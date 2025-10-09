@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ArrowRight, Check, Calendar, MapPin, User, Plus, CreditCard } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Calendar, MapPin, User, Plus, CreditCard, Bath, ChefHat, Sofa, Layers, Sparkles, Square } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -297,7 +297,7 @@ const Booking = () => {
                       </p>
                       {address.cleaning_packages && (
                         <div className="bg-accent/20 rounded-lg p-3">
-                          <div className="flex justify-between items-center">
+                          <div className="flex justify-between items-start mb-3">
                             <div>
                               <p className="font-medium text-sm">
                                 {address.cleaning_packages.package_name}
@@ -310,6 +310,33 @@ const Booking = () => {
                               {address.currency === 'EUR' ? '€' : '$'}
                               {address.cleaning_packages.recurring_price}
                             </p>
+                          </div>
+                          <div className="border-t border-border/40 pt-2">
+                            <p className="text-xs text-muted-foreground mb-2">Included Services:</p>
+                            <div className="grid grid-cols-3 gap-2">
+                              {address.cleaning_packages.areas_included?.map((area: string, idx: number) => {
+                                const getServiceIcon = (service: string) => {
+                                  switch(service.toLowerCase()) {
+                                    case 'bathroom': return <Bath className="w-3.5 h-3.5" />;
+                                    case 'kitchen': return <ChefHat className="w-3.5 h-3.5" />;
+                                    case 'livingroom': return <Sofa className="w-3.5 h-3.5" />;
+                                    case 'floors': return <Layers className="w-3.5 h-3.5" />;
+                                    case 'dusting': return <Sparkles className="w-3.5 h-3.5" />;
+                                    case 'surfaces': return <Square className="w-3.5 h-3.5" />;
+                                    default: return <Square className="w-3.5 h-3.5" />;
+                                  }
+                                };
+                                
+                                return (
+                                  <div key={idx} className="flex items-center gap-1 bg-background/60 rounded px-2 py-1">
+                                    <span className="text-primary">
+                                      {getServiceIcon(area)}
+                                    </span>
+                                    <span className="text-xs capitalize">{area}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
                         </div>
                       )}

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { ArrowLeft, MapPin, Home, Plus, Star, Trash2 } from "lucide-react";
+import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layers, Sparkles, Square } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 
@@ -566,12 +566,32 @@ const MyAddresses = () => {
                               <p className="text-xs text-muted-foreground">recurring</p>
                             </div>
                           </div>
-                          <div className="flex flex-wrap gap-1 mt-2">
-                            {address.cleaning_packages.areas_included?.map((area: string, idx: number) => (
-                              <Badge key={idx} variant="outline" className="text-xs">
-                                {area}
-                              </Badge>
-                            ))}
+                          <div className="mt-3">
+                            <p className="text-xs text-muted-foreground mb-2">Included Services:</p>
+                            <div className="grid grid-cols-3 gap-2">
+                              {address.cleaning_packages.areas_included?.map((area: string, idx: number) => {
+                                const getServiceIcon = (service: string) => {
+                                  switch(service.toLowerCase()) {
+                                    case 'bathroom': return <Bath className="w-4 h-4" />;
+                                    case 'kitchen': return <ChefHat className="w-4 h-4" />;
+                                    case 'livingroom': return <Sofa className="w-4 h-4" />;
+                                    case 'floors': return <Layers className="w-4 h-4" />;
+                                    case 'dusting': return <Sparkles className="w-4 h-4" />;
+                                    case 'surfaces': return <Square className="w-4 h-4" />;
+                                    default: return <Square className="w-4 h-4" />;
+                                  }
+                                };
+                                
+                                return (
+                                  <div key={idx} className="flex items-center gap-1.5 bg-background/50 rounded-md p-1.5">
+                                    <span className="text-primary">
+                                      {getServiceIcon(area)}
+                                    </span>
+                                    <span className="text-xs capitalize">{area}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
                         </div>
                       </div>
