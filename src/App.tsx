@@ -13,6 +13,7 @@ import ProviderWallet from "./pages/provider/ProviderWallet";
 import ProviderProfilePage from "./pages/provider/ProviderProfilePage";
 import ProviderReviews from "./pages/provider/ProviderReviews";
 import Providers from "./pages/customer/Providers";
+import FindProviders from "./pages/customer/FindProviders";
 import MyAddresses from "./pages/customer/MyAddresses";
 import Booking from "./pages/customer/Booking";
 import MyBookings from "./pages/customer/MyBookings";
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/customer/dashboard" element={<CustomerDashboard />} />
           <Route path="/customer/providers" element={<Providers />} />
+          <Route path="/customer/find-providers" element={<FindProviders />} />
           <Route path="/customer/my-addresses" element={<MyAddresses />} />
           <Route path="/customer/booking" element={<Booking />} />
           <Route path="/customer/bookings" element={<MyBookings />} />

@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
+import ProviderCard from "@/components/ProviderCard";
 
 const STEPS = [
   { id: 1, name: "Where", icon: MapPin },
@@ -417,81 +418,58 @@ const Booking = () => {
 
         {/* Step 3: Who */}
         {currentStep === 3 && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">Choose your provider</h2>
-              <p className="text-muted-foreground">
-                {availableProviders.length} providers available on {new Date(selectedDate).toLocaleDateString()}
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">Choose your provider</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">
+                {availableProviders.length} provider{availableProviders.length !== 1 ? 's' : ''} available on {selectedDate && new Date(selectedDate).toLocaleDateString()}
               </p>
             </div>
 
             {availableProviders.length === 0 ? (
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-12 pb-12 text-center">
-                  <User className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-muted-foreground mb-4">
+                  <User className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-sm sm:text-base text-muted-foreground mb-4">
                     No providers available for this date
                   </p>
-                  <Button variant="outline" onClick={() => setCurrentStep(2)}>
+                  <Button variant="outline" onClick={() => setCurrentStep(2)} className="touch-target">
                     Choose Different Date
                   </Button>
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid gap-4">
+              <div className="space-y-4">
                 {availableProviders.map((provider) => (
-                  <Card
+                  <ProviderCard
                     key={provider.id}
-                    className={`cursor-pointer transition-all border-2 ${
-                      selectedProvider?.id === provider.id
-                        ? 'border-primary bg-primary/5'
-                        : 'border-transparent hover:border-primary/50'
-                    }`}
-                    onClick={() => setSelectedProvider(provider)}
-                  >
-                    <CardContent className="pt-6">
-                      <div className="flex items-start gap-4">
-                        <Avatar className="w-16 h-16 border-2 border-primary/20">
-                          <AvatarImage src={provider.photo_url} />
-                          <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white">
-                            {provider.full_name.split(' ').map((n: string) => n[0]).join('')}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <h3 className="font-semibold">{provider.full_name}</h3>
-                              <p className="text-sm text-muted-foreground">
-                                ⭐ {provider.rating_avg.toFixed(1)} ({provider.rating_count} reviews)
-                              </p>
-                            </div>
-                            {selectedProvider?.id === provider.id && (
-                              <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                                <Check className="w-4 h-4 text-primary-foreground" />
-                              </div>
-                            )}
-                          </div>
-                          {provider.bio && (
-                            <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-                              {provider.bio}
-                            </p>
-                          )}
-                          <Button
-                            variant="link"
-                            size="sm"
-                            className="px-0 mt-2"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/providers/profile/${provider.id}`);
-                            }}
-                          >
-                            View Full Profile
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                    providerId={provider.id}
+                    fullName={provider.full_name}
+                    photoUrl={provider.photo_url}
+                    verified={provider.verified}
+                    newProvider={provider.new_provider}
+                    ratingAvg={provider.rating_avg || 0}
+                    ratingCount={provider.rating_count || 0}
+                    serviceAreas={provider.service_areas || []}
+                    skills={provider.skills || []}
+                    bio={provider.bio}
+                    showActions={true}
+                    onSelect={() => setSelectedProvider(provider)}
+                    isSelected={selectedProvider?.id === provider.id}
+                  />
                 ))}
+              </div>
+            )}
+
+            {availableProviders.length > 0 && (
+              <div className="text-center pt-4">
+                <Button 
+                  variant="link" 
+                  onClick={() => navigate('/customer/find-providers')}
+                  className="text-primary"
+                >
+                  View All Providers →
+                </Button>
               </div>
             )}
           </div>

@@ -101,7 +101,7 @@ const CustomerDashboard = () => {
                 type="text"
                 placeholder="Search for providers..."
                 className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 rounded-xl border bg-background focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-base"
-                onClick={() => navigate('/customer/providers')}
+                onClick={() => navigate('/customer/find-providers')}
               />
             </div>
           </CardContent>
@@ -197,7 +197,7 @@ const CustomerDashboard = () => {
                 <p className="text-sm sm:text-base text-muted-foreground mb-4">
                   No recommended providers yet
                 </p>
-                <Button onClick={() => navigate('/customer/providers')} className="w-full sm:w-auto">
+                <Button onClick={() => navigate('/customer/find-providers')} className="w-full sm:w-auto">
                   Find Providers
                 </Button>
               </div>
