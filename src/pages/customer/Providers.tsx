@@ -168,10 +168,19 @@ const Providers = () => {
                         </div>
                       )}
                       <div className="flex gap-2">
-                        <Button size="sm" className="flex-1">
+                        <Button 
+                          size="sm" 
+                          className="flex-1"
+                          onClick={() => navigate(`/providers/profile/${provider.id}`)}
+                        >
                           View Profile
                         </Button>
-                        <Button size="sm" variant="outline" className="flex-1">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="flex-1"
+                          onClick={() => navigate('/customer/booking')}
+                        >
                           Book Now
                         </Button>
                       </div>

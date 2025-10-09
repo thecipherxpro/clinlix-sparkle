@@ -114,7 +114,10 @@ const CustomerDashboard = () => {
               </CardHeader>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5">
+            <Card 
+              className="cursor-pointer hover:shadow-lg transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5"
+              onClick={() => navigate('/customer/my-addresses')}
+            >
               <CardHeader className="space-y-1 pb-4">
                 <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-2">
                   <MapPin className="w-6 h-6 text-accent" />

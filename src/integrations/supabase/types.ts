@@ -14,6 +14,125 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          addon_ids: string[] | null
+          address_id: string
+          completed_at: string | null
+          created_at: string | null
+          customer_id: string
+          id: string
+          overtime_minutes: number | null
+          package_id: string
+          payment_intent_id: string | null
+          payment_status: string
+          provider_id: string | null
+          requested_date: string
+          requested_time: string
+          started_at: string | null
+          status: string
+          total_estimate: number
+          total_final: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          addon_ids?: string[] | null
+          address_id: string
+          completed_at?: string | null
+          created_at?: string | null
+          customer_id: string
+          id?: string
+          overtime_minutes?: number | null
+          package_id: string
+          payment_intent_id?: string | null
+          payment_status?: string
+          provider_id?: string | null
+          requested_date: string
+          requested_time: string
+          started_at?: string | null
+          status?: string
+          total_estimate: number
+          total_final?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          addon_ids?: string[] | null
+          address_id?: string
+          completed_at?: string | null
+          created_at?: string | null
+          customer_id?: string
+          id?: string
+          overtime_minutes?: number | null
+          package_id?: string
+          payment_intent_id?: string | null
+          payment_status?: string
+          provider_id?: string | null
+          requested_date?: string
+          requested_time?: string
+          started_at?: string | null
+          status?: string
+          total_estimate?: number
+          total_final?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_address_id_fkey"
+            columns: ["address_id"]
+            isOneToOne: false
+            referencedRelation: "customer_addresses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "cleaning_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cleaning_addons: {
+        Row: {
+          created_at: string | null
+          id: string
+          name_en: string
+          name_pt: string
+          price: number
+          type: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name_en: string
+          name_pt: string
+          price: number
+          type: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name_en?: string
+          name_pt?: string
+          price?: number
+          type?: string
+        }
+        Relationships: []
+      }
       cleaning_packages: {
         Row: {
           areas_included: string[] | null
@@ -44,6 +163,126 @@ export type Database = {
           package_name?: string
           recurring_price?: number
           time_included?: string
+        }
+        Relationships: []
+      }
+      customer_addresses: {
+        Row: {
+          apt_unit: string | null
+          city: string | null
+          codigo_postal: string | null
+          country: string
+          created_at: string | null
+          currency: string
+          customer_id: string
+          distrito: string | null
+          email: string
+          first_name: string
+          id: string
+          is_primary: boolean | null
+          label: string
+          last_name: string
+          layout_type: string
+          localidade: string | null
+          package_code: string
+          phone: string
+          porta_andar: string | null
+          postal_code: string | null
+          property_type: string
+          province: string | null
+          rua: string | null
+          street: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          apt_unit?: string | null
+          city?: string | null
+          codigo_postal?: string | null
+          country: string
+          created_at?: string | null
+          currency?: string
+          customer_id: string
+          distrito?: string | null
+          email: string
+          first_name: string
+          id?: string
+          is_primary?: boolean | null
+          label: string
+          last_name: string
+          layout_type: string
+          localidade?: string | null
+          package_code: string
+          phone: string
+          porta_andar?: string | null
+          postal_code?: string | null
+          property_type: string
+          province?: string | null
+          rua?: string | null
+          street?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          apt_unit?: string | null
+          city?: string | null
+          codigo_postal?: string | null
+          country?: string
+          created_at?: string | null
+          currency?: string
+          customer_id?: string
+          distrito?: string | null
+          email?: string
+          first_name?: string
+          id?: string
+          is_primary?: boolean | null
+          label?: string
+          last_name?: string
+          layout_type?: string
+          localidade?: string | null
+          package_code?: string
+          phone?: string
+          porta_andar?: string | null
+          postal_code?: string | null
+          property_type?: string
+          province?: string | null
+          rua?: string | null
+          street?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_addresses_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_addresses_package_code_fkey"
+            columns: ["package_code"]
+            isOneToOne: false
+            referencedRelation: "cleaning_packages"
+            referencedColumns: ["package_code"]
+          },
+        ]
+      }
+      overtime_rules: {
+        Row: {
+          id: string
+          increment_minutes: number
+          price_cad: number
+          price_eur: number
+        }
+        Insert: {
+          id?: string
+          increment_minutes?: number
+          price_cad?: number
+          price_eur?: number
+        }
+        Update: {
+          id?: string
+          increment_minutes?: number
+          price_cad?: number
+          price_eur?: number
         }
         Relationships: []
       }
@@ -91,6 +330,41 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      provider_availability: {
+        Row: {
+          created_at: string | null
+          date: string
+          end_time: string
+          id: string
+          provider_id: string
+          start_time: string
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          end_time: string
+          id?: string
+          provider_id: string
+          start_time: string
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          end_time?: string
+          id?: string
+          provider_id?: string
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_availability_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       provider_profiles: {
         Row: {
@@ -147,6 +421,112 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_reviews: {
+        Row: {
+          booking_id: string
+          comment: string | null
+          created_at: string | null
+          customer_id: string
+          id: string
+          provider_id: string
+          rating: number
+        }
+        Insert: {
+          booking_id: string
+          comment?: string | null
+          created_at?: string | null
+          customer_id: string
+          id?: string
+          provider_id: string
+          rating: number
+        }
+        Update: {
+          booking_id?: string
+          comment?: string | null
+          created_at?: string | null
+          customer_id?: string
+          id?: string
+          provider_id?: string
+          rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_reviews_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_reviews_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_wallet: {
+        Row: {
+          base_amount: number
+          booking_id: string
+          created_at: string | null
+          id: string
+          overtime_amount: number | null
+          payout_due: number
+          platform_fee: number
+          provider_id: string
+          status: string
+          total_earned: number
+        }
+        Insert: {
+          base_amount: number
+          booking_id: string
+          created_at?: string | null
+          id?: string
+          overtime_amount?: number | null
+          payout_due: number
+          platform_fee: number
+          provider_id: string
+          status?: string
+          total_earned: number
+        }
+        Update: {
+          base_amount?: number
+          booking_id?: string
+          created_at?: string | null
+          id?: string
+          overtime_amount?: number | null
+          payout_due?: number
+          platform_fee?: number
+          provider_id?: string
+          status?: string
+          total_earned?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_wallet_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_wallet_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
             referencedColumns: ["id"]
           },
         ]
