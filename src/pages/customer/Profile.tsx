@@ -10,6 +10,7 @@ import { ArrowLeft, User, LogOut, Save } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import MobileNav from "@/components/MobileNav";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -117,19 +118,19 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')}>
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
+        <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target md:hidden">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             My Profile
           </h1>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="mobile-container py-4 sm:py-8 max-w-2xl">
         {/* Profile Header */}
         <Card className="border-0 shadow-sm mb-6">
           <CardContent className="pt-6">
@@ -263,7 +264,7 @@ const Profile = () => {
                 </p>
               </div>
 
-              <Button type="submit" className="w-full" disabled={saving}>
+              <Button type="submit" className="w-full h-12 sm:h-10" disabled={saving}>
                 <Save className="w-4 h-4 mr-2" />
                 {saving ? 'Saving...' : 'Save Changes'}
               </Button>
@@ -280,7 +281,7 @@ const Profile = () => {
             <Button
               variant="destructive"
               onClick={handleLogout}
-              className="w-full"
+              className="w-full h-12 sm:h-10"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Logout
@@ -288,6 +289,8 @@ const Profile = () => {
           </CardContent>
         </Card>
       </main>
+      
+      <MobileNav />
     </div>
   );
 };

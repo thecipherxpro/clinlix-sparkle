@@ -80,24 +80,24 @@ const ProviderProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-24 md:pb-8">
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
+        <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="touch-target">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Provider Profile
           </h1>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl pb-32">
+      <main className="mobile-container py-4 sm:py-8 max-w-4xl pb-24">
         {/* Cover Section */}
-        <div className="relative mb-8">
-          <div className="h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl" />
-          <div className="absolute -bottom-16 left-8">
-            <Avatar className="w-32 h-32 border-4 border-background">
+        <div className="relative mb-6 sm:mb-8">
+          <div className="h-32 sm:h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl" />
+          <div className="absolute -bottom-12 sm:-bottom-16 left-4 sm:left-8">
+            <Avatar className="w-24 h-24 sm:w-32 sm:h-32 border-4 border-background">
               <AvatarImage src={provider.photo_url} />
               <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-3xl">
                 {provider.full_name.split(' ').map((n: string) => n[0]).join('')}
@@ -106,9 +106,9 @@ const ProviderProfile = () => {
           </div>
         </div>
 
-        <div className="mt-20">
+        <div className="mt-16 sm:mt-20">
           {/* Header Info */}
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
             {provider.new_provider && (
               <Badge variant="secondary" className="gap-1">
                 <Sparkles className="w-3 h-3" />
@@ -123,17 +123,17 @@ const ProviderProfile = () => {
             )}
           </div>
 
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold">{provider.full_name}</h1>
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold">{provider.full_name}</h1>
             <div className="flex items-center gap-1">
-              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-              <span className="font-semibold">{provider.rating_avg.toFixed(1)}</span>
-              <span className="text-muted-foreground">({provider.rating_count})</span>
+              <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-yellow-400 text-yellow-400" />
+              <span className="font-semibold text-sm sm:text-base">{provider.rating_avg.toFixed(1)}</span>
+              <span className="text-muted-foreground text-sm sm:text-base">({provider.rating_count})</span>
             </div>
           </div>
 
           {provider.skills && provider.skills.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
+            <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
               {provider.skills.map((skill: string, idx: number) => (
                 <Badge key={idx} variant="outline">
                   {skill}
@@ -142,18 +142,18 @@ const ProviderProfile = () => {
             </div>
           )}
 
-          <Separator className="my-6" />
+          <Separator className="my-4 sm:my-6" />
 
           {/* Tabs */}
           <Tabs defaultValue="about" className="w-full">
-            <TabsList className="w-full">
+            <TabsList className="w-full h-12 sm:h-10">
               <TabsTrigger value="about" className="flex-1">About</TabsTrigger>
               <TabsTrigger value="reviews" className="flex-1">
                 Reviews ({provider.rating_count})
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="about" className="space-y-6 mt-6">
+            <TabsContent value="about" className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
               {provider.bio && (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="pt-6">
@@ -201,7 +201,7 @@ const ProviderProfile = () => {
               )}
             </TabsContent>
 
-            <TabsContent value="reviews" className="space-y-4 mt-6">
+            <TabsContent value="reviews" className="space-y-4 mt-4 sm:mt-6">
               {reviews.length === 0 ? (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="pt-12 pb-12 text-center">
@@ -248,25 +248,25 @@ const ProviderProfile = () => {
       </main>
 
       {/* Sticky Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-card border-t shadow-lg z-10">
-        <div className="container mx-auto px-4 py-4 max-w-4xl">
+      <div className="fixed bottom-0 left-0 right-0 bg-card border-t shadow-lg z-50 safe-bottom">
+        <div className="mobile-container py-3 sm:py-4 max-w-4xl">
           {hasConfirmedBooking ? (
-            <div className="flex gap-2">
-              <Button variant="outline" className="flex-1">
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Message
+            <div className="grid grid-cols-3 gap-2">
+              <Button variant="outline" size="sm" className="h-12 sm:h-10">
+                <MessageSquare className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Message</span>
               </Button>
-              <Button variant="outline" className="flex-1">
-                <Phone className="w-4 h-4 mr-2" />
-                Call
+              <Button variant="outline" size="sm" className="h-12 sm:h-10">
+                <Phone className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Call</span>
               </Button>
-              <Button variant="outline" className="flex-1">
-                <Mail className="w-4 h-4 mr-2" />
-                Email
+              <Button variant="outline" size="sm" className="h-12 sm:h-10">
+                <Mail className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Email</span>
               </Button>
             </div>
           ) : (
-            <Button className="w-full" size="lg" onClick={handleBookNow}>
+            <Button className="w-full h-12 sm:h-11 text-base" onClick={handleBookNow}>
               Book Now
             </Button>
           )}

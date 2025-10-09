@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Search, Star, Sparkles, Shield } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import MobileNav from "@/components/MobileNav";
 
 const Providers = () => {
   const navigate = useNavigate();
@@ -75,27 +76,27 @@ const Providers = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')}>
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
+        <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Find Providers
           </h1>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-6xl">
+      <main className="mobile-container py-4 sm:py-8 max-w-6xl">
         {/* Search */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 sm:w-5 sm:h-5" />
             <Input
               type="text"
               placeholder="Search providers..."
-              className="pl-12 h-12"
+              className="pl-10 sm:pl-12 h-12 text-base"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -105,17 +106,17 @@ const Providers = () => {
         {/* Providers List */}
         {filteredProviders.length === 0 ? (
           <Card className="border-0 shadow-sm">
-            <CardContent className="pt-12 pb-12 text-center">
-              <p className="text-muted-foreground mb-4">
+            <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
+              <p className="text-sm sm:text-base text-muted-foreground mb-4">
                 No providers found yet
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Check back soon as we onboard more cleaning professionals
               </p>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {filteredProviders.map((provider) => (
               <Card key={provider.id} className="border-0 shadow-sm hover:shadow-lg transition-all">
                 <CardHeader className="pb-4">
@@ -192,6 +193,8 @@ const Providers = () => {
           </div>
         )}
       </main>
+      
+      <MobileNav />
     </div>
   );
 };

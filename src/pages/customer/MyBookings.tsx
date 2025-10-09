@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeft, Calendar, MapPin, Clock, Star } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
+import MobileNav from "@/components/MobileNav";
 
 const STATUS_COLORS = {
   pending: "bg-yellow-500",
@@ -271,38 +272,42 @@ const MyBookings = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')}>
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
+        <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target md:hidden">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             My Bookings
           </h1>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="mobile-container py-4 sm:py-8 max-w-4xl">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full grid grid-cols-2">
-            <TabsTrigger value="upcoming">
-              Upcoming ({upcomingBookings.length})
+          <TabsList className="w-full grid grid-cols-2 h-12 sm:h-10">
+            <TabsTrigger value="upcoming" className="text-sm sm:text-base">
+              <span className="hidden sm:inline">Upcoming</span>
+              <span className="sm:hidden">Upcoming</span>
+              <span className="ml-1">({upcomingBookings.length})</span>
             </TabsTrigger>
-            <TabsTrigger value="past">
-              Past ({pastBookings.length})
+            <TabsTrigger value="past" className="text-sm sm:text-base">
+              <span className="hidden sm:inline">Past</span>
+              <span className="sm:hidden">Past</span>
+              <span className="ml-1">({pastBookings.length})</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="upcoming" className="space-y-4 mt-6">
+          <TabsContent value="upcoming" className="space-y-4 mt-4 sm:mt-6">
             {upcomingBookings.length === 0 ? (
               <Card className="border-0 shadow-sm">
-                <CardContent className="pt-12 pb-12 text-center">
-                  <Calendar className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-muted-foreground mb-4">
+                <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
+                  <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-sm sm:text-base text-muted-foreground mb-4">
                     No upcoming bookings
                   </p>
-                  <Button onClick={() => navigate('/customer/booking')}>
+                  <Button onClick={() => navigate('/customer/booking')} className="w-full sm:w-auto">
                     Book a Cleaning Service
                   </Button>
                 </CardContent>
@@ -312,12 +317,12 @@ const MyBookings = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="past" className="space-y-4 mt-6">
+          <TabsContent value="past" className="space-y-4 mt-4 sm:mt-6">
             {pastBookings.length === 0 ? (
               <Card className="border-0 shadow-sm">
-                <CardContent className="pt-12 pb-12 text-center">
-                  <Calendar className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-muted-foreground">
+                <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
+                  <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     No past bookings
                   </p>
                 </CardContent>
@@ -328,6 +333,8 @@ const MyBookings = () => {
           </TabsContent>
         </Tabs>
       </main>
+      
+      <MobileNav />
     </div>
   );
 };

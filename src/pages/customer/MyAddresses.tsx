@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layers, Sparkles, Square } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import MobileNav from "@/components/MobileNav";
 
 const MyAddresses = () => {
   const navigate = useNavigate();
@@ -201,31 +202,31 @@ const MyAddresses = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')}>
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
+        <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target md:hidden">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             My Addresses
           </h1>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="flex justify-between items-center mb-6">
-          <p className="text-muted-foreground">
+      <main className="mobile-container py-4 sm:py-8 max-w-4xl">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base text-muted-foreground">
             Manage up to 5 addresses ({addresses.length}/5)
           </p>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button onClick={openAddForm} disabled={addresses.length >= 5}>
+              <Button onClick={openAddForm} disabled={addresses.length >= 5} className="w-full sm:w-auto">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Address
               </Button>
             </SheetTrigger>
-            <SheetContent className="overflow-y-auto w-full sm:max-w-xl">
+            <SheetContent className="overflow-y-auto w-full sm:max-w-xl p-4 sm:p-6">
               <SheetHeader>
                 <SheetTitle>
                   {editingAddress ? 'Edit Address' : 'Add New Address'}
@@ -609,6 +610,8 @@ const MyAddresses = () => {
           </div>
         )}
       </main>
+      
+      <MobileNav />
     </div>
   );
 };

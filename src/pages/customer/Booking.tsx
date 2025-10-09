@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import MobileNav from "@/components/MobileNav";
 
 const STEPS = [
   { id: 1, name: "Where", icon: MapPin },
@@ -196,42 +197,42 @@ const Booking = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')}>
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
+        <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Book Cleaning Service
+          <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Book Service
           </h1>
         </div>
       </header>
 
       {/* Progress Steps */}
-      <div className="border-b bg-card/30 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between max-w-4xl mx-auto">
+      <div className="border-b bg-card/30 backdrop-blur-sm overflow-x-auto">
+        <div className="mobile-container py-3 sm:py-4">
+          <div className="flex items-center justify-between max-w-4xl mx-auto min-w-max px-2">
             {STEPS.map((step, idx) => (
               <div key={step.id} className="flex items-center">
                 <div className="flex flex-col items-center">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
                       currentStep >= step.id
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-secondary text-secondary-foreground'
                     }`}
                   >
                     {currentStep > step.id ? (
-                      <Check className="w-5 h-5" />
+                      <Check className="w-4 h-4 sm:w-5 sm:h-5" />
                     ) : (
-                      <step.icon className="w-5 h-5" />
+                      <step.icon className="w-4 h-4 sm:w-5 sm:h-5" />
                     )}
                   </div>
-                  <span className="text-xs mt-1 hidden sm:block">{step.name}</span>
+                  <span className="text-xs mt-1 hidden md:block whitespace-nowrap">{step.name}</span>
                 </div>
                 {idx < STEPS.length - 1 && (
-                  <div className={`w-12 sm:w-20 h-0.5 mx-2 ${
+                  <div className={`w-8 sm:w-12 md:w-20 h-0.5 mx-1 sm:mx-2 ${
                     currentStep > step.id ? 'bg-primary' : 'bg-secondary'
                   }`} />
                 )}
@@ -241,13 +242,13 @@ const Booking = () => {
         </div>
       </div>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="mobile-container py-4 sm:py-8 max-w-4xl">
         {/* Step 1: Where */}
         {currentStep === 1 && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">Where should we clean?</h2>
-              <p className="text-muted-foreground">Select one of your saved addresses</p>
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">Where should we clean?</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Select one of your saved addresses</p>
             </div>
 
             {addresses.length === 0 ? (
@@ -690,18 +691,19 @@ const Booking = () => {
         )}
 
         {/* Navigation Buttons */}
-        <div className="flex gap-4 mt-8">
+        <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-8">
           {currentStep > 1 && (
-            <Button variant="outline" onClick={handleBack} className="flex-1">
+            <Button variant="outline" onClick={handleBack} className="flex-1 h-12 sm:h-10">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
           )}
-          <Button onClick={handleNext} className="flex-1">
+          <Button onClick={handleNext} className="flex-1 h-12 sm:h-10">
             {currentStep === 6 ? (
               <>
                 <Check className="w-4 h-4 mr-2" />
-                Confirm Booking
+                <span className="hidden sm:inline">Confirm Booking</span>
+                <span className="sm:hidden">Confirm</span>
               </>
             ) : (
               <>
@@ -712,6 +714,8 @@ const Booking = () => {
           </Button>
         </div>
       </main>
+      
+      <MobileNav />
     </div>
   );
 };

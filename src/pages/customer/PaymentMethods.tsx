@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ArrowLeft, CreditCard, Plus } from "lucide-react";
 import { toast } from "sonner";
+import MobileNav from "@/components/MobileNav";
 
 const PaymentMethods = () => {
   const navigate = useNavigate();
@@ -49,19 +50,19 @@ const PaymentMethods = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')}>
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
+        <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target md:hidden">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Payment Methods
           </h1>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="mobile-container py-4 sm:py-8 max-w-2xl">
         <Card className="border-0 shadow-sm">
           <CardHeader>
             <CardTitle>Manage Payment Methods</CardTitle>
@@ -121,7 +122,7 @@ const PaymentMethods = () => {
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-1">
-                <span className="text-primary font-bold">i</span>
+                <span className="text-primary font-bold text-sm">i</span>
               </div>
               <div className="text-sm">
                 <p className="font-medium mb-1">Secure & Safe</p>
@@ -135,6 +136,8 @@ const PaymentMethods = () => {
           </CardContent>
         </Card>
       </main>
+      
+      <MobileNav />
     </div>
   );
 };
