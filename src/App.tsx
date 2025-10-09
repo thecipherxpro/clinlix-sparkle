@@ -10,6 +10,9 @@ import ProviderDashboard from "./pages/provider/ProviderDashboard";
 import Providers from "./pages/customer/Providers";
 import MyAddresses from "./pages/customer/MyAddresses";
 import Booking from "./pages/customer/Booking";
+import MyBookings from "./pages/customer/MyBookings";
+import Profile from "./pages/customer/Profile";
+import PaymentMethods from "./pages/customer/PaymentMethods";
 import ProviderProfile from "./pages/ProviderProfile";
 import NotFound from "./pages/NotFound";
 
@@ -28,6 +31,9 @@ const App = () => (
           <Route path="/customer/providers" element={<Providers />} />
           <Route path="/customer/my-addresses" element={<MyAddresses />} />
           <Route path="/customer/booking" element={<Booking />} />
+          <Route path="/customer/bookings" element={<MyBookings />} />
+          <Route path="/customer/profile" element={<Profile />} />
+          <Route path="/customer/payment-methods" element={<PaymentMethods />} />
           <Route path="/providers/profile/:providerId" element={<ProviderProfile />} />
           <Route path="/provider/dashboard" element={<ProviderDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

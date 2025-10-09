@@ -103,7 +103,7 @@ const CustomerDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card 
               className="cursor-pointer hover:shadow-lg transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5"
-              onClick={() => navigate('/customer/providers')}
+              onClick={() => navigate('/customer/booking')}
             >
               <CardHeader className="space-y-1 pb-4">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2">
@@ -127,7 +127,10 @@ const CustomerDashboard = () => {
               </CardHeader>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5">
+            <Card 
+              className="cursor-pointer hover:shadow-lg transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5"
+              onClick={() => navigate('/customer/payment-methods')}
+            >
               <CardHeader className="space-y-1 pb-4">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2">
                   <CreditCard className="w-6 h-6 text-primary" />
@@ -137,7 +140,10 @@ const CustomerDashboard = () => {
               </CardHeader>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5">
+            <Card 
+              className="cursor-pointer hover:shadow-lg transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5"
+              onClick={() => navigate('/customer/profile')}
+            >
               <CardHeader className="space-y-1 pb-4">
                 <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-2">
                   <User className="w-6 h-6 text-accent" />
@@ -147,6 +153,29 @@ const CustomerDashboard = () => {
               </CardHeader>
             </Card>
           </div>
+        </div>
+
+        {/* Next Booking */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-semibold">Next Booking</h3>
+            <Button variant="link" onClick={() => navigate('/customer/bookings')}>
+              View All
+            </Button>
+          </div>
+          <Card className="border-0 shadow-sm">
+            <CardContent className="pt-6">
+              <div className="text-center py-12">
+                <Calendar className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-muted-foreground mb-4">
+                  No upcoming bookings
+                </p>
+                <Button onClick={() => navigate('/customer/booking')}>
+                  Book a Service
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Recommended Providers */}
