@@ -86,21 +86,21 @@ const ProviderWallet = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
-      <header className="bg-card/50 backdrop-blur-sm sticky top-0 z-10 border-b">
-        <div className="container mx-auto px-4 py-4">
+      <header className="bg-card/50 backdrop-blur-sm sticky top-0 z-10 border-b safe-top">
+        <div className="mobile-container py-4">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => navigate('/provider/dashboard')} className="touch-target">
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-xl font-bold">Wallet</h1>
-              <p className="text-sm text-muted-foreground">Track your earnings</p>
+              <h1 className="text-lg md:text-xl font-bold">Wallet</h1>
+              <p className="text-xs md:text-sm text-muted-foreground">Track your earnings</p>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 max-w-6xl space-y-6">
+      <main className="mobile-container py-6 max-w-6xl mx-auto space-y-4 md:space-y-6">
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Card className="border-0 shadow-sm bg-gradient-to-br from-primary/5 to-accent/5">

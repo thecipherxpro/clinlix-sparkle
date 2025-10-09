@@ -112,21 +112,21 @@ const ProviderJobs = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
-      <header className="bg-card/50 backdrop-blur-sm sticky top-0 z-10 border-b">
-        <div className="container mx-auto px-4 py-4">
+      <header className="bg-card/50 backdrop-blur-sm sticky top-0 z-10 border-b safe-top">
+        <div className="mobile-container py-4">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => navigate('/provider/dashboard')} className="touch-target">
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-xl font-bold">My Jobs</h1>
-              <p className="text-sm text-muted-foreground">Manage your bookings</p>
+              <h1 className="text-lg md:text-xl font-bold">My Jobs</h1>
+              <p className="text-xs md:text-sm text-muted-foreground">Manage your bookings</p>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 max-w-6xl">
+      <main className="mobile-container py-6 max-w-6xl mx-auto">
         <Tabs defaultValue="active" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="active" className="text-sm">
