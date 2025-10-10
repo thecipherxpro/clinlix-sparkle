@@ -39,7 +39,7 @@ const Index = () => {
   };
 
   return (
-    <div className="h-190 bg-gradient-to-b from-[#F8FAFC] to-[#CFE9F5] flex flex-col items-center justify-between px-6 py-8 overflow-hidden">
+    <div className="h-screen bg-gradient-to-b from-[#F8FAFC] to-[#CFE9F5] flex flex-col items-center justify-between px-6 py-8 overflow-hidden">
       {/* Cleaning Lady Image */}
       <div
         className={`w-full flex-1 flex items-center justify-center transition-all duration-1000 ${
