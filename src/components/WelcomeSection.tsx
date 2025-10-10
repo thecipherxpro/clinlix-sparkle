@@ -79,36 +79,36 @@ export default function WelcomeSection() {
   }
 
   return (
-    <div className="bg-background border-b border-border p-4 shadow-sm">
-      <div className="flex items-center justify-between">
-        {/* Left: Avatar */}
-        <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12">
+    <div className="bg-accent/30 border-b border-border p-6 shadow-sm">
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
+        {/* Left: Avatar and Welcome Text */}
+        <div className="flex items-center gap-4">
+          <Avatar className="h-16 w-16 border-2 border-background shadow-md">
             <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.first_name || "User"} />
-            <AvatarFallback className="bg-muted text-primary font-semibold">
+            <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xl">
               {profile ? getInitials(profile.first_name, profile.last_name) : "U"}
             </AvatarFallback>
           </Avatar>
 
-          {/* Center: Welcome Text */}
-          <div className="flex flex-col gap-1">
-            <p className="text-sm text-muted-foreground font-normal">Welcome</p>
-            <p className="text-lg font-semibold text-foreground">
-              {getWelcomeMessage()}
+          {/* Welcome Text */}
+          <div className="flex flex-col">
+            <p className="text-sm text-muted-foreground font-normal mb-0.5">Welcome</p>
+            <p className="text-2xl font-bold text-foreground">
+              Hello {profile?.first_name || "User"}
             </p>
           </div>
         </div>
 
-        {/* Right: Notification Bell */}
+        {/* Right: Notification Bell in white circle */}
         <Button
           variant="ghost"
           size="icon"
           onClick={() => navigate("/notifications")}
-          className="relative hover:bg-accent"
+          className="relative h-14 w-14 rounded-full bg-background hover:bg-background/90 shadow-md"
         >
           <Bell className="h-6 w-6 text-foreground" />
           {/* Optional: Add notification indicator dot */}
-          {/* <span className="absolute top-1 right-1 h-2 w-2 bg-primary rounded-full" /> */}
+          {/* <span className="absolute top-2 right-2 h-2.5 w-2.5 bg-primary rounded-full" /> */}
         </Button>
       </div>
     </div>
