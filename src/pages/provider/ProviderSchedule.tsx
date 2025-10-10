@@ -1,26 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar } from "@/components/ui/calendar";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Calendar as CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
+import { DateScroller } from "@/components/provider/DateScroller";
+import { TimeSlotCard } from "@/components/provider/TimeSlotCard";
+import { AddAvailabilityDrawer } from "@/components/provider/AddAvailabilityDrawer";
 
 const ProviderSchedule = () => {
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [availability, setAvailability] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [providerProfile, setProviderProfile] = useState<any>(null);
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [startTime, setStartTime] = useState("09:00");
-  const [endTime, setEndTime] = useState("17:00");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
 
   useEffect(() => {
     checkUserAndFetchAvailability();
@@ -55,11 +51,18 @@ const ProviderSchedule = () => {
       setProviderProfile(providerData);
 
       if (providerData) {
+        const today = new Date();
+        const thirtyDaysLater = new Date();
+        thirtyDaysLater.setDate(today.getDate() + 30);
+
         const { data: availabilityData } = await supabase
           .from('provider_availability')
           .select('*')
           .eq('provider_id', providerData.id)
-          .order('date', { ascending: true });
+          .gte('date', today.toISOString().split('T')[0])
+          .lte('date', thirtyDaysLater.toISOString().split('T')[0])
+          .order('date', { ascending: true })
+          .order('start_time', { ascending: true });
 
         setAvailability(availabilityData || []);
       }
@@ -71,48 +74,63 @@ const ProviderSchedule = () => {
     }
   };
 
-  const handleAddSlot = async () => {
-    if (!selectedDate || !providerProfile) {
-      toast.error("Please select a date");
-      return;
+  const checkOverlap = (newStart: string, newEnd: string, date: string) => {
+    const slotsForDate = availability.filter(
+      slot => slot.date === date
+    );
+
+    for (const slot of slotsForDate) {
+      // Check if new slot overlaps with existing slot
+      if (
+        (newStart >= slot.start_time && newStart < slot.end_time) ||
+        (newEnd > slot.start_time && newEnd <= slot.end_time) ||
+        (newStart <= slot.start_time && newEnd >= slot.end_time)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const handleAddSlot = async (startTime: string, endTime: string) => {
+    if (!providerProfile) return;
+
+    const dateString = selectedDate.toISOString().split('T')[0];
+
+    // Check for overlaps
+    if (checkOverlap(startTime, endTime, dateString)) {
+      toast.error("This time overlaps with an existing slot");
+      throw new Error("Overlap detected");
     }
 
-    if (startTime >= endTime) {
-      toast.error("End time must be after start time");
-      return;
-    }
-
-    setIsSubmitting(true);
     try {
       const { error } = await supabase
         .from('provider_availability')
         .insert({
           provider_id: providerProfile.id,
-          date: selectedDate.toISOString().split('T')[0],
+          date: dateString,
           start_time: startTime,
           end_time: endTime
         });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message.includes('unique_availability')) {
+          toast.error("This time slot already exists");
+        } else if (error.message.includes('check_time_range')) {
+          toast.error("Time must be between 7:00 AM and 7:00 PM");
+        } else {
+          throw error;
+        }
+        throw error;
+      }
 
-      toast.success("Availability slot added");
-      setIsAddDialogOpen(false);
-      setStartTime("09:00");
-      setEndTime("17:00");
+      toast.success("Availability added successfully");
       
       // Refresh availability data
-      const { data: availabilityData } = await supabase
-        .from('provider_availability')
-        .select('*')
-        .eq('provider_id', providerProfile.id)
-        .order('date', { ascending: true });
-
-      setAvailability(availabilityData || []);
+      await checkUserAndFetchAvailability();
     } catch (error) {
       console.error('Error adding slot:', error);
-      toast.error("Failed to add availability slot");
-    } finally {
-      setIsSubmitting(false);
+      throw error;
     }
   };
 
@@ -125,13 +143,24 @@ const ProviderSchedule = () => {
 
       if (error) throw error;
 
-      toast.success("Availability slot removed");
+      toast.success("Slot removed");
       setAvailability(availability.filter(slot => slot.id !== slotId));
     } catch (error) {
       console.error('Error removing slot:', error);
-      toast.error("Failed to remove availability slot");
+      toast.error("Failed to remove slot");
     }
   };
+
+  // Get dates that have slots
+  const datesWithSlots = useMemo(() => {
+    return new Set(availability.map(slot => slot.date));
+  }, [availability]);
+
+  // Get slots for selected date
+  const slotsForSelectedDate = useMemo(() => {
+    const dateString = selectedDate.toISOString().split('T')[0];
+    return availability.filter(slot => slot.date === dateString);
+  }, [availability, selectedDate]);
 
   if (loading) {
     return (
@@ -142,141 +171,113 @@ const ProviderSchedule = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       <header className="bg-card/50 backdrop-blur-sm sticky top-0 z-10 border-b safe-top">
-        <div className="mobile-container py-4">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/provider/dashboard')} className="touch-target">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <div>
-              <h1 className="text-lg md:text-xl font-bold">My Schedule</h1>
-              <p className="text-xs md:text-sm text-muted-foreground">Manage your availability</p>
+        <div className="mobile-container py-3 sm:py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate('/provider/dashboard')} 
+                className="touch-target"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+              <div>
+                <h1 className="text-lg sm:text-xl font-bold">My Schedule</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  Add or edit your available time slots
+                </p>
+              </div>
             </div>
+            <Button
+              size="sm"
+              onClick={() => setIsAddDrawerOpen(true)}
+              className="touch-target"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">Add</span>
+            </Button>
           </div>
         </div>
       </header>
 
-      <main className="mobile-container py-6 max-w-6xl mx-auto space-y-4 md:space-y-6">
+      <main className="mobile-container py-4 sm:py-6 max-w-4xl mx-auto space-y-4 sm:space-y-6">
+        {/* Date Scroller */}
         <Card className="border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-lg">Calendar</CardTitle>
-            <CardDescription>Select dates to manage your availability</CardDescription>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <CalendarIcon className="h-4 w-4" />
+              Next 30 Days
+            </CardTitle>
+            <CardDescription className="text-xs">
+              Select a date to manage availability
+            </CardDescription>
           </CardHeader>
-          <CardContent className="flex justify-center">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              className="rounded-md border w-full"
+          <CardContent>
+            <DateScroller
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+              datesWithSlots={datesWithSlots}
             />
           </CardContent>
         </Card>
 
+        {/* Time Slots */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-lg">Available Slots</CardTitle>
-                <CardDescription>
-                  {selectedDate ? selectedDate.toLocaleDateString() : "Select a date"}
-                </CardDescription>
-              </div>
-              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button size="sm" className="touch-target" disabled={!selectedDate}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Slot
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Add Availability Slot</DialogTitle>
-                    <DialogDescription>
-                      Set your available hours for {selectedDate?.toLocaleDateString()}
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4 py-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="start-time">Start Time</Label>
-                      <Input
-                        id="start-time"
-                        type="time"
-                        value={startTime}
-                        onChange={(e) => setStartTime(e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="end-time">End Time</Label>
-                      <Input
-                        id="end-time"
-                        type="time"
-                        value={endTime}
-                        onChange={(e) => setEndTime(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button onClick={handleAddSlot} disabled={isSubmitting}>
-                      {isSubmitting ? "Adding..." : "Add Slot"}
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
+            <CardTitle className="text-base">
+              {selectedDate.toLocaleDateString('en-US', { 
+                weekday: 'long',
+                month: 'long', 
+                day: 'numeric',
+                year: 'numeric'
+              })}
+            </CardTitle>
+            <CardDescription className="text-xs">
+              {slotsForSelectedDate.length} slot{slotsForSelectedDate.length !== 1 ? 's' : ''} available
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            {availability.length === 0 ? (
+            {slotsForSelectedDate.length === 0 ? (
               <div className="py-12 text-center">
-                <p className="text-muted-foreground">No availability slots added yet</p>
-                <p className="text-sm text-muted-foreground mt-2">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
+                  <CalendarIcon className="w-8 h-8 text-muted-foreground" />
+                </div>
+                <p className="text-muted-foreground font-medium mb-1">
+                  No availability set for this day
+                </p>
+                <p className="text-sm text-muted-foreground mb-4">
                   Add your available time slots to receive bookings
                 </p>
+                <Button onClick={() => setIsAddDrawerOpen(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Availability
+                </Button>
               </div>
             ) : (
               <div className="space-y-3">
-                {availability
-                  .filter(slot => 
-                    selectedDate && 
-                    new Date(slot.date).toDateString() === selectedDate.toDateString()
-                  )
-                  .map((slot) => (
-                    <div 
-                      key={slot.id} 
-                      className="flex items-center justify-between p-4 border rounded-lg"
-                    >
-                      <div>
-                        <div className="font-medium">{slot.start_time} - {slot.end_time}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {new Date(slot.date).toLocaleDateString()}
-                        </div>
-                      </div>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="touch-target text-destructive hover:text-destructive hover:bg-destructive/10"
-                        onClick={() => handleRemoveSlot(slot.id)}
-                      >
-                        <Trash2 className="w-4 h-4 mr-1" />
-                        Remove
-                      </Button>
-                    </div>
-                  ))}
-                {selectedDate && availability.filter(slot => 
-                  new Date(slot.date).toDateString() === selectedDate.toDateString()
-                ).length === 0 && (
-                  <div className="py-8 text-center text-muted-foreground">
-                    No slots for this date
-                  </div>
-                )}
+                {slotsForSelectedDate.map((slot) => (
+                  <TimeSlotCard
+                    key={slot.id}
+                    startTime={slot.start_time}
+                    endTime={slot.end_time}
+                    onDelete={() => handleRemoveSlot(slot.id)}
+                  />
+                ))}
               </div>
             )}
           </CardContent>
         </Card>
       </main>
+
+      <AddAvailabilityDrawer
+        open={isAddDrawerOpen}
+        onOpenChange={setIsAddDrawerOpen}
+        selectedDate={selectedDate}
+        onAdd={handleAddSlot}
+      />
 
       <ProviderMobileNav />
     </div>
