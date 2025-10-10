@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
+import { ImageUpload } from "@/components/ImageUpload";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -253,15 +254,12 @@ const Profile = () => {
               <Separator />
 
               <div>
-                <Label>Avatar URL</Label>
-                <Input
-                  value={formData.avatar_url}
-                  onChange={(e) => setFormData({ ...formData, avatar_url: e.target.value })}
-                  placeholder="https://example.com/avatar.jpg"
+                <Label>Profile Picture</Label>
+                <ImageUpload
+                  currentImageUrl={formData.avatar_url}
+                  onImageUploaded={(url) => setFormData({ ...formData, avatar_url: url })}
+                  fallbackText={`${formData.first_name[0]}${formData.last_name[0]}`}
                 />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Paste a URL to your profile picture
-                </p>
               </div>
 
               <Button type="submit" className="w-full h-12 sm:h-10" disabled={saving}>

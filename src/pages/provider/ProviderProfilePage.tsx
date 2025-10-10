@@ -11,6 +11,7 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { ArrowLeft, User, Star, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
+import { ImageUpload } from "@/components/ImageUpload";
 
 const ProviderProfilePage = () => {
   const navigate = useNavigate();
@@ -302,18 +303,12 @@ const ProviderProfilePage = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="photoUrl">Profile Photo URL</Label>
-              <Input
-                id="photoUrl"
-                type="url"
-                placeholder="https://example.com/photo.jpg"
-                value={providerProfile?.photo_url || ''}
-                onChange={(e) => setProviderProfile({...providerProfile, photo_url: e.target.value})}
-                className="touch-target"
+              <Label htmlFor="photoUrl">Profile Photo</Label>
+              <ImageUpload
+                currentImageUrl={providerProfile?.photo_url || ''}
+                onImageUploaded={(url) => setProviderProfile({...providerProfile, photo_url: url})}
+                fallbackText={profile?.first_name?.[0] || 'P'}
               />
-              <p className="text-xs text-muted-foreground">
-                Enter a URL to your profile photo
-              </p>
             </div>
           </CardContent>
         </Card>
