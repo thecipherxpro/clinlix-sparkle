@@ -3,10 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, MapPin, CreditCard, User, LogOut, Search } from "lucide-react";
-import { toast } from "sonner";
+import { Calendar, MapPin, CreditCard, User, Search } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
+import WelcomeSection from "@/components/WelcomeSection";
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
@@ -45,11 +44,6 @@ const CustomerDashboard = () => {
     }
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    toast.success("You're logged out. See you soon!");
-    navigate('/auth');
-  };
 
   if (loading) {
     return (
@@ -61,36 +55,9 @@ const CustomerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
-        <div className="mobile-container py-3 sm:py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Clinlix
-            </h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <Avatar className="w-9 h-9 sm:w-10 sm:h-10 cursor-pointer border-2 border-primary/20" onClick={() => navigate('/customer/profile')}>
-              <AvatarImage src={profile?.avatar_url} alt={profile?.first_name} />
-              <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                {profile?.first_name?.[0]}{profile?.last_name?.[0]}
-              </AvatarFallback>
-            </Avatar>
-            <Button variant="ghost" size="icon" onClick={handleLogout} className="touch-target">
-              <LogOut className="w-5 h-5" />
-            </Button>
-          </div>
-        </div>
-      </header>
+      <WelcomeSection />
 
       <main className="mobile-container py-4 sm:py-8 max-w-6xl">
-        <div className="mb-6 sm:mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-2">
-            Hi, {profile?.first_name} 👋
-          </h2>
-          <p className="text-sm sm:text-base text-muted-foreground">
-            Welcome back to your cleaning dashboard
-          </p>
-        </div>
 
         {/* Search Bar */}
         <Card className="mb-6 sm:mb-8 border-0 shadow-sm">

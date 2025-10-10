@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, DollarSign, Briefcase, User, LogOut, Clock, Star } from "lucide-react";
-import { toast } from "sonner";
+import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
+import WelcomeSection from "@/components/WelcomeSection";
 
 const ProviderDashboard = () => {
   const navigate = useNavigate();
@@ -52,11 +50,6 @@ const ProviderDashboard = () => {
     }
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    toast.success("Logged out successfully");
-    navigate("/auth");
-  };
 
   if (loading) {
     return (
@@ -68,32 +61,9 @@ const ProviderDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
-        <div className="mobile-container py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Clinlix Provider
-            </h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <Avatar className="w-9 h-9 sm:w-10 sm:h-10 cursor-pointer border-2 border-primary/20" onClick={() => navigate('/provider/profile')}>
-              <AvatarImage src={providerProfile?.photo_url || profile?.avatar_url} alt={profile?.first_name} />
-              <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                {profile?.first_name?.[0]}{profile?.last_name?.[0]}
-              </AvatarFallback>
-            </Avatar>
-            <Button variant="ghost" size="icon" onClick={handleLogout} className="touch-target">
-              <LogOut className="w-5 h-5" />
-            </Button>
-          </div>
-        </div>
-      </header>
+      <WelcomeSection />
 
       <main className="mobile-container py-6 max-w-6xl mx-auto">
-        <div className="mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-2">Hi, {profile?.first_name} 👋</h2>
-          <p className="text-sm md:text-base text-muted-foreground">Manage your cleaning jobs and schedule</p>
-        </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
