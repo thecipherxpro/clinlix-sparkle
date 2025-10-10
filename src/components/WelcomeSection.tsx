@@ -136,8 +136,12 @@ export default function WelcomeSection() {
               onChange={handleImageUpload}
               className="hidden"
             />
-            <Avatar className="h-16 w-16 border-2 border-background shadow-md transition-transform group-hover:scale-105">
-              <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.first_name || "User"} />
+            <Avatar className="h-16 w-16 border-2 border-background shadow-md transition-transform group-hover:scale-105 ring-2 ring-primary/20">
+              <AvatarImage 
+                src={profile?.avatar_url || undefined} 
+                alt={profile?.first_name || "User"}
+                className="object-cover"
+              />
               <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xl">
                 {profile ? getInitials(profile.first_name, profile.last_name) : "U"}
               </AvatarFallback>
