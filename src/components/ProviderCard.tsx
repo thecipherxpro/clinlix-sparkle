@@ -71,6 +71,7 @@ const ProviderCard = ({
         {/* Avatar */}
         <AvatarDisplay 
           userId={userId}
+          avatarUrl={photoUrl}
           size={64}
           fallbackText={getInitials(fullName)}
           className="flex-shrink-0 border-2 border-muted rounded-full"

@@ -123,6 +123,7 @@ const Providers = () => {
                   <div className="flex items-start gap-4">
                     <AvatarDisplay 
                       userId={provider.user_id}
+                      avatarUrl={provider.photo_url}
                       size={64}
                       fallbackText={getInitials(provider.full_name)}
                       className="border-2 border-primary/20 rounded-full flex-shrink-0"

@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface AvatarDisplayProps {
   userId?: string;
+  avatarUrl?: string;
   size?: number;
   showName?: boolean;
   className?: string;
@@ -12,23 +13,27 @@ interface AvatarDisplayProps {
 
 export default function AvatarDisplay({
   userId,
+  avatarUrl,
   size = 48,
   showName = false,
   className = "",
   fallbackText,
 }: AvatarDisplayProps) {
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [displayAvatarUrl, setDisplayAvatarUrl] = useState<string | null>(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (userId) {
+    if (avatarUrl) {
+      setDisplayAvatarUrl(avatarUrl);
+      setLoading(false);
+    } else if (userId) {
       fetchProfile();
     } else {
       setLoading(false);
     }
-  }, [userId]);
+  }, [userId, avatarUrl]);
 
   const fetchProfile = async () => {
     try {
@@ -40,7 +45,7 @@ export default function AvatarDisplay({
 
       if (error) throw error;
 
-      setAvatarUrl(profile.avatar_url);
+      setDisplayAvatarUrl(profile.avatar_url);
       setFirstName(profile.first_name);
       setLastName(profile.last_name);
     } catch (error) {
@@ -68,7 +73,7 @@ export default function AvatarDisplay({
     <div className={`flex items-center gap-3 ${className}`}>
       <Avatar style={{ width: size, height: size }} className="flex-shrink-0">
         <AvatarImage 
-          src={avatarUrl || undefined} 
+          src={displayAvatarUrl || undefined} 
           alt={`${firstName} ${lastName}`}
           className="object-cover"
         />

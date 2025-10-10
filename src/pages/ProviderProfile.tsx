@@ -99,6 +99,7 @@ const ProviderProfile = () => {
           <div className="absolute -bottom-12 sm:-bottom-16 left-4 sm:left-8">
             <AvatarDisplay 
               userId={provider.user_id}
+              avatarUrl={provider.photo_url}
               size={window.innerWidth >= 640 ? 128 : 96}
               fallbackText={provider.full_name.split(' ').map((n: string) => n[0]).join('')}
               className="border-4 border-background rounded-full"
