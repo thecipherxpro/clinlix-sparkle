@@ -80,7 +80,8 @@ const JobRequestsList = () => {
     }
   };
 
-  const getInitials = (firstName: string, lastName: string) => {
+  const getInitials = (firstName?: string, lastName?: string) => {
+    if (!firstName || !lastName) return "??";
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
@@ -118,15 +119,15 @@ const JobRequestsList = () => {
             <div className="flex items-center gap-3 mb-4">
               <Avatar>
                 <AvatarFallback className="bg-primary text-primary-foreground">
-                  {getInitials(job.profiles.first_name, job.profiles.last_name)}
+                  {getInitials(job.profiles?.first_name, job.profiles?.last_name)}
                 </AvatarFallback>
               </Avatar>
               <div>
                 <h3 className="font-semibold text-foreground">
-                  {job.profiles.first_name} {job.profiles.last_name}
+                  {job.profiles?.first_name || "Customer"} {job.profiles?.last_name || ""}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {job.cleaning_packages.package_name}
+                  {job.cleaning_packages?.package_name || "Cleaning Service"}
                 </p>
               </div>
             </div>
@@ -139,12 +140,12 @@ const JobRequestsList = () => {
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Clock className="h-4 w-4 text-muted-foreground" />
-                <span>{job.requested_time} • {job.cleaning_packages.time_included}</span>
+                <span>{job.requested_time} • {job.cleaning_packages?.time_included || "N/A"}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
                 <span className="truncate">
-                  {job.customer_addresses.rua}, {job.customer_addresses.localidade}
+                  {job.customer_addresses?.rua || "Address"}, {job.customer_addresses?.localidade || ""}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-sm font-semibold">
