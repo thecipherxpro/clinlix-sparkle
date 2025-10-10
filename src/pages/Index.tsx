@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
 import clinlixLogoText from "@/assets/clinlix-logo-text.png";
 
@@ -85,20 +86,16 @@ const Index = () => {
         >
           <Button
             onClick={() => navigate("/auth")}
-            className="w-4/5 mx-auto flex items-center justify-center h-[50px] rounded-[30px] bg-gradient-to-r from-[#8A63FF] to-[#6C63FF] hover:from-[#7C3AED] hover:to-[#5C3AED] text-white text-base font-semibold shadow-[0_4px_15px_rgba(0,0,0,0.15)] transition-all hover:scale-[1.02] animate-pulse"
+            className="relative w-4/5 mx-auto flex items-center justify-center h-[50px] rounded-[30px] bg-gradient-to-r from-[#8A63FF] to-[#6C63FF] hover:from-[#7C3AED] hover:to-[#5C3AED] text-white text-base font-semibold shadow-[0_4px_15px_rgba(0,0,0,0.15)] transition-all hover:scale-[1.02] animate-pulse pr-14"
             style={{
               animationDuration: "3s",
               animationIterationCount: "infinite"
             }}
           >
             Continue
-            <svg
-              className="w-5 h-5 ml-2 fill-[#FFD43B]"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M13.3 17.275c-.225-.225-.225-.587 0-.812L16.875 13H5c-.35 0-.625-.275-.625-.625s.275-.625.625-.625h11.875l-3.575-3.463c-.225-.225-.225-.587 0-.812s.587-.225.812 0l4.713 4.588c.225.225.225.587 0 .812l-4.713 4.588c-.225.225-.587.225-.812 0z"/>
-            </svg>
+            <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#FFD43B] flex items-center justify-center shadow-md">
+              <ChevronRight className="w-6 h-6 text-[#8A63FF]" strokeWidth={3} />
+            </div>
           </Button>
         </div>
       </div>
