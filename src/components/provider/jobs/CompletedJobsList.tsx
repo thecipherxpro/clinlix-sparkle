@@ -111,13 +111,12 @@ const CompletedJobsList = () => {
       {completedJobs.map((job) => (
         <Card key={job.id} className="border-l-4 border-l-green-500">
           <CardContent className="p-4">
-            {/* Customer Info */}
-            <div className="flex items-center gap-3 mb-3">
-              <Avatar>
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  {getInitials(job.profiles.first_name, job.profiles.last_name)}
-                </AvatarFallback>
-              </Avatar>
+            <div className="flex items-center gap-3 mb-4">
+              <AvatarDisplay 
+                userId={job.customer_id}
+                size={56}
+                fallbackText={getInitials(job.profiles.first_name, job.profiles.last_name)}
+              />
               <div className="flex-1">
                 <h3 className="font-semibold text-foreground">
                   {job.profiles.first_name} {job.profiles.last_name}

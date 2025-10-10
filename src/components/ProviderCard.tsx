@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Star, CheckCircle, Sparkles } from "lucide-react";
+import AvatarDisplay from "@/components/AvatarDisplay";
 
 interface ProviderCardProps {
   providerId: string;
+  userId: string;
   fullName: string;
   photoUrl?: string;
   verified: boolean;
@@ -24,6 +25,7 @@ interface ProviderCardProps {
 
 const ProviderCard = ({
   providerId,
+  userId,
   fullName,
   photoUrl,
   verified,
@@ -67,12 +69,12 @@ const ProviderCard = ({
     >
       <div className="flex gap-4">
         {/* Avatar */}
-        <Avatar className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 border-2 border-muted">
-          <AvatarImage src={photoUrl} alt={fullName} />
-          <AvatarFallback className="bg-primary/10 text-primary font-semibold text-base">
-            {getInitials(fullName)}
-          </AvatarFallback>
-        </Avatar>
+        <AvatarDisplay 
+          userId={userId}
+          size={64}
+          fallbackText={getInitials(fullName)}
+          className="flex-shrink-0 border-2 border-muted rounded-full"
+        />
 
         {/* Content */}
         <div className="flex-1 min-w-0">

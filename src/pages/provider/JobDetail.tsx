@@ -313,11 +313,12 @@ const JobDetail = () => {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-4 mb-4">
-              <Avatar className="h-16 w-16">
-                <AvatarFallback className="bg-gradient-to-br from-primary to-purple-600 text-white text-lg font-semibold">
-                  {getInitials(job.profiles?.first_name, job.profiles?.last_name)}
-                </AvatarFallback>
-              </Avatar>
+              <AvatarDisplay 
+                userId={job.customer_id}
+                size={64}
+                fallbackText={getInitials(job.profiles?.first_name, job.profiles?.last_name)}
+                className="border-2 border-primary/20"
+              />
               <div className="flex-1">
                 <h2 className="text-xl font-bold">
                   {job.profiles?.first_name || "Customer"} {job.profiles?.last_name || ""}

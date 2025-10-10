@@ -11,6 +11,7 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { ArrowLeft, User, Star, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
+import AvatarUploader from "@/components/AvatarUploader";
 
 
 const ProviderProfilePage = () => {
@@ -144,9 +145,12 @@ const ProviderProfilePage = () => {
           <Card className="border-0 shadow-sm bg-gradient-to-br from-primary/5 to-accent/5">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                  <User className="w-8 h-8 text-primary" />
-                </div>
+                <AvatarUploader 
+                  size={80}
+                  editable={true}
+                  role="provider"
+                  onUploadSuccess={() => loadProfile()}
+                />
                 <div>
                   <div className="text-2xl font-bold">{providerProfile.full_name}</div>
                   <div className="flex items-center gap-2 mt-1">
@@ -300,17 +304,6 @@ const ProviderProfilePage = () => {
                 selected={providerProfile?.languages || []}
                 onChange={(languages) => setProviderProfile({...providerProfile, languages})}
                 placeholder="Select languages..."
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="photoUrl">Profile Photo</Label>
-              <Input
-                id="photoUrl"
-                type="url"
-                placeholder="https://example.com/photo.jpg"
-                value={providerProfile?.photo_url || ''}
-                onChange={(e) => setProviderProfile({...providerProfile, photo_url: e.target.value})}
-                className="touch-target"
               />
             </div>
           </CardContent>

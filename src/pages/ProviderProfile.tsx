@@ -97,12 +97,12 @@ const ProviderProfile = () => {
         <div className="relative mb-6 sm:mb-8">
           <div className="h-32 sm:h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl" />
           <div className="absolute -bottom-12 sm:-bottom-16 left-4 sm:left-8">
-            <Avatar className="w-24 h-24 sm:w-32 sm:h-32 border-4 border-background">
-              <AvatarImage src={provider.photo_url} />
-              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-3xl">
-                {provider.full_name.split(' ').map((n: string) => n[0]).join('')}
-              </AvatarFallback>
-            </Avatar>
+            <AvatarDisplay 
+              userId={provider.user_id}
+              size={window.innerWidth >= 640 ? 128 : 96}
+              fallbackText={provider.full_name.split(' ').map((n: string) => n[0]).join('')}
+              className="border-4 border-background rounded-full"
+            />
           </div>
         </div>
 

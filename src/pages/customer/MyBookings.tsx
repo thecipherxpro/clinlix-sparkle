@@ -187,12 +187,11 @@ const MyBookings = () => {
             {booking.provider_profiles && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Avatar className="w-10 h-10">
-                    <AvatarImage src={booking.provider_profiles.photo_url} />
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white">
-                      {booking.provider_profiles.full_name.split(' ').map((n: string) => n[0]).join('')}
-                    </AvatarFallback>
-                  </Avatar>
+                  <AvatarDisplay 
+                    userId={booking.provider_profiles.user_id}
+                    size={40}
+                    fallbackText={booking.provider_profiles.full_name.split(' ').map((n: string) => n[0]).join('')}
+                  />
                   <div>
                     <p className="font-medium text-sm">{booking.provider_profiles.full_name}</p>
                     <p className="text-xs text-muted-foreground flex items-center gap-1">

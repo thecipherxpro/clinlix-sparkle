@@ -327,6 +327,7 @@ const FindProviders = () => {
               <ProviderCard
                 key={provider.id}
                 providerId={provider.id}
+                userId={provider.user_id}
                 fullName={provider.full_name}
                 photoUrl={provider.photo_url}
                 verified={provider.verified}

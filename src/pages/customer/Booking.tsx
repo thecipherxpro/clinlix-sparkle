@@ -7,10 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, ArrowRight, Check, Calendar, MapPin, User, Plus, CreditCard, Bath, ChefHat, Sofa, Layers, Sparkles, Square } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
-import ProviderCard from "@/components/ProviderCard";
+import AvatarDisplay from "@/components/AvatarDisplay";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const STEPS = [
   { id: 1, name: "Where", icon: MapPin },
@@ -444,6 +445,7 @@ const Booking = () => {
                   <ProviderCard
                     key={provider.id}
                     providerId={provider.id}
+                    userId={provider.user_id}
                     fullName={provider.full_name}
                     photoUrl={provider.photo_url}
                     verified={provider.verified}
@@ -606,12 +608,11 @@ const Booking = () => {
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Provider</p>
                   <div className="flex items-center gap-3 mt-2">
-                    <Avatar className="w-10 h-10">
-                      <AvatarImage src={selectedProvider?.photo_url} />
-                      <AvatarFallback>
-                        {selectedProvider?.full_name.split(' ').map((n: string) => n[0]).join('')}
-                      </AvatarFallback>
-                    </Avatar>
+                    <AvatarDisplay 
+                      userId={selectedProvider?.user_id}
+                      size={40}
+                      fallbackText={selectedProvider?.full_name.split(' ').map((n: string) => n[0]).join('')}
+                    />
                     <div>
                       <p className="font-medium">{selectedProvider?.full_name}</p>
                       <p className="text-sm text-muted-foreground">

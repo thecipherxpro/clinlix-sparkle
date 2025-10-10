@@ -158,11 +158,12 @@ const JobRequestsList = () => {
             <CardContent className="p-5">
               {/* Header: Customer Info */}
               <div className="flex items-center gap-4 mb-4">
-                <Avatar className="h-14 w-14">
-                  <AvatarFallback className="bg-gradient-to-br from-primary to-purple-600 text-white text-lg font-semibold">
-                    {getInitials(job.profiles?.first_name, job.profiles?.last_name)}
-                  </AvatarFallback>
-                </Avatar>
+                <AvatarDisplay 
+                  userId={job.customer_id}
+                  size={56}
+                  fallbackText={getInitials(job.profiles?.first_name, job.profiles?.last_name)}
+                  className="border-2 border-primary/20"
+                />
                 <div className="flex-1">
                   <h3 className="font-bold text-lg text-foreground">
                     {job.profiles?.first_name || "Customer"} {job.profiles?.last_name || ""}
