@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
 import clinlixLogoText from "@/assets/clinlix-logo-text.png";
 
@@ -33,71 +32,71 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-[#EAE6FF] flex flex-col items-center justify-between px-6 py-12 overflow-hidden">
-      {/* Dual Cleaners Image */}
+    <div className="h-screen bg-gradient-to-b from-[#F8FAFC] to-[#CFE9F5] flex flex-col items-center justify-between px-6 py-8 overflow-hidden">
+      {/* Cleaning Lady Image */}
       <div
         className={`w-full flex-1 flex items-center justify-center transition-all duration-1000 ${
           showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
-        style={{ transitionDelay: "200ms" }}
+        style={{ transitionDelay: "300ms" }}
       >
         <img
-          src="https://i.postimg.cc/zXHMBm7s/Cleaning-lady.png"
-          alt="Professional Cleaning Service Team - Male and Female Cleaners"
-          className="w-full max-w-sm h-auto object-contain"
+          src="https://i.postimg.cc/PfD1KZWB/hel22.jpg"
+          alt="Professional Cleaning Service"
+          className="w-full max-w-md h-auto object-contain"
         />
       </div>
 
-      {/* Bottom Section */}
-      <div className="w-full max-w-md space-y-6">
-        {/* Clinlix Logo Text */}
-        <div
-          className={`transition-all duration-800 ${
-            showContent ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-95"
-          }`}
-          style={{ transitionDelay: "500ms" }}
-        >
-          <img 
-            src="https://i.postimg.cc/rw6HRhZh/Clinlix-writting.png" 
-            alt="Clinlix" 
-            className="w-3/5 h-auto mx-auto" 
-          />
-        </div>
+      {/* Clinlix Logo Text */}
+      <div
+        className={`transition-all duration-800 ${
+          showContent ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-95"
+        }`}
+        style={{ transitionDelay: "600ms" }}
+      >
+        <img src={clinlixLogoText} alt="Clinlix" className="w-48 h-auto mx-auto" />
+      </div>
 
-        {/* Tagline */}
-        <h1
-          className={`text-lg font-semibold text-[#222222] text-center transition-all duration-800 ${
-            showContent ? "opacity-100" : "opacity-0"
-          }`}
-          style={{
-            transitionDelay: "600ms",
-            fontFamily: "Inter, Manrope, sans-serif"
-          }}
-        >
-          Trusted Cleaning,<br />Every Single Time
-        </h1>
+      {/* Tagline */}
+      <h1
+        className={`text-lg font-semibold text-[#333333] text-center tracking-wide mt-4 transition-all duration-800 ${
+          showContent ? "opacity-100" : "opacity-0"
+        }`}
+        style={{
+          transitionDelay: "800ms",
+          letterSpacing: "0.3px",
+        }}
+      >
+        Trusted Cleaning, Every Single Time
+      </h1>
 
-        {/* Continue Button */}
-        <div
-          className={`w-full transition-all duration-1000 ${
-            showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-          style={{ transitionDelay: "1000ms" }}
+      {/* Buttons Section */}
+      <div
+        className={`w-full max-w-md flex gap-4 mt-8 mb-6 transition-all duration-1000 ${
+          showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+        }`}
+        style={{ transitionDelay: "1200ms" }}
+      >
+        <Button
+          onClick={() => navigate("/auth")}
+          className="flex-1 h-12 rounded-[30px] bg-gradient-to-r from-[#8A63FF] to-[#6C63FF] hover:from-[#7A53EF] hover:to-[#5C53EF] text-white font-bold shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-all hover:scale-105"
         >
-          <Button
-            onClick={() => navigate("/auth")}
-            className="relative w-4/5 mx-auto flex items-center justify-center h-[50px] rounded-[30px] bg-gradient-to-r from-[#8A63FF] to-[#6C63FF] hover:from-[#7C3AED] hover:to-[#5C3AED] text-white text-base font-semibold shadow-[0_4px_15px_rgba(0,0,0,0.15)] transition-all hover:scale-[1.02] animate-pulse pr-14"
-            style={{
-              animationDuration: "3s",
-              animationIterationCount: "infinite"
-            }}
-          >
-            Continue
-            <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#FFD43B] flex items-center justify-center shadow-md">
-              <ChevronRight className="w-6 h-6 text-[#8A63FF]" strokeWidth={3} />
-            </div>
-          </Button>
-        </div>
+          Login
+        </Button>
+        <Button
+          onClick={() => navigate("/auth")}
+          className="flex-1 h-12 rounded-[30px] bg-gradient-to-r from-[#55A7FF] to-[#3B89F5] hover:from-[#4597EF] hover:to-[#2B79E5] text-white font-bold shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-all hover:scale-105"
+        >
+          Sign Up
+        </Button>
+      </div>
+
+      {/* Security Footer */}
+      <div
+        className={`text-center pb-4 transition-all duration-800 ${showContent ? "opacity-100" : "opacity-0"}`}
+        style={{ transitionDelay: "1500ms" }}
+      >
+        <p className="text-[10px] text-[#007B67] font-medium">SECURED BY CipherX Solutions</p>
       </div>
     </div>
   );
