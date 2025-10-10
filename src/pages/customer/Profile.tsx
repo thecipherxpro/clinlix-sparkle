@@ -10,7 +10,7 @@ import { ArrowLeft, User, LogOut, Save } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
-import AvatarUploader from "@/components/AvatarUploader";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -134,14 +134,14 @@ const Profile = () => {
         {/* Profile Header */}
         <Card className="border-0 shadow-sm mb-6">
           <CardContent className="pt-6">
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              <AvatarUploader 
-                size={120}
-                editable={true}
-                role="customer"
-                onUploadSuccess={(url) => setFormData({ ...formData, avatar_url: url })}
-              />
-              <div className="flex-1 text-center sm:text-left">
+            <div className="flex items-center gap-6">
+              <Avatar className="h-16 w-16 border-2 border-border shadow-md">
+                <AvatarImage src={formData.avatar_url || undefined} alt={`${formData.first_name} ${formData.last_name}`} />
+                <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xl">
+                  {formData.first_name[0]}{formData.last_name[0]}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1">
                 <h2 className="text-2xl font-bold">
                   {formData.first_name} {formData.last_name}
                 </h2>
@@ -251,6 +251,17 @@ const Profile = () => {
               </div>
 
               <Separator />
+
+              <div>
+                <Label htmlFor="avatar_url">Profile Picture URL</Label>
+                <Input
+                  id="avatar_url"
+                  type="url"
+                  placeholder="https://example.com/avatar.jpg"
+                  value={formData.avatar_url || ''}
+                  onChange={(e) => setFormData({ ...formData, avatar_url: e.target.value })}
+                />
+              </div>
 
               <Button type="submit" className="w-full h-12 sm:h-10" disabled={saving}>
                 <Save className="w-4 h-4 mr-2" />

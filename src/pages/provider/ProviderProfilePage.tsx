@@ -11,7 +11,7 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { ArrowLeft, User, Star, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
-import AvatarUploader from "@/components/AvatarUploader";
+
 
 const ProviderProfilePage = () => {
   const navigate = useNavigate();
@@ -304,17 +304,14 @@ const ProviderProfilePage = () => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="photoUrl">Profile Photo</Label>
-              <div className="flex justify-start">
-                <AvatarUploader
-                  size={120}
-                  editable={true}
-                  role="provider"
-                  onUploadSuccess={(url) => setProviderProfile({...providerProfile, photo_url: url})}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Click avatar to upload or change your profile photo
-              </p>
+              <Input
+                id="photoUrl"
+                type="url"
+                placeholder="https://example.com/photo.jpg"
+                value={providerProfile?.photo_url || ''}
+                onChange={(e) => setProviderProfile({...providerProfile, photo_url: e.target.value})}
+                className="touch-target"
+              />
             </div>
           </CardContent>
         </Card>
