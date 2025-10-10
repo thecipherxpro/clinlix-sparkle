@@ -4,7 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
-import { ArrowLeft, Plus } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 
@@ -14,6 +17,10 @@ const ProviderSchedule = () => {
   const [availability, setAvailability] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [providerProfile, setProviderProfile] = useState<any>(null);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [startTime, setStartTime] = useState("09:00");
+  const [endTime, setEndTime] = useState("17:00");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     checkUserAndFetchAvailability();
@@ -61,6 +68,68 @@ const ProviderSchedule = () => {
       toast.error("Failed to load schedule");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAddSlot = async () => {
+    if (!selectedDate || !providerProfile) {
+      toast.error("Please select a date");
+      return;
+    }
+
+    if (startTime >= endTime) {
+      toast.error("End time must be after start time");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('provider_availability')
+        .insert({
+          provider_id: providerProfile.id,
+          date: selectedDate.toISOString().split('T')[0],
+          start_time: startTime,
+          end_time: endTime
+        });
+
+      if (error) throw error;
+
+      toast.success("Availability slot added");
+      setIsAddDialogOpen(false);
+      setStartTime("09:00");
+      setEndTime("17:00");
+      
+      // Refresh availability data
+      const { data: availabilityData } = await supabase
+        .from('provider_availability')
+        .select('*')
+        .eq('provider_id', providerProfile.id)
+        .order('date', { ascending: true });
+
+      setAvailability(availabilityData || []);
+    } catch (error) {
+      console.error('Error adding slot:', error);
+      toast.error("Failed to add availability slot");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleRemoveSlot = async (slotId: string) => {
+    try {
+      const { error } = await supabase
+        .from('provider_availability')
+        .delete()
+        .eq('id', slotId);
+
+      if (error) throw error;
+
+      toast.success("Availability slot removed");
+      setAvailability(availability.filter(slot => slot.id !== slotId));
+    } catch (error) {
+      console.error('Error removing slot:', error);
+      toast.error("Failed to remove availability slot");
     }
   };
 
@@ -113,10 +182,50 @@ const ProviderSchedule = () => {
                   {selectedDate ? selectedDate.toLocaleDateString() : "Select a date"}
                 </CardDescription>
               </div>
-              <Button size="sm" className="touch-target">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Slot
-              </Button>
+              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="touch-target" disabled={!selectedDate}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Slot
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add Availability Slot</DialogTitle>
+                    <DialogDescription>
+                      Set your available hours for {selectedDate?.toLocaleDateString()}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="start-time">Start Time</Label>
+                      <Input
+                        id="start-time"
+                        type="time"
+                        value={startTime}
+                        onChange={(e) => setStartTime(e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="end-time">End Time</Label>
+                      <Input
+                        id="end-time"
+                        type="time"
+                        value={endTime}
+                        onChange={(e) => setEndTime(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button onClick={handleAddSlot} disabled={isSubmitting}>
+                      {isSubmitting ? "Adding..." : "Add Slot"}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </CardHeader>
           <CardContent>
@@ -145,7 +254,13 @@ const ProviderSchedule = () => {
                           {new Date(slot.date).toLocaleDateString()}
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm" className="touch-target">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="touch-target text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={() => handleRemoveSlot(slot.id)}
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" />
                         Remove
                       </Button>
                     </div>
