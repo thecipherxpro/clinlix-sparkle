@@ -144,7 +144,7 @@ const ProviderCard = ({
                 onClick={() => navigate(`/providers/profile/${providerId}`)}
                 className="flex-1 touch-target"
               >
-                View Profile
+                See Details
               </Button>
               {onSelect ? (
                 <Button
@@ -161,7 +161,7 @@ const ProviderCard = ({
                   onClick={() => navigate(`/customer/booking?providerId=${providerId}`)}
                   className="flex-1 touch-target"
                 >
-                  Book
+                  Book Now
                 </Button>
               )}
             </div>

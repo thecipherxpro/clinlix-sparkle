@@ -47,7 +47,7 @@ const CustomerDashboard = () => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    toast.success("Logged out successfully");
+    toast.success("You're logged out. See you soon!");
     navigate('/auth');
   };
 
@@ -99,7 +99,7 @@ const CustomerDashboard = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 sm:w-5 sm:h-5" />
               <input
                 type="text"
-                placeholder="Search for providers..."
+                placeholder="Find a provider"
                 className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 rounded-xl border bg-background focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-base"
                 onClick={() => navigate('/customer/find-providers')}
               />
@@ -119,7 +119,7 @@ const CustomerDashboard = () => {
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2">
                   <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
-                <CardTitle className="text-sm sm:text-lg">Book Cleaning</CardTitle>
+                <CardTitle className="text-sm sm:text-lg">Book Now</CardTitle>
                 <CardDescription className="text-xs sm:text-sm">Schedule service</CardDescription>
               </CardHeader>
             </Card>
@@ -146,7 +146,7 @@ const CustomerDashboard = () => {
                   <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <CardTitle className="text-sm sm:text-lg">Payment</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Payment methods</CardDescription>
+                <CardDescription className="text-xs sm:text-sm">Manage cards</CardDescription>
               </CardHeader>
             </Card>
 
@@ -178,10 +178,10 @@ const CustomerDashboard = () => {
               <div className="text-center py-8 sm:py-12">
                 <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
                 <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                  No upcoming bookings
+                  You haven't booked yet
                 </p>
                 <Button onClick={() => navigate('/customer/booking')} className="w-full sm:w-auto">
-                  Book a Service
+                  Book Now
                 </Button>
               </div>
             </CardContent>
@@ -195,10 +195,10 @@ const CustomerDashboard = () => {
             <CardContent className="pt-6 pb-6 sm:pt-8 sm:pb-8">
               <div className="text-center py-8 sm:py-12">
                 <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                  No recommended providers yet
+                  We're learning your preferences
                 </p>
                 <Button onClick={() => navigate('/customer/find-providers')} className="w-full sm:w-auto">
-                  Find Providers
+                  Browse Providers
                 </Button>
               </div>
             </CardContent>

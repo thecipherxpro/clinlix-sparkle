@@ -34,7 +34,7 @@ const Auth = () => {
     e.preventDefault();
     
     if (!loginForm.email || !loginForm.password) {
-      toast.error("Please fill in all fields");
+      toast.error("Fill in all fields to continue");
       return;
     }
 
@@ -72,17 +72,17 @@ const Auth = () => {
     e.preventDefault();
 
     if (!registerForm.firstName || !registerForm.lastName || !registerForm.email || !registerForm.password) {
-      toast.error("Please fill in all fields");
+      toast.error("Fill in all fields to continue");
       return;
     }
 
     if (registerForm.password !== registerForm.confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error("Passwords don't match. Try again.");
       return;
     }
 
     if (registerForm.password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error("Use at least 6 characters for your password");
       return;
     }
 
@@ -104,7 +104,7 @@ const Auth = () => {
       if (error) throw error;
 
       if (data.user) {
-        toast.success("Account created successfully!");
+        toast.success("Welcome! Your account is ready.");
         const redirectPath = selectedRole === 'provider' 
           ? '/provider/dashboard' 
           : '/customer/dashboard';
@@ -144,7 +144,7 @@ const Auth = () => {
                   <Input
                     id="login-email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="name@example.com"
                     value={loginForm.email}
                     onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
                     disabled={loading}
@@ -155,14 +155,14 @@ const Auth = () => {
                   <Input
                     id="login-password"
                     type="password"
-                    placeholder="••••••"
+                    placeholder="Enter password"
                     value={loginForm.password}
                     onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                     disabled={loading}
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Logging in..." : "Login"}
+                  {loading ? "Signing in..." : "Sign In"}
                 </Button>
               </form>
             </TabsContent>
@@ -217,7 +217,7 @@ const Auth = () => {
                   <Input
                     id="register-email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="name@example.com"
                     value={registerForm.email}
                     onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
                     disabled={loading}
@@ -228,7 +228,7 @@ const Auth = () => {
                   <Input
                     id="register-password"
                     type="password"
-                    placeholder="••••••"
+                    placeholder="At least 6 characters"
                     value={registerForm.password}
                     onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
                     disabled={loading}
@@ -239,14 +239,14 @@ const Auth = () => {
                   <Input
                     id="confirm-password"
                     type="password"
-                    placeholder="••••••"
+                    placeholder="Re-enter password"
                     value={registerForm.confirmPassword}
                     onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })}
                     disabled={loading}
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Creating account..." : `Sign up as ${selectedRole === 'customer' ? 'Customer' : 'Provider'}`}
+                  {loading ? "Creating account..." : `Start as ${selectedRole === 'customer' ? 'Customer' : 'Provider'}`}
                 </Button>
               </form>
             </TabsContent>

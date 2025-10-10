@@ -189,7 +189,7 @@ const FindProviders = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
                 type="text"
-                placeholder="Search by provider name or area..."
+                placeholder="Find providers near you..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 touch-target"
@@ -205,9 +205,9 @@ const FindProviders = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:max-w-md">
                 <SheetHeader>
-                  <SheetTitle>Filters</SheetTitle>
+                  <SheetTitle>Filter Providers</SheetTitle>
                   <SheetDescription>
-                    Refine your search for providers
+                    Narrow your search
                   </SheetDescription>
                 </SheetHeader>
                 
@@ -242,10 +242,10 @@ const FindProviders = () => {
 
                   {/* Service Area */}
                   <div className="space-y-2">
-                    <Label htmlFor="area">Service Area</Label>
+                    <Label htmlFor="area">Where do you need service?</Label>
                     <Input
                       id="area"
-                      placeholder="e.g., Lisbon, Porto..."
+                      placeholder="Enter your city"
                       value={serviceAreaFilter}
                       onChange={(e) => setServiceAreaFilter(e.target.value)}
                       className="touch-target"
@@ -274,7 +274,7 @@ const FindProviders = () => {
                     onClick={clearFilters}
                     className="w-full touch-target"
                   >
-                    Clear All Filters
+                    Reset Filters
                   </Button>
                 </div>
               </SheetContent>
@@ -314,12 +314,12 @@ const FindProviders = () => {
           {filteredProviders.length === 0 ? (
             <div className="text-center py-16">
               <UserX className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <h3 className="text-lg font-semibold mb-2">No providers found</h3>
+              <h3 className="text-lg font-semibold mb-2">No matches yet</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Try adjusting your filters or search terms
+                Try different filters or expand your search area
               </p>
               <Button onClick={clearFilters} variant="outline">
-                Clear Filters
+                Reset Filters
               </Button>
             </div>
           ) : (

@@ -116,15 +116,15 @@ const Booking = () => {
 
   const handleNext = () => {
     if (currentStep === 1 && !selectedAddress) {
-      toast.error('Please select an address');
+      toast.error('Choose an address to continue');
       return;
     }
     if (currentStep === 2 && (!selectedDate || !selectedTime)) {
-      toast.error('Please select date and time');
+      toast.error('Pick a date and time to see available providers');
       return;
     }
     if (currentStep === 3 && !selectedProvider) {
-      toast.error('Please select a provider');
+      toast.error('Choose a provider to continue booking');
       return;
     }
     
@@ -162,7 +162,7 @@ const Booking = () => {
 
       if (error) throw error;
 
-      toast.success('Booking request sent! Awaiting provider confirmation.');
+      toast.success("Booking sent! We'll notify you when your provider confirms.");
       navigate('/customer/dashboard');
     } catch (error: any) {
       toast.error(error.message || 'Failed to create booking');
@@ -248,8 +248,8 @@ const Booking = () => {
         {currentStep === 1 && (
           <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold mb-2">Where should we clean?</h2>
-              <p className="text-sm sm:text-base text-muted-foreground">Select one of your saved addresses</p>
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">Which location should we clean?</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Choose from your saved addresses</p>
             </div>
 
             {addresses.length === 0 ? (
@@ -257,10 +257,10 @@ const Booking = () => {
                 <CardContent className="pt-12 pb-12 text-center">
                   <MapPin className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
                   <p className="text-muted-foreground mb-4">
-                    No addresses saved yet
+                    Add your first cleaning location
                   </p>
                   <Button onClick={() => navigate('/customer/my-addresses')}>
-                    Add Address First
+                    Add Your First Address
                   </Button>
                 </CardContent>
               </Card>
@@ -354,8 +354,8 @@ const Booking = () => {
         {currentStep === 2 && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">When do you need cleaning?</h2>
-              <p className="text-muted-foreground">Choose your preferred date and time</p>
+              <h2 className="text-2xl font-bold mb-2">When do you need us?</h2>
+              <p className="text-muted-foreground">Pick your preferred date and time</p>
             </div>
 
             <Card className="border-0 shadow-sm">
@@ -431,7 +431,7 @@ const Booking = () => {
                 <CardContent className="pt-12 pb-12 text-center">
                   <User className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
                   <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                    No providers available for this date
+                    No matches for this date
                   </p>
                   <Button variant="outline" onClick={() => setCurrentStep(2)} className="touch-target">
                     Choose Different Date
