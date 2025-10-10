@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Bell } from "lucide-react";
+import { Bell, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface UserProfile {
   first_name: string;
@@ -15,6 +16,8 @@ interface UserProfile {
 export default function WelcomeSection() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,19 +49,102 @@ export default function WelcomeSection() {
     return `${firstName?.[0] || ""}${lastName?.[0] || ""}`.toUpperCase();
   };
 
-  const getWelcomeMessage = () => {
-    if (!profile) return "Welcome";
-    
-    switch (profile.role) {
-      case "customer":
-        return `Welcome back, ${profile.first_name} 👋`;
-      case "provider":
-        return `Hello ${profile.first_name}, ready for your next job?`;
-      case "admin":
-        return `Welcome, ${profile.first_name} (Admin)`;
-      default:
-        return `Hello, ${profile.first_name}`;
+  const compressImage = async (file: File): Promise<File> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d')!;
+          
+          const maxSize = 512;
+          let width = img.width;
+          let height = img.height;
+          
+          if (width > height) {
+            if (width > maxSize) {
+              height *= maxSize / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width *= maxSize / height;
+              height = maxSize;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+            }
+          }, 'image/jpeg', 0.8);
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error("Please select an image file");
+      return;
     }
+
+    setUploading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      const compressedFile = await compressImage(file);
+      const filePath = `avatars/${user.id}/profile.jpg`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, compressedFile, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+
+      const avatarUrl = `${publicUrl}?t=${new Date().getTime()}`;
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: avatarUrl })
+        .eq('id', user.id);
+
+      if (updateError) throw updateError;
+
+      if (profile?.role === 'provider') {
+        await supabase
+          .from('provider_profiles')
+          .update({ photo_url: avatarUrl })
+          .eq('user_id', user.id);
+      }
+
+      setProfile(prev => prev ? { ...prev, avatar_url: avatarUrl } : null);
+      toast.success("Profile picture updated successfully");
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error("Failed to upload image");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
   };
 
   if (loading) {
@@ -83,12 +169,31 @@ export default function WelcomeSection() {
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Left: Avatar and Welcome Text */}
         <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16 border-2 border-background shadow-md">
-            <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.first_name || "User"} />
-            <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xl">
-              {profile ? getInitials(profile.first_name, profile.last_name) : "U"}
-            </AvatarFallback>
-          </Avatar>
+          <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+            <Avatar className="h-16 w-16 border-2 border-background shadow-md transition-transform group-hover:scale-105">
+              <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.first_name || "User"} />
+              <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xl">
+                {profile ? getInitials(profile.first_name, profile.last_name) : "U"}
+              </AvatarFallback>
+            </Avatar>
+            {uploading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              </div>
+            )}
+            {!uploading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                <Upload className="h-6 w-6 text-primary" />
+              </div>
+            )}
+          </div>
 
           {/* Welcome Text */}
           <div className="flex flex-col">
