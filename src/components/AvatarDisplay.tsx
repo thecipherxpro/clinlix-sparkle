@@ -70,8 +70,8 @@ export default function AvatarDisplay({
   }
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
-      <Avatar style={{ width: size, height: size }} className="flex-shrink-0">
+    <div className={`flex items-start gap-3 ${className}`}>
+      <Avatar style={{ width: size, height: size }} className="flex-shrink-0 border-2 border-border">
         <AvatarImage 
           src={displayAvatarUrl || undefined} 
           alt={`${firstName} ${lastName}`}
