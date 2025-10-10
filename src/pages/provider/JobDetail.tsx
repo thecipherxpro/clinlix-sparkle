@@ -176,7 +176,8 @@ const JobDetail = () => {
     }
   };
 
-  const getInitials = (firstName: string, lastName: string) => {
+  const getInitials = (firstName?: string, lastName?: string) => {
+    if (!firstName || !lastName) return "??";
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
@@ -233,14 +234,14 @@ const JobDetail = () => {
             <div className="flex items-center gap-4 mb-4">
               <Avatar className="h-16 w-16">
                 <AvatarFallback className="bg-primary text-primary-foreground text-lg">
-                  {getInitials(job.profiles.first_name, job.profiles.last_name)}
+                  {getInitials(job.profiles?.first_name, job.profiles?.last_name)}
                 </AvatarFallback>
               </Avatar>
               <div>
                 <h2 className="text-xl font-bold">
-                  {job.profiles.first_name} {job.profiles.last_name}
+                  {job.profiles?.first_name || "Customer"} {job.profiles?.last_name || ""}
                 </h2>
-                {job.profiles.phone && (
+                {job.profiles?.phone && (
                   <p className="text-sm text-muted-foreground">{job.profiles.phone}</p>
                 )}
                 <Badge variant="outline" className="mt-1">
@@ -277,7 +278,7 @@ const JobDetail = () => {
               <div>
                 <p className="font-medium">Time</p>
                 <p className="text-sm text-muted-foreground">
-                  {job.requested_time} • {job.cleaning_packages.time_included}
+                  {job.requested_time} • {job.cleaning_packages?.time_included || "N/A"}
                 </p>
               </div>
             </div>
@@ -287,10 +288,10 @@ const JobDetail = () => {
               <div className="flex-1">
                 <p className="font-medium">Address</p>
                 <p className="text-sm text-muted-foreground">
-                  {job.customer_addresses.rua}
-                  {job.customer_addresses.porta_andar && `, ${job.customer_addresses.porta_andar}`}
+                  {job.customer_addresses?.rua || "Address not available"}
+                  {job.customer_addresses?.porta_andar && `, ${job.customer_addresses.porta_andar}`}
                   <br />
-                  {job.customer_addresses.localidade}, {job.customer_addresses.codigo_postal}
+                  {job.customer_addresses?.localidade}, {job.customer_addresses?.codigo_postal}
                 </p>
                 <Button
                   variant="link"
@@ -309,7 +310,7 @@ const JobDetail = () => {
               <div>
                 <p className="font-medium">Property Type</p>
                 <p className="text-sm text-muted-foreground capitalize">
-                  {job.customer_addresses.property_type}
+                  {job.customer_addresses?.property_type || "N/A"}
                 </p>
               </div>
             </div>
@@ -319,7 +320,7 @@ const JobDetail = () => {
               <div>
                 <p className="font-medium">Cleaning Package</p>
                 <p className="text-sm text-muted-foreground">
-                  {job.cleaning_packages.package_name}
+                  {job.cleaning_packages?.package_name || "N/A"}
                 </p>
               </div>
             </div>
@@ -348,7 +349,7 @@ const JobDetail = () => {
         </Card>
 
         {/* Timer for Started Jobs */}
-        {job.job_status === "started" && job.started_at && (
+        {job.job_status === "started" && job.started_at && job.cleaning_packages?.time_included && (
           <JobTimer
             startedAt={job.started_at}
             timeIncluded={job.cleaning_packages.time_included}
@@ -428,7 +429,7 @@ const JobDetail = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Accept this job?</AlertDialogTitle>
             <AlertDialogDescription>
-              You will earn €{earnings} for this {job.cleaning_packages.time_included} cleaning job.
+              You will earn €{earnings} for this {job.cleaning_packages?.time_included || "cleaning"} job.
               Make sure you can arrive on time at {job.requested_time}.
             </AlertDialogDescription>
           </AlertDialogHeader>
