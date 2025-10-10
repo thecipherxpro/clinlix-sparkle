@@ -14,13 +14,6 @@ const Index = () => {
 
     // Trigger animations
     setTimeout(() => setShowContent(true), 100);
-
-    // Auto-redirect after 6 seconds
-    const timer = setTimeout(() => {
-      navigate("/auth");
-    }, 6000);
-
-    return () => clearTimeout(timer);
   }, []);
 
   const checkUser = async () => {
