@@ -11,7 +11,7 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { ArrowLeft, User, Star, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
-import { ImageUpload } from "@/components/ImageUpload";
+import AvatarUploader from "@/components/AvatarUploader";
 
 const ProviderProfilePage = () => {
   const navigate = useNavigate();
@@ -304,11 +304,17 @@ const ProviderProfilePage = () => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="photoUrl">Profile Photo</Label>
-              <ImageUpload
-                currentImageUrl={providerProfile?.photo_url || ''}
-                onImageUploaded={(url) => setProviderProfile({...providerProfile, photo_url: url})}
-                fallbackText={profile?.first_name?.[0] || 'P'}
-              />
+              <div className="flex justify-start">
+                <AvatarUploader
+                  size={120}
+                  editable={true}
+                  role="provider"
+                  onUploadSuccess={(url) => setProviderProfile({...providerProfile, photo_url: url})}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Click avatar to upload or change your profile photo
+              </p>
             </div>
           </CardContent>
         </Card>

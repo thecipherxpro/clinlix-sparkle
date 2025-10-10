@@ -153,6 +153,18 @@ export default function AvatarUploader({
 
       if (updateError) throw updateError;
 
+      // If provider, also update provider_profiles photo_url
+      if (role === "provider") {
+        const { error: providerUpdateError } = await supabase
+          .from("provider_profiles")
+          .update({ photo_url: urlWithTimestamp })
+          .eq("user_id", user.id);
+        
+        if (providerUpdateError) {
+          console.error("Failed to update provider photo:", providerUpdateError);
+        }
+      }
+
       setAvatarUrl(urlWithTimestamp);
       
       toast({
