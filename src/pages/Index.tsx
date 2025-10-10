@@ -42,7 +42,7 @@ const Index = () => {
         style={{ transitionDelay: "200ms" }}
       >
         <img
-          src="https://i.postimg.cc/zXHMBm7s/Cleaning-lady.png"
+          src="https://i.postimg.cc/3wgQwkjQ/Splash-New.png"
           alt="Professional Cleaning Service Team - Male and Female Cleaners"
           className="w-full max-w-sm h-auto object-contain"
         />
