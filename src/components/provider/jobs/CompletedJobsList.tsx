@@ -4,9 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Euro, CheckCircle } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import AvatarDisplay from "@/components/AvatarDisplay";
 
 interface CompletedJob {
   id: string;
@@ -14,6 +14,7 @@ interface CompletedJob {
   total_final: number;
   overtime_minutes: number;
   completed_at: string;
+  customer_id: string;
   profiles: {
     first_name: string;
     last_name: string;

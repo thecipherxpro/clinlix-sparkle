@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
 import AvatarDisplay from "@/components/AvatarDisplay";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ProviderCard from "@/components/ProviderCard";
 
 const STEPS = [
   { id: 1, name: "Where", icon: MapPin },

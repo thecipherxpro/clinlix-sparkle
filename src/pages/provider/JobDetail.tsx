@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
@@ -34,6 +33,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import AvatarDisplay from "@/components/AvatarDisplay";
 
 interface JobDetail {
   id: string;
@@ -45,6 +45,7 @@ interface JobDetail {
   started_at: string | null;
   overtime_minutes: number;
   addon_ids: string[] | null;
+  customer_id: string;
   profiles: {
     first_name: string;
     last_name: string;
