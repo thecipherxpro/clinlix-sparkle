@@ -32,71 +32,72 @@ const Index = () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-b from-[#152e66]/0 to-[#8365fb]/88 flex flex-col items-center justify-between px-6 py-8 overflow-hidden">
-      {/* Cleaning Lady Image */}
+    <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5F9] flex flex-col items-center justify-between px-6 py-12 overflow-hidden">
+      {/* Cleaning Team Image */}
       <div
         className={`w-full flex-1 flex items-center justify-center transition-all duration-1000 ${
           showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
-        style={{ transitionDelay: "300ms" }}
+        style={{ transitionDelay: "200ms" }}
       >
         <img
           src="https://i.postimg.cc/3wgQwkjQ/Splash-New.png"
-          alt="Professional Cleaning Service"
-          className="w-full max-w-md h-auto object-contain"
+          alt="Professional Cleaning Service Team"
+          className="w-full max-w-sm h-auto object-contain"
         />
       </div>
 
-      {/* Clinlix Logo Text */}
-      <div
-        className={`transition-all duration-800 ${
-          showContent ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-95"
-        }`}
-        style={{ transitionDelay: "600ms" }}
-      >
-        <img src={clinlixLogoText} alt="Clinlix" className="w-48 h-auto mx-auto" />
-      </div>
-
-      {/* Tagline */}
-      <h1
-        className={`text-lg font-semibold text-[#333333] text-center tracking-wide mt-4 transition-all duration-800 ${
-          showContent ? "opacity-100" : "opacity-0"
-        }`}
-        style={{
-          transitionDelay: "800ms",
-          letterSpacing: "0.3px",
-        }}
-      >
-        Trusted Cleaning, Every Single Time
-      </h1>
-
-      {/* Buttons Section */}
-      <div
-        className={`w-full max-w-md flex gap-4 mt-8 mb-6 transition-all duration-1000 ${
-          showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
-        style={{ transitionDelay: "1200ms" }}
-      >
-        <Button
-          onClick={() => navigate("/auth")}
-          className="flex-1 h-12 rounded-[30px] bg-gradient-to-r from-[#8A63FF] to-[#6C63FF] hover:from-[#7A53EF] hover:to-[#5C53EF] text-white font-bold shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-all hover:scale-105"
+      {/* Bottom Section */}
+      <div className="w-full max-w-md space-y-6">
+        {/* Clinlix Logo Text */}
+        <div
+          className={`transition-all duration-800 ${
+            showContent ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-95"
+          }`}
+          style={{ transitionDelay: "400ms" }}
         >
-          Login
-        </Button>
-        <Button
-          onClick={() => navigate("/auth")}
-          className="flex-1 h-12 rounded-[30px] bg-gradient-to-r from-[#55A7FF] to-[#3B89F5] hover:from-[#4597EF] hover:to-[#2B79E5] text-white font-bold shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-all hover:scale-105"
-        >
-          Sign Up
-        </Button>
-      </div>
+          <img src={clinlixLogoText} alt="Clinlix" className="w-52 h-auto mx-auto" />
+        </div>
 
-      {/* Security Footer */}
-      <div
-        className={`text-center pb-4 transition-all duration-800 ${showContent ? "opacity-100" : "opacity-0"}`}
-        style={{ transitionDelay: "1500ms" }}
-      >
-        <p className="text-[10px] text-[#007B67] font-medium">SECURED BY CipherX Solutions</p>
+        {/* Tagline */}
+        <h1
+          className={`text-xl font-bold text-[#2D2D2D] text-center transition-all duration-800 ${
+            showContent ? "opacity-100" : "opacity-0"
+          }`}
+          style={{
+            transitionDelay: "600ms",
+          }}
+        >
+          Trusted Cleaning,<br />Every Single Time
+        </h1>
+
+        {/* Continue Button */}
+        <div
+          className={`w-full transition-all duration-1000 ${
+            showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: "800ms" }}
+        >
+          <Button
+            onClick={() => navigate("/auth")}
+            className="w-full h-14 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] hover:from-[#7C3AED] hover:to-[#6D28D9] text-white text-lg font-bold shadow-[0_4px_20px_rgba(139,92,246,0.4)] transition-all hover:scale-[1.02] hover:shadow-[0_6px_24px_rgba(139,92,246,0.5)]"
+          >
+            Continue
+            <svg
+              className="w-6 h-6 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </Button>
+        </div>
       </div>
     </div>
   );
