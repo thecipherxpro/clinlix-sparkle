@@ -58,6 +58,8 @@ interface JobDetail {
     codigo_postal: string;
     property_type: string;
     country: string;
+    layout_type: string;
+    distrito: string | null;
   };
   cleaning_packages: {
     package_name: string;
@@ -97,13 +99,24 @@ const JobDetail = () => {
         .select(`
           *,
           profiles:customer_id(first_name, last_name, phone, email),
-          customer_addresses:address_id(rua, porta_andar, localidade, codigo_postal, property_type, country),
+          customer_addresses:address_id(rua, porta_andar, localidade, codigo_postal, property_type, country, layout_type, distrito),
           cleaning_packages:package_id(package_name, time_included, bedroom_count, areas_included)
         `)
         .eq("id", id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      
+      if (!data) {
+        toast({
+          title: "Error",
+          description: "Job not found",
+          variant: "destructive",
+        });
+        navigate("/provider/jobs");
+        return;
+      }
+      
       setJob(data);
     } catch (error) {
       console.error("Error fetching job detail:", error);
@@ -604,12 +617,12 @@ const JobDetail = () => {
 
                 <div className="flex items-start gap-3">
                   <Package className="h-5 w-5 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="font-medium">Layout</p>
-                    <p className="text-sm text-muted-foreground">
-                      {job.cleaning_packages?.bedroom_count || 0} Bedrooms
-                    </p>
-                  </div>
+                <div>
+                  <p className="font-medium">Layout</p>
+                  <p className="text-sm text-muted-foreground capitalize">
+                    {job.customer_addresses?.layout_type || `${job.cleaning_packages?.bedroom_count || 0} Bedrooms`}
+                  </p>
+                </div>
                 </div>
 
                 <div>
