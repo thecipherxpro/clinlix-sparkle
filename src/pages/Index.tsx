@@ -57,10 +57,10 @@ const Index = () => {
           }`}
           style={{ transitionDelay: "500ms" }}
         >
-          <img 
-            src="https://i.postimg.cc/rw6HRhZh/Clinlix-writting.png" 
-            alt="Clinlix" 
-            className="w-3/5 h-auto mx-auto" 
+          <img
+            src="https://i.postimg.cc/rw6HRhZh/Clinlix-writting.png"
+            alt="Clinlix"
+            className="w-3/5 h-auto mx-auto"
           />
         </div>
 
@@ -71,10 +71,10 @@ const Index = () => {
           }`}
           style={{
             transitionDelay: "600ms",
-            fontFamily: "Inter, Manrope, sans-serif"
+            fontFamily: "Inter, Manrope, sans-serif",
           }}
         >
-          Trusted Cleaning,<br />Every Single Time
+          Trusted Cleaning,Every Single Time
         </h1>
 
         {/* Continue Button */}
@@ -89,7 +89,7 @@ const Index = () => {
             className="relative w-4/5 mx-auto flex items-center justify-center h-[50px] rounded-[30px] bg-gradient-to-r from-[#8A63FF] to-[#6C63FF] hover:from-[#7C3AED] hover:to-[#5C3AED] text-white text-base font-semibold shadow-[0_4px_15px_rgba(0,0,0,0.15)] transition-all hover:scale-[1.02] animate-pulse pr-14"
             style={{
               animationDuration: "3s",
-              animationIterationCount: "infinite"
+              animationIterationCount: "infinite",
             }}
           >
             Continue
