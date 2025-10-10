@@ -105,7 +105,7 @@ export default function WelcomeSection() {
       if (!user) throw new Error("Not authenticated");
 
       const compressedFile = await compressImage(file);
-      const filePath = `avatars/${user.id}/profile.jpg`;
+      const filePath = `${user.id}/profile.jpg`;
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
