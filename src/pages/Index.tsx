@@ -33,7 +33,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-[#EAE6FF] flex flex-col items-center justify-between px-6 py-12 overflow-hidden">
+    <div className="min-h-896 bg-gradient-to-b from-white to-[#EAE6FF] flex flex-col items-center justify-between px-6 py-12 overflow-hidden">
       {/* Dual Cleaners Image */}
       <div
         className={`w-full flex-1 flex items-center justify-center transition-all duration-1000 ${
