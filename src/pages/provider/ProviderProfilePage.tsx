@@ -6,7 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, User, Star } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MultiSelect } from "@/components/ui/multi-select";
+import { ArrowLeft, User, Star, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 
@@ -84,11 +86,23 @@ const ProviderProfilePage = () => {
             full_name: `${profile.first_name} ${profile.last_name}`,
             bio: providerProfile.bio,
             experience_years: providerProfile.experience_years,
+            skills: providerProfile.skills,
+            service_areas: providerProfile.service_areas,
+            languages: providerProfile.languages,
+            photo_url: providerProfile.photo_url,
           })
           .eq('user_id', user.id);
 
         if (providerError) throw providerError;
       }
+
+      // Update profile country
+      const { error: countryError } = await supabase
+        .from('profiles')
+        .update({ country: profile.country })
+        .eq('id', user.id);
+
+      if (countryError) throw countryError;
 
       toast.success("Profile updated successfully");
     } catch (error) {
@@ -205,15 +219,34 @@ const ProviderProfilePage = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
+              <Label htmlFor="country">Country</Label>
+              <Select
+                value={profile?.country || 'Portugal'}
+                onValueChange={(value) => setProfile({...profile, country: value})}
+              >
+                <SelectTrigger className="touch-target">
+                  <SelectValue placeholder="Select country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Portugal">Portugal</SelectItem>
+                  <SelectItem value="Canada">Canada</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="bio">Bio</Label>
               <Textarea
                 id="bio"
                 placeholder="Tell customers about yourself..."
                 rows={4}
+                maxLength={500}
                 value={providerProfile?.bio || ''}
                 onChange={(e) => setProviderProfile({...providerProfile, bio: e.target.value})}
                 className="resize-none touch-target"
               />
+              <p className="text-xs text-muted-foreground text-right">
+                {(providerProfile?.bio || '').length}/500
+              </p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="experience">Years of Experience</Label>
@@ -221,21 +254,88 @@ const ProviderProfilePage = () => {
                 id="experience"
                 type="number"
                 min="0"
+                max="30"
                 value={providerProfile?.experience_years || 0}
                 onChange={(e) => setProviderProfile({...providerProfile, experience_years: parseInt(e.target.value) || 0})}
                 className="touch-target"
               />
             </div>
+            <div className="space-y-2">
+              <Label>Skills</Label>
+              <MultiSelect
+                options={[
+                  'Basic Cleaning',
+                  'Deep Cleaning',
+                  'Move-In/Out',
+                  'Post-Construction',
+                  'Window Cleaning',
+                  'Carpet Cleaning',
+                  'Laundry',
+                  'Ironing',
+                  'Organization'
+                ]}
+                selected={providerProfile?.skills || []}
+                onChange={(skills) => setProviderProfile({...providerProfile, skills})}
+                placeholder="Select skills..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Service Areas</Label>
+              <MultiSelect
+                options={
+                  profile?.country === 'Portugal'
+                    ? ['Lisbon', 'Porto', 'Braga', 'Faro', 'Coimbra', 'Aveiro', 'Setúbal']
+                    : ['Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa', 'Edmonton']
+                }
+                selected={providerProfile?.service_areas || []}
+                onChange={(service_areas) => setProviderProfile({...providerProfile, service_areas})}
+                placeholder="Select service areas..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Languages</Label>
+              <MultiSelect
+                options={['English', 'Portuguese', 'Spanish', 'French', 'Mandarin']}
+                selected={providerProfile?.languages || []}
+                onChange={(languages) => setProviderProfile({...providerProfile, languages})}
+                placeholder="Select languages..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="photoUrl">Profile Photo URL</Label>
+              <Input
+                id="photoUrl"
+                type="url"
+                placeholder="https://example.com/photo.jpg"
+                value={providerProfile?.photo_url || ''}
+                onChange={(e) => setProviderProfile({...providerProfile, photo_url: e.target.value})}
+                className="touch-target"
+              />
+              <p className="text-xs text-muted-foreground">
+                Enter a URL to your profile photo
+              </p>
+            </div>
           </CardContent>
         </Card>
 
-        <Button 
-          onClick={handleSaveProfile} 
-          disabled={saving}
-          className="w-full touch-target"
-        >
-          {saving ? "Saving..." : "Save Changes"}
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button 
+            onClick={handleSaveProfile} 
+            disabled={saving}
+            className="flex-1 touch-target"
+          >
+            {saving ? "Saving..." : "Save Changes"}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => navigate(`/providers/profile/${providerProfile?.id}`)}
+            className="flex-1 touch-target"
+            disabled={!providerProfile?.id}
+          >
+            <ExternalLink className="w-4 h-4 mr-2" />
+            Preview Public Profile
+          </Button>
+        </div>
       </main>
 
       <ProviderMobileNav />
