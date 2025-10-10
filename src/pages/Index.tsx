@@ -41,7 +41,7 @@ const Index = () => {
         style={{ transitionDelay: "300ms" }}
       >
         <img
-          src={cleaningLadyImage}
+          src="https://i.postimg.cc/3wgQwkjQ/Splash-New.png"
           alt="Professional Cleaning Service"
           className="w-full max-w-md h-auto object-contain"
         />
