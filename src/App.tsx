@@ -20,6 +20,7 @@ import MyBookings from "./pages/customer/MyBookings";
 import Profile from "./pages/customer/Profile";
 import PaymentMethods from "./pages/customer/PaymentMethods";
 import ProviderProfile from "./pages/ProviderProfile";
+import JobDetail from "./pages/provider/JobDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +45,8 @@ const App = () => (
           <Route path="/providers/profile/:providerId" element={<ProviderProfile />} />
           <Route path="/provider/dashboard" element={<ProviderDashboard />} />
           <Route path="/provider/jobs" element={<ProviderJobs />} />
+          <Route path="/provider/jobs/:id" element={<JobDetail />} />
+          <Route path="/provider/jobs/:id/summary" element={<JobDetail />} />
           <Route path="/provider/schedule" element={<ProviderSchedule />} />
           <Route path="/provider/wallet" element={<ProviderWallet />} />
           <Route path="/provider/profile" element={<ProviderProfilePage />} />

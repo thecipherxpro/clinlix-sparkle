@@ -19,9 +19,11 @@ export type Database = {
           addon_ids: string[] | null
           address_id: string
           completed_at: string | null
+          confirmed_at: string | null
           created_at: string | null
           customer_id: string
           id: string
+          job_status: string | null
           overtime_minutes: number | null
           package_id: string
           payment_intent_id: string | null
@@ -39,9 +41,11 @@ export type Database = {
           addon_ids?: string[] | null
           address_id: string
           completed_at?: string | null
+          confirmed_at?: string | null
           created_at?: string | null
           customer_id: string
           id?: string
+          job_status?: string | null
           overtime_minutes?: number | null
           package_id: string
           payment_intent_id?: string | null
@@ -59,9 +63,11 @@ export type Database = {
           addon_ids?: string[] | null
           address_id?: string
           completed_at?: string | null
+          confirmed_at?: string | null
           created_at?: string | null
           customer_id?: string
           id?: string
+          job_status?: string | null
           overtime_minutes?: number | null
           package_id?: string
           payment_intent_id?: string | null
