@@ -5,8 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Calendar, Clock, MapPin, Home, Package, Euro, FileText, Navigation } from "lucide-react";
+import { 
+  ArrowLeft, 
+  Calendar, 
+  Clock, 
+  MapPin, 
+  Home, 
+  Package,
+  Phone,
+  Mail,
+  Navigation,
+  Euro,
+  AlertCircle
+} from "lucide-react";
 import { format } from "date-fns";
 import JobStatusBar from "@/components/provider/jobs/JobStatusBar";
 import JobTimer from "@/components/provider/jobs/JobTimer";
@@ -20,6 +33,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface JobDetail {
   id: string;
@@ -35,6 +49,7 @@ interface JobDetail {
     first_name: string;
     last_name: string;
     phone: string | null;
+    email: string;
   };
   customer_addresses: {
     rua: string;
@@ -42,11 +57,20 @@ interface JobDetail {
     localidade: string;
     codigo_postal: string;
     property_type: string;
+    country: string;
   };
   cleaning_packages: {
     package_name: string;
     time_included: string;
+    bedroom_count: number;
+    areas_included: string[];
   };
+}
+
+interface Addon {
+  id: string;
+  name_en: string;
+  price: number;
 }
 
 const JobDetail = () => {
@@ -54,12 +78,16 @@ const JobDetail = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [job, setJob] = useState<JobDetail | null>(null);
+  const [addons, setAddons] = useState<Addon[]>([]);
   const [loading, setLoading] = useState(true);
   const [showDeclineDialog, setShowDeclineDialog] = useState(false);
   const [showAcceptDialog, setShowAcceptDialog] = useState(false);
 
   useEffect(() => {
-    if (id) fetchJobDetail();
+    if (id) {
+      fetchJobDetail();
+      fetchAddons();
+    }
   }, [id]);
 
   const fetchJobDetail = async () => {
@@ -68,9 +96,9 @@ const JobDetail = () => {
         .from("bookings")
         .select(`
           *,
-          profiles:customer_id(first_name, last_name, phone),
-          customer_addresses:address_id(rua, porta_andar, localidade, codigo_postal, property_type),
-          cleaning_packages:package_id(package_name, time_included)
+          profiles:customer_id(first_name, last_name, phone, email),
+          customer_addresses:address_id(rua, porta_andar, localidade, codigo_postal, property_type, country),
+          cleaning_packages:package_id(package_name, time_included, bedroom_count, areas_included)
         `)
         .eq("id", id)
         .single();
@@ -86,6 +114,19 @@ const JobDetail = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAddons = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("cleaning_addons")
+        .select("id, name_en, price");
+
+      if (error) throw error;
+      setAddons(data || []);
+    } catch (error) {
+      console.error("Error fetching addons:", error);
     }
   };
 
@@ -106,7 +147,8 @@ const JobDetail = () => {
         description: "The job has been confirmed successfully",
       });
 
-      navigate("/provider/jobs");
+      fetchJobDetail();
+      setShowAcceptDialog(false);
     } catch (error) {
       console.error("Error accepting job:", error);
       toast({
@@ -188,6 +230,30 @@ const JobDetail = () => {
     window.open(url, "_blank");
   };
 
+  const getJobAddons = () => {
+    if (!job?.addon_ids || job.addon_ids.length === 0) return [];
+    return addons.filter(addon => job.addon_ids!.includes(addon.id));
+  };
+
+  const calculateTotalWithAddons = () => {
+    if (!job) return 0;
+    const jobAddons = getJobAddons();
+    const addonsTotal = jobAddons.reduce((sum, addon) => sum + Number(addon.price), 0);
+    return job.total_estimate + addonsTotal;
+  };
+
+  const isJobConfirmed = job?.job_status !== "pending" && job?.job_status !== "declined";
+
+  const serviceIcons: Record<string, string> = {
+    bathroom: "🛁",
+    kitchen: "🍽️",
+    livingroom: "🛋️",
+    floors: "🧹",
+    dusting: "🧼",
+    surfaces: "✨",
+    vacuuming: "🧹"
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background animate-pulse">
@@ -208,8 +274,10 @@ const JobDetail = () => {
     );
   }
 
-  const earnings = (job.total_estimate * 0.85).toFixed(2);
-  const platformFee = (job.total_estimate * 0.15).toFixed(2);
+  const totalWithAddons = calculateTotalWithAddons();
+  const earnings = (totalWithAddons * 0.85).toFixed(2);
+  const platformFee = (totalWithAddons * 0.15).toFixed(2);
+  const jobAddons = getJobAddons();
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -228,199 +296,337 @@ const JobDetail = () => {
       </header>
 
       <div className="p-4 space-y-4">
-        {/* Customer Card */}
+        {/* Customer Card with Status */}
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-4 mb-4">
               <Avatar className="h-16 w-16">
-                <AvatarFallback className="bg-primary text-primary-foreground text-lg">
+                <AvatarFallback className="bg-gradient-to-br from-primary to-purple-600 text-white text-lg font-semibold">
                   {getInitials(job.profiles?.first_name, job.profiles?.last_name)}
                 </AvatarFallback>
               </Avatar>
-              <div>
+              <div className="flex-1">
                 <h2 className="text-xl font-bold">
                   {job.profiles?.first_name || "Customer"} {job.profiles?.last_name || ""}
                 </h2>
-                {job.profiles?.phone && (
-                  <p className="text-sm text-muted-foreground">{job.profiles.phone}</p>
-                )}
                 <Badge variant="outline" className="mt-1">
                   Booking #{job.id.slice(0, 8)}
                 </Badge>
               </div>
+              {/* Contact Icons - Only shown when confirmed */}
+              {isJobConfirmed && (
+                <div className="flex gap-2">
+                  {job.profiles?.phone && (
+                    <a href={`tel:${job.profiles.phone}`}>
+                      <Button variant="outline" size="icon">
+                        <Phone className="h-4 w-4" />
+                      </Button>
+                    </a>
+                  )}
+                  {job.profiles?.email && (
+                    <a href={`mailto:${job.profiles.email}`}>
+                      <Button variant="outline" size="icon">
+                        <Mail className="h-4 w-4" />
+                      </Button>
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Status Bar for Confirmed Jobs */}
-            {job.job_status !== "pending" && job.job_status !== "declined" && (
+            {isJobConfirmed && (
               <JobStatusBar currentStatus={job.job_status} />
             )}
           </CardContent>
         </Card>
 
-        {/* Job Details Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Job Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-start gap-3">
-              <Calendar className="h-5 w-5 text-muted-foreground mt-0.5" />
-              <div>
-                <p className="font-medium">Date</p>
-                <p className="text-sm text-muted-foreground">
-                  {format(new Date(job.requested_date), "EEEE, MMMM dd, yyyy")}
-                </p>
-              </div>
-            </div>
+        {/* Tabbed Interface */}
+        <Tabs defaultValue="when" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="when">
+              <Clock className="h-4 w-4 mr-2" />
+              When
+            </TabsTrigger>
+            <TabsTrigger value="where">
+              <MapPin className="h-4 w-4 mr-2" />
+              Where
+            </TabsTrigger>
+          </TabsList>
 
-            <div className="flex items-start gap-3">
-              <Clock className="h-5 w-5 text-muted-foreground mt-0.5" />
-              <div>
-                <p className="font-medium">Time</p>
-                <p className="text-sm text-muted-foreground">
-                  {job.requested_time} • {job.cleaning_packages?.time_included || "N/A"}
-                </p>
-              </div>
-            </div>
+          {/* WHEN TAB */}
+          <TabsContent value="when" className="space-y-4 mt-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Booking Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <Calendar className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div>
+                    <p className="font-medium">Date</p>
+                    <p className="text-sm text-muted-foreground">
+                      {format(new Date(job.requested_date), "EEEE, MMMM dd, yyyy")}
+                    </p>
+                  </div>
+                </div>
 
-            <div className="flex items-start gap-3">
-              <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
-              <div className="flex-1">
-                <p className="font-medium">Address</p>
-                <p className="text-sm text-muted-foreground">
-                  {job.customer_addresses?.rua || "Address not available"}
-                  {job.customer_addresses?.porta_andar && `, ${job.customer_addresses.porta_andar}`}
-                  <br />
-                  {job.customer_addresses?.localidade}, {job.customer_addresses?.codigo_postal}
-                </p>
+                <div className="flex items-start gap-3">
+                  <Clock className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div>
+                    <p className="font-medium">Start Time</p>
+                    <p className="text-sm text-muted-foreground">{job.requested_time}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <Package className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div>
+                    <p className="font-medium">Cleaning Duration</p>
+                    <p className="text-sm text-muted-foreground">
+                      Up to {job.cleaning_packages?.time_included || "N/A"}
+                    </p>
+                  </div>
+                </div>
+
+                {jobAddons.length > 0 && (
+                  <div className="border-t pt-4">
+                    <p className="font-medium mb-2">Add-ons</p>
+                    <div className="space-y-1">
+                      {jobAddons.map(addon => (
+                        <div key={addon.id} className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">{addon.name_en}</span>
+                          <span className="font-medium">€{Number(addon.price).toFixed(2)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Earnings Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Euro className="h-5 w-5" />
+                  Estimated Earnings
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Base Amount</span>
+                  <span className="font-medium">€{job.total_estimate.toFixed(2)}</span>
+                </div>
+                {jobAddons.length > 0 && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Add-ons</span>
+                    <span className="font-medium">
+                      €{jobAddons.reduce((sum, a) => sum + Number(a.price), 0).toFixed(2)}
+                    </span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Platform Fee (15%)</span>
+                  <span className="font-medium text-red-600">-€{platformFee}</span>
+                </div>
+                <div className="border-t pt-3 flex justify-between items-center">
+                  <span className="font-semibold text-lg">Your Earnings</span>
+                  <span className="font-bold text-lg text-green-600">€{earnings}</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Overtime Rule Alert */}
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                <strong>Overtime Rule:</strong> €10 per 30 minutes extra if job exceeds estimated time
+              </AlertDescription>
+            </Alert>
+
+            {/* Timer for Started Jobs */}
+            {job.job_status === "started" && job.started_at && job.cleaning_packages?.time_included && (
+              <JobTimer
+                startedAt={job.started_at}
+                timeIncluded={job.cleaning_packages.time_included}
+                bookingId={job.id}
+                overtimeMinutes={job.overtime_minutes}
+              />
+            )}
+
+            {/* Action Buttons */}
+            <div className="space-y-3">
+              {job.job_status === "pending" && (
+                <>
+                  <Button
+                    className="w-full h-12 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-700"
+                    size="lg"
+                    onClick={() => setShowAcceptDialog(true)}
+                  >
+                    Accept Job
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full h-12"
+                    size="lg"
+                    onClick={() => setShowDeclineDialog(true)}
+                  >
+                    Decline
+                  </Button>
+                </>
+              )}
+
+              {job.job_status === "confirmed" && (
                 <Button
-                  variant="link"
-                  size="sm"
-                  className="p-0 h-auto mt-1"
-                  onClick={openInMaps}
+                  className="w-full h-12"
+                  size="lg"
+                  onClick={() => updateJobStatus("on_the_way")}
                 >
-                  <Navigation className="h-3 w-3 mr-1" />
-                  Open in Maps
+                  I'm On the Way
                 </Button>
-              </div>
+              )}
+
+              {job.job_status === "on_the_way" && (
+                <Button
+                  className="w-full h-12"
+                  size="lg"
+                  onClick={() => updateJobStatus("arrived")}
+                >
+                  I've Arrived
+                </Button>
+              )}
+
+              {job.job_status === "arrived" && (
+                <Button
+                  className="w-full h-12"
+                  size="lg"
+                  onClick={() => updateJobStatus("started")}
+                >
+                  Start Job
+                </Button>
+              )}
+
+              {job.job_status === "started" && (
+                <Button
+                  className="w-full h-12"
+                  size="lg"
+                  onClick={() => updateJobStatus("completed")}
+                >
+                  Complete Job
+                </Button>
+              )}
             </div>
+          </TabsContent>
 
-            <div className="flex items-start gap-3">
-              <Home className="h-5 w-5 text-muted-foreground mt-0.5" />
-              <div>
-                <p className="font-medium">Property Type</p>
-                <p className="text-sm text-muted-foreground capitalize">
-                  {job.customer_addresses?.property_type || "N/A"}
-                </p>
-              </div>
-            </div>
+          {/* WHERE TAB */}
+          <TabsContent value="where" className="space-y-4 mt-4">
+            {/* Customer Address */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Customer Address</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Full Name</p>
+                  <p className="font-medium">
+                    {job.profiles?.first_name || "Customer"} {job.profiles?.last_name || ""}
+                  </p>
+                </div>
 
-            <div className="flex items-start gap-3">
-              <Package className="h-5 w-5 text-muted-foreground mt-0.5" />
-              <div>
-                <p className="font-medium">Cleaning Package</p>
-                <p className="text-sm text-muted-foreground">
-                  {job.cleaning_packages?.package_name || "N/A"}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+                {isJobConfirmed ? (
+                  <>
+                    {job.profiles?.phone && (
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-1">Phone Number</p>
+                        <p className="font-medium">{job.profiles.phone}</p>
+                      </div>
+                    )}
+                    {job.profiles?.email && (
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-1">Email</p>
+                        <p className="font-medium">{job.profiles.email}</p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Alert>
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      Contact details will be revealed after accepting the job
+                    </AlertDescription>
+                  </Alert>
+                )}
 
-        {/* Earnings Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Estimated Earnings</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-muted-foreground">Base Amount</span>
-              <span className="font-medium">€{job.total_estimate.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-muted-foreground">Platform Fee (15%)</span>
-              <span className="font-medium text-red-600">-€{platformFee}</span>
-            </div>
-            <div className="border-t pt-3 flex justify-between items-center">
-              <span className="font-semibold text-lg">Your Earnings</span>
-              <span className="font-bold text-lg text-green-600">€{earnings}</span>
-            </div>
-          </CardContent>
-        </Card>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Country</p>
+                  <p className="font-medium">{job.customer_addresses?.country || "Portugal"} 🇵🇹</p>
+                </div>
 
-        {/* Timer for Started Jobs */}
-        {job.job_status === "started" && job.started_at && job.cleaning_packages?.time_included && (
-          <JobTimer
-            startedAt={job.started_at}
-            timeIncluded={job.cleaning_packages.time_included}
-            bookingId={job.id}
-            overtimeMinutes={job.overtime_minutes}
-          />
-        )}
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Address</p>
+                  <p className="font-medium">
+                    {job.customer_addresses?.rua || "Address not available"}
+                    {job.customer_addresses?.porta_andar && `, ${job.customer_addresses.porta_andar}`}
+                    <br />
+                    {job.customer_addresses?.codigo_postal}, {job.customer_addresses?.localidade}
+                  </p>
+                </div>
 
-        {/* Action Buttons */}
-        <div className="space-y-3">
-          {job.job_status === "pending" && (
-            <>
-              <Button
-                className="w-full h-12"
-                size="lg"
-                onClick={() => setShowAcceptDialog(true)}
-              >
-                Accept Job
-              </Button>
-              <Button
-                variant="destructive"
-                className="w-full h-12"
-                size="lg"
-                onClick={() => setShowDeclineDialog(true)}
-              >
-                Decline Job
-              </Button>
-            </>
-          )}
+                {isJobConfirmed && (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={openInMaps}
+                  >
+                    <Navigation className="h-4 w-4 mr-2" />
+                    Open in Google Maps
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
 
-          {job.job_status === "confirmed" && (
-            <Button
-              className="w-full h-12"
-              size="lg"
-              onClick={() => updateJobStatus("on_the_way")}
-            >
-              I'm On the Way
-            </Button>
-          )}
+            {/* Property Info */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Property Information</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <Home className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div>
+                    <p className="font-medium">Property Type</p>
+                    <p className="text-sm text-muted-foreground capitalize">
+                      {job.customer_addresses?.property_type || "N/A"}
+                    </p>
+                  </div>
+                </div>
 
-          {job.job_status === "on_the_way" && (
-            <Button
-              className="w-full h-12"
-              size="lg"
-              onClick={() => updateJobStatus("arrived")}
-            >
-              I've Arrived
-            </Button>
-          )}
+                <div className="flex items-start gap-3">
+                  <Package className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div>
+                    <p className="font-medium">Layout</p>
+                    <p className="text-sm text-muted-foreground">
+                      {job.cleaning_packages?.bedroom_count || 0} Bedrooms
+                    </p>
+                  </div>
+                </div>
 
-          {job.job_status === "arrived" && (
-            <Button
-              className="w-full h-12"
-              size="lg"
-              onClick={() => updateJobStatus("started")}
-            >
-              Start Job
-            </Button>
-          )}
-
-          {job.job_status === "started" && (
-            <Button
-              className="w-full h-12"
-              size="lg"
-              variant="default"
-              onClick={() => updateJobStatus("completed")}
-            >
-              Complete Job
-            </Button>
-          )}
-        </div>
+                <div>
+                  <p className="font-medium mb-3">Included Services</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {job.cleaning_packages?.areas_included?.map((area) => (
+                      <div key={area} className="flex items-center gap-2 text-sm">
+                        <span className="text-lg">{serviceIcons[area] || "✓"}</span>
+                        <span className="capitalize">{area.replace("_", " ")}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Accept Dialog */}
