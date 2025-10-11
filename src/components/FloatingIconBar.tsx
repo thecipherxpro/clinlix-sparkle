@@ -52,16 +52,16 @@ const FloatingIconBar: React.FC<FloatingIconBarProps> = ({
                 aria-current={isActive ? 'page' : undefined}
               >
                 <Icon 
-                  className={`transition-all duration-300 ${
+                  className={`flex-shrink-0 transition-all duration-300 ${
                     isActive 
-                      ? 'w-4 h-4 sm:w-5 sm:h-5 text-white' 
+                      ? 'w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white' 
                       : 'w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6 text-gray-400'
                   }`}
                   strokeWidth={isActive ? 2.5 : 2}
                 />
                 
                 {isActive && showLabels && (
-                  <span className="ml-1 sm:ml-2 md:ml-2 text-white font-semibold text-xs sm:text-sm whitespace-nowrap">
+                  <span className="ml-1.5 sm:ml-2 md:ml-2.5 text-white font-semibold text-xs sm:text-sm whitespace-nowrap">
                     {item.label}
                   </span>
                 )}
