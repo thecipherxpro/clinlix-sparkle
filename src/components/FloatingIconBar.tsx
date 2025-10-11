@@ -61,7 +61,7 @@ const FloatingIconBar: React.FC<FloatingIconBarProps> = ({
                 />
                 
                 {isActive && showLabels && (
-                  <span className="ml-1 sm:ml-1.5 md:ml-2 text-white font-semibold text-xs sm:text-sm whitespace-nowrap">
+                  <span className="ml-1 sm:ml-2 md:ml-2 text-white font-semibold text-xs sm:text-sm whitespace-nowrap">
                     {item.label}
                   </span>
                 )}
