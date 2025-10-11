@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
 import AvatarUploader from "@/components/AvatarUploader";
+import SettingsDrawer from "@/components/SettingsDrawer";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -120,13 +121,16 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
-        <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target md:hidden">
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            My Profile
-          </h1>
+        <div className="mobile-container py-3 sm:py-4 flex items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target md:hidden">
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              My Profile
+            </h1>
+          </div>
+          <SettingsDrawer role="customer" />
         </div>
       </header>
 

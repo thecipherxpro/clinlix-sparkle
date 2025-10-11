@@ -19,6 +19,8 @@ import Booking from "./pages/customer/Booking";
 import MyBookings from "./pages/customer/MyBookings";
 import Profile from "./pages/customer/Profile";
 import PaymentMethods from "./pages/customer/PaymentMethods";
+import CustomerSettings from "./pages/customer/CustomerSettings";
+import ProviderSettings from "./pages/provider/ProviderSettings";
 import ProviderProfile from "./pages/ProviderProfile";
 import JobDetail from "./pages/provider/JobDetail";
 import NotFound from "./pages/NotFound";
@@ -41,6 +43,7 @@ const App = () => (
           <Route path="/customer/booking" element={<Booking />} />
           <Route path="/customer/bookings" element={<MyBookings />} />
           <Route path="/customer/profile" element={<Profile />} />
+          <Route path="/customer/settings" element={<CustomerSettings />} />
           <Route path="/customer/payment-methods" element={<PaymentMethods />} />
           <Route path="/providers/profile/:providerId" element={<ProviderProfile />} />
           <Route path="/provider/dashboard" element={<ProviderDashboard />} />
@@ -50,6 +53,7 @@ const App = () => (
           <Route path="/provider/schedule" element={<ProviderSchedule />} />
           <Route path="/provider/wallet" element={<ProviderWallet />} />
           <Route path="/provider/profile" element={<ProviderProfilePage />} />
+          <Route path="/provider/settings" element={<ProviderSettings />} />
           <Route path="/provider/reviews" element={<ProviderReviews />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

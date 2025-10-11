@@ -294,6 +294,8 @@ export type Database = {
       }
       profiles: {
         Row: {
+          accept_recurring: boolean | null
+          available_status: boolean | null
           avatar_url: string | null
           country: string | null
           created_at: string | null
@@ -303,11 +305,15 @@ export type Database = {
           id: string
           language: string | null
           last_name: string
+          notifications_enabled: boolean | null
           phone: string | null
           role: Database["public"]["Enums"]["app_role"]
+          sms_notifications: boolean | null
           updated_at: string | null
         }
         Insert: {
+          accept_recurring?: boolean | null
+          available_status?: boolean | null
           avatar_url?: string | null
           country?: string | null
           created_at?: string | null
@@ -317,11 +323,15 @@ export type Database = {
           id: string
           language?: string | null
           last_name: string
+          notifications_enabled?: boolean | null
           phone?: string | null
           role: Database["public"]["Enums"]["app_role"]
+          sms_notifications?: boolean | null
           updated_at?: string | null
         }
         Update: {
+          accept_recurring?: boolean | null
+          available_status?: boolean | null
           avatar_url?: string | null
           country?: string | null
           created_at?: string | null
@@ -331,8 +341,10 @@ export type Database = {
           id?: string
           language?: string | null
           last_name?: string
+          notifications_enabled?: boolean | null
           phone?: string | null
           role?: Database["public"]["Enums"]["app_role"]
+          sms_notifications?: boolean | null
           updated_at?: string | null
         }
         Relationships: []

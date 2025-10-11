@@ -12,6 +12,7 @@ import { ArrowLeft, User, Star, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import AvatarUploader from "@/components/AvatarUploader";
+import SettingsDrawer from "@/components/SettingsDrawer";
 
 
 const ProviderProfilePage = () => {
@@ -127,14 +128,17 @@ const ProviderProfilePage = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
       <header className="bg-card/50 backdrop-blur-sm sticky top-0 z-10 border-b safe-top">
         <div className="mobile-container py-4">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/provider/dashboard')} className="touch-target">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <div>
-              <h1 className="text-lg md:text-xl font-bold">My Profile</h1>
-              <p className="text-xs md:text-sm text-muted-foreground">Manage your information</p>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon" onClick={() => navigate('/provider/dashboard')} className="touch-target">
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+              <div>
+                <h1 className="text-lg md:text-xl font-bold">My Profile</h1>
+                <p className="text-xs md:text-sm text-muted-foreground">Manage your information</p>
+              </div>
             </div>
+            <SettingsDrawer role="provider" />
           </div>
         </div>
       </header>
