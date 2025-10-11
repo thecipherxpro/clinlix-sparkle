@@ -118,15 +118,15 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
         </Button>
       </DrawerTrigger>
       
-      <DrawerContent className="max-h-[85vh]">
-        <DrawerHeader className="border-b">
+      <DrawerContent className="max-h-[85vh] flex flex-col">
+        <DrawerHeader className="border-b shrink-0">
           <DrawerTitle>Settings</DrawerTitle>
           <DrawerDescription>
             Manage your account settings and preferences
           </DrawerDescription>
         </DrawerHeader>
 
-        <ScrollArea className="h-full">
+        <ScrollArea className="flex-1 overflow-auto">
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
