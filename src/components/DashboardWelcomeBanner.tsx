@@ -85,14 +85,14 @@ const DashboardWelcomeBanner = ({ user }: DashboardWelcomeBannerProps) => {
         <div>
           <p className="text-gray-500">Welcome back,</p>
           <h1 className="text-4xl font-bold text-gray-800">{user.name}!</h1>
-          <div className="flex items-center space-x-5 mt-2">
-            <div className="flex items-center">
-              <span className="w-4 h-3 bg-gray-300 rounded-full mr-2"></span>
-              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider">{user.role} PORTAL</span>
+          <div className="flex items-center gap-6 mt-3">
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 bg-gray-300 rounded-full flex-shrink-0"></span>
+              <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide whitespace-nowrap">{user.role} PORTAL</span>
             </div>
-            <div className="flex items-center">
-              <span className="w-4 h-3 bg-orange-400 rounded-full mr-2"></span>
-              <span className="text-xs font-semibold text-gray-600 ">{formattedDate}</span>
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 bg-orange-400 rounded-full flex-shrink-0"></span>
+              <span className="text-sm font-semibold text-gray-600 whitespace-nowrap">{formattedDate}</span>
             </div>
           </div>
         </div>
