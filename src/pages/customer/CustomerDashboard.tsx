@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, MapPin, CreditCard, User, Search } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
-import WelcomeSection from "@/components/WelcomeSection";
+import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
@@ -55,7 +55,15 @@ const CustomerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
-      <WelcomeSection />
+      <div className="pt-4 sm:pt-6">
+        <DashboardWelcomeBanner 
+          user={{
+            name: profile?.first_name || 'User',
+            role: 'CUSTOMER',
+            avatarUrl: profile?.avatar_url
+          }}
+        />
+      </div>
 
       <main className="mobile-container py-4 sm:py-8 max-w-6xl">
 

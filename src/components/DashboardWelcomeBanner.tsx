@@ -1,0 +1,142 @@
+import { useEffect, useState, useRef } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Loader2, Upload } from 'lucide-react';
+import { toast } from 'sonner';
+
+interface DashboardWelcomeBannerProps {
+  user: {
+    name: string;
+    role: string;
+    avatarUrl?: string;
+  };
+}
+
+const DashboardWelcomeBanner = ({ user }: DashboardWelcomeBannerProps) => {
+  const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const today = new Date();
+  const month = today.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+  const day = today.getDate();
+  const year = today.getFullYear();
+  const formattedDate = `${month}, ${day} /${year}`;
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) throw new Error('Not authenticated');
+
+      const fileExt = file.name.split('.').pop();
+      const filePath = `${authUser.id}/profile.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+
+      const newAvatarUrl = `${publicUrl}?t=${new Date().getTime()}`;
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: newAvatarUrl })
+        .eq('id', authUser.id);
+
+      if (updateError) throw updateError;
+
+      // Update provider_profiles if user is a provider
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', authUser.id)
+        .single();
+
+      if (profileData?.role === 'provider') {
+        await supabase
+          .from('provider_profiles')
+          .update({ photo_url: newAvatarUrl })
+          .eq('user_id', authUser.id);
+      }
+
+      setAvatarUrl(newAvatarUrl);
+      toast.success('Profile picture updated successfully');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Failed to upload image');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  return (
+    <div className="bg-card rounded-3xl border border-border p-4 sm:p-5 w-full mx-auto shadow-sm mobile-container">
+      <div className="flex items-center justify-between gap-4 flex-col sm:flex-row">
+        <div className="w-full sm:w-auto text-center sm:text-left">
+          <p className="text-muted-foreground text-sm sm:text-base">Welcome back,</p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground">{user.name}!</h1>
+          <div className="flex items-center justify-center sm:justify-start space-x-3 sm:space-x-5 mt-2">
+            <div className="flex items-center">
+              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-muted rounded-full mr-2"></span>
+              <span className="text-xs sm:text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                {user.role} PORTAL
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-accent rounded-full mr-2"></span>
+              <span className="text-xs sm:text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                {formattedDate}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div 
+          className="relative group cursor-pointer p-1 rounded-full bg-accent/20 flex-shrink-0"
+          onClick={handleAvatarClick}
+        >
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+          />
+          <img
+            src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
+            alt={user.name}
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover ring-2 ring-accent/30"
+          />
+          {uploading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full">
+              <Loader2 className="h-6 w-6 sm:h-8 sm:h-8 animate-spin text-primary" />
+            </div>
+          )}
+          {!uploading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+              <Upload className="h-6 w-6 sm:h-8 sm:h-8 text-primary" />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DashboardWelcomeBanner;
