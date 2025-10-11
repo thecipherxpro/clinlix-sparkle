@@ -8,8 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, Shield, ArrowLeft, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Shield, ArrowLeft, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa";
+import logoImage from "@/assets/logo-clinlix.png";
 
 type Role = 'customer' | 'provider';
 
@@ -184,9 +185,11 @@ const Auth = () => {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           
-          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mb-2 shadow-lg">
-            <Sparkles className="w-8 h-8 text-primary-foreground" />
-          </div>
+          <img 
+            src={logoImage} 
+            alt="Clinlix Logo" 
+            className="mx-auto w-16 h-16 mb-2"
+          />
           <CardTitle className="text-3xl font-bold text-center">Clinlix</CardTitle>
         </CardHeader>
         
@@ -362,7 +365,7 @@ const Auth = () => {
                   aria-pressed={selectedRole === 'customer'}
                   aria-label="Sign up as a customer"
                 >
-                  <Sparkles className="w-5 h-5" />
+                  <User className="w-5 h-5" />
                   <span className="font-medium">Customer</span>
                 </Button>
                 <Button
