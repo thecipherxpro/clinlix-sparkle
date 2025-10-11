@@ -6,16 +6,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, Shield } from "lucide-react";
+import { Sparkles, Shield, ArrowLeft, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa";
 
 type Role = 'customer' | 'provider';
 
 const Auth = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'login' | 'register'>('register');
+  const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
   const [selectedRole, setSelectedRole] = useState<Role>('customer');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [loginForm, setLoginForm] = useState({
     email: '',
@@ -30,6 +35,31 @@ const Auth = () => {
     confirmPassword: '',
   });
 
+  const [validationErrors, setValidationErrors] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setValidationErrors(prev => ({ ...prev, email: 'Enter a valid email.' }));
+      return false;
+    }
+    setValidationErrors(prev => ({ ...prev, email: '' }));
+    return true;
+  };
+
+  const validatePassword = (password: string) => {
+    if (password.length < 8) {
+      setValidationErrors(prev => ({ ...prev, password: 'Password must be at least 8 characters.' }));
+      return false;
+    }
+    setValidationErrors(prev => ({ ...prev, password: '' }));
+    return true;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -37,6 +67,8 @@ const Auth = () => {
       toast.error("Fill in all fields to continue");
       return;
     }
+
+    if (!validateEmail(loginForm.email)) return;
 
     setLoading(true);
     try {
@@ -68,6 +100,23 @@ const Auth = () => {
     }
   };
 
+  const handleSocialLogin = async (provider: 'google' | 'facebook' | 'apple') => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      toast.error(error.message || `Failed to login with ${provider}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -76,15 +125,15 @@ const Auth = () => {
       return;
     }
 
-    if (registerForm.password !== registerForm.confirmPassword) {
-      toast.error("Passwords don't match. Try again.");
-      return;
-    }
+    if (!validateEmail(registerForm.email)) return;
 
-    if (registerForm.password.length < 6) {
-      toast.error("Use at least 6 characters for your password");
+    if (!validatePassword(registerForm.password)) return;
+
+    if (registerForm.password !== registerForm.confirmPassword) {
+      setValidationErrors(prev => ({ ...prev, confirmPassword: "Passwords don't match." }));
       return;
     }
+    setValidationErrors(prev => ({ ...prev, confirmPassword: '' }));
 
     setLoading(true);
     try {
@@ -117,63 +166,187 @@ const Auth = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    navigate('/auth/forgot-password');
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-secondary/20 to-background p-4">
-      <Card className="w-full max-w-md shadow-lg border-0">
-        <CardHeader className="space-y-2 text-center pb-4">
-          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mb-2">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-[hsl(240,8%,97%)] to-[hsl(252,15%,98%)]">
+      <Card className="w-full max-w-md rounded-[24px] shadow-[0_2px_8px_rgba(108,99,255,0.08)] border-0 animate-fade-in">
+        <CardHeader className="space-y-3 pt-8 pb-6 px-6">
+          <button 
+            onClick={() => navigate('/')}
+            className="absolute top-6 left-6 w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-foreground" />
+          </button>
+          
+          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mb-2 shadow-lg">
             <Sparkles className="w-8 h-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-3xl font-bold">Clinlix</CardTitle>
-          <CardDescription className="text-base">
-            Professional cleaning services at your fingertips
-          </CardDescription>
+          <CardTitle className="text-3xl font-bold text-center">Clinlix</CardTitle>
         </CardHeader>
         
-        <CardContent>
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'login' | 'register')} className="space-y-4">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="register">Register</TabsTrigger>
+        <CardContent className="px-6 pb-8">
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'login' | 'register')} className="space-y-6">
+            <TabsList className="grid w-full grid-cols-2 bg-secondary/50 p-1 rounded-[16px]">
+              <TabsTrigger value="login" className="rounded-[12px] data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                Log in
+              </TabsTrigger>
+              <TabsTrigger value="register" className="rounded-[12px] data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                Sign Up
+              </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="login" className="space-y-4">
+            <TabsContent value="login" className="space-y-5 mt-6">
+              <div className="text-center space-y-2 mb-6">
+                <p className="text-sm text-muted-foreground">
+                  Enter your email and password to securely access your account and manage your services.
+                </p>
+              </div>
+
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
-                  <Input
-                    id="login-email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={loginForm.email}
-                    onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
-                    disabled={loading}
-                  />
+                  <Label htmlFor="login-email" className="text-sm font-medium">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="login-email"
+                      type="email"
+                      placeholder="name@example.com"
+                      value={loginForm.email}
+                      onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+                      disabled={loading}
+                      className="pl-10 h-12 rounded-[20px] bg-muted/50 border-0"
+                    />
+                  </div>
+                  {validationErrors.email && (
+                    <p className="text-xs text-destructive">{validationErrors.email}</p>
+                  )}
                 </div>
+                
                 <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
-                  <Input
-                    id="login-password"
-                    type="password"
-                    placeholder="Enter password"
-                    value={loginForm.password}
-                    onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-                    disabled={loading}
-                  />
+                  <Label htmlFor="login-password" className="text-sm font-medium">Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="login-password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter password"
+                      value={loginForm.password}
+                      onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                      disabled={loading}
+                      className="pl-10 pr-10 h-12 rounded-[20px] bg-muted/50 border-0"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </button>
+                  </div>
+                  {validationErrors.password && (
+                    <p className="text-xs text-destructive">{validationErrors.password}</p>
+                  )}
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Signing in..." : "Sign In"}
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="remember" 
+                      checked={rememberMe}
+                      onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                    />
+                    <label
+                      htmlFor="remember"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Remember me
+                    </label>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    className="text-sm text-primary hover:underline font-medium"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-[50px] rounded-[30px] bg-gradient-to-r from-primary to-accent text-base font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]" 
+                  disabled={loading}
+                >
+                  {loading ? "Signing in..." : "Login"}
                 </Button>
               </form>
+
+              <div className="text-center text-sm">
+                <span className="text-muted-foreground">Don't have an account? </span>
+                <button
+                  onClick={() => setActiveTab('register')}
+                  className="text-primary hover:underline font-semibold"
+                >
+                  Sign Up here
+                </button>
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-border" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-2 text-muted-foreground">Or Continue With</span>
+                </div>
+              </div>
+
+              <div className="flex justify-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('facebook')}
+                  disabled={loading}
+                  className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50"
+                >
+                  <FaFacebook className="w-5 h-5 text-white" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('google')}
+                  disabled={loading}
+                  className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 border border-border"
+                >
+                  <FaGoogle className="w-5 h-5 text-[#DB4437]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('apple')}
+                  disabled={loading}
+                  className="w-11 h-11 rounded-full bg-black flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50"
+                >
+                  <FaApple className="w-5 h-5 text-white" />
+                </button>
+              </div>
             </TabsContent>
 
-            <TabsContent value="register" className="space-y-4">
+            <TabsContent value="register" className="space-y-5 mt-6">
+              <div className="text-center space-y-2 mb-6">
+                <p className="text-sm text-muted-foreground">
+                  Sign up to book or manage cleaning services easily.
+                </p>
+              </div>
+
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <Button
                   type="button"
                   variant={selectedRole === 'customer' ? 'default' : 'outline'}
                   onClick={() => setSelectedRole('customer')}
-                  className="h-20 flex flex-col items-center justify-center gap-1"
+                  className="h-20 flex flex-col items-center justify-center gap-1 rounded-[16px] transition-all hover:scale-105"
                 >
                   <Sparkles className="w-5 h-5" />
                   <span className="font-medium">Customer</span>
@@ -182,7 +355,7 @@ const Auth = () => {
                   type="button"
                   variant={selectedRole === 'provider' ? 'default' : 'outline'}
                   onClick={() => setSelectedRole('provider')}
-                  className="h-20 flex flex-col items-center justify-center gap-1"
+                  className="h-20 flex flex-col items-center justify-center gap-1 rounded-[16px] transition-all hover:scale-105"
                 >
                   <Shield className="w-5 h-5" />
                   <span className="font-medium">Provider</span>
@@ -190,65 +363,164 @@ const Auth = () => {
               </div>
 
               <form onSubmit={handleRegister} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-2">
-                    <Label htmlFor="first-name">First Name</Label>
+                    <Label htmlFor="first-name" className="text-sm font-medium">First Name</Label>
                     <Input
                       id="first-name"
                       placeholder="John"
                       value={registerForm.firstName}
                       onChange={(e) => setRegisterForm({ ...registerForm, firstName: e.target.value })}
                       disabled={loading}
+                      className="h-12 rounded-[20px] bg-muted/50 border-0"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="last-name">Last Name</Label>
+                    <Label htmlFor="last-name" className="text-sm font-medium">Last Name</Label>
                     <Input
                       id="last-name"
                       placeholder="Doe"
                       value={registerForm.lastName}
                       onChange={(e) => setRegisterForm({ ...registerForm, lastName: e.target.value })}
                       disabled={loading}
+                      className="h-12 rounded-[20px] bg-muted/50 border-0"
                     />
                   </div>
                 </div>
+                
                 <div className="space-y-2">
-                  <Label htmlFor="register-email">Email</Label>
-                  <Input
-                    id="register-email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={registerForm.email}
-                    onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
-                    disabled={loading}
-                  />
+                  <Label htmlFor="register-email" className="text-sm font-medium">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="register-email"
+                      type="email"
+                      placeholder="name@example.com"
+                      value={registerForm.email}
+                      onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
+                      disabled={loading}
+                      className="pl-10 h-12 rounded-[20px] bg-muted/50 border-0"
+                    />
+                  </div>
+                  {validationErrors.email && (
+                    <p className="text-xs text-destructive">{validationErrors.email}</p>
+                  )}
                 </div>
+                
                 <div className="space-y-2">
-                  <Label htmlFor="register-password">Password</Label>
-                  <Input
-                    id="register-password"
-                    type="password"
-                    placeholder="At least 6 characters"
-                    value={registerForm.password}
-                    onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
-                    disabled={loading}
-                  />
+                  <Label htmlFor="register-password" className="text-sm font-medium">Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="register-password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="At least 8 characters"
+                      value={registerForm.password}
+                      onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
+                      disabled={loading}
+                      className="pl-10 pr-10 h-12 rounded-[20px] bg-muted/50 border-0"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </button>
+                  </div>
+                  {validationErrors.password && (
+                    <p className="text-xs text-destructive">{validationErrors.password}</p>
+                  )}
                 </div>
+                
                 <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm Password</Label>
-                  <Input
-                    id="confirm-password"
-                    type="password"
-                    placeholder="Re-enter password"
-                    value={registerForm.confirmPassword}
-                    onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })}
-                    disabled={loading}
-                  />
+                  <Label htmlFor="confirm-password" className="text-sm font-medium">Confirm Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="confirm-password"
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Re-enter password"
+                      value={registerForm.confirmPassword}
+                      onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })}
+                      disabled={loading}
+                      className="pl-10 pr-10 h-12 rounded-[20px] bg-muted/50 border-0"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2"
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="w-4 h-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </button>
+                  </div>
+                  {validationErrors.confirmPassword && (
+                    <p className="text-xs text-destructive">{validationErrors.confirmPassword}</p>
+                  )}
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Creating account..." : `Start as ${selectedRole === 'customer' ? 'Customer' : 'Provider'}`}
+                
+                <Button 
+                  type="submit" 
+                  className="w-full h-[50px] rounded-[30px] bg-gradient-to-r from-primary to-accent text-base font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]" 
+                  disabled={loading}
+                >
+                  {loading ? "Creating account..." : "Sign Up"}
                 </Button>
               </form>
+
+              <div className="text-center text-sm">
+                <span className="text-muted-foreground">Already have an account? </span>
+                <button
+                  onClick={() => setActiveTab('login')}
+                  className="text-primary hover:underline font-semibold"
+                >
+                  Log in
+                </button>
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-border" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-2 text-muted-foreground">Or Continue With</span>
+                </div>
+              </div>
+
+              <div className="flex justify-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('facebook')}
+                  disabled={loading}
+                  className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50"
+                >
+                  <FaFacebook className="w-5 h-5 text-white" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('google')}
+                  disabled={loading}
+                  className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 border border-border"
+                >
+                  <FaGoogle className="w-5 h-5 text-[#DB4437]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('apple')}
+                  disabled={loading}
+                  className="w-11 h-11 rounded-full bg-black flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50"
+                >
+                  <FaApple className="w-5 h-5 text-white" />
+                </button>
+              </div>
             </TabsContent>
           </Tabs>
         </CardContent>
