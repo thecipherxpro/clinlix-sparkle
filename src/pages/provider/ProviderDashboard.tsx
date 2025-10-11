@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import WelcomeSection from "@/components/WelcomeSection";
+import ActionCard from "@/components/ActionCard";
+import cleaningLadyImage from "@/assets/cleaning-lady.png";
 
 const ProviderDashboard = () => {
   const navigate = useNavigate();
@@ -64,6 +66,15 @@ const ProviderDashboard = () => {
       <WelcomeSection />
 
       <main className="mobile-container py-6 max-w-6xl mx-auto">
+        
+        {/* Action Card */}
+        <div className="mb-6 md:mb-8">
+          <ActionCard 
+            title="Start Your Day!"
+            imageUrl={cleaningLadyImage}
+            onSwipeClick={() => navigate('/provider/jobs')}
+          />
+        </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
