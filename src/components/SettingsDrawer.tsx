@@ -37,6 +37,7 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
         size="icon"
         onClick={() => setIsOpen(true)}
         className="touch-target"
+        aria-label="Open settings"
       >
         <Settings className="w-5 h-5" />
       </Button>
@@ -44,17 +45,21 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 animate-fade-in"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-200"
           onClick={() => setIsOpen(false)}
+          aria-hidden="true"
         />
       )}
 
       {/* Bottom Drawer */}
       <div
-        className={`fixed bottom-0 left-0 right-0 bg-card rounded-t-3xl shadow-2xl z-50 transition-transform duration-300 ease-out ${
-          isOpen ? 'translate-y-0' : 'translate-y-full'
+        className={`fixed bottom-0 left-0 right-0 bg-card rounded-t-3xl shadow-2xl z-50 transition-all duration-300 ease-out ${
+          isOpen ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
         }`}
         style={{ maxHeight: '50vh' }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="drawer-title"
       >
         {/* Handle */}
         <div className="flex justify-center pt-3 pb-2">
@@ -64,12 +69,13 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
         {/* Content */}
         <div className="px-6 pb-8 pt-2 space-y-3">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Quick Actions</h3>
+            <h3 id="drawer-title" className="text-lg font-semibold">Quick Actions</h3>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(false)}
               className="touch-target"
+              aria-label="Close drawer"
             >
               <X className="w-5 h-5" />
             </Button>
