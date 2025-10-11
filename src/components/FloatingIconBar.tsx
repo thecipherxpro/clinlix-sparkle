@@ -7,6 +7,7 @@ interface NavigationItem {
   label: string;
   color: string;
   badge?: number | string;
+  hideLabel?: boolean;
 }
 
 interface FloatingIconBarProps {
@@ -60,7 +61,7 @@ const FloatingIconBar: React.FC<FloatingIconBarProps> = ({
                   strokeWidth={isActive ? 2.5 : 2}
                 />
                 
-                {isActive && showLabels && (
+                {isActive && showLabels && !item.hideLabel && (
                   <span className="ml-1.5 sm:ml-2 md:ml-2.5 text-white font-semibold text-xs sm:text-sm whitespace-nowrap">
                     {item.label}
                   </span>

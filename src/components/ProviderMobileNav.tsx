@@ -23,7 +23,8 @@ const ProviderMobileNav = () => {
       id: "/provider/schedule", 
       icon: Calendar, 
       label: "Schedule", 
-      color: "from-pink-500 to-pink-600" 
+      color: "from-pink-500 to-pink-600",
+      hideLabel: true
     },
     { 
       id: "/provider/wallet", 
