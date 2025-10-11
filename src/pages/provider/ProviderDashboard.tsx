@@ -13,6 +13,11 @@ const ProviderDashboard = () => {
   const [profile, setProfile] = useState<any>(null);
   const [providerProfile, setProviderProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    pendingJobs: 0,
+    activeToday: 0,
+    monthlyEarnings: 0
+  });
 
   useEffect(() => {
     checkUser();
@@ -45,6 +50,42 @@ const ProviderDashboard = () => {
         .single();
 
       setProviderProfile(providerData);
+
+      // Fetch stats
+      if (providerData?.id) {
+        const today = new Date().toISOString().split('T')[0];
+        const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
+
+        // Fetch pending jobs
+        const { count: pendingCount } = await supabase
+          .from("bookings")
+          .select("*", { count: "exact", head: true })
+          .eq("provider_id", providerData.id)
+          .eq("status", "pending");
+
+        // Fetch active today
+        const { count: activeCount } = await supabase
+          .from("bookings")
+          .select("*", { count: "exact", head: true })
+          .eq("provider_id", providerData.id)
+          .eq("status", "confirmed")
+          .eq("requested_date", today);
+
+        // Fetch monthly earnings
+        const { data: walletData } = await supabase
+          .from("provider_wallet")
+          .select("payout_due")
+          .eq("provider_id", providerData.id)
+          .gte("created_at", firstDayOfMonth);
+
+        const monthlyTotal = walletData?.reduce((sum, record) => sum + Number(record.payout_due || 0), 0) || 0;
+
+        setStats({
+          pendingJobs: pendingCount || 0,
+          activeToday: activeCount || 0,
+          monthlyEarnings: monthlyTotal
+        });
+      }
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -76,50 +117,52 @@ const ProviderDashboard = () => {
           />
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
-          <Card className="border-0 shadow-sm">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardDescription className="text-xs md:text-sm">Pending Jobs</CardDescription>
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Briefcase className="w-5 h-5 text-primary" />
+        {/* Professional Stats Card */}
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-card via-card to-primary/5 mb-6 md:mb-8">
+          <CardHeader>
+            <CardTitle className="text-xl md:text-2xl">Today's Overview</CardTitle>
+            <CardDescription>Your current statistics and earnings</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Pending Jobs */}
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Briefcase className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Pending Jobs</p>
+                  <p className="text-3xl font-bold">{stats.pendingJobs}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Awaiting response</p>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl md:text-3xl font-bold">0</div>
-            </CardContent>
-          </Card>
 
-          <Card className="border-0 shadow-sm">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardDescription className="text-xs md:text-sm">Active Today</CardDescription>
-                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-accent" />
+              {/* Active Today */}
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-6 h-6 text-accent" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Active Today</p>
+                  <p className="text-3xl font-bold">{stats.activeToday}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Confirmed bookings</p>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl md:text-3xl font-bold">0</div>
-            </CardContent>
-          </Card>
 
-          <Card className="border-0 shadow-sm">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardDescription className="text-xs md:text-sm">Monthly Earnings</CardDescription>
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <DollarSign className="w-5 h-5 text-primary" />
+              {/* Monthly Earnings */}
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <DollarSign className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Monthly Earnings</p>
+                  <p className="text-3xl font-bold">€{stats.monthlyEarnings.toFixed(2)}</p>
+                  <p className="text-xs text-muted-foreground mt-1">This month's total</p>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl md:text-3xl font-bold">€0</div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Quick Actions */}
         <div>
