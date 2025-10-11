@@ -87,28 +87,28 @@ const DashboardWelcomeBanner = ({ user }: DashboardWelcomeBannerProps) => {
   };
 
   return (
-    <div className="bg-card rounded-3xl border border-border p-4 sm:p-5 w-full mx-auto shadow-sm mobile-container">
-      <div className="flex items-center justify-between gap-4 flex-col sm:flex-row">
-        <div className="w-full sm:w-auto text-center sm:text-left">
-          <p className="text-muted-foreground text-sm sm:text-base">Welcome back,</p>
-          <h1 className="text-3xl sm:text-4xl font-bold text-foreground">{user.name}!</h1>
-          <div className="flex items-center justify-center sm:justify-start space-x-3 sm:space-x-5 mt-2">
+    <div className="bg-white rounded-3xl border border-gray-200 p-5 w-full max-w-lg mx-auto shadow-sm">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-gray-500">Welcome back,</p>
+          <h1 className="text-4xl font-bold text-gray-800">{user.name}!</h1>
+          <div className="flex items-center space-x-5 mt-2">
             <div className="flex items-center">
-              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-muted rounded-full mr-2"></span>
-              <span className="text-xs sm:text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              <span className="w-3 h-3 bg-gray-300 rounded-full mr-2"></span>
+              <span className="text-sm font-semibold text-gray-600 uppercase tracking-wider">
                 {user.role} PORTAL
               </span>
             </div>
             <div className="flex items-center">
-              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-accent rounded-full mr-2"></span>
-              <span className="text-xs sm:text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              <span className="w-3 h-3 bg-orange-400 rounded-full mr-2"></span>
+              <span className="text-sm font-semibold text-gray-600 uppercase tracking-wider">
                 {formattedDate}
               </span>
             </div>
           </div>
         </div>
         <div 
-          className="relative group cursor-pointer p-1 rounded-full bg-accent/20 flex-shrink-0"
+          className="relative group cursor-pointer p-1 rounded-full bg-purple-200 flex-shrink-0"
           onClick={handleAvatarClick}
         >
           <input
@@ -121,16 +121,16 @@ const DashboardWelcomeBanner = ({ user }: DashboardWelcomeBannerProps) => {
           <img
             src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
             alt={user.name}
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover ring-2 ring-accent/30"
+            className="w-20 h-20 rounded-full object-cover"
           />
           {uploading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full">
-              <Loader2 className="h-6 w-6 sm:h-8 sm:h-8 animate-spin text-primary" />
+            <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-full">
+              <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
             </div>
           )}
           {!uploading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-              <Upload className="h-6 w-6 sm:h-8 sm:h-8 text-primary" />
+            <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+              <Upload className="h-8 w-8 text-purple-600" />
             </div>
           )}
         </div>
