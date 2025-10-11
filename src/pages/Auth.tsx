@@ -174,12 +174,15 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-[hsl(240,8%,97%)] to-[hsl(252,15%,98%)]">
       <Card className="w-full max-w-md rounded-[24px] shadow-[0_2px_8px_rgba(108,99,255,0.08)] border-0 animate-fade-in">
         <CardHeader className="space-y-3 pt-8 pb-6 px-6">
-          <button 
+          <Button 
+            variant="ghost"
+            size="icon"
             onClick={() => navigate('/')}
-            className="absolute top-6 left-6 w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary transition-colors"
+            className="absolute top-6 left-6 rounded-full touch-target"
+            aria-label="Go back to home page"
           >
-            <ArrowLeft className="w-5 h-5 text-foreground" />
-          </button>
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
           
           <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mb-2 shadow-lg">
             <Sparkles className="w-8 h-8 text-primary-foreground" />
@@ -241,7 +244,8 @@ const Auth = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 touch-target rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? (
                         <EyeOff className="w-4 h-4 text-muted-foreground" />
@@ -269,13 +273,14 @@ const Auth = () => {
                       Remember me
                     </label>
                   </div>
-                  <button
+                  <Button
                     type="button"
+                    variant="link"
                     onClick={handleForgotPassword}
-                    className="text-sm text-primary hover:underline font-medium"
+                    className="h-auto p-0 text-sm font-medium"
                   >
                     Forgot Password?
-                  </button>
+                  </Button>
                 </div>
 
                 <Button 
@@ -289,12 +294,13 @@ const Auth = () => {
 
               <div className="text-center text-sm">
                 <span className="text-muted-foreground">Don't have an account? </span>
-                <button
+                <Button
+                  variant="link"
                   onClick={() => setActiveTab('register')}
-                  className="text-primary hover:underline font-semibold"
+                  className="h-auto p-0 font-semibold text-sm"
                 >
                   Sign Up here
-                </button>
+                </Button>
               </div>
 
               <div className="relative">
@@ -306,31 +312,37 @@ const Auth = () => {
                 </div>
               </div>
 
-              <div className="flex justify-center gap-4">
-                <button
+              <div className="flex justify-center gap-4" role="group" aria-label="Social login options">
+                <Button
                   type="button"
                   onClick={() => handleSocialLogin('facebook')}
                   disabled={loading}
-                  className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50"
+                  size="icon"
+                  className="rounded-full bg-[#1877F2] hover:bg-[#1877F2]/90 text-white shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 touch-target"
+                  aria-label="Sign in with Facebook"
                 >
-                  <FaFacebook className="w-5 h-5 text-white" />
-                </button>
-                <button
+                  <FaFacebook className="w-5 h-5" />
+                </Button>
+                <Button
                   type="button"
                   onClick={() => handleSocialLogin('google')}
                   disabled={loading}
-                  className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 border border-border"
+                  size="icon"
+                  className="rounded-full bg-white hover:bg-white/90 shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 border border-border touch-target"
+                  aria-label="Sign in with Google"
                 >
                   <FaGoogle className="w-5 h-5 text-[#DB4437]" />
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={() => handleSocialLogin('apple')}
                   disabled={loading}
-                  className="w-11 h-11 rounded-full bg-black flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50"
+                  size="icon"
+                  className="rounded-full bg-black hover:bg-black/90 text-white shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 touch-target"
+                  aria-label="Sign in with Apple"
                 >
-                  <FaApple className="w-5 h-5 text-white" />
-                </button>
+                  <FaApple className="w-5 h-5" />
+                </Button>
               </div>
             </TabsContent>
 
@@ -341,12 +353,14 @@ const Auth = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 mb-4">
+              <div className="grid grid-cols-2 gap-3 mb-4" role="group" aria-label="Select account type">
                 <Button
                   type="button"
                   variant={selectedRole === 'customer' ? 'default' : 'outline'}
                   onClick={() => setSelectedRole('customer')}
                   className="h-20 flex flex-col items-center justify-center gap-1 rounded-[16px] transition-all hover:scale-105"
+                  aria-pressed={selectedRole === 'customer'}
+                  aria-label="Sign up as a customer"
                 >
                   <Sparkles className="w-5 h-5" />
                   <span className="font-medium">Customer</span>
@@ -356,6 +370,8 @@ const Auth = () => {
                   variant={selectedRole === 'provider' ? 'default' : 'outline'}
                   onClick={() => setSelectedRole('provider')}
                   className="h-20 flex flex-col items-center justify-center gap-1 rounded-[16px] transition-all hover:scale-105"
+                  aria-pressed={selectedRole === 'provider'}
+                  aria-label="Sign up as a service provider"
                 >
                   <Shield className="w-5 h-5" />
                   <span className="font-medium">Provider</span>
@@ -423,7 +439,8 @@ const Auth = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 touch-target rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? (
                         <EyeOff className="w-4 h-4 text-muted-foreground" />
@@ -453,7 +470,8 @@ const Auth = () => {
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 touch-target rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                     >
                       {showConfirmPassword ? (
                         <EyeOff className="w-4 h-4 text-muted-foreground" />
@@ -478,12 +496,13 @@ const Auth = () => {
 
               <div className="text-center text-sm">
                 <span className="text-muted-foreground">Already have an account? </span>
-                <button
+                <Button
+                  variant="link"
                   onClick={() => setActiveTab('login')}
-                  className="text-primary hover:underline font-semibold"
+                  className="h-auto p-0 font-semibold text-sm"
                 >
                   Log in
-                </button>
+                </Button>
               </div>
 
               <div className="relative">
@@ -495,31 +514,37 @@ const Auth = () => {
                 </div>
               </div>
 
-              <div className="flex justify-center gap-4">
-                <button
+              <div className="flex justify-center gap-4" role="group" aria-label="Social login options">
+                <Button
                   type="button"
                   onClick={() => handleSocialLogin('facebook')}
                   disabled={loading}
-                  className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50"
+                  size="icon"
+                  className="rounded-full bg-[#1877F2] hover:bg-[#1877F2]/90 text-white shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 touch-target"
+                  aria-label="Sign in with Facebook"
                 >
-                  <FaFacebook className="w-5 h-5 text-white" />
-                </button>
-                <button
+                  <FaFacebook className="w-5 h-5" />
+                </Button>
+                <Button
                   type="button"
                   onClick={() => handleSocialLogin('google')}
                   disabled={loading}
-                  className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 border border-border"
+                  size="icon"
+                  className="rounded-full bg-white hover:bg-white/90 shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 border border-border touch-target"
+                  aria-label="Sign in with Google"
                 >
                   <FaGoogle className="w-5 h-5 text-[#DB4437]" />
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={() => handleSocialLogin('apple')}
                   disabled={loading}
-                  className="w-11 h-11 rounded-full bg-black flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50"
+                  size="icon"
+                  className="rounded-full bg-black hover:bg-black/90 text-white shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 touch-target"
+                  aria-label="Sign in with Apple"
                 >
-                  <FaApple className="w-5 h-5 text-white" />
-                </button>
+                  <FaApple className="w-5 h-5" />
+                </Button>
               </div>
             </TabsContent>
           </Tabs>
