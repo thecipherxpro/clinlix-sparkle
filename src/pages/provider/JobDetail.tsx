@@ -17,7 +17,12 @@ import {
   Mail,
   Navigation,
   Euro,
-  AlertCircle
+  AlertCircle,
+  Bath,
+  UtensilsCrossed,
+  Sofa,
+  Sparkles,
+  Waves
 } from "lucide-react";
 import { format } from "date-fns";
 import JobStatusBar from "@/components/provider/jobs/JobStatusBar";
@@ -258,14 +263,14 @@ const JobDetail = () => {
 
   const isJobConfirmed = job?.job_status !== "pending" && job?.job_status !== "declined";
 
-  const serviceIcons: Record<string, string> = {
-    bathroom: "🛁",
-    kitchen: "🍽️",
-    livingroom: "🛋️",
-    floors: "🧹",
-    dusting: "🧼",
-    surfaces: "✨",
-    vacuuming: "🧹"
+  const serviceIcons: Record<string, React.ComponentType<any>> = {
+    bathroom: Bath,
+    kitchen: UtensilsCrossed,
+    livingroom: Sofa,
+    floors: Sparkles,
+    dusting: Sparkles,
+    surfaces: Waves,
+    vacuuming: Sparkles
   };
 
   if (loading) {
@@ -630,12 +635,15 @@ const JobDetail = () => {
                 <div>
                   <p className="font-medium mb-3">Included Services</p>
                   <div className="grid grid-cols-2 gap-2">
-                    {job.cleaning_packages?.areas_included?.map((area) => (
-                      <div key={area} className="flex items-center gap-2 text-sm">
-                        <span className="text-lg">{serviceIcons[area] || "✓"}</span>
-                        <span className="capitalize">{area.replace("_", " ")}</span>
-                      </div>
-                    ))}
+                    {job.cleaning_packages?.areas_included?.map((area) => {
+                      const IconComponent = serviceIcons[area] || Sparkles;
+                      return (
+                        <div key={area} className="flex items-center gap-2 text-sm">
+                          <IconComponent className="h-5 w-5 text-primary" />
+                          <span className="capitalize">{area.replace("_", " ")}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </CardContent>
