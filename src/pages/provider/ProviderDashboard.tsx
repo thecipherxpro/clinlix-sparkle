@@ -110,41 +110,32 @@ const ProviderDashboard = () => {
             <CardDescription>Your current statistics and earnings</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-3 gap-3 md:gap-6">
               {/* Pending Jobs */}
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Briefcase className="w-6 h-6 text-primary" />
+              <div className="flex flex-col items-center text-center">
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center mb-2">
+                  <Briefcase className="w-4 h-4 md:w-6 md:h-6 text-primary" />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Pending Jobs</p>
-                  <p className="text-3xl font-bold">{stats.pendingJobs}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Awaiting response</p>
-                </div>
+                <p className="text-[10px] md:text-sm text-muted-foreground mb-1">Pending</p>
+                <p className="text-xl md:text-3xl font-bold">{stats.pendingJobs}</p>
               </div>
 
               {/* Active Today */}
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-6 h-6 text-accent" />
+              <div className="flex flex-col items-center text-center">
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-accent/10 flex items-center justify-center mb-2">
+                  <Clock className="w-4 h-4 md:w-6 md:h-6 text-accent" />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Active Today</p>
-                  <p className="text-3xl font-bold">{stats.activeToday}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Confirmed bookings</p>
-                </div>
+                <p className="text-[10px] md:text-sm text-muted-foreground mb-1">Active</p>
+                <p className="text-xl md:text-3xl font-bold">{stats.activeToday}</p>
               </div>
 
               {/* Monthly Earnings */}
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <DollarSign className="w-6 h-6 text-primary" />
+              <div className="flex flex-col items-center text-center">
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center mb-2">
+                  <DollarSign className="w-4 h-4 md:w-6 md:h-6 text-primary" />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Monthly Earnings</p>
-                  <p className="text-3xl font-bold">€{stats.monthlyEarnings.toFixed(2)}</p>
-                  <p className="text-xs text-muted-foreground mt-1">This month's total</p>
-                </div>
+                <p className="text-[10px] md:text-sm text-muted-foreground mb-1">Earnings</p>
+                <p className="text-xl md:text-3xl font-bold">€{stats.monthlyEarnings.toFixed(2)}</p>
               </div>
             </div>
           </CardContent>
