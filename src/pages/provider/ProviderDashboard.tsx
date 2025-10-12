@@ -7,7 +7,6 @@ import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import ActionCard from "@/components/ActionCard";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
-
 const ProviderDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
@@ -18,37 +17,31 @@ const ProviderDashboard = () => {
     activeToday: 0,
     monthlyEarnings: 0
   });
-
   useEffect(() => {
     checkUser();
   }, []);
-
   const checkUser = async () => {
     try {
       const {
-        data: { user },
+        data: {
+          user
+        }
       } = await supabase.auth.getUser();
-
       if (!user) {
         navigate("/auth");
         return;
       }
-
-      const { data: profileData } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-
+      const {
+        data: profileData
+      } = await supabase.from("profiles").select("*").eq("id", user.id).single();
       if (profileData?.role !== "provider") {
         navigate("/customer/dashboard");
         return;
       }
-
       setProfile(profileData);
-
-      const { data: providerData } = await supabase
-        .from("provider_profiles")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-
+      const {
+        data: providerData
+      } = await supabase.from("provider_profiles").select("*").eq("user_id", user.id).single();
       setProviderProfile(providerData);
 
       // Fetch stats
@@ -57,29 +50,26 @@ const ProviderDashboard = () => {
         const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
 
         // Fetch pending jobs
-        const { count: pendingCount } = await supabase
-          .from("bookings")
-          .select("*", { count: "exact", head: true })
-          .eq("provider_id", providerData.id)
-          .eq("status", "pending");
+        const {
+          count: pendingCount
+        } = await supabase.from("bookings").select("*", {
+          count: "exact",
+          head: true
+        }).eq("provider_id", providerData.id).eq("status", "pending");
 
         // Fetch active today
-        const { count: activeCount } = await supabase
-          .from("bookings")
-          .select("*", { count: "exact", head: true })
-          .eq("provider_id", providerData.id)
-          .eq("status", "confirmed")
-          .eq("requested_date", today);
+        const {
+          count: activeCount
+        } = await supabase.from("bookings").select("*", {
+          count: "exact",
+          head: true
+        }).eq("provider_id", providerData.id).eq("status", "confirmed").eq("requested_date", today);
 
         // Fetch monthly earnings
-        const { data: walletData } = await supabase
-          .from("provider_wallet")
-          .select("payout_due")
-          .eq("provider_id", providerData.id)
-          .gte("created_at", firstDayOfMonth);
-
+        const {
+          data: walletData
+        } = await supabase.from("provider_wallet").select("payout_due").eq("provider_id", providerData.id).gte("created_at", firstDayOfMonth);
         const monthlyTotal = walletData?.reduce((sum, record) => sum + Number(record.payout_due || 0), 0) || 0;
-
         setStats({
           pendingJobs: pendingCount || 0,
           activeToday: activeCount || 0,
@@ -92,37 +82,25 @@ const ProviderDashboard = () => {
       setLoading(false);
     }
   };
-
-
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+    return <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
       <div className="pt-4 sm:pt-6">
-        <DashboardWelcomeBanner 
-          user={{
-            name: profile?.first_name || 'User',
-            role: 'PROVIDER',
-            avatarUrl: profile?.avatar_url
-          }}
-        />
+        <DashboardWelcomeBanner user={{
+        name: profile?.first_name || 'User',
+        role: 'PROVIDER',
+        avatarUrl: profile?.avatar_url
+      }} />
       </div>
 
-      <main className="mobile-container py-6 max-w-6xl mx-auto">
+      <main className="mobile-container max-w-6xl mx-auto py-[14px]">
         
         {/* Action Card */}
         <div className="mb-6 md:mb-8">
-          <ActionCard 
-            title="Start Your Day!"
-            imageUrl={cleaningLadyImage}
-            onSwipeClick={() => navigate('/provider/jobs')}
-          />
+          <ActionCard title="Start Your Day!" imageUrl={cleaningLadyImage} onSwipeClick={() => navigate('/provider/jobs')} />
         </div>
 
         {/* Professional Stats Card */}
@@ -176,10 +154,7 @@ const ProviderDashboard = () => {
         <div>
           <h3 className="text-lg md:text-xl font-semibold mb-4">Quick Actions</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-            <Card 
-              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5"
-              onClick={() => navigate('/provider/jobs')}
-            >
+            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5" onClick={() => navigate('/provider/jobs')}>
               <CardHeader className="space-y-1 pb-4 p-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2 shadow-md">
                   <Briefcase className="w-5 h-5 md:w-6 md:h-6 text-primary" />
@@ -189,10 +164,7 @@ const ProviderDashboard = () => {
               </CardHeader>
             </Card>
 
-            <Card 
-              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5"
-              onClick={() => navigate('/provider/schedule')}
-            >
+            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5" onClick={() => navigate('/provider/schedule')}>
               <CardHeader className="space-y-1 pb-4 p-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-2">
                   <Calendar className="w-5 h-5 md:w-6 md:h-6 text-accent" />
@@ -202,10 +174,7 @@ const ProviderDashboard = () => {
               </CardHeader>
             </Card>
 
-            <Card 
-              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5"
-              onClick={() => navigate('/provider/wallet')}
-            >
+            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5" onClick={() => navigate('/provider/wallet')}>
               <CardHeader className="space-y-1 pb-4 p-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2">
                   <DollarSign className="w-5 h-5 md:w-6 md:h-6 text-primary" />
@@ -215,10 +184,7 @@ const ProviderDashboard = () => {
               </CardHeader>
             </Card>
 
-            <Card 
-              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5"
-              onClick={() => navigate('/provider/profile')}
-            >
+            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5" onClick={() => navigate('/provider/profile')}>
               <CardHeader className="space-y-1 pb-4 p-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-2">
                   <User className="w-5 h-5 md:w-6 md:h-6 text-accent" />
@@ -232,8 +198,6 @@ const ProviderDashboard = () => {
       </main>
 
       <ProviderMobileNav />
-    </div>
-  );
+    </div>;
 };
-
 export default ProviderDashboard;
