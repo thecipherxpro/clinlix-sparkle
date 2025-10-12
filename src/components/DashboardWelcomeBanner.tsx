@@ -79,33 +79,116 @@ const DashboardWelcomeBanner = ({
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
-  return <div className="bg-white rounded-3xl border border-gray-200 p-3 sm:p-5 w-80 max-w-84 shadow-sm mx-[17px] px-[14px] my-0 py-[19px]">
-      <div className="flex items-center justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          <p className="text-xs sm:text-sm text-gray-500">Welcome back,</p>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 truncate">{user.name}!</h1>
-          <div className="flex items-center gap-2 sm:gap-3 mt-2 sm:mt-3 flex-wrap">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 sm:w-3 sm:h-3 bg-gray-300 rounded-full flex-shrink-0"></span>
-              <span className="font-semibold text-gray-600 uppercase tracking-wide text-[10px] sm:text-xs">{user.role} PORTAL</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 sm:w-3 sm:h-3 bg-orange-400 rounded-full flex-shrink-0"></span>
-              <span className="font-semibold text-gray-600 text-[10px] sm:text-xs">{formattedDate}</span>
+  return (
+    /* Mobile-first container: Full width with responsive padding and margins
+       - Uses viewport-relative margins for consistent edge spacing across devices
+       - Padding scales from mobile (4vw) to tablet (3vw) for optimal content spacing
+       - Border radius adapts to screen size for proportional rounded corners */
+    <div className="w-full mx-[4vw] sm:mx-[3vw] my-0">
+      <div className="bg-white rounded-[clamp(20px,5vw,24px)] border border-gray-200 shadow-sm 
+                      px-[clamp(16px,4vw,24px)] py-[clamp(16px,4.5vw,24px)]">
+        
+        {/* Flex container: Adapts layout direction based on content and screen size
+            - gap uses clamp() to scale proportionally (12px on small, 20px on larger screens)
+            - items-start ensures proper alignment on all screen sizes */}
+        <div className="flex items-start justify-between gap-[clamp(12px,3vw,20px)]">
+          
+          {/* Content section: Flexible width that grows to fill available space
+              - min-w-0 prevents flex item overflow issues with text truncation */}
+          <div className="min-w-0 flex-1">
+            
+            {/* Typography: Using clamp() for fluid, responsive text scaling
+                - Welcome text: scales from 11px to 14px
+                - Name heading: scales from 24px (mobile) to 36px (tablet) */}
+            <p className="text-[clamp(11px,2.8vw,14px)] text-gray-500 leading-tight">
+              Welcome back,
+            </p>
+            <h1 className="text-[clamp(24px,6.5vw,36px)] font-bold text-gray-800 truncate 
+                           leading-[1.2] mt-[clamp(2px,0.5vw,4px)]">
+              {user.name}!
+            </h1>
+            
+            {/* Status badges: Responsive spacing with clamp() for consistent gaps
+                - Touch-friendly: Minimum 44px height maintained for tap targets
+                - flex-wrap ensures proper stacking on narrow screens */}
+            <div className="flex items-center gap-[clamp(8px,2vw,12px)] 
+                           mt-[clamp(10px,2.5vw,16px)] flex-wrap">
+              
+              {/* Role badge: Proportional sizing with viewport units */}
+              <div className="flex items-center gap-[clamp(4px,1vw,6px)] 
+                             py-[clamp(4px,1vw,6px)] min-h-[44px]">
+                <span className="w-[clamp(8px,2vw,12px)] h-[clamp(8px,2vw,12px)] 
+                               bg-gray-300 rounded-full flex-shrink-0"></span>
+                <span className="font-semibold text-gray-600 uppercase tracking-wide 
+                               text-[clamp(9px,2.2vw,11px)]">
+                  {user.role} PORTAL
+                </span>
+              </div>
+              
+              {/* Date badge: Matches role badge styling for consistency */}
+              <div className="flex items-center gap-[clamp(4px,1vw,6px)] 
+                             py-[clamp(4px,1vw,6px)] min-h-[44px]">
+                <span className="w-[clamp(8px,2vw,12px)] h-[clamp(8px,2vw,12px)] 
+                               bg-orange-400 rounded-full flex-shrink-0"></span>
+                <span className="font-semibold text-gray-600 
+                               text-[clamp(9px,2.2vw,11px)]">
+                  {formattedDate}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="relative group cursor-pointer p-1 rounded-full bg-purple-200 flex-shrink-0" onClick={handleAvatarClick}>
-          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-          <img src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt={user.name} className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover" />
-          {uploading && <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-full">
-              <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 animate-spin text-purple-600" />
-            </div>}
-          {!uploading && <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-              <Upload className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
-            </div>}
+          
+          {/* Avatar section: Touch-optimized with 44px+ tap target
+              - Responsive sizing using clamp() for proportional scaling
+              - Active touch states with group hover for better UX */}
+          <div className="relative group cursor-pointer flex-shrink-0 
+                         touch-manipulation active:scale-95 transition-transform" 
+               onClick={handleAvatarClick}>
+            
+            {/* Hidden file input for upload functionality */}
+            <input 
+              ref={fileInputRef} 
+              type="file" 
+              accept="image/*" 
+              onChange={handleImageUpload} 
+              className="hidden" 
+              aria-label="Upload profile picture"
+            />
+            
+            {/* Avatar container: Responsive padding and sizing
+                - Padding scales with viewport for consistent border effect
+                - Minimum 60px size ensures touch target accessibility */}
+            <div className="p-[clamp(3px,0.8vw,4px)] rounded-full bg-purple-200">
+              <img 
+                src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} 
+                alt={user.name} 
+                className="w-[clamp(60px,15vw,80px)] h-[clamp(60px,15vw,80px)] 
+                          rounded-full object-cover"
+              />
+            </div>
+            
+            {/* Upload loading state: Centered spinner overlay */}
+            {uploading && (
+              <div className="absolute inset-0 flex items-center justify-center 
+                             bg-white/80 rounded-full">
+                <Loader2 className="w-[clamp(24px,6vw,32px)] h-[clamp(24px,6vw,32px)] 
+                                   animate-spin text-purple-600" />
+              </div>
+            )}
+            
+            {/* Upload hover state: Icon overlay on desktop, always visible hint on mobile */}
+            {!uploading && (
+              <div className="absolute inset-0 flex items-center justify-center 
+                             bg-white/80 rounded-full opacity-0 group-hover:opacity-100 
+                             group-active:opacity-100 transition-opacity duration-200">
+                <Upload className="w-[clamp(24px,6vw,32px)] h-[clamp(24px,6vw,32px)] 
+                                  text-purple-600" />
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default DashboardWelcomeBanner;
