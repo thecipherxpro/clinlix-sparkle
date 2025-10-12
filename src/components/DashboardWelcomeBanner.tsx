@@ -84,7 +84,7 @@ const DashboardWelcomeBanner = ({
        - Uses viewport-relative margins for consistent edge spacing across devices
        - Padding scales from mobile (4vw) to tablet (3vw) for optimal content spacing
        - Border radius adapts to screen size for proportional rounded corners */
-    <div className="w-full mx-[4vw] sm:mx-[3vw] my-0">
+    <div className="w-fit mx-[4vw] sm:mx-[3vw] my-0">
       <div className="bg-white rounded-[clamp(20px,5vw,24px)] border border-gray-200 shadow-sm 
                       px-[clamp(16px,4vw,24px)] py-[clamp(16px,4.5vw,24px)]">
         
