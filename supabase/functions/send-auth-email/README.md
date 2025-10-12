@@ -1,6 +1,6 @@
 # Custom Email Templates Setup for Clinlix
 
-This edge function sends custom branded emails for all authentication events (signup, password reset, magic link, invitations).
+This edge function sends custom branded emails with Clinlix logo for all authentication events (signup, password reset, magic link, invitations).
 
 ## Setup Instructions
 
@@ -38,12 +38,12 @@ Add your production URL as `SITE_URL` in Backend → Secrets:
 In the Backend → Auth settings:
 1. Go to "Hooks" section
 2. Enable "Send Email Hook"
-3. Set the endpoint to: `https://<your-project-ref>.supabase.co/functions/v1/send-auth-email`
+3. Set the endpoint to: `https://ctyulavksyguogudczpi.supabase.co/functions/v1/send-auth-email`
 4. Add the `SEND_EMAIL_HOOK_SECRET` value
 
 ### 6. Update Sender Email (Optional)
 
-In `supabase/functions/send-auth-email/index.ts`, update line 109:
+In `supabase/functions/send-auth-email/index.ts`, update line 63:
 ```typescript
 from: 'Clinlix <noreply@yourdomain.com>', // Change to your verified domain
 ```
@@ -72,7 +72,7 @@ After setup, test each email type:
 
 ## Troubleshooting
 
-- **Logo not showing**: Ensure the logo is uploaded to the correct path in Storage
+- **Logo not showing**: Ensure the logo is uploaded to the correct path in Storage and is publicly accessible
 - **Emails not sending**: Check that RESEND_API_KEY is correct and domain is verified
 - **Hook not working**: Verify SEND_EMAIL_HOOK_SECRET matches in both places
 - **Wrong redirect URL**: Ensure SITE_URL is set correctly

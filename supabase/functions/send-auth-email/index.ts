@@ -1,11 +1,6 @@
-import React from 'npm:react@18.3.1';
 import { Webhook } from 'https://esm.sh/standardwebhooks@1.0.0';
-import { Resend } from 'npm:resend@4.0.0';
-import { renderAsync } from 'npm:@react-email/components@0.0.22';
-import { MagicLinkEmail } from './_templates/magic-link.tsx';
-import { EmailConfirmation } from './_templates/email-confirmation.tsx';
-import { PasswordReset } from './_templates/password-reset.tsx';
-import { InviteEmail } from './_templates/invite.tsx';
+import { Resend } from 'https://esm.sh/resend@4.0.0';
+import { getEmailTemplate } from './_templates/email-templates.ts';
 
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string);
 const hookSecret = Deno.env.get('SEND_EMAIL_HOOK_SECRET') as string;
@@ -48,62 +43,14 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
     const siteUrl = redirect_to || Deno.env.get('SITE_URL') || supabaseUrl;
 
-    // Determine which template to use based on email_action_type
-    let emailComponent;
-    let subject = '';
-
-    switch (email_action_type) {
-      case 'magiclink':
-        emailComponent = React.createElement(MagicLinkEmail, {
-          supabase_url: supabaseUrl,
-          token,
-          token_hash,
-          redirect_to: siteUrl,
-          email_action_type,
-        });
-        subject = 'Log in to Clinlix';
-        break;
-
-      case 'signup':
-        emailComponent = React.createElement(EmailConfirmation, {
-          supabase_url: supabaseUrl,
-          token_hash,
-          redirect_to: siteUrl,
-        });
-        subject = 'Confirm your Clinlix account';
-        break;
-
-      case 'recovery':
-        emailComponent = React.createElement(PasswordReset, {
-          supabase_url: supabaseUrl,
-          token_hash,
-          redirect_to: siteUrl,
-        });
-        subject = 'Reset your Clinlix password';
-        break;
-
-      case 'invite':
-        emailComponent = React.createElement(InviteEmail, {
-          supabase_url: supabaseUrl,
-          token_hash,
-          redirect_to: siteUrl,
-        });
-        subject = "You've been invited to Clinlix";
-        break;
-
-      default:
-        // Fallback to magic link template
-        emailComponent = React.createElement(MagicLinkEmail, {
-          supabase_url: supabaseUrl,
-          token,
-          token_hash,
-          redirect_to: siteUrl,
-          email_action_type,
-        });
-        subject = 'Clinlix Authentication';
-    }
-
-    const html = await renderAsync(emailComponent);
+    // Get the appropriate email template and subject
+    const { html, subject } = getEmailTemplate(email_action_type, {
+      supabase_url: supabaseUrl,
+      token,
+      token_hash,
+      redirect_to: siteUrl,
+      email_action_type,
+    });
 
     const { error } = await resend.emails.send({
       from: 'Clinlix <onboarding@resend.dev>', // Change to your verified domain
@@ -125,10 +72,11 @@ Deno.serve(async (req) => {
     );
   } catch (error) {
     console.error('Error sending email:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return new Response(
       JSON.stringify({
         error: {
-          message: error.message,
+          message: errorMessage,
         },
       }),
       {
