@@ -79,30 +79,30 @@ const DashboardWelcomeBanner = ({
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
-  return <div className="bg-white rounded-3xl border border-gray-200 p-5 w-full max-w-lg shadow-sm mx-0 px-[18px]">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-gray-500">Welcome back,</p>
-          <h1 className="text-4xl font-bold text-gray-800">{user.name}!</h1>
-          <div className="flex items-center gap-1 mt-3 my-[3px]">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 bg-gray-300 rounded-full flex-shrink-0"></span>
-              <span className="font-semibold text-gray-600 uppercase tracking-wide whitespace-nowrap text-xs">{user.role} PORTAL</span>
+  return <div className="bg-white rounded-3xl border border-gray-200 p-3 sm:p-5 w-full max-w-lg shadow-sm mx-0">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="text-xs sm:text-sm text-gray-500">Welcome back,</p>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 truncate">{user.name}!</h1>
+          <div className="flex items-center gap-2 sm:gap-3 mt-2 sm:mt-3 flex-wrap">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 sm:w-3 sm:h-3 bg-gray-300 rounded-full flex-shrink-0"></span>
+              <span className="font-semibold text-gray-600 uppercase tracking-wide text-[10px] sm:text-xs">{user.role} PORTAL</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 bg-orange-400 rounded-full flex-shrink-0"></span>
-              <span className="font-semibold text-gray-600 whitespace-nowrap text-xs text-left">{formattedDate}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 sm:w-3 sm:h-3 bg-orange-400 rounded-full flex-shrink-0"></span>
+              <span className="font-semibold text-gray-600 text-[10px] sm:text-xs">{formattedDate}</span>
             </div>
           </div>
         </div>
         <div className="relative group cursor-pointer p-1 rounded-full bg-purple-200 flex-shrink-0" onClick={handleAvatarClick}>
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-          <img src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt={user.name} className="w-20 h-20 rounded-full object-cover" />
+          <img src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt={user.name} className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover" />
           {uploading && <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-full">
-              <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+              <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 animate-spin text-purple-600" />
             </div>}
           {!uploading && <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-              <Upload className="h-8 w-8 text-purple-600" />
+              <Upload className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
             </div>}
         </div>
       </div>
