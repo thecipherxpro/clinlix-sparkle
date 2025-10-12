@@ -30,12 +30,17 @@ const FloatingIconBar: React.FC<FloatingIconBarProps> = ({
   className = ''
 }) => {
   const positionClasses = position === 'top' 
-    ? 'top-6' 
-    : 'bottom-6';
+    ? 'top-[clamp(16px,4vw,24px)]' 
+    : 'bottom-[clamp(16px,4vw,24px)]';
 
   return (
-    <div className={`fixed ${positionClasses} left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-2xl px-2 sm:px-4 ${className}`}>
-      <div className="bg-white rounded-full shadow-2xl px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 flex items-center justify-center gap-1 sm:gap-2 border border-gray-200 backdrop-blur-lg bg-opacity-95">
+    /* Mobile-first floating nav bar with auto-fit width and responsive positioning */
+    <div className={`fixed ${positionClasses} left-1/2 transform -translate-x-1/2 z-50 
+                    w-[min(95%,600px)] px-[clamp(8px,2vw,16px)] ${className}`}>
+      <div className="bg-white rounded-full shadow-2xl 
+                     px-[clamp(8px,2vw,24px)] py-[clamp(8px,2vw,16px)] 
+                     flex items-center justify-center gap-[clamp(4px,1vw,8px)] 
+                     border border-gray-200 backdrop-blur-lg bg-opacity-95">
         {items.map((item, index) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -46,8 +51,9 @@ const FloatingIconBar: React.FC<FloatingIconBarProps> = ({
                 onClick={() => onTabChange(item.id)}
                 className={`relative flex items-center justify-center transition-all duration-300 ${
                   isActive 
-                    ? `w-20 sm:w-24 md:w-32 bg-gradient-to-r ${item.color} rounded-full px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 shadow-lg` 
-                    : 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 hover:bg-gray-100 rounded-full'
+                    ? `w-[clamp(80px,20vw,128px)] bg-gradient-to-r ${item.color} rounded-full 
+                       px-[clamp(8px,2vw,16px)] py-[clamp(8px,2vw,12px)] shadow-lg` 
+                    : 'w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] hover:bg-gray-100 rounded-full'
                 }`}
                 aria-label={item.label}
                 aria-current={isActive ? 'page' : undefined}
@@ -55,31 +61,38 @@ const FloatingIconBar: React.FC<FloatingIconBarProps> = ({
                 <Icon 
                   className={`flex-shrink-0 transition-all duration-300 ${
                     isActive 
-                      ? 'w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white' 
-                      : 'w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6 text-gray-400'
+                      ? 'w-[clamp(20px,5vw,28px)] h-[clamp(20px,5vw,28px)] text-white' 
+                      : 'w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-gray-400'
                   }`}
                   strokeWidth={isActive ? 2.5 : 2}
                 />
                 
                 {isActive && showLabels && !item.hideLabel && (
-                  <span className="ml-1.5 sm:ml-2 md:ml-2.5 text-white font-semibold text-xs sm:text-sm whitespace-nowrap">
+                  <span className="ml-[clamp(6px,1.5vw,10px)] text-white font-semibold 
+                                 text-[clamp(11px,2.8vw,14px)] whitespace-nowrap">
                     {item.label}
                   </span>
                 )}
 
                 {isActive && (
-                  <div className="absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full shadow-md animate-pulse" />
+                  <div className="absolute -top-[clamp(2px,0.5vw,4px)] -right-[clamp(2px,0.5vw,4px)] 
+                                w-[clamp(8px,2vw,12px)] h-[clamp(8px,2vw,12px)] 
+                                bg-white rounded-full shadow-md animate-pulse" />
                 )}
 
                 {item.badge && (
-                  <span className="absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 min-w-[18px] sm:min-w-[20px] h-4 sm:h-5 bg-red-500 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center px-1 sm:px-1.5">
+                  <span className="absolute -top-[clamp(2px,0.5vw,4px)] -right-[clamp(2px,0.5vw,4px)] 
+                                 min-w-[clamp(18px,4.5vw,20px)] h-[clamp(16px,4vw,20px)] 
+                                 bg-red-500 text-white text-[clamp(10px,2.5vw,12px)] font-bold 
+                                 rounded-full flex items-center justify-center 
+                                 px-[clamp(4px,1vw,6px)]">
                     {item.badge}
                   </span>
                 )}
               </button>
               
               {showSeparators && index < items.length - 1 && !isActive && (
-                <div className="w-px h-6 sm:h-7 md:h-8 bg-gray-200" />
+                <div className="w-px h-[clamp(24px,6vw,32px)] bg-gray-200" />
               )}
             </React.Fragment>
           );

@@ -87,101 +87,142 @@ const ProviderDashboard = () => {
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>;
   }
-  return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
-      <div className="pt-4 sm:pt-6">
-        <DashboardWelcomeBanner user={{
-        name: profile?.first_name || 'User',
-        role: 'PROVIDER',
-        avatarUrl: profile?.avatar_url
-      }} />
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
+      {/* Mobile-first header with auto-fit padding */}
+      <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
+        <DashboardWelcomeBanner 
+          user={{
+            name: profile?.first_name || 'User',
+            role: 'PROVIDER',
+            avatarUrl: profile?.avatar_url
+          }} 
+        />
       </div>
 
-      <main className="mobile-container max-w-6xl mx-auto py-[14px]">
+      {/* Mobile-first main container with auto-fit max-width */}
+      <main className="w-full max-w-[min(1280px,calc(100%-32px))] mx-auto 
+                       px-[clamp(16px,4vw,32px)] py-[clamp(14px,3.5vw,24px)]">
         
-        {/* Action Card */}
-        <div className="mb-6 md:mb-8">
-          <ActionCard title="Start Your Day!" imageUrl={cleaningLadyImage} onSwipeClick={() => navigate('/provider/jobs')} />
+        {/* Action Card - Auto-fit responsive */}
+        <div className="mb-[clamp(20px,5vw,32px)]">
+          <ActionCard 
+            title="Start Your Day!" 
+            imageUrl={cleaningLadyImage} 
+            onSwipeClick={() => navigate('/provider/jobs')} 
+          />
         </div>
 
-        {/* Professional Stats Card */}
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-card via-card to-primary/5 mb-6 md:mb-8">
-          <CardHeader>
-            <CardTitle className="text-xl md:text-2xl">Today's Overview</CardTitle>
-            <CardDescription>Your current statistics and earnings</CardDescription>
+        {/* Professional Stats Card - Auto-fit responsive */}
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-card via-card to-primary/5 
+                       mb-[clamp(20px,5vw,32px)]">
+          <CardHeader className="p-[clamp(16px,4vw,24px)]">
+            <CardTitle className="text-[clamp(20px,5vw,28px)]">Today's Overview</CardTitle>
+            <CardDescription className="text-[clamp(12px,3vw,14px)]">
+              Your current statistics and earnings
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-3 gap-3 md:gap-6">
+          <CardContent className="px-[clamp(16px,4vw,24px)] pb-[clamp(16px,4vw,24px)]">
+            <div className="grid grid-cols-3 gap-[clamp(12px,3vw,24px)]">
               {/* Pending Jobs */}
               <div className="flex flex-col items-center text-center">
-                <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center mb-2">
-                  <Briefcase className="w-4 h-4 md:w-6 md:h-6 text-primary" />
+                <div className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
+                              rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center 
+                              mb-[clamp(8px,2vw,12px)]">
+                  <Briefcase className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-primary" />
                 </div>
-                <p className="text-[10px] md:text-sm text-muted-foreground mb-1">Pending</p>
-                <p className="text-xl md:text-3xl font-bold">{stats.pendingJobs}</p>
+                <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Pending</p>
+                <p className="text-[clamp(20px,5vw,36px)] font-bold">{stats.pendingJobs}</p>
               </div>
 
               {/* Active Today */}
               <div className="flex flex-col items-center text-center">
-                <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-accent/10 flex items-center justify-center mb-2">
-                  <Clock className="w-4 h-4 md:w-6 md:h-6 text-accent" />
+                <div className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
+                              rounded-lg md:rounded-xl bg-accent/10 flex items-center justify-center 
+                              mb-[clamp(8px,2vw,12px)]">
+                  <Clock className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-accent" />
                 </div>
-                <p className="text-[10px] md:text-sm text-muted-foreground mb-1">Active</p>
-                <p className="text-xl md:text-3xl font-bold">{stats.activeToday}</p>
+                <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Active</p>
+                <p className="text-[clamp(20px,5vw,36px)] font-bold">{stats.activeToday}</p>
               </div>
 
               {/* Monthly Earnings */}
               <div className="flex flex-col items-center text-center">
-                <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center mb-2">
-                  <DollarSign className="w-4 h-4 md:w-6 md:h-6 text-primary" />
+                <div className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
+                              rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center 
+                              mb-[clamp(8px,2vw,12px)]">
+                  <DollarSign className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-primary" />
                 </div>
-                <p className="text-[10px] md:text-sm text-muted-foreground mb-1">Earnings</p>
-                <p className="text-xl md:text-3xl font-bold">€{stats.monthlyEarnings.toFixed(2)}</p>
+                <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Earnings</p>
+                <p className="text-[clamp(20px,5vw,36px)] font-bold">€{stats.monthlyEarnings.toFixed(2)}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Quick Actions */}
+        {/* Quick Actions - Auto-fit grid with responsive gaps */}
         <div>
-          <h3 className="text-lg md:text-xl font-semibold mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5" onClick={() => navigate('/provider/jobs')}>
-              <CardHeader className="space-y-1 pb-4 p-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2 shadow-md">
-                  <Briefcase className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
+            Quick Actions
+          </h3>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
+            <Card 
+              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all 
+                       border-0 bg-gradient-to-br from-primary/5 to-accent/5" 
+              onClick={() => navigate('/provider/jobs')}
+            >
+              <CardHeader className="space-y-1 pb-[clamp(12px,3vw,16px)] p-[clamp(16px,4vw,24px)]">
+                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
+                              rounded-xl bg-primary/10 flex items-center justify-center mb-2 shadow-md">
+                  <Briefcase className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-primary" />
                 </div>
-                <CardTitle className="text-base md:text-lg">Jobs</CardTitle>
-                <CardDescription className="text-xs md:text-sm">Pending requests</CardDescription>
+                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Jobs</CardTitle>
+                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Pending requests</CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5" onClick={() => navigate('/provider/schedule')}>
-              <CardHeader className="space-y-1 pb-4 p-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-2">
-                  <Calendar className="w-5 h-5 md:w-6 md:h-6 text-accent" />
+            <Card 
+              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all 
+                       border-0 bg-gradient-to-br from-accent/5 to-primary/5" 
+              onClick={() => navigate('/provider/schedule')}
+            >
+              <CardHeader className="space-y-1 pb-[clamp(12px,3vw,16px)] p-[clamp(16px,4vw,24px)]">
+                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
+                              rounded-xl bg-accent/10 flex items-center justify-center mb-2">
+                  <Calendar className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-accent" />
                 </div>
-                <CardTitle className="text-base md:text-lg">Schedule</CardTitle>
-                <CardDescription className="text-xs md:text-sm">Availability</CardDescription>
+                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Schedule</CardTitle>
+                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Availability</CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5" onClick={() => navigate('/provider/wallet')}>
-              <CardHeader className="space-y-1 pb-4 p-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2">
-                  <DollarSign className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+            <Card 
+              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all 
+                       border-0 bg-gradient-to-br from-primary/5 to-accent/5" 
+              onClick={() => navigate('/provider/wallet')}
+            >
+              <CardHeader className="space-y-1 pb-[clamp(12px,3vw,16px)] p-[clamp(16px,4vw,24px)]">
+                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
+                              rounded-xl bg-primary/10 flex items-center justify-center mb-2">
+                  <DollarSign className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-primary" />
                 </div>
-                <CardTitle className="text-base md:text-lg">Wallet</CardTitle>
-                <CardDescription className="text-xs md:text-sm">Earnings</CardDescription>
+                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Wallet</CardTitle>
+                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Earnings</CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5" onClick={() => navigate('/provider/profile')}>
-              <CardHeader className="space-y-1 pb-4 p-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-2">
-                  <User className="w-5 h-5 md:w-6 md:h-6 text-accent" />
+            <Card 
+              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all 
+                       border-0 bg-gradient-to-br from-accent/5 to-primary/5" 
+              onClick={() => navigate('/provider/profile')}
+            >
+              <CardHeader className="space-y-1 pb-[clamp(12px,3vw,16px)] p-[clamp(16px,4vw,24px)]">
+                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
+                              rounded-xl bg-accent/10 flex items-center justify-center mb-2">
+                  <User className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-accent" />
                 </div>
-                <CardTitle className="text-base md:text-lg">Profile</CardTitle>
-                <CardDescription className="text-xs md:text-sm">Your info</CardDescription>
+                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Profile</CardTitle>
+                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Your info</CardDescription>
               </CardHeader>
             </Card>
           </div>
@@ -189,6 +230,7 @@ const ProviderDashboard = () => {
       </main>
 
       <ProviderMobileNav />
-    </div>;
+    </div>
+  );
 };
 export default ProviderDashboard;

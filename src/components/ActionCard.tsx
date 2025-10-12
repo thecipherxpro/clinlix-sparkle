@@ -18,24 +18,51 @@ const ActionCard = ({
   bgPatternUrl,
   onSwipeClick = () => alert("Swipe button clicked!")
 }: ActionCardProps) => {
-  return <div className="relative bg-[#EAF7F7] rounded-3xl border border-gray-200 shadow-sm overflow-hidden w-full">
-      {bgPatternUrl && <img src={bgPatternUrl} className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-multiply" alt="" />}
+  return (
+    /* Mobile-first auto-fit card with responsive border radius and padding */
+    <div className="relative bg-[#EAF7F7] rounded-[clamp(20px,5vw,24px)] border border-gray-200 
+                    shadow-sm overflow-hidden w-full">
+      {bgPatternUrl && (
+        <img 
+          src={bgPatternUrl} 
+          className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-multiply" 
+          alt="" 
+        />
+      )}
 
-      <div className="relative z-10 flex items-center justify-between p-5 sm:p-6">
-        <div className="flex flex-col space-y-4">
-          <h2 className="sm:text-3xl font-bold text-[#0D6A6A] text-lg">{title}</h2>
-          <button onClick={onSwipeClick} className="flex items-center space-x-3 bg-[#0D6A6A] rounded-full py-2 pl-2 pr-5 self-start transition-transform hover:scale-105">
-            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow">
-              <ChevronRightIcon className="w-4 h-4 text-[#0D6A6A]" />
+      <div className="relative z-10 flex items-center justify-between 
+                      p-[clamp(16px,4vw,24px)] gap-[clamp(12px,3vw,20px)]">
+        <div className="flex flex-col space-y-[clamp(12px,3vw,16px)]">
+          <h2 className="text-[clamp(18px,4.5vw,28px)] font-bold text-[#0D6A6A]">
+            {title}
+          </h2>
+          <button 
+            onClick={onSwipeClick} 
+            className="flex items-center space-x-[clamp(8px,2vw,12px)] bg-[#0D6A6A] 
+                     rounded-full py-[clamp(8px,2vw,10px)] pl-[clamp(8px,2vw,10px)] 
+                     pr-[clamp(16px,4vw,20px)] self-start transition-transform 
+                     hover:scale-105 active:scale-95"
+          >
+            <div className="w-[clamp(32px,8vw,40px)] h-[clamp(32px,8vw,40px)] 
+                          rounded-full bg-white flex items-center justify-center shadow">
+              <ChevronRightIcon className="w-[clamp(16px,4vw,20px)] h-[clamp(16px,4vw,20px)] text-[#0D6A6A]" />
             </div>
-            <span className="text-white font-semibold tracking-wider text-sm">SWIPE</span>
+            <span className="text-white font-semibold tracking-wider 
+                           text-[clamp(12px,3vw,14px)]">
+              SWIPE
+            </span>
           </button>
         </div>
 
         <div className="flex-shrink-0">
-          <img src="https://i.postimg.cc/YSMn7Lkk/77-JOBS.png" alt={title} className="w-24 h-auto sm:w-32" />
+          <img 
+            src={imageUrl} 
+            alt={title} 
+            className="w-[clamp(80px,20vw,128px)] h-auto object-contain" 
+          />
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default ActionCard;
