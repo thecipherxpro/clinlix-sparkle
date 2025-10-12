@@ -144,30 +144,46 @@ const ProviderDashboard = () => {
         {/* Quick Actions */}
         <div>
           <h3 className="text-lg md:text-xl font-semibold mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
-            <ActionCard
-              title="View Jobs"
-              imageUrl="https://i.postimg.cc/YSMn7Lkk/77-JOBS.png"
-              onSwipeClick={() => navigate('/provider/jobs')}
-            />
-            
-            <ActionCard
-              title="My Schedule"
-              imageUrl="https://i.postimg.cc/YSMn7Lkk/77-JOBS.png"
-              onSwipeClick={() => navigate('/provider/schedule')}
-            />
-            
-            <ActionCard
-              title="My Wallet"
-              imageUrl="https://i.postimg.cc/YSMn7Lkk/77-JOBS.png"
-              onSwipeClick={() => navigate('/provider/wallet')}
-            />
-            
-            <ActionCard
-              title="My Profile"
-              imageUrl="https://i.postimg.cc/YSMn7Lkk/77-JOBS.png"
-              onSwipeClick={() => navigate('/provider/profile')}
-            />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5" onClick={() => navigate('/provider/jobs')}>
+              <CardHeader className="space-y-1 pb-4 p-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2 shadow-md">
+                  <Briefcase className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                </div>
+                <CardTitle className="text-base md:text-lg">Jobs</CardTitle>
+                <CardDescription className="text-xs md:text-sm">Pending requests</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5" onClick={() => navigate('/provider/schedule')}>
+              <CardHeader className="space-y-1 pb-4 p-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-2">
+                  <Calendar className="w-5 h-5 md:w-6 md:h-6 text-accent" />
+                </div>
+                <CardTitle className="text-base md:text-lg">Schedule</CardTitle>
+                <CardDescription className="text-xs md:text-sm">Availability</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-primary/5 to-accent/5" onClick={() => navigate('/provider/wallet')}>
+              <CardHeader className="space-y-1 pb-4 p-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2">
+                  <DollarSign className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                </div>
+                <CardTitle className="text-base md:text-lg">Wallet</CardTitle>
+                <CardDescription className="text-xs md:text-sm">Earnings</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg active:scale-95 transition-all border-0 bg-gradient-to-br from-accent/5 to-primary/5" onClick={() => navigate('/provider/profile')}>
+              <CardHeader className="space-y-1 pb-4 p-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-2">
+                  <User className="w-5 h-5 md:w-6 md:h-6 text-accent" />
+                </div>
+                <CardTitle className="text-base md:text-lg">Profile</CardTitle>
+                <CardDescription className="text-xs md:text-sm">Your info</CardDescription>
+              </CardHeader>
+            </Card>
           </div>
         </div>
       </main>
