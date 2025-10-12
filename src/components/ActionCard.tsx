@@ -33,7 +33,7 @@ const ActionCard = ({
         </div>
 
         <div className="flex-shrink-0">
-          <img src="https://i.postimg.cc/YSMn7Lkk/77-JOBS.png" alt={title} className="w-15 h-18 sm:w-15" />
+          <img src="https://i.postimg.cc/YSMn7Lkk/77-JOBS.png" alt={title} className="w-auto h-auto sm:w-auto " />
         </div>
       </div>
     </div>;
