@@ -79,7 +79,7 @@ const DashboardWelcomeBanner = ({
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
-  return <div className="bg-white rounded-3xl border border-gray-200 p-3 sm:p-5 w-full max-w-lg shadow-sm mx-0">
+  return <div className="bg-white rounded-3xl border border-gray-200 p-3 sm:p-5 w-80 max-w-84 shadow-sm px-[19px] mx-[4px]">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           <p className="text-xs sm:text-sm text-gray-500">Welcome back,</p>
