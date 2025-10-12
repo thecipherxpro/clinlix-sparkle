@@ -144,7 +144,7 @@ const ProviderDashboard = () => {
         {/* Quick Actions */}
         <div>
           <h3 className="text-lg md:text-xl font-semibold mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
             <ActionCard
               title="View Jobs"
               imageUrl="https://i.postimg.cc/YSMn7Lkk/77-JOBS.png"
