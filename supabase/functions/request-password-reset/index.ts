@@ -81,73 +81,222 @@ Deno.serve(async (req) => {
       throw new Error('Failed to generate reset token');
     }
 
-    // Create reset URL
-    const resetUrl = `${req.headers.get('origin')}/auth/reset-password?token=${token}`;
+    // Create reset URL and logo URL
+    const origin = req.headers.get('origin') || 'https://clinlix.lovable.app';
+    const resetUrl = `${origin}/auth/reset-password?token=${token}`;
+    const logoUrl = `${origin}/images/logo-clinlix-email.png`;
 
     // Send email via Resend
     const html = `
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
       <head>
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <title>Reset Your Clinlix Password</title>
         <style>
-          body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #f5f5f5; }
-          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
-          .header { background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%); padding: 40px 60px; text-align: center; }
-          .logo { max-width: 180px; height: auto; }
-          .content { padding: 60px 60px 40px; }
-          .title { margin: 0 0 24px; font-size: 28px; font-weight: 700; color: #1a1a1a; line-height: 1.3; }
-          .text { margin: 0 0 24px; font-size: 16px; line-height: 1.6; color: #4a5568; }
-          .button-container { padding: 20px 0; text-align: center; }
-          .button { display: inline-block; background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%); color: #ffffff; text-decoration: none; padding: 16px 48px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(108, 99, 255, 0.4); }
-          .footer { background-color: #f7fafc; padding: 40px 60px; border-top: 1px solid #e2e8f0; text-align: center; }
-          .footer-text { margin: 0 0 8px; font-size: 14px; color: #718096; }
-          .footer-link { margin: 0; font-size: 12px; color: #a0aec0; word-break: break-all; }
-          .footer-link a { color: #6C63FF; }
+          /* Reset styles */
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            line-height: 1.6;
+          }
+          
+          /* Container */
+          .email-wrapper { 
+            width: 100%; 
+            background-color: #f4f7fa; 
+            padding: 20px 0;
+          }
+          .email-container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background-color: #ffffff;
+          }
+          
+          /* Header with logo */
+          .email-header { 
+            background-color: #ffffff;
+            padding: 40px 30px 30px;
+            border-bottom: 3px solid #4a90a4;
+          }
+          .logo-img { 
+            max-width: 200px; 
+            height: auto; 
+            display: block;
+          }
+          
+          /* Content area */
+          .email-body { 
+            padding: 40px 30px;
+            text-align: left;
+          }
+          
+          .greeting { 
+            font-size: 18px; 
+            font-weight: 600; 
+            color: #1a2332;
+            margin: 0 0 20px;
+          }
+          
+          .message-text { 
+            font-size: 16px; 
+            line-height: 1.7; 
+            color: #4a5568;
+            margin: 0 0 16px;
+          }
+          
+          /* Button */
+          .button-wrapper { 
+            margin: 32px 0;
+          }
+          .reset-button { 
+            display: inline-block;
+            background-color: #4a90a4;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.3s ease;
+          }
+          .reset-button:hover {
+            background-color: #3d7a8a;
+          }
+          
+          /* Security info */
+          .security-info {
+            background-color: #f8f9fa;
+            border-left: 4px solid #4a90a4;
+            padding: 16px 20px;
+            margin: 24px 0;
+          }
+          .security-info p {
+            font-size: 14px;
+            color: #4a5568;
+            margin: 0 0 8px;
+            line-height: 1.6;
+          }
+          .security-info p:last-child {
+            margin: 0;
+          }
+          
+          /* Footer */
+          .email-footer { 
+            background-color: #f8f9fa;
+            padding: 30px;
+            text-align: left;
+            border-top: 1px solid #e2e8f0;
+          }
+          .footer-text { 
+            font-size: 13px; 
+            color: #718096;
+            margin: 0 0 12px;
+            line-height: 1.6;
+          }
+          .footer-link { 
+            font-size: 12px; 
+            color: #4a90a4;
+            word-wrap: break-word;
+            text-decoration: none;
+          }
+          .footer-link:hover {
+            text-decoration: underline;
+          }
+          .company-info {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+          }
+          
+          /* Mobile responsive */
+          @media only screen and (max-width: 600px) {
+            .email-wrapper { padding: 10px 0 !important; }
+            .email-header { padding: 30px 20px 20px !important; }
+            .email-body { padding: 30px 20px !important; }
+            .email-footer { padding: 20px !important; }
+            .logo-img { max-width: 160px !important; }
+            .greeting { font-size: 16px !important; }
+            .message-text { font-size: 15px !important; }
+            .reset-button { 
+              display: block;
+              width: 100%;
+              padding: 14px 20px !important;
+              font-size: 15px !important;
+            }
+            .security-info { padding: 14px 16px !important; }
+          }
+          
+          /* Dark mode support */
+          @media (prefers-color-scheme: dark) {
+            .email-container { background-color: #ffffff !important; }
+            .email-header { background-color: #ffffff !important; }
+            .email-body { background-color: #ffffff !important; }
+            .email-footer { background-color: #f8f9fa !important; }
+          }
         </style>
       </head>
       <body>
-        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 0;">
-          <tr>
-            <td align="center">
-              <div class="container">
-                <div class="header">
-                  <img src="https://ctyulavksyguogudczpi.supabase.co/storage/v1/object/public/avatars/clinlix-logo-text.png" alt="Clinlix" class="logo" />
-                </div>
-                
-                <div class="content">
-                  <h1 class="title">Reset Your Password</h1>
-                  <p class="text">Hi ${profile?.first_name || 'there'},</p>
-                  <p class="text">We received a request to reset your password. Click the button below to create a new password:</p>
-                  
-                  <div class="button-container">
-                    <a href="${resetUrl}" class="button">Reset Password</a>
-                  </div>
-                  
-                  <p class="text" style="font-size: 14px; color: #718096;">
-                    If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.
-                  </p>
-                  
-                  <p class="text" style="font-size: 14px; color: #718096;">
-                    This link will expire in 1 hour for security reasons.
-                  </p>
-                </div>
-                
-                <div class="footer">
-                  <p class="footer-text">
-                    © 2025 Clinlix. Professional Cleaning Services.
-                  </p>
-                  <p class="footer-link">
-                    If the button doesn't work, copy and paste this link:<br/>
-                    <a href="${resetUrl}">${resetUrl}</a>
-                  </p>
-                </div>
+        <div class="email-wrapper">
+          <div class="email-container">
+            <!-- Header with Logo -->
+            <div class="email-header">
+              <img src="${logoUrl}" alt="Clinlix Logo" class="logo-img" />
+            </div>
+            
+            <!-- Main Content -->
+            <div class="email-body">
+              <p class="greeting">Hi ${profile?.first_name || 'there'},</p>
+              
+              <p class="message-text">
+                We received a request to reset your Clinlix account password. If you made this request, click the button below to create a new password:
+              </p>
+              
+              <div class="button-wrapper">
+                <a href="${resetUrl}" class="reset-button">Reset My Password</a>
               </div>
-            </td>
-          </tr>
-        </table>
+              
+              <div class="security-info">
+                <p><strong>Important Security Information:</strong></p>
+                <p>• This password reset link will expire in 1 hour</p>
+                <p>• If you didn't request this reset, please ignore this email</p>
+                <p>• Your password will remain unchanged unless you click the link above</p>
+              </div>
+              
+              <p class="message-text">
+                If you have any questions or concerns about your account security, please contact our support team immediately.
+              </p>
+            </div>
+            
+            <!-- Footer -->
+            <div class="email-footer">
+              <p class="footer-text">
+                <strong>Having trouble with the button?</strong><br/>
+                Copy and paste this link into your browser:
+              </p>
+              <p class="footer-text">
+                <a href="${resetUrl}" class="footer-link">${resetUrl}</a>
+              </p>
+              
+              <div class="company-info">
+                <p class="footer-text">
+                  <strong>Clinlix</strong><br/>
+                  Professional Healthcare Cleaning Services<br/>
+                  © 2025 Clinlix. All rights reserved.
+                </p>
+                <p class="footer-text">
+                  This is an automated security email. Please do not reply to this message.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </body>
       </html>
     `;
