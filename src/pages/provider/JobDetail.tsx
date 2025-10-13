@@ -254,6 +254,45 @@ const JobDetail = () => {
 
       if (error) throw error;
 
+      // Send status update email to customer
+      if (job) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: providerProfile } = await supabase
+            .from("provider_profiles")
+            .select("full_name")
+            .eq("user_id", user.id)
+            .single();
+
+          if (providerProfile) {
+            const serviceDate = new Date(job.requested_date).toLocaleDateString('en-US', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
+
+            const addressStr = job.customer_addresses.country === "Portugal"
+              ? `${job.customer_addresses.rua}, ${job.customer_addresses.localidade}, ${job.customer_addresses.codigo_postal}`
+              : `${job.customer_addresses.rua}, ${job.customer_addresses.localidade}`;
+
+            await supabase.functions.invoke('send-provider-status-update', {
+              body: {
+                customerEmail: job.profiles.email,
+                customerName: `${job.profiles.first_name} ${job.profiles.last_name}`,
+                bookingId: job.id,
+                providerName: providerProfile.full_name,
+                status: newStatus,
+                serviceDate: serviceDate,
+                serviceTime: job.requested_time,
+                address: addressStr,
+                estimatedArrival: newStatus === "on_the_way" ? "15-20 minutes" : undefined
+              }
+            });
+          }
+        }
+      }
+
       toast({
         title: "Status Updated",
         description: `Job status updated to ${newStatus.replace("_", " ")}`,
