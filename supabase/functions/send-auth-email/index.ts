@@ -17,7 +17,7 @@ const getEmailTemplate = (
     body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
     .header { background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%); padding: 40px 60px; text-align: center; }
-    .logo { max-width: 180px; height: auto; }
+    .logo { max-width: 120px; height: auto; }
     .content { padding: 60px 60px 40px; }
     .title { margin: 0 0 24px; font-size: 28px; font-weight: 700; color: #1a1a1a; line-height: 1.3; }
     .text { margin: 0 0 24px; font-size: 16px; line-height: 1.6; color: #4a5568; }
@@ -75,7 +75,7 @@ const getEmailTemplate = (
           <td align="center">
             <div class="container">
               <div class="header">
-                <img src="https://ctyulavksyguogudczpi.supabase.co/storage/v1/object/public/avatars/clinlix-logo-text.png" alt="Clinlix" class="logo" />
+                <img src="https://clinlix.com/images/clinlix-logo.png" alt="Clinlix" class="logo" />
               </div>
               
               <div class="content">

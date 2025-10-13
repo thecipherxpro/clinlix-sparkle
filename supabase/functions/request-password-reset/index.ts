@@ -84,7 +84,7 @@ Deno.serve(async (req) => {
     // Create reset URL and logo URL
     const origin = req.headers.get('origin') || 'https://clinlix.com';
     const resetUrl = `${origin}/auth/reset-password?token=${token}`;
-    const logoUrl = `${origin}/images/logo-clinlix-email.png`;
+    const logoUrl = 'https://clinlix.com/images/clinlix-logo.png';
 
     // Send email via Resend
     const html = `
@@ -125,7 +125,7 @@ Deno.serve(async (req) => {
             border-bottom: 3px solid #4a90a4;
           }
           .logo-img { 
-            max-width: 200px; 
+            max-width: 120px; 
             height: auto; 
             display: block;
           }

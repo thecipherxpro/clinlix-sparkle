@@ -34,7 +34,7 @@ const getEmailTemplate = (data: JobRequestNotification, logoUrl: string) => {
         body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #f5f5f5; }
         .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
         .header { background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%); padding: 30px 20px; text-align: left; }
-        .logo { max-width: 150px; height: auto; }
+        .logo { max-width: 120px; height: auto; }
         .content { padding: 40px 20px; text-align: left; }
         .title { margin: 0 0 20px; font-size: 24px; font-weight: 700; color: #1a1a1a; text-align: left; }
         .text { margin: 0 0 16px; font-size: 15px; line-height: 1.6; color: #4a5568; text-align: left; }
@@ -152,8 +152,7 @@ const handler = async (req: Request): Promise<Response> => {
     
     console.log(`Sending job request notification to ${data.providerEmail}`);
     
-    const origin = req.headers.get('origin') || 'https://clinlix.com';
-    const logoUrl = `${origin}/images/logo-clinlix-email.png`;
+    const logoUrl = 'https://clinlix.com/images/clinlix-logo.png';
 
     const html = getEmailTemplate(data, logoUrl);
 
