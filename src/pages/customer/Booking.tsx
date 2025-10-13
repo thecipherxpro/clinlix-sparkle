@@ -150,7 +150,7 @@ const Booking = () => {
         .from('bookings')
         .insert([{
           customer_id: user!.id,
-          provider_id: selectedProvider.user_id,
+          provider_id: selectedProvider.id,
           address_id: selectedAddress.id,
           package_id: selectedAddress.cleaning_packages.id,
           addon_ids: selectedAddons,
