@@ -161,6 +161,39 @@ const JobDetail = () => {
 
       if (error) throw error;
 
+      // Get provider info for email
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: providerProfile } = await supabase
+          .from("provider_profiles")
+          .select("full_name")
+          .eq("user_id", user.id)
+          .single();
+
+        if (providerProfile && job) {
+          const totalWithAddons = calculateTotalWithAddons();
+          const currency = job.customer_addresses.country === "Portugal" ? "€" : "$";
+
+          // Send booking accepted email to customer
+          await supabase.functions.invoke("send-booking-accepted", {
+            body: {
+              customerEmail: job.profiles.email,
+              customerName: `${job.profiles.first_name} ${job.profiles.last_name}`,
+              bookingId: job.id,
+              providerName: providerProfile.full_name,
+              serviceDate: format(new Date(job.requested_date), "EEEE, MMMM dd, yyyy"),
+              serviceTime: job.requested_time,
+              packageName: job.cleaning_packages.package_name,
+              address: job.customer_addresses.country === "Portugal"
+                ? `${job.customer_addresses.rua}, ${job.customer_addresses.localidade}, ${job.customer_addresses.codigo_postal}`
+                : `${job.customer_addresses.rua}, ${job.customer_addresses.localidade}`,
+              totalAmount: totalWithAddons.toFixed(2),
+              currency: currency,
+            },
+          });
+        }
+      }
+
       toast({
         title: "Job Accepted",
         description: "The job has been confirmed successfully",
