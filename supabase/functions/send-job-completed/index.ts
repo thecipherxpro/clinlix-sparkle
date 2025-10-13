@@ -30,21 +30,21 @@ const getEmailTemplate = (data: JobCompletedRequest) => {
       <style>
         body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #f5f5f5; }
         .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
-        .header { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); padding: 30px 20px; text-align: left; }
+        .header { background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); padding: 30px 20px; text-align: left; }
         .logo { max-width: 120px; height: auto; }
         .content { padding: 40px 20px; text-align: left; }
         .title { margin: 0 0 20px; font-size: 24px; font-weight: 700; color: #1a1a1a; text-align: left; }
         .text { margin: 0 0 16px; font-size: 15px; line-height: 1.6; color: #4a5568; text-align: left; }
-        .complete-badge { background-color: #48bb78; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 16px; }
-        .booking-details { background-color: #f7fafc; border-left: 4px solid #48bb78; padding: 20px; margin: 24px 0; }
+        .complete-badge { background-color: #14B8A6; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 16px; }
+        .booking-details { background-color: #f7fafc; border-left: 4px solid #14B8A6; padding: 20px; margin: 24px 0; }
         .detail-row { margin: 12px 0; text-align: left; }
         .detail-label { font-weight: 600; color: #2d3748; font-size: 14px; }
         .detail-value { color: #4a5568; font-size: 14px; margin-top: 4px; }
-        .review-box { background-color: #fff5f5; padding: 20px; border-radius: 8px; margin: 24px 0; text-align: center; border: 2px solid #fed7d7; }
-        .button { display: inline-block; background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(108, 99, 255, 0.4); margin: 10px 0; }
+        .review-box { background-color: #f0fdfa; padding: 20px; border-radius: 8px; margin: 24px 0; text-align: center; border: 2px solid #99f6e4; }
+        .button { display: inline-block; background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(20, 184, 166, 0.4); margin: 10px 0; }
         .footer { background-color: #f7fafc; padding: 30px 20px; border-top: 1px solid #e2e8f0; text-align: left; }
         .footer-text { margin: 0 0 8px; font-size: 13px; color: #718096; text-align: left; }
-        .stars { font-size: 24px; color: #ecc94b; margin: 10px 0; }
+        
         @media only screen and (max-width: 600px) {
           .content { padding: 30px 16px; }
           .header { padding: 24px 16px; }
@@ -63,8 +63,8 @@ const getEmailTemplate = (data: JobCompletedRequest) => {
               </div>
               
               <div class="content">
-                <span class="complete-badge">✓ COMPLETED</span>
-                <h1 class="title">Service Complete! ✨</h1>
+                <span class="complete-badge">COMPLETED</span>
+                <h1 class="title">Service Complete</h1>
                 <p class="text">Hi ${data.customerName},</p>
                 <p class="text">Great news! <strong>${data.providerName}</strong> has completed your cleaning service. We hope you love your freshly cleaned space!</p>
                 
@@ -91,26 +91,25 @@ const getEmailTemplate = (data: JobCompletedRequest) => {
                   
                   <div class="detail-row">
                     <div class="detail-label">Total Paid</div>
-                    <div class="detail-value" style="font-weight: 600; color: #48bb78; font-size: 16px;">${data.currency} ${data.totalAmount}</div>
+                    <div class="detail-value" style="font-weight: 600; color: #14B8A6; font-size: 16px;">${data.currency} ${data.totalAmount}</div>
                   </div>
                 </div>
                 
                 <div class="review-box">
-                  <div class="stars">⭐⭐⭐⭐⭐</div>
-                  <p class="text" style="margin: 10px 0; font-size: 16px; font-weight: 600; color: #2d3748;">
+                  <p class="text" style="margin: 10px 0; font-size: 16px; font-weight: 600; color: #0D9488;">
                     How was your experience?
                   </p>
                   <p class="text" style="margin: 10px 0; font-size: 14px; color: #4a5568;">
                     Your feedback helps us maintain quality service and helps other customers make informed decisions.
                   </p>
-                  <a href="https://clinlix.com/customer/my-bookings" class="button">Leave a Review</a>
+                  <a href="https://clinlix.com/auth" class="button">Leave a Review</a>
                 </div>
                 
                 <p class="text" style="text-align: center; font-size: 15px; font-weight: 600; color: #2d3748;">
                   Need another cleaning?
                 </p>
                 <div style="text-align: center;">
-                  <a href="https://clinlix.com/customer/booking" class="button" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);">Book Again</a>
+                  <a href="https://clinlix.com/auth" class="button">Book Again</a>
                 </div>
                 
                 <p class="text" style="font-size: 13px; color: #718096;">

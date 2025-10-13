@@ -31,16 +31,16 @@ const getEmailTemplate = (data: BookingConfirmationRequest, logoUrl: string) => 
       <style>
         body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #f5f5f5; }
         .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
-        .header { background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%); padding: 30px 20px; text-align: left; }
+        .header { background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); padding: 30px 20px; text-align: left; }
         .logo { max-width: 120px; height: auto; }
         .content { padding: 40px 20px; text-align: left; }
         .title { margin: 0 0 20px; font-size: 24px; font-weight: 700; color: #1a1a1a; text-align: left; }
         .text { margin: 0 0 16px; font-size: 15px; line-height: 1.6; color: #4a5568; text-align: left; }
-        .booking-details { background-color: #f7fafc; border-left: 4px solid #6C63FF; padding: 20px; margin: 24px 0; }
+        .booking-details { background-color: #f7fafc; border-left: 4px solid #14B8A6; padding: 20px; margin: 24px 0; }
         .detail-row { margin: 12px 0; text-align: left; }
         .detail-label { font-weight: 600; color: #2d3748; font-size: 14px; }
         .detail-value { color: #4a5568; font-size: 14px; margin-top: 4px; }
-        .total-section { background-color: #6C63FF; color: white; padding: 16px 20px; margin: 24px 0; border-radius: 8px; text-align: left; }
+        .total-section { background-color: #14B8A6; color: white; padding: 16px 20px; margin: 24px 0; border-radius: 8px; text-align: left; }
         .total-label { font-size: 14px; opacity: 0.9; }
         .total-amount { font-size: 28px; font-weight: 700; margin-top: 4px; }
         .footer { background-color: #f7fafc; padding: 30px 20px; border-top: 1px solid #e2e8f0; text-align: left; }
@@ -64,7 +64,7 @@ const getEmailTemplate = (data: BookingConfirmationRequest, logoUrl: string) => 
               </div>
               
               <div class="content">
-                <h1 class="title">Booking Confirmed! 🎉</h1>
+                <h1 class="title">Booking Confirmed</h1>
                 <p class="text">Hi ${data.customerName},</p>
                 <p class="text">Great news! Your cleaning service has been confirmed. We're looking forward to making your space spotless.</p>
                 

@@ -24,42 +24,37 @@ const getStatusContent = (status: string) => {
   switch (status) {
     case "on_the_way":
       return {
-        badge: "🚗 ON THE WAY",
-        badgeColor: "#3b82f6",
-        title: "Your Provider is On The Way! 🚗",
-        icon: "🚗",
+        badge: "ON THE WAY",
+        badgeColor: "#14B8A6",
+        title: "Your Provider is On The Way",
         message: "Good news! Your provider is now heading to your location."
       };
     case "arrived":
       return {
-        badge: "📍 ARRIVED",
-        badgeColor: "#8b5cf6",
-        title: "Your Provider Has Arrived! 📍",
-        icon: "📍",
+        badge: "ARRIVED",
+        badgeColor: "#0D9488",
+        title: "Your Provider Has Arrived",
         message: "Your provider has arrived at your location and will begin the service shortly."
       };
     case "started":
       return {
-        badge: "✨ IN PROGRESS",
-        badgeColor: "#f59e0b",
-        title: "Service Has Started! ✨",
-        icon: "✨",
+        badge: "IN PROGRESS",
+        badgeColor: "#14B8A6",
+        title: "Service Has Started",
         message: "Your cleaning service is now in progress. Your provider is working hard to make your space spotless!"
       };
     case "completed":
       return {
-        badge: "✓ COMPLETED",
-        badgeColor: "#48bb78",
-        title: "Service Completed Successfully! 🎉",
-        icon: "✓",
+        badge: "COMPLETED",
+        badgeColor: "#0D9488",
+        title: "Service Completed Successfully",
         message: "Great news! Your cleaning service has been completed. We hope you're satisfied with the results!"
       };
     default:
       return {
-        badge: "📋 UPDATE",
-        badgeColor: "#718096",
+        badge: "UPDATE",
+        badgeColor: "#14B8A6",
         title: "Status Update",
-        icon: "📋",
         message: "Your booking status has been updated."
       };
   }
@@ -78,7 +73,7 @@ const getEmailTemplate = (data: StatusUpdateRequest) => {
       <style>
         body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #f5f5f5; }
         .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
-        .header { background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%); padding: 30px 20px; text-align: left; }
+        .header { background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); padding: 30px 20px; text-align: left; }
         .logo { max-width: 120px; height: auto; }
         .content { padding: 40px 20px; text-align: left; }
         .title { margin: 0 0 20px; font-size: 24px; font-weight: 700; color: #1a1a1a; text-align: left; }
@@ -86,12 +81,12 @@ const getEmailTemplate = (data: StatusUpdateRequest) => {
         .status-badge { color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 16px; }
         .status-card { background-color: #f7fafc; padding: 20px; margin: 24px 0; border-radius: 8px; text-align: center; border-left: 4px solid ${statusContent.badgeColor}; }
         .status-icon { font-size: 48px; margin-bottom: 12px; }
-        .booking-details { background-color: #f7fafc; padding: 20px; margin: 24px 0; border-left: 4px solid #6C63FF; }
+        .booking-details { background-color: #f7fafc; padding: 20px; margin: 24px 0; border-left: 4px solid #14B8A6; }
         .detail-row { margin: 12px 0; text-align: left; }
         .detail-label { font-weight: 600; color: #2d3748; font-size: 14px; }
         .detail-value { color: #4a5568; font-size: 14px; margin-top: 4px; }
-        .provider-info { background-color: #eef2ff; padding: 16px 20px; margin: 24px 0; border-radius: 8px; border-left: 4px solid #6366f1; }
-        .button { display: inline-block; background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(108, 99, 255, 0.4); margin: 20px 0; }
+        .provider-info { background-color: #f0fdfa; padding: 16px 20px; margin: 24px 0; border-radius: 8px; border-left: 4px solid #14B8A6; }
+        .button { display: inline-block; background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(20, 184, 166, 0.4); margin: 20px 0; }
         .footer { background-color: #f7fafc; padding: 30px 20px; border-top: 1px solid #e2e8f0; text-align: left; }
         .footer-text { margin: 0 0 8px; font-size: 13px; color: #718096; text-align: left; }
         .info-box { background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 6px; margin: 20px 0; text-align: left; }
@@ -119,14 +114,13 @@ const getEmailTemplate = (data: StatusUpdateRequest) => {
                 <p class="text">${statusContent.message}</p>
                 
                 <div class="status-card">
-                  <div class="status-icon">${statusContent.icon}</div>
-                  <p class="text" style="margin: 0; font-size: 16px; font-weight: 600; color: #2d3748;">
+                  <p class="text" style="margin: 0; font-size: 18px; font-weight: 700; color: #0D9488;">
                     Status: ${data.status.replace("_", " ").toUpperCase()}
                   </p>
                 </div>
                 
                 <div class="provider-info">
-                  <p class="text" style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #2d3748;">👤 Your Provider</p>
+                  <p class="text" style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #2d3748;">Your Provider</p>
                   <p class="text" style="margin: 0; font-size: 14px; color: #2d3748;">
                     ${data.providerName}
                   </p>
@@ -157,15 +151,15 @@ const getEmailTemplate = (data: StatusUpdateRequest) => {
                 
                 ${data.status === "completed" ? `
                 <div class="info-box">
-                  <p class="text" style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #d97706;">⭐ Rate Your Experience</p>
-                  <p class="text" style="margin: 0; font-size: 13px; color: #92400e;">
+                  <p class="text" style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #0D9488;">Rate Your Experience</p>
+                  <p class="text" style="margin: 0; font-size: 13px; color: #115e59;">
                     We'd love to hear about your experience! Please take a moment to rate your service and help us improve.
                   </p>
                 </div>
                 ` : ''}
                 
                 <div style="text-align: center;">
-                  <a href="https://clinlix.com/customer/my-bookings" class="button">View Booking Details</a>
+                  <a href="https://clinlix.com/auth" class="button">View Booking Details</a>
                 </div>
                 
                 <p class="text" style="font-size: 13px; color: #718096;">

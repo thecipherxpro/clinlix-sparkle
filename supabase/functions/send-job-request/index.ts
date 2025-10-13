@@ -33,24 +33,24 @@ const getEmailTemplate = (data: JobRequestNotification, logoUrl: string) => {
       <style>
         body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #f5f5f5; }
         .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
-        .header { background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%); padding: 30px 20px; text-align: left; }
+        .header { background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); padding: 30px 20px; text-align: left; }
         .logo { max-width: 120px; height: auto; }
         .content { padding: 40px 20px; text-align: left; }
         .title { margin: 0 0 20px; font-size: 24px; font-weight: 700; color: #1a1a1a; text-align: left; }
         .text { margin: 0 0 16px; font-size: 15px; line-height: 1.6; color: #4a5568; text-align: left; }
-        .urgent-badge { background-color: #f56565; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 16px; }
-        .job-details { background-color: #f7fafc; border-left: 4px solid #48bb78; padding: 20px; margin: 24px 0; }
+        .urgent-badge { background-color: #14B8A6; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 16px; }
+        .job-details { background-color: #f7fafc; border-left: 4px solid #14B8A6; padding: 20px; margin: 24px 0; }
         .detail-row { margin: 12px 0; text-align: left; }
         .detail-label { font-weight: 600; color: #2d3748; font-size: 14px; }
         .detail-value { color: #4a5568; font-size: 14px; margin-top: 4px; }
-        .earnings-section { background-color: #48bb78; color: white; padding: 16px 20px; margin: 24px 0; border-radius: 8px; text-align: left; }
+        .earnings-section { background-color: #14B8A6; color: white; padding: 16px 20px; margin: 24px 0; border-radius: 8px; text-align: left; }
         .earnings-label { font-size: 14px; opacity: 0.9; }
         .earnings-amount { font-size: 28px; font-weight: 700; margin-top: 4px; }
         .button-container { padding: 20px 0; text-align: left; }
-        .button { display: inline-block; background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(108, 99, 255, 0.4); }
+        .button { display: inline-block; background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(20, 184, 166, 0.4); }
         .footer { background-color: #f7fafc; padding: 30px 20px; border-top: 1px solid #e2e8f0; text-align: left; }
         .footer-text { margin: 0 0 8px; font-size: 13px; color: #718096; text-align: left; }
-        .warning-box { background-color: #fef5e7; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 6px; margin: 20px 0; text-align: left; }
+        .warning-box { background-color: #f0fdfa; border-left: 4px solid #14B8A6; padding: 16px; border-radius: 6px; margin: 20px 0; text-align: left; }
         @media only screen and (max-width: 600px) {
           .content { padding: 30px 16px; }
           .header { padding: 24px 16px; }
@@ -71,7 +71,7 @@ const getEmailTemplate = (data: JobRequestNotification, logoUrl: string) => {
               
               <div class="content">
                 <span class="urgent-badge">NEW JOB REQUEST</span>
-                <h1 class="title">You Have a New Job Opportunity! 💼</h1>
+                <h1 class="title">You Have a New Job Opportunity</h1>
                 <p class="text">Hi ${data.providerName},</p>
                 <p class="text">A customer has requested your cleaning services. Review the details below and accept the job to get started.</p>
                 
@@ -112,8 +112,8 @@ const getEmailTemplate = (data: JobRequestNotification, logoUrl: string) => {
                 </div>
                 
                 <div class="warning-box">
-                  <p class="text" style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #d97706;">⏰ Time Sensitive</p>
-                  <p class="text" style="margin: 0; font-size: 13px; color: #92400e;">
+                  <p class="text" style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #0D9488;">Time Sensitive</p>
+                  <p class="text" style="margin: 0; font-size: 13px; color: #115e59;">
                     This job request is available on a first-come, first-served basis. Accept quickly to secure this opportunity!
                   </p>
                 </div>

@@ -29,17 +29,17 @@ const getEmailTemplate = (data: JobStartedRequest) => {
       <style>
         body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #f5f5f5; }
         .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
-        .header { background: linear-gradient(135deg, #805AD5 0%, #6B46C1 100%); padding: 30px 20px; text-align: left; }
+        .header { background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); padding: 30px 20px; text-align: left; }
         .logo { max-width: 120px; height: auto; }
         .content { padding: 40px 20px; text-align: left; }
         .title { margin: 0 0 20px; font-size: 24px; font-weight: 700; color: #1a1a1a; text-align: left; }
         .text { margin: 0 0 16px; font-size: 15px; line-height: 1.6; color: #4a5568; text-align: left; }
-        .active-badge { background-color: #805AD5; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 16px; }
-        .booking-details { background-color: #f7fafc; border-left: 4px solid #805AD5; padding: 20px; margin: 24px 0; }
+        .active-badge { background-color: #14B8A6; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 16px; }
+        .booking-details { background-color: #f7fafc; border-left: 4px solid #14B8A6; padding: 20px; margin: 24px 0; }
         .detail-row { margin: 12px 0; text-align: left; }
         .detail-label { font-weight: 600; color: #2d3748; font-size: 14px; }
         .detail-value { color: #4a5568; font-size: 14px; margin-top: 4px; }
-        .info-box { background-color: #faf5ff; padding: 16px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #805AD5; }
+        .info-box { background-color: #f0fdfa; padding: 16px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #14B8A6; }
         .footer { background-color: #f7fafc; padding: 30px 20px; border-top: 1px solid #e2e8f0; text-align: left; }
         .footer-text { margin: 0 0 8px; font-size: 13px; color: #718096; text-align: left; }
         @media only screen and (max-width: 600px) {
@@ -59,8 +59,8 @@ const getEmailTemplate = (data: JobStartedRequest) => {
               </div>
               
               <div class="content">
-                <span class="active-badge">● IN PROGRESS</span>
-                <h1 class="title">Your Service Has Started! 🧹</h1>
+                <span class="active-badge">IN PROGRESS</span>
+                <h1 class="title">Your Service Has Started</h1>
                 <p class="text">Hi ${data.customerName},</p>
                 <p class="text"><strong>${data.providerName}</strong> has arrived and started your cleaning service. Your space will be sparkling clean soon!</p>
                 
@@ -92,8 +92,8 @@ const getEmailTemplate = (data: JobStartedRequest) => {
                 </div>
                 
                 <div class="info-box">
-                  <p class="text" style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #553c9a;">💡 While We Work</p>
-                  <p class="text" style="margin: 0; font-size: 13px; color: #553c9a;">
+                  <p class="text" style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #0D9488;">While We Work</p>
+                  <p class="text" style="margin: 0; font-size: 13px; color: #115e59;">
                     • You'll receive a notification when the service is complete<br/>
                     • Feel free to review the work and provide feedback<br/>
                     • Any concerns? Contact us anytime at support@clinlix.com
