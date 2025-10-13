@@ -153,7 +153,7 @@ Deno.serve(async (req) => {
     `;
 
     const { error: emailError } = await resend.emails.send({
-      from: 'Clinlix <support@tscp.ca>',
+      from: 'Clinlix <support@clinlix.com>',
       to: [email],
       subject: 'Reset Your Clinlix Password',
       html,
