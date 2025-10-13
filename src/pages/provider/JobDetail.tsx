@@ -334,7 +334,7 @@ const JobDetail = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b px-4 py-4">
+      <header className="sticky top-0 z-10 bg-card border-b px-4 py-3">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
@@ -343,53 +343,59 @@ const JobDetail = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-bold text-foreground">Job Details</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-foreground">Job Details</h1>
         </div>
       </header>
 
-      <div className="p-4 space-y-4">
+      <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
         {/* Customer Card with Status */}
         <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4 mb-4">
+          <CardContent className="p-4 sm:p-6">
+            {/* Customer Info - Mobile Optimized */}
+            <div className="flex items-start gap-3 mb-4">
               <AvatarDisplay 
                 userId={job.customer_id}
-                size={64}
+                size={56}
                 fallbackText={getInitials(job.profiles?.first_name, job.profiles?.last_name)}
-                className="border-2 border-primary/20"
+                className="border-2 border-primary/20 flex-shrink-0"
               />
-              <div className="flex-1">
-                <h2 className="text-xl font-bold">
+              <div className="flex-1 min-w-0">
+                <h2 className="text-base sm:text-lg font-bold truncate">
                   {job.profiles?.first_name || "Customer"} {job.profiles?.last_name || ""}
                 </h2>
-                <Badge variant="outline" className="mt-1">
-                  Booking #{job.id.slice(0, 8)}
+                <Badge variant="outline" className="mt-1 text-xs">
+                  #{job.id.slice(0, 8)}
                 </Badge>
+                
+                {/* Contact Info - Mobile Friendly */}
+                {isJobConfirmed && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {job.profiles?.phone && (
+                      <a href={`tel:${job.profiles.phone}`} className="flex-1 min-w-[120px]">
+                        <Button variant="outline" size="sm" className="w-full">
+                          <Phone className="h-3.5 w-3.5 mr-1.5" />
+                          <span className="text-xs">Call</span>
+                        </Button>
+                      </a>
+                    )}
+                    {job.profiles?.email && (
+                      <a href={`mailto:${job.profiles.email}`} className="flex-1 min-w-[120px]">
+                        <Button variant="outline" size="sm" className="w-full">
+                          <Mail className="h-3.5 w-3.5 mr-1.5" />
+                          <span className="text-xs">Email</span>
+                        </Button>
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
-              {/* Contact Icons - Only shown when confirmed */}
-              {isJobConfirmed && (
-                <div className="flex gap-2">
-                  {job.profiles?.phone && (
-                    <a href={`tel:${job.profiles.phone}`}>
-                      <Button variant="outline" size="icon">
-                        <Phone className="h-4 w-4" />
-                      </Button>
-                    </a>
-                  )}
-                  {job.profiles?.email && (
-                    <a href={`mailto:${job.profiles.email}`}>
-                      <Button variant="outline" size="icon">
-                        <Mail className="h-4 w-4" />
-                      </Button>
-                    </a>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* Status Bar for Confirmed Jobs */}
             {isJobConfirmed && (
-              <JobStatusBar currentStatus={job.job_status} />
+              <div className="mt-4">
+                <JobStatusBar currentStatus={job.job_status} />
+              </div>
             )}
           </CardContent>
         </Card>
@@ -397,59 +403,59 @@ const JobDetail = () => {
         {/* Tabbed Interface */}
         <Tabs defaultValue="when" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="when">
-              <Clock className="h-4 w-4 mr-2" />
-              When
+            <TabsTrigger value="when" className="text-xs sm:text-sm">
+              <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span>When</span>
             </TabsTrigger>
-            <TabsTrigger value="where">
-              <MapPin className="h-4 w-4 mr-2" />
-              Where
+            <TabsTrigger value="where" className="text-xs sm:text-sm">
+              <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span>Where</span>
             </TabsTrigger>
           </TabsList>
 
           {/* WHEN TAB */}
-          <TabsContent value="when" className="space-y-4 mt-4">
+          <TabsContent value="when" className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Booking Details</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base sm:text-lg">Booking Details</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 sm:space-y-4">
                 <div className="flex items-start gap-3">
-                  <Calendar className="h-5 w-5 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="font-medium">Date</p>
-                    <p className="text-sm text-muted-foreground">
+                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-sm sm:text-base">Date</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       {format(new Date(job.requested_date), "EEEE, MMMM dd, yyyy")}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Clock className="h-5 w-5 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="font-medium">Start Time</p>
-                    <p className="text-sm text-muted-foreground">{job.requested_time}</p>
+                  <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-sm sm:text-base">Start Time</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">{job.requested_time}</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Package className="h-5 w-5 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="font-medium">Cleaning Duration</p>
-                    <p className="text-sm text-muted-foreground">
+                  <Package className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-sm sm:text-base">Cleaning Duration</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Up to {job.cleaning_packages?.time_included || "N/A"}
                     </p>
                   </div>
                 </div>
 
                 {jobAddons.length > 0 && (
-                  <div className="border-t pt-4">
-                    <p className="font-medium mb-2">Add-ons</p>
-                    <div className="space-y-1">
+                  <div className="border-t pt-3 sm:pt-4">
+                    <p className="font-medium mb-2 text-sm sm:text-base">Add-ons</p>
+                    <div className="space-y-1.5">
                       {jobAddons.map(addon => (
-                        <div key={addon.id} className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">{addon.name_en}</span>
-                          <span className="font-medium">€{Number(addon.price).toFixed(2)}</span>
+                        <div key={addon.id} className="flex justify-between text-xs sm:text-sm">
+                          <span className="text-muted-foreground truncate mr-2">{addon.name_en}</span>
+                          <span className="font-medium flex-shrink-0">€{Number(addon.price).toFixed(2)}</span>
                         </div>
                       ))}
                     </div>
@@ -460,32 +466,32 @@ const JobDetail = () => {
 
             {/* Earnings Card */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Euro className="h-5 w-5" />
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                  <Euro className="h-4 w-4 sm:h-5 sm:w-5" />
                   Estimated Earnings
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-2.5 sm:space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Base Amount</span>
-                  <span className="font-medium">€{job.total_estimate.toFixed(2)}</span>
+                  <span className="text-muted-foreground text-xs sm:text-sm">Base Amount</span>
+                  <span className="font-medium text-sm sm:text-base">€{job.total_estimate.toFixed(2)}</span>
                 </div>
                 {jobAddons.length > 0 && (
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Add-ons</span>
-                    <span className="font-medium">
+                    <span className="text-muted-foreground text-xs sm:text-sm">Add-ons</span>
+                    <span className="font-medium text-sm sm:text-base">
                       €{jobAddons.reduce((sum, a) => sum + Number(a.price), 0).toFixed(2)}
                     </span>
                   </div>
                 )}
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Platform Fee (15%)</span>
-                  <span className="font-medium text-red-600">-€{platformFee}</span>
+                  <span className="text-muted-foreground text-xs sm:text-sm">Platform Fee (15%)</span>
+                  <span className="font-medium text-sm sm:text-base text-red-600">-€{platformFee}</span>
                 </div>
-                <div className="border-t pt-3 flex justify-between items-center">
-                  <span className="font-semibold text-lg">Your Earnings</span>
-                  <span className="font-bold text-lg text-green-600">€{earnings}</span>
+                <div className="border-t pt-2.5 sm:pt-3 flex justify-between items-center">
+                  <span className="font-semibold text-base sm:text-lg">Your Earnings</span>
+                  <span className="font-bold text-base sm:text-lg text-green-600">€{earnings}</span>
                 </div>
               </CardContent>
             </Card>
@@ -493,7 +499,7 @@ const JobDetail = () => {
             {/* Overtime Rule Alert */}
             <Alert>
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
+              <AlertDescription className="text-xs sm:text-sm">
                 <strong>Overtime Rule:</strong> €10 per 30 minutes extra if job exceeds estimated time
               </AlertDescription>
             </Alert>
@@ -509,11 +515,11 @@ const JobDetail = () => {
             )}
 
             {/* Action Buttons */}
-            <div className="space-y-3">
+            <div className="space-y-2.5 sm:space-y-3">
               {job.job_status === "pending" && (
                 <>
                   <Button
-                    className="w-full h-12 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-700"
+                    className="w-full h-11 sm:h-12 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-700 text-sm sm:text-base"
                     size="lg"
                     onClick={() => setShowAcceptDialog(true)}
                   >
@@ -521,7 +527,7 @@ const JobDetail = () => {
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full h-12"
+                    className="w-full h-11 sm:h-12 text-sm sm:text-base"
                     size="lg"
                     onClick={() => setShowDeclineDialog(true)}
                   >
@@ -532,7 +538,7 @@ const JobDetail = () => {
 
               {job.job_status === "confirmed" && (
                 <Button
-                  className="w-full h-12"
+                  className="w-full h-11 sm:h-12 text-sm sm:text-base"
                   size="lg"
                   onClick={() => updateJobStatus("on_the_way")}
                 >
@@ -542,7 +548,7 @@ const JobDetail = () => {
 
               {job.job_status === "on_the_way" && (
                 <Button
-                  className="w-full h-12"
+                  className="w-full h-11 sm:h-12 text-sm sm:text-base"
                   size="lg"
                   onClick={() => updateJobStatus("arrived")}
                 >
@@ -552,7 +558,7 @@ const JobDetail = () => {
 
               {job.job_status === "arrived" && (
                 <Button
-                  className="w-full h-12"
+                  className="w-full h-11 sm:h-12 text-sm sm:text-base"
                   size="lg"
                   onClick={() => updateJobStatus("started")}
                 >
@@ -562,7 +568,7 @@ const JobDetail = () => {
 
               {job.job_status === "started" && (
                 <Button
-                  className="w-full h-12"
+                  className="w-full h-11 sm:h-12 text-sm sm:text-base"
                   size="lg"
                   onClick={() => updateJobStatus("completed")}
                 >
@@ -573,16 +579,16 @@ const JobDetail = () => {
           </TabsContent>
 
           {/* WHERE TAB */}
-          <TabsContent value="where" className="space-y-4 mt-4">
+          <TabsContent value="where" className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
             {/* Customer Address */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Customer Address</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base sm:text-lg">Customer Address</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 sm:space-y-4">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Full Name</p>
-                  <p className="font-medium">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-1">Full Name</p>
+                  <p className="font-medium text-sm sm:text-base">
                     {job.profiles?.first_name || "Customer"} {job.profiles?.last_name || ""}
                   </p>
                 </div>
@@ -591,34 +597,38 @@ const JobDetail = () => {
                   <>
                     {job.profiles?.phone && (
                       <div>
-                        <p className="text-sm text-muted-foreground mb-1">Phone Number</p>
-                        <p className="font-medium">{job.profiles.phone}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-1">Phone Number</p>
+                        <a href={`tel:${job.profiles.phone}`} className="font-medium text-sm sm:text-base text-primary hover:underline">
+                          {job.profiles.phone}
+                        </a>
                       </div>
                     )}
                     {job.profiles?.email && (
                       <div>
-                        <p className="text-sm text-muted-foreground mb-1">Email</p>
-                        <p className="font-medium">{job.profiles.email}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-1">Email</p>
+                        <a href={`mailto:${job.profiles.email}`} className="font-medium text-sm sm:text-base text-primary hover:underline break-all">
+                          {job.profiles.email}
+                        </a>
                       </div>
                     )}
                   </>
                 ) : (
                   <Alert>
                     <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>
+                    <AlertDescription className="text-xs sm:text-sm">
                       Contact details will be revealed after accepting the job
                     </AlertDescription>
                   </Alert>
                 )}
 
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Country</p>
-                  <p className="font-medium">{job.customer_addresses?.country || "Portugal"} 🇵🇹</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-1">Country</p>
+                  <p className="font-medium text-sm sm:text-base">{job.customer_addresses?.country || "Portugal"} 🇵🇹</p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Address</p>
-                  <p className="font-medium">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-1">Address</p>
+                  <p className="font-medium text-sm sm:text-base leading-relaxed">
                     {job.customer_addresses?.rua || "Address not available"}
                     {job.customer_addresses?.porta_andar && `, ${job.customer_addresses.porta_andar}`}
                     <br />
@@ -629,10 +639,10 @@ const JobDetail = () => {
                 {isJobConfirmed && (
                   <Button
                     variant="outline"
-                    className="w-full"
+                    className="w-full text-xs sm:text-sm"
                     onClick={openInMaps}
                   >
-                    <Navigation className="h-4 w-4 mr-2" />
+                    <Navigation className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-2" />
                     Open in Google Maps
                   </Button>
                 )}
@@ -641,39 +651,39 @@ const JobDetail = () => {
 
             {/* Property Info */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Property Information</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base sm:text-lg">Property Information</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 sm:space-y-4">
                 <div className="flex items-start gap-3">
-                  <Home className="h-5 w-5 text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="font-medium">Property Type</p>
-                    <p className="text-sm text-muted-foreground capitalize">
+                  <Home className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-sm sm:text-base">Property Type</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground capitalize">
                       {job.customer_addresses?.property_type || "N/A"}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Package className="h-5 w-5 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="font-medium">Layout</p>
-                  <p className="text-sm text-muted-foreground capitalize">
+                  <Package className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-sm sm:text-base">Layout</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground capitalize">
                     {job.customer_addresses?.layout_type || `${job.cleaning_packages?.bedroom_count || 0} Bedrooms`}
                   </p>
                 </div>
                 </div>
 
                 <div>
-                  <p className="font-medium mb-3">Included Services</p>
+                  <p className="font-medium mb-3 text-sm sm:text-base">Included Services</p>
                   <div className="grid grid-cols-2 gap-2">
                     {job.cleaning_packages?.areas_included?.map((area) => {
                       const IconComponent = serviceIcons[area] || Sparkles;
                       return (
-                        <div key={area} className="flex items-center gap-2 text-sm">
-                          <IconComponent className="h-5 w-5 text-primary" />
-                          <span className="capitalize">{area.replace("_", " ")}</span>
+                        <div key={area} className="flex items-center gap-2 text-xs sm:text-sm">
+                          <IconComponent className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                          <span className="capitalize truncate">{area.replace("_", " ")}</span>
                         </div>
                       );
                     })}
