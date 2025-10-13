@@ -1,0 +1,79 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.75.0';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const { token, newPassword } = await req.json();
+
+    if (!token || !newPassword) {
+      return new Response(
+        JSON.stringify({ error: 'Token and new password are required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log('Verifying reset token');
+
+    // Find valid token
+    const { data: resetToken, error: tokenError } = await supabase
+      .from('password_reset_tokens')
+      .select('*')
+      .eq('token', token)
+      .eq('used', false)
+      .gt('expires_at', new Date().toISOString())
+      .single();
+
+    if (tokenError || !resetToken) {
+      console.error('Invalid or expired token');
+      return new Response(
+        JSON.stringify({ error: 'Invalid or expired reset token' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log('Token valid, updating password for user:', resetToken.user_id);
+
+    // Update user password using admin API
+    const { error: updateError } = await supabase.auth.admin.updateUserById(
+      resetToken.user_id,
+      { password: newPassword }
+    );
+
+    if (updateError) {
+      console.error('Error updating password:', updateError);
+      throw new Error('Failed to update password');
+    }
+
+    // Mark token as used
+    await supabase
+      .from('password_reset_tokens')
+      .update({ used: true })
+      .eq('id', resetToken.id);
+
+    console.log('Password updated successfully');
+
+    return new Response(
+      JSON.stringify({ success: true }),
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  } catch (error: any) {
+    console.error('Error in verify-reset-token:', error);
+    return new Response(
+      JSON.stringify({ error: error.message || 'Failed to reset password' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+});
