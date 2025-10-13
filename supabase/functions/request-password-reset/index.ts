@@ -36,11 +36,15 @@ Deno.serve(async (req) => {
 
     console.log('Password reset requested for:', email);
 
-    // Find user by email using admin API
-    const { data: { users }, error: userError } = await supabase.auth.admin.listUsers();
+    // Find user in profiles table
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id, first_name, email')
+      .eq('email', email.toLowerCase())
+      .maybeSingle();
     
-    if (userError) {
-      console.error('Error listing users:', userError);
+    if (profileError) {
+      console.error('Error finding profile:', profileError);
       // Don't reveal error for security
       return new Response(
         JSON.stringify({ success: true }),
@@ -48,9 +52,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    const user = users.find(u => u.email?.toLowerCase() === email.toLowerCase());
-
-    if (!user) {
+    if (!profile) {
       // Don't reveal if user exists for security
       console.log('User not found, but returning success for security');
       return new Response(
@@ -59,14 +61,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Get profile for user name
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('first_name')
-      .eq('id', user.id)
-      .single();
-
-    console.log('User found, generating token for:', user.id);
+    console.log('User found, generating token for:', profile.id);
 
     // Generate secure token
     const token = generateSecureToken();
@@ -76,7 +71,7 @@ Deno.serve(async (req) => {
     const { error: tokenError } = await supabase
       .from('password_reset_tokens')
       .insert({
-        user_id: user.id,
+        user_id: profile.id,
         token,
         expires_at: expiresAt.toISOString(),
       });
