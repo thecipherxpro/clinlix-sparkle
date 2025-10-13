@@ -36,14 +36,21 @@ Deno.serve(async (req) => {
 
     console.log('Password reset requested for:', email);
 
-    // Find user by email
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('id, first_name, last_name')
-      .eq('email', email)
-      .single();
+    // Find user by email using admin API
+    const { data: { users }, error: userError } = await supabase.auth.admin.listUsers();
+    
+    if (userError) {
+      console.error('Error listing users:', userError);
+      // Don't reveal error for security
+      return new Response(
+        JSON.stringify({ success: true }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
-    if (profileError || !profile) {
+    const user = users.find(u => u.email?.toLowerCase() === email.toLowerCase());
+
+    if (!user) {
       // Don't reveal if user exists for security
       console.log('User not found, but returning success for security');
       return new Response(
@@ -51,6 +58,15 @@ Deno.serve(async (req) => {
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    // Get profile for user name
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('first_name')
+      .eq('id', user.id)
+      .single();
+
+    console.log('User found, generating token for:', user.id);
 
     // Generate secure token
     const token = generateSecureToken();
@@ -60,7 +76,7 @@ Deno.serve(async (req) => {
     const { error: tokenError } = await supabase
       .from('password_reset_tokens')
       .insert({
-        user_id: profile.id,
+        user_id: user.id,
         token,
         expires_at: expiresAt.toISOString(),
       });
@@ -108,7 +124,7 @@ Deno.serve(async (req) => {
                 
                 <div class="content">
                   <h1 class="title">Reset Your Password</h1>
-                  <p class="text">Hi ${profile.first_name || 'there'},</p>
+                  <p class="text">Hi ${profile?.first_name || 'there'},</p>
                   <p class="text">We received a request to reset your password. Click the button below to create a new password:</p>
                   
                   <div class="button-container">
