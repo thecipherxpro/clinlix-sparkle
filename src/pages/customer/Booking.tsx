@@ -146,11 +146,11 @@ const Booking = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      const { error } = await supabase
+      const { data: bookingData, error } = await supabase
         .from('bookings')
         .insert([{
           customer_id: user!.id,
-          provider_id: selectedProvider.id,
+          provider_id: selectedProvider.user_id,
           address_id: selectedAddress.id,
           package_id: selectedAddress.cleaning_packages.id,
           addon_ids: selectedAddons,
@@ -159,9 +159,73 @@ const Booking = () => {
           total_estimate: calculateTotal(),
           status: 'pending',
           payment_status: 'pending'
-        }]);
+        }])
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // Get customer profile data
+      const { data: customerProfile } = await supabase
+        .from('profiles')
+        .select('first_name, last_name, email, currency')
+        .eq('id', user!.id)
+        .single();
+
+      // Get provider profile data
+      const { data: providerProfile } = await supabase
+        .from('profiles')
+        .select('first_name, last_name, email')
+        .eq('id', selectedProvider.user_id)
+        .single();
+
+      // Format address
+      const formattedAddress = selectedAddress.country === 'Portugal'
+        ? `${selectedAddress.rua}, ${selectedAddress.localidade}, ${selectedAddress.country}`
+        : `${selectedAddress.street}, ${selectedAddress.city}, ${selectedAddress.country}`;
+
+      // Format date
+      const formattedDate = new Date(selectedDate).toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+
+      const currency = customerProfile?.currency === 'EUR' ? '€' : '$';
+
+      // Send booking confirmation email to customer
+      supabase.functions.invoke('send-booking-confirmation', {
+        body: {
+          customerEmail: customerProfile?.email,
+          customerName: `${customerProfile?.first_name} ${customerProfile?.last_name}`,
+          bookingId: bookingData.id,
+          serviceDate: formattedDate,
+          serviceTime: selectedTime,
+          packageName: selectedAddress.cleaning_packages.package_name,
+          address: formattedAddress,
+          totalAmount: calculateTotal().toFixed(2),
+          currency: currency
+        }
+      }).catch(err => console.error('Error sending customer email:', err));
+
+      // Send job request email to provider
+      const providerEarnings = (calculateTotal() * 0.7).toFixed(2); // 70% to provider
+      supabase.functions.invoke('send-job-request', {
+        body: {
+          providerEmail: providerProfile?.email,
+          providerName: `${providerProfile?.first_name} ${providerProfile?.last_name}`,
+          bookingId: bookingData.id,
+          customerName: `${customerProfile?.first_name} ${customerProfile?.last_name}`,
+          serviceDate: formattedDate,
+          serviceTime: selectedTime,
+          packageName: selectedAddress.cleaning_packages.package_name,
+          address: formattedAddress,
+          estimatedEarnings: providerEarnings,
+          currency: currency,
+          acceptUrl: `https://clinlix.com/provider/jobs`
+        }
+      }).catch(err => console.error('Error sending provider email:', err));
 
       toast.success("Booking sent! We'll notify you when your provider confirms.");
       navigate('/customer/dashboard');
