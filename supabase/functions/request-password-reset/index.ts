@@ -82,7 +82,7 @@ Deno.serve(async (req) => {
     }
 
     // Create reset URL and logo URL
-    const origin = req.headers.get('origin') || 'https://clinlix.lovable.app';
+    const origin = req.headers.get('origin') || 'https://clinlix.com';
     const resetUrl = `${origin}/auth/reset-password?token=${token}`;
     const logoUrl = `${origin}/images/logo-clinlix-email.png`;
 
