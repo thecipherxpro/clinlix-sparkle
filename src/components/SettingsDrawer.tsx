@@ -83,11 +83,11 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
   const handlePasswordReset = async () => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(profile.email, {
-        redirectTo: `${window.location.origin}/auth`,
+        redirectTo: `${window.location.origin}/auth/reset-password`,
       });
 
       if (error) throw error;
-      toast.success('Password reset email sent');
+      toast.success('Password reset email sent! Check your inbox.');
     } catch (error) {
       console.error('Error:', error);
       toast.error('Failed to send reset email');
