@@ -93,7 +93,17 @@ const Booking = () => {
   const fetchAvailableProviders = async () => {
     const { data } = await supabase
       .from('provider_availability')
-      .select('provider_id, provider_profiles(*)')
+      .select(`
+        provider_id, 
+        provider_profiles(
+          *,
+          profiles:user_id (
+            first_name,
+            last_name,
+            email
+          )
+        )
+      `)
       .eq('date', selectedDate);
 
     const providers = data?.map(d => d.provider_profiles).filter(Boolean) || [];
@@ -172,12 +182,8 @@ const Booking = () => {
         .eq('id', user!.id)
         .single();
 
-      // Get provider profile data
-      const { data: providerProfile } = await supabase
-        .from('profiles')
-        .select('first_name, last_name, email')
-        .eq('id', selectedProvider.user_id)
-        .single();
+      // Get provider profile data from the joined data
+      const providerProfile = selectedProvider.profiles;
 
       // Format address
       const formattedAddress = selectedAddress.country === 'Portugal'
