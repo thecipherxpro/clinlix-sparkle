@@ -155,7 +155,7 @@ Deno.serve(async (req) => {
     );
 
     const { error } = await resend.emails.send({
-      from: 'Clinlix <onboarding@resend.dev>',
+      from: 'Clinlix <support@tscp.ca>',
       to: [user.email],
       subject,
       html,
