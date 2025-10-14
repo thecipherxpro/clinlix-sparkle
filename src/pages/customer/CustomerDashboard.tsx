@@ -9,6 +9,7 @@ import MobileNav from "@/components/MobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import AvatarDisplay from "@/components/AvatarDisplay";
+import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
 
 const STATUS_COLORS = {
   pending: "bg-yellow-500",
@@ -35,6 +36,7 @@ const CustomerDashboard = () => {
   const [profile, setProfile] = useState<any>(null);
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showUnreviewedModal, setShowUnreviewedModal] = useState(false);
 
   useEffect(() => {
     checkUser();
@@ -76,6 +78,11 @@ const CustomerDashboard = () => {
         .limit(5);
 
       setUpcomingBookings(bookingsData || []);
+      
+      // Show unreviewed jobs modal after data is loaded
+      if (profileData) {
+        setTimeout(() => setShowUnreviewedModal(true), 1000);
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -325,6 +332,13 @@ const CustomerDashboard = () => {
           </Card>
         </div>
       </main>
+      
+      {profile && showUnreviewedModal && (
+        <UnreviewedJobsModal 
+          userId={profile.id} 
+          onClose={() => setShowUnreviewedModal(false)} 
+        />
+      )}
       
       <MobileNav />
     </div>

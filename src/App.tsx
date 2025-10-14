@@ -20,6 +20,7 @@ import MyAddresses from "./pages/customer/MyAddresses";
 import Booking from "./pages/customer/Booking";
 import MyBookings from "./pages/customer/MyBookings";
 import BookingDetails from "./pages/customer/BookingDetails";
+import ReviewBooking from "./pages/customer/ReviewBooking";
 import Profile from "./pages/customer/Profile";
 import PaymentMethods from "./pages/customer/PaymentMethods";
 import CustomerSettings from "./pages/customer/CustomerSettings";
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="/customer/booking" element={<Booking />} />
           <Route path="/customer/bookings" element={<MyBookings />} />
           <Route path="/customer/bookings/:id" element={<BookingDetails />} />
+          <Route path="/customer/bookings/:id/review" element={<ReviewBooking />} />
           <Route path="/customer/profile" element={<Profile />} />
           <Route path="/customer/settings" element={<CustomerSettings />} />
           <Route path="/customer/payment-methods" element={<PaymentMethods />} />

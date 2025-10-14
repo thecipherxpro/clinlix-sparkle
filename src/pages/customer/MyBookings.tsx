@@ -35,7 +35,7 @@ const MyBookings = () => {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("upcoming");
+  const [activeTab, setActiveTab] = useState("active");
 
   useEffect(() => {
     checkAuthAndFetchBookings();
@@ -98,13 +98,13 @@ const MyBookings = () => {
     }
   };
 
-  const upcomingBookings = bookings.filter(b => 
+  const activeBookings = bookings.filter(b => 
     ['pending', 'confirmed', 'on_the_way', 'arrived', 'started'].includes(b.status)
   );
 
-  const pastBookings = bookings.filter(b => 
-    ['completed', 'cancelled'].includes(b.status)
-  );
+  const completedBookings = bookings.filter(b => b.status === 'completed');
+  
+  const cancelledBookings = bookings.filter(b => b.status === 'cancelled');
 
   const renderBookingCard = (booking: any) => {
     const canCancel = ['pending', 'confirmed'].includes(booking.status);
@@ -285,21 +285,23 @@ const MyBookings = () => {
 
       <main className="mobile-container py-4 sm:py-8 max-w-4xl">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full grid grid-cols-2 h-12 sm:h-10">
-            <TabsTrigger value="upcoming" className="text-sm sm:text-base">
-              <span className="hidden sm:inline">Upcoming</span>
-              <span className="sm:hidden">Upcoming</span>
-              <span className="ml-1">({upcomingBookings.length})</span>
+          <TabsList className="w-full grid grid-cols-3 h-12 sm:h-10">
+            <TabsTrigger value="active" className="text-xs sm:text-base">
+              Active
+              <span className="ml-1">({activeBookings.length})</span>
             </TabsTrigger>
-            <TabsTrigger value="past" className="text-sm sm:text-base">
-              <span className="hidden sm:inline">Past</span>
-              <span className="sm:hidden">Past</span>
-              <span className="ml-1">({pastBookings.length})</span>
+            <TabsTrigger value="completed" className="text-xs sm:text-base">
+              Completed
+              <span className="ml-1">({completedBookings.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="cancelled" className="text-xs sm:text-base">
+              Cancelled
+              <span className="ml-1">({cancelledBookings.length})</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="upcoming" className="space-y-4 mt-4 sm:mt-6">
-            {upcomingBookings.length === 0 ? (
+          <TabsContent value="active" className="space-y-4 mt-4 sm:mt-6">
+            {activeBookings.length === 0 ? (
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
@@ -312,22 +314,37 @@ const MyBookings = () => {
                 </CardContent>
               </Card>
             ) : (
-              upcomingBookings.map(renderBookingCard)
+              activeBookings.map(renderBookingCard)
             )}
           </TabsContent>
 
-          <TabsContent value="past" className="space-y-4 mt-4 sm:mt-6">
-            {pastBookings.length === 0 ? (
+          <TabsContent value="completed" className="space-y-4 mt-4 sm:mt-6">
+            {completedBookings.length === 0 ? (
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
                   <p className="text-sm sm:text-base text-muted-foreground">
-                    No past bookings
+                    No completed bookings
                   </p>
                 </CardContent>
               </Card>
             ) : (
-              pastBookings.map(renderBookingCard)
+              completedBookings.map(renderBookingCard)
+            )}
+          </TabsContent>
+
+          <TabsContent value="cancelled" className="space-y-4 mt-4 sm:mt-6">
+            {cancelledBookings.length === 0 ? (
+              <Card className="border-0 shadow-sm">
+                <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
+                  <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    No cancelled bookings
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              cancelledBookings.map(renderBookingCard)
             )}
           </TabsContent>
         </Tabs>
