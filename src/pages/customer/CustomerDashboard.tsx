@@ -73,7 +73,7 @@ const CustomerDashboard = () => {
           provider_profiles(*)
         `)
         .eq('customer_id', user.id)
-        .in('status', ['pending', 'confirmed', 'on_the_way', 'arrived', 'started'])
+        .in('job_status', ['pending', 'confirmed', 'on_the_way', 'arrived', 'started'])
         .order('requested_date', { ascending: true })
         .limit(5);
 
@@ -229,8 +229,8 @@ const CustomerDashboard = () => {
                     >
                       <CardContent className="p-4 space-y-3">
                         {/* Status Badge */}
-                        <Badge className={STATUS_COLORS[booking.status as keyof typeof STATUS_COLORS]}>
-                          {STATUS_LABELS[booking.status as keyof typeof STATUS_LABELS]}
+                        <Badge className={STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]}>
+                          {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
                         </Badge>
 
                         {/* Date & Time */}
