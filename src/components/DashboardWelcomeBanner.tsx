@@ -89,13 +89,14 @@ const DashboardWelcomeBanner = ({
       <div className="bg-card rounded-2xl max-w-full border shadow-sm p-6">
         
         {/* Flex container: Adapts layout direction based on content and screen size
-            - gap uses clamp() to scale proportionally (12px on small, 20px on larger screens)
-            - items-start ensures proper alignment on all screen sizes */}
-        <div className="flex items-start justify-between gap-[clamp(12px,3vw,20px)]">
+            - Stacks vertically on mobile, side-by-side on tablet+
+            - items-center on mobile for centered avatar, items-start on larger screens */}
+        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4 sm:gap-6">
           
           {/* Content section: Flexible width that grows to fill available space
-              - min-w-0 prevents flex item overflow issues with text truncation */}
-          <div className="min-w-0 flex-1">
+              - min-w-0 prevents flex item overflow issues with text truncation
+              - text-center on mobile, text-left on larger screens */}
+          <div className="min-w-0 flex-1 text-center sm:text-left w-full sm:w-auto">
             
             {/* Typography: Using clamp() for fluid, responsive text scaling
                 - Welcome text: scales from 11px to 14px
@@ -110,8 +111,9 @@ const DashboardWelcomeBanner = ({
             
             {/* Status badges: Responsive spacing with clamp() for consistent gaps
                 - Touch-friendly: Minimum 44px height maintained for tap targets
-                - flex-wrap ensures proper stacking on narrow screens */}
-            <div className="flex items-center gap-2 sm:gap-3 mt-3 sm:mt-4 flex-wrap">
+                - flex-wrap ensures proper stacking on narrow screens
+                - justify-center on mobile, justify-start on larger screens */}
+            <div className="flex items-center justify-center sm:justify-start gap-2 sm:gap-3 mt-3 sm:mt-4 flex-wrap">
               
               {/* Role badge: Proportional sizing with viewport units */}
               <Badge variant="secondary" className="text-[clamp(9px,2.2vw,11px)] sm:text-xs px-2.5 sm:px-3 py-1.5 sm:py-2 min-h-[44px] sm:min-h-0 uppercase tracking-wide">
@@ -127,8 +129,9 @@ const DashboardWelcomeBanner = ({
           
           {/* Avatar section: Touch-optimized with 44px+ tap target
               - Responsive sizing using clamp() for proportional scaling
-              - Active touch states with group hover for better UX */}
-          <div className="relative group cursor-pointer flex-shrink-0 
+              - Active touch states with group hover for better UX
+              - Positioned above content on mobile, right side on larger screens */}
+          <div className="relative group cursor-pointer flex-shrink-0 order-first sm:order-last
                          touch-manipulation active:scale-95 transition-transform" onClick={handleAvatarClick}>
             
             {/* Hidden file input for upload functionality */}
