@@ -85,7 +85,7 @@ const DashboardWelcomeBanner = ({
        - Padding scales from mobile (4vw) to tablet (3vw) for optimal content spacing
        - Border radius adapts to screen size for proportional rounded corners */
     <div className="w-fit mx-[4vw] sm:mx-[3vw] my-0">
-      <div className="bg-white rounded-2xl max-w-full ">
+      <div className="bg-card rounded-2xl max-w-full border shadow-sm p-6">
         
         {/* Flex container: Adapts layout direction based on content and screen size
             - gap uses clamp() to scale proportionally (12px on small, 20px on larger screens)
@@ -99,10 +99,10 @@ const DashboardWelcomeBanner = ({
             {/* Typography: Using clamp() for fluid, responsive text scaling
                 - Welcome text: scales from 11px to 14px
                 - Name heading: scales from 24px (mobile) to 36px (tablet) */}
-            <p className="text-[clamp(11px,2.8vw,14px)] text-gray-500 leading-tight">
+            <p className="text-[clamp(11px,2.8vw,14px)] text-muted-foreground leading-tight">
               Welcome back,
             </p>
-            <h1 className="text-[clamp(24px,6.5vw,36px)] font-bold text-gray-800 truncate 
+            <h1 className="text-[clamp(24px,6.5vw,36px)] font-bold text-foreground truncate 
                            leading-[1.2] mt-[clamp(2px,0.5vw,4px)]">
               {user.name}!
             </h1>
@@ -117,8 +117,8 @@ const DashboardWelcomeBanner = ({
               <div className="flex items-center gap-[clamp(4px,1vw,6px)] 
                              py-[clamp(4px,1vw,6px)] min-h-[44px]">
                 <span className="w-[clamp(8px,2vw,12px)] h-[clamp(8px,2vw,12px)] 
-                               bg-gray-300 rounded-full flex-shrink-0"></span>
-                <span className="font-semibold text-gray-600 uppercase tracking-wide 
+                               bg-muted rounded-full flex-shrink-0"></span>
+                <span className="font-semibold text-muted-foreground uppercase tracking-wide 
                                text-[clamp(9px,2.2vw,11px)]">
                   {user.role} PORTAL
                 </span>
@@ -128,8 +128,8 @@ const DashboardWelcomeBanner = ({
               <div className="flex items-center gap-[clamp(4px,1vw,6px)] 
                              py-[clamp(4px,1vw,6px)] min-h-[44px]">
                 <span className="w-[clamp(8px,2vw,12px)] h-[clamp(8px,2vw,12px)] 
-                               bg-orange-400 rounded-full flex-shrink-0"></span>
-                <span className="font-semibold text-gray-600 
+                               bg-primary rounded-full flex-shrink-0"></span>
+                <span className="font-semibold text-muted-foreground 
                                text-[clamp(9px,2.2vw,11px)]">
                   {formattedDate}
                 </span>
@@ -149,24 +149,24 @@ const DashboardWelcomeBanner = ({
             {/* Avatar container: Responsive padding and sizing
                 - Padding scales with viewport for consistent border effect
                 - Minimum 60px size ensures touch target accessibility */}
-            <div className="p-[clamp(3px,0.8vw,4px)] rounded-full bg-purple-200">
+            <div className="p-[clamp(3px,0.8vw,4px)] rounded-full bg-primary/20">
               <img src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt={user.name} className="w-[clamp(60px,15vw,80px)] h-[clamp(60px,15vw,80px)] 
                           rounded-full object-cover" />
             </div>
             
             {/* Upload loading state: Centered spinner overlay */}
             {uploading && <div className="absolute inset-0 flex items-center justify-center 
-                             bg-white/80 rounded-full">
+                             bg-background/80 rounded-full">
                 <Loader2 className="w-[clamp(24px,6vw,32px)] h-[clamp(24px,6vw,32px)] 
-                                   animate-spin text-purple-600" />
+                                   animate-spin text-primary" />
               </div>}
             
             {/* Upload hover state: Icon overlay on desktop, always visible hint on mobile */}
             {!uploading && <div className="absolute inset-0 flex items-center justify-center 
-                             bg-white/80 rounded-full opacity-0 group-hover:opacity-100 
+                             bg-background/80 rounded-full opacity-0 group-hover:opacity-100 
                              group-active:opacity-100 transition-opacity duration-200">
                 <Upload className="w-[clamp(24px,6vw,32px)] h-[clamp(24px,6vw,32px)] 
-                                  text-purple-600" />
+                                  text-primary" />
               </div>}
           </div>
         </div>
