@@ -33,6 +33,7 @@ const BookingDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [booking, setBooking] = useState<any>(null);
+  const [addons, setAddons] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -68,6 +69,20 @@ const BookingDetails = () => {
       }
 
       setBooking(bookingData);
+
+      // Fetch addon details if any
+      if (bookingData.addon_ids && bookingData.addon_ids.length > 0) {
+        const { data: addonsData, error: addonsError } = await supabase
+          .from('cleaning_addons')
+          .select('*')
+          .in('id', bookingData.addon_ids);
+
+        if (addonsError) {
+          console.error('Error fetching addons:', addonsError);
+        } else {
+          setAddons(addonsData || []);
+        }
+      }
     } catch (error: any) {
       console.error('Error:', error);
       toast.error('Failed to load booking details');
@@ -278,16 +293,19 @@ const BookingDetails = () => {
               </p>
             </div>
 
-            {booking.addon_ids && booking.addon_ids.length > 0 && (
+            {addons.length > 0 && (
               <>
                 <Separator />
                 <div>
                   <p className="text-xs sm:text-sm text-muted-foreground mb-2">Add-ons</p>
-                  <div className="flex flex-wrap gap-2">
-                    {booking.addon_ids.map((addonId: string) => (
-                      <Badge key={addonId} variant="secondary" className="text-xs">
-                        Add-on
-                      </Badge>
+                  <div className="space-y-2">
+                    {addons.map((addon) => (
+                      <div key={addon.id} className="flex justify-between items-center text-sm">
+                        <span>{addon.name_en}</span>
+                        <span className="font-medium">
+                          {address?.currency === 'EUR' ? '€' : '$'}{Number(addon.price).toFixed(2)}
+                        </span>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -298,7 +316,22 @@ const BookingDetails = () => {
 
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Estimated Total</span>
+                <span className="text-muted-foreground">Package Price</span>
+                <span className="font-medium">
+                  {address?.currency === 'EUR' ? '€' : '$'}{packageInfo?.one_time_price}
+                </span>
+              </div>
+              {addons.length > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Add-ons Total</span>
+                  <span className="font-medium">
+                    {address?.currency === 'EUR' ? '€' : '$'}
+                    {addons.reduce((sum, addon) => sum + Number(addon.price), 0).toFixed(2)}
+                  </span>
+                </div>
+              )}
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Subtotal</span>
                 <span className="font-medium">
                   {address?.currency === 'EUR' ? '€' : '$'}{booking.total_estimate}
                 </span>
