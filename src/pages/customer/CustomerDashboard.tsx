@@ -3,13 +3,37 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, MapPin, CreditCard, User, Search } from "lucide-react";
+import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import MobileNav from "@/components/MobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import AvatarDisplay from "@/components/AvatarDisplay";
+
+const STATUS_COLORS = {
+  pending: "bg-yellow-500",
+  confirmed: "bg-blue-500",
+  on_the_way: "bg-purple-500",
+  arrived: "bg-indigo-500",
+  started: "bg-green-500",
+  completed: "bg-emerald-500",
+  cancelled: "bg-red-500"
+};
+
+const STATUS_LABELS = {
+  pending: "Pending",
+  confirmed: "Confirmed",
+  on_the_way: "On the Way",
+  arrived: "Arrived",
+  started: "In Progress",
+  completed: "Completed",
+  cancelled: "Cancelled"
+};
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
+  const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,6 +61,21 @@ const CustomerDashboard = () => {
       }
 
       setProfile(profileData);
+
+      // Fetch upcoming bookings
+      const { data: bookingsData } = await supabase
+        .from('bookings')
+        .select(`
+          *,
+          customer_addresses(*, cleaning_packages(*)),
+          provider_profiles(*)
+        `)
+        .eq('customer_id', user.id)
+        .in('status', ['pending', 'confirmed', 'on_the_way', 'arrived', 'started'])
+        .order('requested_date', { ascending: true })
+        .limit(5);
+
+      setUpcomingBookings(bookingsData || []);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -157,10 +196,10 @@ const CustomerDashboard = () => {
           </div>
         </div>
 
-        {/* Next Booking - Auto-fit responsive */}
+        {/* Upcoming Bookings - Carousel */}
         <div className="mb-[clamp(20px,5vw,32px)]">
           <div className="flex items-center justify-between mb-[clamp(12px,3vw,16px)]">
-            <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold">Next Booking</h3>
+            <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold">Upcoming Bookings</h3>
             <Button 
               variant="link" 
               className="text-[clamp(12px,3vw,14px)]" 
@@ -169,25 +208,97 @@ const CustomerDashboard = () => {
               View All
             </Button>
           </div>
-          <Card className="border-0 shadow-sm">
-            <CardContent className="pt-[clamp(24px,6vw,32px)] pb-[clamp(24px,6vw,32px)]">
-              <div className="text-center py-[clamp(32px,8vw,48px)]">
-                <Calendar className="w-[clamp(48px,12vw,64px)] h-[clamp(48px,12vw,64px)] 
-                                   mx-auto mb-[clamp(16px,4vw,20px)] text-muted-foreground" />
-                <p className="text-[clamp(13px,3.2vw,16px)] text-muted-foreground 
-                             mb-[clamp(16px,4vw,20px)]">
-                  You haven't booked yet
-                </p>
-                <Button 
-                  onClick={() => navigate('/customer/booking')} 
-                  className="w-full sm:w-auto px-[clamp(24px,6vw,32px)] 
-                           py-[clamp(12px,3vw,16px)] text-[clamp(14px,3.5vw,16px)]"
-                >
-                  Book Now
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+
+          {upcomingBookings.length === 0 ? (
+            <Card className="border-0 shadow-sm">
+              <CardContent className="pt-[clamp(24px,6vw,32px)] pb-[clamp(24px,6vw,32px)]">
+                <div className="text-center py-[clamp(32px,8vw,48px)]">
+                  <Calendar className="w-[clamp(48px,12vw,64px)] h-[clamp(48px,12vw,64px)] 
+                                     mx-auto mb-[clamp(16px,4vw,20px)] text-muted-foreground" />
+                  <p className="text-[clamp(13px,3.2vw,16px)] text-muted-foreground 
+                               mb-[clamp(16px,4vw,20px)]">
+                    You haven't booked yet
+                  </p>
+                  <Button 
+                    onClick={() => navigate('/customer/booking')} 
+                    className="w-full sm:w-auto px-[clamp(24px,6vw,32px)] 
+                             py-[clamp(12px,3vw,16px)] text-[clamp(14px,3.5vw,16px)]"
+                  >
+                    Book Now
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Carousel className="w-full" opts={{ align: "start", loop: false }}>
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {upcomingBookings.map((booking) => (
+                  <CarouselItem key={booking.id} className="pl-2 md:pl-4 basis-[85%] sm:basis-[70%] md:basis-1/2 lg:basis-1/3">
+                    <Card 
+                      className="border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full"
+                      onClick={() => navigate(`/customer/bookings/${booking.id}`)}
+                    >
+                      <CardContent className="p-4 space-y-3">
+                        {/* Status Badge */}
+                        <Badge className={STATUS_COLORS[booking.status as keyof typeof STATUS_COLORS]}>
+                          {STATUS_LABELS[booking.status as keyof typeof STATUS_LABELS]}
+                        </Badge>
+
+                        {/* Date & Time */}
+                        <div>
+                          <p className="font-semibold text-sm sm:text-base line-clamp-1">
+                            {booking.customer_addresses?.label}
+                          </p>
+                          <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                            <Calendar className="w-3 h-3" />
+                            {new Date(booking.requested_date).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </p>
+                          <p className="text-xs text-muted-foreground flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {booking.requested_time}
+                          </p>
+                        </div>
+
+                        {/* Provider */}
+                        {booking.provider_profiles && (
+                          <div className="flex items-center gap-2 pt-2 border-t">
+                            <AvatarDisplay 
+                              userId={booking.provider_profiles.user_id}
+                              size={32}
+                              fallbackText={booking.provider_profiles.full_name.split(' ').map((n: string) => n[0]).join('')}
+                            />
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-xs line-clamp-1">
+                                {booking.provider_profiles.full_name}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {booking.customer_addresses?.cleaning_packages?.package_name}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Price */}
+                        <div className="flex items-center justify-between pt-2 border-t">
+                          <span className="text-xs text-muted-foreground">Total</span>
+                          <span className="font-bold text-primary">
+                            {booking.customer_addresses?.currency === 'EUR' ? '€' : '$'}
+                            {booking.total_final || booking.total_estimate}
+                          </span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden sm:flex -left-4" />
+              <CarouselNext className="hidden sm:flex -right-4" />
+            </Carousel>
+          )}
         </div>
 
         {/* Recommended Providers - Auto-fit responsive */}
