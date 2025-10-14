@@ -85,8 +85,7 @@ const DashboardWelcomeBanner = ({
        - Padding scales from mobile (4vw) to tablet (3vw) for optimal content spacing
        - Border radius adapts to screen size for proportional rounded corners */
     <div className="w-fit mx-[4vw] sm:mx-[3vw] my-0">
-      <div className="bg-white rounded-[clamp(20px,5vw,24px)] border border-gray-200 shadow-sm 
-                      px-[clamp(16px,4vw,24px)] py-[clamp(16px,4.5vw,24px)]">
+      <div className="bg-white rounded-2xl max-w-full ">
         
         {/* Flex container: Adapts layout direction based on content and screen size
             - gap uses clamp() to scale proportionally (12px on small, 20px on larger screens)
@@ -142,49 +141,33 @@ const DashboardWelcomeBanner = ({
               - Responsive sizing using clamp() for proportional scaling
               - Active touch states with group hover for better UX */}
           <div className="relative group cursor-pointer flex-shrink-0 
-                         touch-manipulation active:scale-95 transition-transform" 
-               onClick={handleAvatarClick}>
+                         touch-manipulation active:scale-95 transition-transform" onClick={handleAvatarClick}>
             
             {/* Hidden file input for upload functionality */}
-            <input 
-              ref={fileInputRef} 
-              type="file" 
-              accept="image/*" 
-              onChange={handleImageUpload} 
-              className="hidden" 
-              aria-label="Upload profile picture"
-            />
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" aria-label="Upload profile picture" />
             
             {/* Avatar container: Responsive padding and sizing
                 - Padding scales with viewport for consistent border effect
                 - Minimum 60px size ensures touch target accessibility */}
             <div className="p-[clamp(3px,0.8vw,4px)] rounded-full bg-purple-200">
-              <img 
-                src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} 
-                alt={user.name} 
-                className="w-[clamp(60px,15vw,80px)] h-[clamp(60px,15vw,80px)] 
-                          rounded-full object-cover"
-              />
+              <img src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt={user.name} className="w-[clamp(60px,15vw,80px)] h-[clamp(60px,15vw,80px)] 
+                          rounded-full object-cover" />
             </div>
             
             {/* Upload loading state: Centered spinner overlay */}
-            {uploading && (
-              <div className="absolute inset-0 flex items-center justify-center 
+            {uploading && <div className="absolute inset-0 flex items-center justify-center 
                              bg-white/80 rounded-full">
                 <Loader2 className="w-[clamp(24px,6vw,32px)] h-[clamp(24px,6vw,32px)] 
                                    animate-spin text-purple-600" />
-              </div>
-            )}
+              </div>}
             
             {/* Upload hover state: Icon overlay on desktop, always visible hint on mobile */}
-            {!uploading && (
-              <div className="absolute inset-0 flex items-center justify-center 
+            {!uploading && <div className="absolute inset-0 flex items-center justify-center 
                              bg-white/80 rounded-full opacity-0 group-hover:opacity-100 
                              group-active:opacity-100 transition-opacity duration-200">
                 <Upload className="w-[clamp(24px,6vw,32px)] h-[clamp(24px,6vw,32px)] 
                                   text-purple-600" />
-              </div>
-            )}
+              </div>}
           </div>
         </div>
       </div>
