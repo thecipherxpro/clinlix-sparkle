@@ -98,7 +98,7 @@ const BookingDetails = () => {
     try {
       const { error } = await supabase
         .from('bookings')
-        .update({ status: 'cancelled' })
+        .update({ job_status: 'cancelled' })
         .eq('id', id);
 
       if (error) throw error;

@@ -86,7 +86,7 @@ const MyBookings = () => {
     try {
       const { error } = await supabase
         .from('bookings')
-        .update({ status: 'cancelled' })
+        .update({ job_status: 'cancelled' })
         .eq('id', bookingId);
 
       if (error) throw error;
@@ -99,15 +99,15 @@ const MyBookings = () => {
   };
 
   const activeBookings = bookings.filter(b => 
-    ['pending', 'confirmed', 'on_the_way', 'arrived', 'started'].includes(b.status)
+    ['pending', 'confirmed', 'on_the_way', 'arrived', 'started'].includes(b.job_status)
   );
 
-  const completedBookings = bookings.filter(b => b.status === 'completed');
+  const completedBookings = bookings.filter(b => b.job_status === 'completed');
   
-  const cancelledBookings = bookings.filter(b => b.status === 'cancelled');
+  const cancelledBookings = bookings.filter(b => b.job_status === 'cancelled');
 
   const renderBookingCard = (booking: any) => {
-    const canCancel = ['pending', 'confirmed'].includes(booking.status);
+    const canCancel = ['pending', 'confirmed'].includes(booking.job_status);
     
     return (
       <Card key={booking.id} className="border-0 shadow-sm">
@@ -115,8 +115,8 @@ const MyBookings = () => {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <Badge className={STATUS_COLORS[booking.status as keyof typeof STATUS_COLORS]}>
-                  {STATUS_LABELS[booking.status as keyof typeof STATUS_LABELS]}
+                <Badge className={STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]}>
+                  {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
                 </Badge>
                 {booking.payment_status === 'paid' && (
                   <Badge variant="outline">Paid</Badge>
@@ -243,7 +243,7 @@ const MyBookings = () => {
               </div>
             )}
 
-            {booking.status === 'completed' && !booking.provider_reviews?.length && (
+            {booking.job_status === 'completed' && !booking.provider_reviews?.length && (
               <div className="pt-2">
                 <Button
                   variant="outline"
