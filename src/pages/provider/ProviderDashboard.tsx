@@ -94,6 +94,7 @@ const ProviderDashboard = () => {
         <DashboardWelcomeBanner 
           user={{
             name: profile?.first_name || 'User',
+            role: 'PROVIDER',
             avatarUrl: profile?.avatar_url
           }} 
         />

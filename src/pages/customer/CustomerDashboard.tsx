@@ -106,33 +106,16 @@ const CustomerDashboard = () => {
         <DashboardWelcomeBanner 
           user={{
             name: profile?.first_name || 'User',
+            role: 'CUSTOMER',
             avatarUrl: profile?.avatar_url
           }}
+          onSearchClick={() => navigate('/customer/find-providers')}
         />
       </div>
 
       {/* Mobile-first main container with auto-fit max-width and responsive padding */}
       <main className="w-full max-w-[min(1280px,calc(100%-32px))] mx-auto 
                        px-[clamp(16px,4vw,32px)] py-[clamp(16px,4vw,32px)]">
-
-        {/* Search Bar - Auto-fit with responsive padding */}
-        <Card className="mb-[clamp(20px,5vw,32px)] border-0 shadow-sm">
-          <CardContent className="pt-[clamp(16px,4vw,24px)] pb-[clamp(16px,4vw,24px)]">
-            <div className="relative">
-              <Search className="absolute left-[clamp(12px,3vw,16px)] top-1/2 transform -translate-y-1/2 
-                               text-muted-foreground w-[clamp(16px,4vw,20px)] h-[clamp(16px,4vw,20px)]" />
-              <input
-                type="text"
-                placeholder="Find a provider"
-                className="w-full pl-[clamp(40px,10vw,56px)] pr-[clamp(16px,4vw,20px)] 
-                         py-[clamp(12px,3vw,16px)] rounded-xl border bg-background 
-                         focus:ring-2 focus:ring-primary focus:border-transparent 
-                         outline-none transition-all text-[clamp(14px,3.5vw,16px)]"
-                onClick={() => navigate('/customer/find-providers')}
-              />
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Quick Actions - Auto-fit grid with responsive gaps */}
         <div className="mb-[clamp(20px,5vw,32px)]">
