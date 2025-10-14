@@ -330,7 +330,16 @@ const JobDetail = () => {
     if (!job) return 0;
     const jobAddons = getJobAddons();
     const addonsTotal = jobAddons.reduce((sum, addon) => sum + Number(addon.price), 0);
-    return job.total_estimate + addonsTotal;
+    // total_estimate already includes addons, so we use it directly
+    return Number(job.total_estimate);
+  };
+
+  const getBaseAmount = () => {
+    if (!job) return 0;
+    // Base amount is just the package price (total_estimate - addons)
+    const jobAddons = getJobAddons();
+    const addonsTotal = jobAddons.reduce((sum, addon) => sum + Number(addon.price), 0);
+    return Number(job.total_estimate) - addonsTotal;
   };
 
   const isJobConfirmed = job?.job_status !== "pending" && job?.job_status !== "declined";
@@ -366,9 +375,11 @@ const JobDetail = () => {
   }
 
   const totalWithAddons = calculateTotalWithAddons();
-  const earnings = (totalWithAddons * 0.85).toFixed(2);
-  const platformFee = (totalWithAddons * 0.15).toFixed(2);
+  const baseAmount = getBaseAmount();
   const jobAddons = getJobAddons();
+  const addonsTotal = jobAddons.reduce((sum, addon) => sum + Number(addon.price), 0);
+  const platformFee = (totalWithAddons * 0.15).toFixed(2);
+  const earnings = (totalWithAddons - Number(platformFee)).toFixed(2);
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -514,13 +525,13 @@ const JobDetail = () => {
               <CardContent className="space-y-2.5 sm:space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground text-xs sm:text-sm">Base Amount</span>
-                  <span className="font-medium text-sm sm:text-base">€{job.total_estimate.toFixed(2)}</span>
+                  <span className="font-medium text-sm sm:text-base">€{baseAmount.toFixed(2)}</span>
                 </div>
-                {jobAddons.length > 0 && (
+                {addonsTotal > 0 && (
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground text-xs sm:text-sm">Add-ons</span>
                     <span className="font-medium text-sm sm:text-base">
-                      €{jobAddons.reduce((sum, a) => sum + Number(a.price), 0).toFixed(2)}
+                      €{addonsTotal.toFixed(2)}
                     </span>
                   </div>
                 )}

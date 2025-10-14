@@ -524,6 +524,7 @@ export type Database = {
       }
       provider_wallet: {
         Row: {
+          addon_amount: number | null
           base_amount: number
           booking_id: string
           created_at: string | null
@@ -536,6 +537,7 @@ export type Database = {
           total_earned: number
         }
         Insert: {
+          addon_amount?: number | null
           base_amount: number
           booking_id: string
           created_at?: string | null
@@ -548,6 +550,7 @@ export type Database = {
           total_earned: number
         }
         Update: {
+          addon_amount?: number | null
           base_amount?: number
           booking_id?: string
           created_at?: string | null

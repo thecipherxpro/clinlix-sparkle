@@ -165,8 +165,13 @@ const ProviderWallet = () => {
                         <div className="text-sm text-muted-foreground">
                           {new Date(entry.created_at).toLocaleDateString()}
                         </div>
-                        <div className="flex items-center gap-4 mt-2 text-sm">
+                        <div className="flex flex-wrap items-center gap-3 mt-2 text-sm">
                           <span>Base: €{Number(entry.base_amount).toFixed(2)}</span>
+                          {entry.addon_amount > 0 && (
+                            <span className="text-primary">
+                              +Add-ons: €{Number(entry.addon_amount).toFixed(2)}
+                            </span>
+                          )}
                           {entry.overtime_amount > 0 && (
                             <span className="text-accent">
                               +Overtime: €{Number(entry.overtime_amount).toFixed(2)}
