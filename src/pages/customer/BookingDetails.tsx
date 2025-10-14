@@ -53,8 +53,7 @@ const BookingDetails = () => {
         .select(`
           *,
           customer_addresses(*, cleaning_packages(*)),
-          provider_profiles(*),
-          cleaning_addons(*)
+          provider_profiles(*)
         `)
         .eq('id', id)
         .single();
