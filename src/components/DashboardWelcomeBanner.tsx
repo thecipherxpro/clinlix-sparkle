@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 interface DashboardWelcomeBannerProps {
   user: {
     name: string;
@@ -110,30 +111,17 @@ const DashboardWelcomeBanner = ({
             {/* Status badges: Responsive spacing with clamp() for consistent gaps
                 - Touch-friendly: Minimum 44px height maintained for tap targets
                 - flex-wrap ensures proper stacking on narrow screens */}
-            <div className="flex items-center gap-[clamp(8px,2vw,12px)] 
-                           mt-[clamp(10px,2.5vw,16px)] flex-wrap">
+            <div className="flex items-center gap-2 sm:gap-3 mt-3 sm:mt-4 flex-wrap">
               
               {/* Role badge: Proportional sizing with viewport units */}
-              <div className="flex items-center gap-[clamp(4px,1vw,6px)] 
-                             py-[clamp(4px,1vw,6px)] min-h-[44px]">
-                <span className="w-[clamp(8px,2vw,12px)] h-[clamp(8px,2vw,12px)] 
-                               bg-muted rounded-full flex-shrink-0"></span>
-                <span className="font-semibold text-muted-foreground uppercase tracking-wide 
-                               text-[clamp(9px,2.2vw,11px)]">
-                  {user.role} PORTAL
-                </span>
-              </div>
+              <Badge variant="secondary" className="text-[clamp(9px,2.2vw,11px)] sm:text-xs px-2.5 sm:px-3 py-1.5 sm:py-2 min-h-[44px] sm:min-h-0 uppercase tracking-wide">
+                {user.role} PORTAL
+              </Badge>
               
               {/* Date badge: Matches role badge styling for consistency */}
-              <div className="flex items-center gap-[clamp(4px,1vw,6px)] 
-                             py-[clamp(4px,1vw,6px)] min-h-[44px]">
-                <span className="w-[clamp(8px,2vw,12px)] h-[clamp(8px,2vw,12px)] 
-                               bg-primary rounded-full flex-shrink-0"></span>
-                <span className="font-semibold text-muted-foreground 
-                               text-[clamp(9px,2.2vw,11px)]">
-                  {formattedDate}
-                </span>
-              </div>
+              <Badge variant="outline" className="text-[clamp(9px,2.2vw,11px)] sm:text-xs px-2.5 sm:px-3 py-1.5 sm:py-2 min-h-[44px] sm:min-h-0">
+                {formattedDate}
+              </Badge>
             </div>
           </div>
           
