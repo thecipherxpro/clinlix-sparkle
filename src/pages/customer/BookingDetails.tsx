@@ -105,7 +105,7 @@ const BookingDetails = () => {
 
   if (!booking) return null;
 
-  const canCancel = ['pending', 'confirmed'].includes(booking.status);
+  const canCancel = ['pending', 'confirmed'].includes(booking.job_status);
   const address = booking.customer_addresses;
   const provider = booking.provider_profiles;
   const packageInfo = address?.cleaning_packages;
@@ -131,10 +131,10 @@ const BookingDetails = () => {
         {/* Status Card */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between">
               <div>
-                <Badge className={`${STATUS_COLORS[booking.status as keyof typeof STATUS_COLORS]} mb-2`}>
-                  {STATUS_LABELS[booking.status as keyof typeof STATUS_LABELS]}
+                <Badge className={`${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]} mb-2`}>
+                  {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
                 </Badge>
                 <CardTitle className="text-xl sm:text-2xl">{address?.label}</CardTitle>
                 <p className="text-sm text-muted-foreground mt-1">
@@ -348,7 +348,7 @@ const BookingDetails = () => {
           </Card>
         )}
 
-        {booking.status === 'completed' && (
+        {booking.job_status === 'completed' && (
           <Card className="border-0 shadow-sm">
             <CardContent className="pt-6">
               <Button
