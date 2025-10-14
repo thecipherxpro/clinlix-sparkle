@@ -1,28 +1,19 @@
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
 interface DashboardWelcomeBannerProps {
   user: {
     name: string;
-    role: string;
     avatarUrl?: string;
   };
 }
-const DashboardWelcomeBanner = ({
-  user
-}: DashboardWelcomeBannerProps) => {
+
+const DashboardWelcomeBanner = ({ user }: DashboardWelcomeBannerProps) => {
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const today = new Date();
-  const month = today.toLocaleString("en-US", {
-    month: "short"
-  }).toUpperCase();
-  const day = today.getDate();
-  const year = today.getFullYear();
-  const formattedDate = `${month}, ${day} /${year}`;
+
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -80,85 +71,54 @@ const DashboardWelcomeBanner = ({
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
+
   return (
-    /* Mobile-first container: Full width with responsive padding and margins
-       - Uses viewport-relative margins for consistent edge spacing across devices
-       - Padding scales from mobile (4vw) to tablet (3vw) for optimal content spacing
-       - Border radius adapts to screen size for proportional rounded corners */
-    <div className="w-fit mx-[4vw] sm:mx-[3vw] my-0">
-      <div className="bg-card rounded-2xl max-w-full border shadow-sm p-6">
-        
-        {/* Flex container: Adapts layout direction based on content and screen size
-            - Stacks vertically on mobile, side-by-side on tablet+
-            - items-center on mobile for centered avatar, items-start on larger screens */}
-        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4 sm:gap-6">
+    <div className="w-full bg-card rounded-2xl p-6 shadow-sm border">
+      <div className="flex items-center justify-between gap-4">
+        {/* Left: Welcome Text */}
+        <div className="flex-1 min-w-0">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground leading-tight">
+            Welcome
+          </h1>
+          <p className="text-lg sm:text-xl text-muted-foreground mt-1">
+            {user.name}
+          </p>
+        </div>
+
+        {/* Right: Avatar with Upload */}
+        <div 
+          className="relative group cursor-pointer flex-shrink-0 touch-manipulation active:scale-95 transition-transform"
+          onClick={handleAvatarClick}
+        >
+          <input 
+            ref={fileInputRef} 
+            type="file" 
+            accept="image/*" 
+            onChange={handleImageUpload} 
+            className="hidden" 
+            aria-label="Upload profile picture" 
+          />
           
-          {/* Content section: Flexible width that grows to fill available space
-              - min-w-0 prevents flex item overflow issues with text truncation
-              - text-center on mobile, text-left on larger screens */}
-          <div className="min-w-0 flex-1 text-center sm:text-left w-full sm:w-auto">
+          <div className="relative">
+            <img 
+              src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} 
+              alt={user.name} 
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-background shadow-md" 
+            />
             
-            {/* Typography: Using clamp() for fluid, responsive text scaling
-                - Welcome text: scales from 11px to 14px
-                - Name heading: scales from 24px (mobile) to 36px (tablet) */}
-            <p className="text-[clamp(11px,2.8vw,14px)] text-muted-foreground leading-tight">
-              Welcome back,
-            </p>
-            <h1 className="text-[clamp(24px,6.5vw,36px)] font-bold text-foreground truncate 
-                           leading-[1.2] mt-[clamp(2px,0.5vw,4px)]">
-              {user.name}!
-            </h1>
+            {/* Upload loading state */}
+            {uploading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full">
+                <Loader2 className="w-6 h-6 animate-spin text-primary" />
+              </div>
+            )}
             
-            {/* Status badges: Responsive spacing with clamp() for consistent gaps
-                - Touch-friendly: Minimum 44px height maintained for tap targets
-                - flex-wrap ensures proper stacking on narrow screens
-                - justify-center on mobile, justify-start on larger screens */}
-            <div className="flex items-center justify-center sm:justify-start gap-2 sm:gap-3 mt-3 sm:mt-4 flex-wrap">
-              
-              {/* Role badge: Proportional sizing with viewport units */}
-              <Badge variant="secondary" className="text-[clamp(9px,2.2vw,11px)] sm:text-xs px-2.5 sm:px-3 py-1.5 sm:py-2 min-h-[44px] sm:min-h-0 uppercase tracking-wide">
-                {user.role} PORTAL
-              </Badge>
-              
-              {/* Date badge: Matches role badge styling for consistency */}
-              <Badge variant="outline" className="text-[clamp(9px,2.2vw,11px)] sm:text-xs px-2.5 sm:px-3 py-1.5 sm:py-2 min-h-[44px] sm:min-h-0">
-                {formattedDate}
-              </Badge>
-            </div>
-          </div>
-          
-          {/* Avatar section: Touch-optimized with 44px+ tap target
-              - Responsive sizing using clamp() for proportional scaling
-              - Active touch states with group hover for better UX
-              - Positioned above content on mobile, right side on larger screens */}
-          <div className="relative group cursor-pointer flex-shrink-0 order-first sm:order-last
-                         touch-manipulation active:scale-95 transition-transform" onClick={handleAvatarClick}>
-            
-            {/* Hidden file input for upload functionality */}
-            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" aria-label="Upload profile picture" />
-            
-            {/* Avatar container: Responsive padding and sizing
-                - Padding scales with viewport for consistent border effect
-                - Minimum 60px size ensures touch target accessibility */}
-            <div className="p-[clamp(3px,0.8vw,4px)] rounded-full bg-primary/20">
-              <img src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt={user.name} className="w-[clamp(60px,15vw,80px)] h-[clamp(60px,15vw,80px)] 
-                          rounded-full object-cover" />
-            </div>
-            
-            {/* Upload loading state: Centered spinner overlay */}
-            {uploading && <div className="absolute inset-0 flex items-center justify-center 
-                             bg-background/80 rounded-full">
-                <Loader2 className="w-[clamp(24px,6vw,32px)] h-[clamp(24px,6vw,32px)] 
-                                   animate-spin text-primary" />
-              </div>}
-            
-            {/* Upload hover state: Icon overlay on desktop, always visible hint on mobile */}
-            {!uploading && <div className="absolute inset-0 flex items-center justify-center 
-                             bg-background/80 rounded-full opacity-0 group-hover:opacity-100 
-                             group-active:opacity-100 transition-opacity duration-200">
-                <Upload className="w-[clamp(24px,6vw,32px)] h-[clamp(24px,6vw,32px)] 
-                                  text-primary" />
-              </div>}
+            {/* Upload hover state */}
+            {!uploading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <Upload className="w-5 h-5 text-primary" />
+              </div>
+            )}
           </div>
         </div>
       </div>

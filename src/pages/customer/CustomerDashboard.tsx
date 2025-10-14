@@ -106,7 +106,6 @@ const CustomerDashboard = () => {
         <DashboardWelcomeBanner 
           user={{
             name: profile?.first_name || 'User',
-            role: 'CUSTOMER',
             avatarUrl: profile?.avatar_url
           }}
         />
