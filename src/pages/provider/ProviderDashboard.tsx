@@ -193,40 +193,36 @@ const ProviderDashboard = () => {
               title="View Pending Jobs"
               description="Review new job requests"
               value={`${stats.pendingJobs} Pending`}
-              icon={<Briefcase className="w-5 h-5 sm:w-6 sm:h-6" />}
+              icon={<Briefcase className="w-4 h-4 sm:w-5 sm:h-5" />}
               heroColor="#fef4e2"
               onClick={() => navigate("/provider/jobs")}
-              className="min-h-[140px] sm:min-h-[160px]"
             />
             
             <JobCard
               title="Manage Schedule"
               description="Set your availability"
               value="Available"
-              icon={<Calendar className="w-5 h-5 sm:w-6 sm:h-6" />}
+              icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />}
               heroColor="#e0f2fe"
               onClick={() => navigate("/provider/schedule")}
-              className="min-h-[140px] sm:min-h-[160px]"
             />
             
             <JobCard
               title="Check Earnings"
               description="View payment history"
               value={`€${stats.monthlyEarnings.toFixed(0)}`}
-              icon={<DollarSign className="w-5 h-5 sm:w-6 sm:h-6" />}
+              icon={<DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />}
               heroColor="#dcfce7"
               onClick={() => navigate("/provider/wallet")}
-              className="min-h-[140px] sm:min-h-[160px]"
             />
             
             <JobCard
               title="Update Profile"
               description="Edit your information"
               value="Profile"
-              icon={<User className="w-5 h-5 sm:w-6 sm:h-6" />}
+              icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />}
               heroColor="#fae8ff"
               onClick={() => navigate("/provider/profile")}
-              className="min-h-[140px] sm:min-h-[160px]"
             />
           </div>
         </div>

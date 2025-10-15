@@ -24,7 +24,7 @@ export const JobCard: React.FC<JobCardProps> = ({
     <article
       onClick={onClick}
       className={cn(
-        "mx-auto w-full max-w-[300px] bg-card rounded-2xl p-2 text-foreground",
+        "w-full bg-card rounded-xl p-1.5 text-foreground",
         "transition-all duration-300 hover:shadow-lg",
         onClick && "cursor-pointer",
         className
@@ -32,15 +32,15 @@ export const JobCard: React.FC<JobCardProps> = ({
     >
       {/* Hero Section */}
       <section 
-        className="rounded-lg rounded-b-none p-6 text-sm"
+        className="rounded-lg rounded-b-none p-3 sm:p-4 text-xs"
         style={{ backgroundColor: heroColor }}
       >
-        <header className="flex justify-between items-center flex-row gap-4 font-bold">
-          <span>{value || '$150/hr'}</span>
+        <header className="flex justify-between items-center flex-row gap-2 font-bold">
+          <span className="text-[10px] sm:text-xs">{value || '$150/hr'}</span>
           <div className="card__icon">
             <svg 
-              height={20} 
-              width={20} 
+              height={14} 
+              width={14} 
               stroke="currentColor" 
               strokeWidth="1.5" 
               viewBox="0 0 24 24" 
@@ -54,31 +54,24 @@ export const JobCard: React.FC<JobCardProps> = ({
             </svg>
           </div>
         </header>
-        <p className="my-8 text-[2rem] font-semibold pr-8 leading-tight">
+        <p className="my-3 sm:my-4 text-base sm:text-lg md:text-xl font-semibold pr-2 sm:pr-4 leading-tight">
           {title}
         </p>
       </section>
 
       {/* Footer */}
-      <footer className="flex flex-col min-[340px]:flex-row justify-start min-[340px]:justify-between items-start min-[340px]:items-center gap-4 p-3 font-bold text-sm">
-        <div className="flex justify-start items-center gap-3">
+      <footer className="flex flex-col xs:flex-row justify-start xs:justify-between items-start xs:items-center gap-2 sm:gap-3 p-2 sm:p-2.5 text-xs">
+        <div className="flex justify-start items-center gap-2">
           <div className="flex-shrink-0">
-            {icon || (
-              <svg height={35} width={28} viewBox="0 0 250 250">
-                <path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027" />
-                <path fill="#34A853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1" />
-                <path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782" />
-                <path fill="#EB4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251" />
-              </svg>
-            )}
+            {icon}
           </div>
           <div>
-            <p className="font-bold text-sm leading-tight">
+            <p className="font-medium text-[10px] sm:text-xs leading-tight">
               {description}
             </p>
           </div>
         </div>
-        <button className="w-full min-[340px]:w-max font-normal border-none cursor-pointer text-center py-2 px-5 rounded-2xl bg-foreground text-background text-base hover:opacity-90 transition-opacity">
+        <button className="w-full xs:w-auto font-normal border-none cursor-pointer text-center py-1.5 px-3 sm:px-4 rounded-lg bg-foreground text-background text-[10px] sm:text-xs hover:opacity-90 transition-opacity">
           view
         </button>
       </footer>
