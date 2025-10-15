@@ -60,19 +60,10 @@ export const JobCard: React.FC<JobCardProps> = ({
       </section>
 
       {/* Footer */}
-      <footer className="flex flex-col xs:flex-row justify-start xs:justify-between items-start xs:items-center gap-2 sm:gap-3 p-2 sm:p-2.5 text-xs">
-        <div className="flex justify-start items-center gap-2">
-          <div className="flex-shrink-0">
-            {icon}
-          </div>
-          <div>
-            <p className="font-medium text-[10px] sm:text-xs leading-tight">
-              {description}
-            </p>
-          </div>
-        </div>
-        <button className="w-full xs:w-auto font-normal border-none cursor-pointer text-center py-1.5 px-3 sm:px-4 rounded-lg bg-foreground text-background text-[10px] sm:text-xs hover:opacity-90 transition-opacity">
-          view
+      <footer className="flex justify-center items-center p-2 sm:p-2.5">
+        <button className="w-full font-normal border-none cursor-pointer text-center py-1.5 px-3 sm:px-4 rounded-lg bg-foreground text-background text-[10px] sm:text-xs hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+          {icon}
+          <span>view</span>
         </button>
       </footer>
     </article>
