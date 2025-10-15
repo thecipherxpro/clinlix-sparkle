@@ -8,7 +8,7 @@ import {
   CardHeader as UICardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Card, CardHeader, CardFooter, Button } from "@heroui/react";
+import { Card, CardHeader, CardFooter, Button, Image } from "@heroui/react";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -189,14 +189,15 @@ const ProviderDashboard = () => {
         <div>
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
-            <Card isFooterBlurred className="w-full h-[300px] relative overflow-hidden">
+            <Card isFooterBlurred className="w-full h-[300px]">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
                 <p className="text-tiny text-white/60 uppercase font-bold">Quick Access</p>
                 <h4 className="text-white font-medium text-2xl">Jobs</h4>
               </CardHeader>
-              <img
+              <Image
+                removeWrapper
                 alt="Card background"
-                className="absolute inset-0 z-0 w-full h-full object-cover"
+                className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
                 src="https://i.postimg.cc/3wgQwkjQ/Splash-New.png"
               />
               <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
@@ -216,14 +217,15 @@ const ProviderDashboard = () => {
               </CardFooter>
             </Card>
 
-            <Card isFooterBlurred className="w-full h-[300px] relative overflow-hidden">
+            <Card isFooterBlurred className="w-full h-[300px]">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
                 <p className="text-tiny text-white/60 uppercase font-bold">Calendar</p>
                 <h4 className="text-white font-medium text-2xl">Schedule</h4>
               </CardHeader>
-              <img
+              <Image
+                removeWrapper
                 alt="Card background"
-                className="absolute inset-0 z-0 w-full h-full object-cover"
+                className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
                 src="https://heroui.com/images/card-example-4.jpeg"
               />
               <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
@@ -243,14 +245,15 @@ const ProviderDashboard = () => {
               </CardFooter>
             </Card>
 
-            <Card isFooterBlurred className="w-full h-[300px] relative overflow-hidden">
+            <Card isFooterBlurred className="w-full h-[300px]">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
                 <p className="text-tiny text-white/60 uppercase font-bold">Finances</p>
                 <h4 className="text-white font-medium text-2xl">Wallet</h4>
               </CardHeader>
-              <img
+              <Image
+                removeWrapper
                 alt="Card background"
-                className="absolute inset-0 z-0 w-full h-full object-cover"
+                className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
                 src="https://heroui.com/images/card-example-4.jpeg"
               />
               <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
@@ -270,14 +273,15 @@ const ProviderDashboard = () => {
               </CardFooter>
             </Card>
 
-            <Card isFooterBlurred className="w-full h-[300px] relative overflow-hidden">
+            <Card isFooterBlurred className="w-full h-[300px]">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
                 <p className="text-tiny text-white/60 uppercase font-bold">Settings</p>
                 <h4 className="text-white font-medium text-2xl">Profile</h4>
               </CardHeader>
-              <img
+              <Image
+                removeWrapper
                 alt="Card background"
-                className="absolute inset-0 z-0 w-full h-full object-cover"
+                className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
                 src="https://heroui.com/images/card-example-4.jpeg"
               />
               <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
