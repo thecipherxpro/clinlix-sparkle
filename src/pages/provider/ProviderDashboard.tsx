@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card as UICard, CardContent, CardDescription, CardHeader as UICardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardFooter, Image, Button } from "@heroui/react";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import ActionCard from "@/components/ActionCard";
-import { Button } from "@/components/ui/button";
-import { Image } from "@heroui/react";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
 const ProviderDashboard = () => {
   const navigate = useNavigate();
@@ -116,14 +115,14 @@ const ProviderDashboard = () => {
         </div>
 
         {/* Professional Stats Card - Auto-fit responsive */}
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-card via-card to-primary/5 
+        <UICard className="border-0 shadow-lg bg-gradient-to-br from-card via-card to-primary/5 
                        mb-[clamp(20px,5vw,32px)]">
-          <CardHeader className="p-[clamp(16px,4vw,24px)]">
+          <UICardHeader className="p-[clamp(16px,4vw,24px)]">
             <CardTitle className="text-[clamp(20px,5vw,28px)]">Today's Overview</CardTitle>
             <CardDescription className="text-[clamp(12px,3vw,14px)]">
               Your current statistics and earnings
             </CardDescription>
-          </CardHeader>
+          </UICardHeader>
           <CardContent className="px-[clamp(16px,4vw,24px)] pb-[clamp(16px,4vw,24px)]">
             <div className="grid grid-cols-3 gap-[clamp(12px,3vw,24px)]">
               {/* Pending Jobs */}
@@ -160,7 +159,7 @@ const ProviderDashboard = () => {
               </div>
             </div>
           </CardContent>
-        </Card>
+        </UICard>
 
         {/* Quick Actions - Hero UI Cards with Blurred Footer */}
         <div>
@@ -168,9 +167,9 @@ const ProviderDashboard = () => {
             Quick Actions
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
-            <Card className="w-full h-[300px] relative overflow-hidden">
+            <Card isFooterBlurred className="w-full h-[300px]">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/80 uppercase font-bold">Quick Access</p>
+                <p className="text-tiny text-white/60 uppercase font-bold">Quick Access</p>
                 <h4 className="text-white font-medium text-2xl">Jobs</h4>
               </CardHeader>
               <Image
@@ -179,24 +178,26 @@ const ProviderDashboard = () => {
                 className="z-0 w-full h-full object-cover"
                 src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80"
               />
-              <CardFooter className="absolute bg-white/30 backdrop-blur-md bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                 <div>
-                  <p className="text-foreground text-tiny font-semibold">View Pending</p>
-                  <p className="text-foreground/80 text-tiny">Manage requests</p>
+                  <p className="text-black text-tiny">View Pending</p>
+                  <p className="text-black text-tiny">Manage requests</p>
                 </div>
                 <Button 
                   className="text-tiny" 
+                  color="primary" 
+                  radius="full" 
                   size="sm"
-                  onClick={() => navigate('/provider/jobs')}
+                  onPress={() => navigate('/provider/jobs')}
                 >
                   Open
                 </Button>
               </CardFooter>
             </Card>
 
-            <Card className="w-full h-[300px] relative overflow-hidden">
+            <Card isFooterBlurred className="w-full h-[300px]">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/80 uppercase font-bold">Calendar</p>
+                <p className="text-tiny text-white/60 uppercase font-bold">Calendar</p>
                 <h4 className="text-white font-medium text-2xl">Schedule</h4>
               </CardHeader>
               <Image
@@ -205,24 +206,26 @@ const ProviderDashboard = () => {
                 className="z-0 w-full h-full object-cover"
                 src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80"
               />
-              <CardFooter className="absolute bg-white/30 backdrop-blur-md bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                 <div>
-                  <p className="text-foreground text-tiny font-semibold">Set Times</p>
-                  <p className="text-foreground/80 text-tiny">Manage availability</p>
+                  <p className="text-black text-tiny">Set Times</p>
+                  <p className="text-black text-tiny">Manage availability</p>
                 </div>
                 <Button 
                   className="text-tiny" 
+                  color="primary" 
+                  radius="full" 
                   size="sm"
-                  onClick={() => navigate('/provider/schedule')}
+                  onPress={() => navigate('/provider/schedule')}
                 >
                   Open
                 </Button>
               </CardFooter>
             </Card>
 
-            <Card className="w-full h-[300px] relative overflow-hidden">
+            <Card isFooterBlurred className="w-full h-[300px]">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/80 uppercase font-bold">Finances</p>
+                <p className="text-tiny text-white/60 uppercase font-bold">Finances</p>
                 <h4 className="text-white font-medium text-2xl">Wallet</h4>
               </CardHeader>
               <Image
@@ -231,24 +234,26 @@ const ProviderDashboard = () => {
                 className="z-0 w-full h-full object-cover"
                 src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80"
               />
-              <CardFooter className="absolute bg-white/30 backdrop-blur-md bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                 <div>
-                  <p className="text-foreground text-tiny font-semibold">View Earnings</p>
-                  <p className="text-foreground/80 text-tiny">Track payments</p>
+                  <p className="text-black text-tiny">View Earnings</p>
+                  <p className="text-black text-tiny">Track payments</p>
                 </div>
                 <Button 
                   className="text-tiny" 
+                  color="primary" 
+                  radius="full" 
                   size="sm"
-                  onClick={() => navigate('/provider/wallet')}
+                  onPress={() => navigate('/provider/wallet')}
                 >
                   Open
                 </Button>
               </CardFooter>
             </Card>
 
-            <Card className="w-full h-[300px] relative overflow-hidden">
+            <Card isFooterBlurred className="w-full h-[300px]">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/80 uppercase font-bold">Settings</p>
+                <p className="text-tiny text-white/60 uppercase font-bold">Settings</p>
                 <h4 className="text-white font-medium text-2xl">Profile</h4>
               </CardHeader>
               <Image
@@ -257,15 +262,17 @@ const ProviderDashboard = () => {
                 className="z-0 w-full h-full object-cover"
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
               />
-              <CardFooter className="absolute bg-white/30 backdrop-blur-md bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                 <div>
-                  <p className="text-foreground text-tiny font-semibold">Edit Info</p>
-                  <p className="text-foreground/80 text-tiny">Update details</p>
+                  <p className="text-black text-tiny">Edit Info</p>
+                  <p className="text-black text-tiny">Update details</p>
                 </div>
                 <Button 
                   className="text-tiny" 
+                  color="primary" 
+                  radius="full" 
                   size="sm"
-                  onClick={() => navigate('/provider/profile')}
+                  onPress={() => navigate('/provider/profile')}
                 >
                   Open
                 </Button>
