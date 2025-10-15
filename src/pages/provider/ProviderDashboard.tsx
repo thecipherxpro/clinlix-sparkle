@@ -188,7 +188,7 @@ const ProviderDashboard = () => {
         {/* Quick Actions - Job Cards */}
         <div>
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
-          <div className="grid grid-cols-1 xs:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-[clamp(12px,3vw,16px)] auto-rows-fr">
             <JobCard
               title="View Pending Jobs"
               description="Review new job requests"

@@ -24,15 +24,16 @@ export const JobCard: React.FC<JobCardProps> = ({
     <article
       onClick={onClick}
       className={cn(
-        "w-full bg-card rounded-xl p-1.5 text-foreground",
+        "w-full h-full bg-card rounded-xl p-1.5 text-foreground",
         "transition-all duration-300 hover:shadow-lg",
+        "flex flex-col",
         onClick && "cursor-pointer",
         className
       )}
     >
       {/* Hero Section */}
       <section 
-        className="rounded-lg rounded-b-none p-3 sm:p-4 text-xs"
+        className="rounded-lg rounded-b-none p-3 sm:p-4 text-xs flex-1 flex flex-col"
         style={{ backgroundColor: heroColor }}
       >
         <header className="flex justify-between items-center flex-row gap-2 font-bold">
@@ -54,7 +55,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             </svg>
           </div>
         </header>
-        <p className="my-3 sm:my-4 text-base sm:text-lg md:text-xl font-semibold pr-2 sm:pr-4 leading-tight">
+        <p className="flex-1 flex items-center my-3 sm:my-4 text-base sm:text-lg md:text-xl font-semibold pr-2 sm:pr-4 leading-tight">
           {title}
         </p>
       </section>
