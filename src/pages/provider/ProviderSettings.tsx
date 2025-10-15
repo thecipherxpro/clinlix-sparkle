@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+import { Select, SelectItem, Switch } from "@heroui/react";
 import { ArrowLeft, Key, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
@@ -162,8 +161,8 @@ const ProviderSettings = () => {
                 <p className="text-sm text-muted-foreground">Allow customers to book you regularly</p>
               </div>
               <Switch
-                checked={profile?.accept_recurring ?? false}
-                onCheckedChange={(checked) => updateSetting('accept_recurring', checked)}
+                isSelected={profile?.accept_recurring ?? false}
+                onValueChange={(checked) => updateSetting('accept_recurring', checked)}
               />
             </div>
             <div className="flex items-center justify-between">
@@ -172,8 +171,8 @@ const ProviderSettings = () => {
                 <p className="text-sm text-muted-foreground">Show as available for new bookings</p>
               </div>
               <Switch
-                checked={profile?.available_status ?? true}
-                onCheckedChange={(checked) => updateSetting('available_status', checked)}
+                isSelected={profile?.available_status ?? true}
+                onValueChange={(checked) => updateSetting('available_status', checked)}
               />
             </div>
           </CardContent>
@@ -192,8 +191,8 @@ const ProviderSettings = () => {
                 <p className="text-sm text-muted-foreground">Receive job updates via email</p>
               </div>
               <Switch
-                checked={profile?.notifications_enabled ?? true}
-                onCheckedChange={(checked) => updateSetting('notifications_enabled', checked)}
+                isSelected={profile?.notifications_enabled ?? true}
+                onValueChange={(checked) => updateSetting('notifications_enabled', checked)}
               />
             </div>
             <div className="flex items-center justify-between">
@@ -202,8 +201,8 @@ const ProviderSettings = () => {
                 <p className="text-sm text-muted-foreground">Receive job updates via SMS</p>
               </div>
               <Switch
-                checked={profile?.sms_notifications ?? true}
-                onCheckedChange={(checked) => updateSetting('sms_notifications', checked)}
+                isSelected={profile?.sms_notifications ?? true}
+                onValueChange={(checked) => updateSetting('sms_notifications', checked)}
               />
             </div>
           </CardContent>
@@ -240,16 +239,16 @@ const ProviderSettings = () => {
           </CardHeader>
           <CardContent>
             <Select
-              value={profile?.language || 'en'}
-              onValueChange={(value) => updateSetting('language', value)}
+              label="Select Language"
+              selectedKeys={[profile?.language || 'en']}
+              onSelectionChange={(keys) => {
+                const value = Array.from(keys)[0] as string;
+                updateSetting('language', value);
+              }}
+              className="w-full"
             >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en">🇬🇧 English</SelectItem>
-                <SelectItem value="pt">🇵🇹 Portuguese</SelectItem>
-              </SelectContent>
+              <SelectItem key="en">🇬🇧 English</SelectItem>
+              <SelectItem key="pt">🇵🇹 Portuguese</SelectItem>
             </Select>
           </CardContent>
         </Card>

@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectItem } from "@heroui/react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { ArrowLeft, User, Star, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
@@ -230,16 +230,16 @@ const ProviderProfilePage = () => {
             <div className="space-y-2">
               <Label htmlFor="country">Country</Label>
               <Select
-                value={profile?.country || 'Portugal'}
-                onValueChange={(value) => setProfile({...profile, country: value})}
+                label="Select Country"
+                selectedKeys={[profile?.country || 'Portugal']}
+                onSelectionChange={(keys) => {
+                  const value = Array.from(keys)[0] as string;
+                  setProfile({...profile, country: value});
+                }}
+                className="w-full"
               >
-                <SelectTrigger className="touch-target">
-                  <SelectValue placeholder="Select country" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Portugal">Portugal</SelectItem>
-                  <SelectItem value="Canada">Canada</SelectItem>
-                </SelectContent>
+                <SelectItem key="Portugal">Portugal</SelectItem>
+                <SelectItem key="Canada">Canada</SelectItem>
               </Select>
             </div>
             <div className="space-y-2">

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectItem } from "@heroui/react";
 import { ArrowLeft, User, LogOut, Save } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
@@ -212,20 +212,20 @@ const Profile = () => {
                 <div>
                   <Label>Country *</Label>
                   <Select
-                    value={formData.country}
-                    onValueChange={(value) => setFormData({
-                      ...formData,
-                      country: value,
-                      currency: value === 'Portugal' ? 'EUR' : 'CAD'
-                    })}
+                    label="Select Country"
+                    selectedKeys={[formData.country]}
+                    onSelectionChange={(keys) => {
+                      const value = Array.from(keys)[0] as string;
+                      setFormData({
+                        ...formData,
+                        country: value,
+                        currency: value === 'Portugal' ? 'EUR' : 'CAD'
+                      });
+                    }}
+                    className="w-full"
                   >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Portugal">🇵🇹 Portugal</SelectItem>
-                      <SelectItem value="Canada">🇨🇦 Canada</SelectItem>
-                    </SelectContent>
+                    <SelectItem key="Portugal">🇵🇹 Portugal</SelectItem>
+                    <SelectItem key="Canada">🇨🇦 Canada</SelectItem>
                   </Select>
                 </div>
                 <div>
@@ -241,16 +241,16 @@ const Profile = () => {
               <div>
                 <Label>Language *</Label>
                 <Select
-                  value={formData.language}
-                  onValueChange={(value) => setFormData({ ...formData, language: value })}
+                  label="Select Language"
+                  selectedKeys={[formData.language]}
+                  onSelectionChange={(keys) => {
+                    const value = Array.from(keys)[0] as string;
+                    setFormData({ ...formData, language: value });
+                  }}
+                  className="w-full"
                 >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="en">🇬🇧 English</SelectItem>
-                    <SelectItem value="pt">🇵🇹 Portuguese</SelectItem>
-                  </SelectContent>
+                  <SelectItem key="en">🇬🇧 English</SelectItem>
+                  <SelectItem key="pt">🇵🇹 Portuguese</SelectItem>
                 </Select>
               </div>
 
