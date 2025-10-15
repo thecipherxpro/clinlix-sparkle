@@ -8,7 +8,7 @@ import {
   CardHeader as UICardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Card, CardHeader, CardFooter, Button, Image } from "@heroui/react";
+import { Card, CardFooter, Image, Button } from "@heroui/react";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -189,27 +189,22 @@ const ProviderDashboard = () => {
         <div>
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
-            <Card isFooterBlurred className="w-full h-[300px]">
-              <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/60 uppercase font-bold">Quick Access</p>
-                <h4 className="text-white font-medium text-2xl">Jobs</h4>
-              </CardHeader>
+            <Card isFooterBlurred className="border-none" radius="lg">
               <Image
-                removeWrapper
-                alt="Card background"
-                className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
+                alt="Jobs"
+                className="object-cover"
+                height={300}
                 src="https://i.postimg.cc/3wgQwkjQ/Splash-New.png"
+                width="100%"
               />
-              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
-                <div>
-                  <p className="text-black text-tiny">View Pending</p>
-                  <p className="text-black text-tiny">Manage requests</p>
-                </div>
+              <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                <p className="text-tiny text-white/80">View pending requests</p>
                 <Button
-                  className="text-tiny"
-                  color="primary"
-                  radius="full"
+                  className="text-tiny text-white bg-black/20"
+                  color="default"
+                  radius="lg"
                   size="sm"
+                  variant="flat"
                   onPress={() => navigate("/provider/jobs")}
                 >
                   Open
@@ -217,27 +212,22 @@ const ProviderDashboard = () => {
               </CardFooter>
             </Card>
 
-            <Card isFooterBlurred className="w-full h-[300px]">
-              <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/60 uppercase font-bold">Calendar</p>
-                <h4 className="text-white font-medium text-2xl">Schedule</h4>
-              </CardHeader>
+            <Card isFooterBlurred className="border-none" radius="lg">
               <Image
-                removeWrapper
-                alt="Card background"
-                className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
+                alt="Schedule"
+                className="object-cover"
+                height={300}
                 src="https://heroui.com/images/card-example-4.jpeg"
+                width="100%"
               />
-              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
-                <div>
-                  <p className="text-black text-tiny">Set Times</p>
-                  <p className="text-black text-tiny">Manage availability</p>
-                </div>
+              <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                <p className="text-tiny text-white/80">Manage availability</p>
                 <Button
-                  className="text-tiny"
-                  color="primary"
-                  radius="full"
+                  className="text-tiny text-white bg-black/20"
+                  color="default"
+                  radius="lg"
                   size="sm"
+                  variant="flat"
                   onPress={() => navigate("/provider/schedule")}
                 >
                   Open
@@ -245,27 +235,22 @@ const ProviderDashboard = () => {
               </CardFooter>
             </Card>
 
-            <Card isFooterBlurred className="w-full h-[300px]">
-              <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/60 uppercase font-bold">Finances</p>
-                <h4 className="text-white font-medium text-2xl">Wallet</h4>
-              </CardHeader>
+            <Card isFooterBlurred className="border-none" radius="lg">
               <Image
-                removeWrapper
-                alt="Card background"
-                className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
+                alt="Wallet"
+                className="object-cover"
+                height={300}
                 src="https://heroui.com/images/card-example-4.jpeg"
+                width="100%"
               />
-              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
-                <div>
-                  <p className="text-black text-tiny">View Earnings</p>
-                  <p className="text-black text-tiny">Track payments</p>
-                </div>
+              <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                <p className="text-tiny text-white/80">Track payments</p>
                 <Button
-                  className="text-tiny"
-                  color="primary"
-                  radius="full"
+                  className="text-tiny text-white bg-black/20"
+                  color="default"
+                  radius="lg"
                   size="sm"
+                  variant="flat"
                   onPress={() => navigate("/provider/wallet")}
                 >
                   Open
@@ -273,27 +258,22 @@ const ProviderDashboard = () => {
               </CardFooter>
             </Card>
 
-            <Card isFooterBlurred className="w-full h-[300px]">
-              <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/60 uppercase font-bold">Settings</p>
-                <h4 className="text-white font-medium text-2xl">Profile</h4>
-              </CardHeader>
+            <Card isFooterBlurred className="border-none" radius="lg">
               <Image
-                removeWrapper
-                alt="Card background"
-                className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
+                alt="Profile"
+                className="object-cover"
+                height={300}
                 src="https://heroui.com/images/card-example-4.jpeg"
+                width="100%"
               />
-              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
-                <div>
-                  <p className="text-black text-tiny">Edit Info</p>
-                  <p className="text-black text-tiny">Update details</p>
-                </div>
+              <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                <p className="text-tiny text-white/80">Update details</p>
                 <Button
-                  className="text-tiny"
-                  color="primary"
-                  radius="full"
+                  className="text-tiny text-white bg-black/20"
+                  color="default"
+                  radius="lg"
                   size="sm"
+                  variant="flat"
                   onPress={() => navigate("/provider/profile")}
                 >
                   Open
