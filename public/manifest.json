@@ -1,0 +1,38 @@
+{
+  "name": "Clinlix",
+  "short_name": "Clinlix",
+  "description": "Trusted Cleaning, Every Single Time",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#6E45E2",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "https://clinlix.com/assets/logo-clinlix-BphsOeP6.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://clinlix.com/assets/logo-clinlix-BphsOeP6.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "business"],
+  "shortcuts": [
+    {
+      "name": "Book Cleaning",
+      "url": "/customer/booking",
+      "description": "Book a cleaning service"
+    },
+    {
+      "name": "My Bookings",
+      "url": "/customer/my-bookings",
+      "description": "View your bookings"
+    }
+  ]
+}
