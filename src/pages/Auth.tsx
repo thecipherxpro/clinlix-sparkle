@@ -264,7 +264,7 @@ const Auth = () => {
                       id="remember"
                       checked={rememberMe}
                       onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                      className="w-1 h-1"
+                      className="w-[1px] h-[1px]"
                     />
                     <label
                       htmlFor="remember"
