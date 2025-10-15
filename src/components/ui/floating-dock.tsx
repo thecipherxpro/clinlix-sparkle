@@ -42,19 +42,19 @@ const FloatingDockMobile = ({
         {open && (
           <motion.div
             layoutId="nav"
-            className="absolute inset-x-0 bottom-full mb-2 flex flex-col gap-2"
+            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 flex gap-2 bg-gray-50 dark:bg-neutral-900 rounded-2xl px-4 py-3"
           >
             {items.map((item, idx) => (
               <motion.div
                 key={item.title}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, scale: 0 }}
                 animate={{
                   opacity: 1,
-                  y: 0,
+                  scale: 1,
                 }}
                 exit={{
                   opacity: 0,
-                  y: 10,
+                  scale: 0,
                   transition: {
                     delay: idx * 0.05,
                   },
@@ -62,11 +62,14 @@ const FloatingDockMobile = ({
                 transition={{ delay: (items.length - 1 - idx) * 0.05 }}
               >
                 <button
-                  onClick={item.onClick || (() => window.location.href = item.href)}
+                  onClick={() => {
+                    item.onClick?.();
+                    setOpen(false);
+                  }}
                   key={item.title}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-900"
+                  className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-800 hover:bg-gray-300 dark:hover:bg-neutral-700 transition-colors"
                 >
-                  <div className="h-4 w-4">{item.icon}</div>
+                  <div className="h-5 w-5">{item.icon}</div>
                 </button>
               </motion.div>
             ))}
@@ -75,7 +78,7 @@ const FloatingDockMobile = ({
       </AnimatePresence>
       <button
         onClick={() => setOpen(!open)}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-800"
+        className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-800 border-2 border-gray-200 dark:border-neutral-700"
       >
         <IconLayoutNavbarCollapse className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
       </button>
