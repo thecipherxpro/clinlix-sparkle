@@ -268,7 +268,7 @@ const Auth = () => {
                     />
                     <label
                       htmlFor="remember"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-xs font-thin leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Remember me
                     </label>
