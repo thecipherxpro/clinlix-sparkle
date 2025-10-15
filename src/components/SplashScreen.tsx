@@ -20,7 +20,7 @@ export default function SplashScreen() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-[#ffffff] via-[#ffffff] to-[#dacefd] text-white z-[100]"
+          className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-[#ffffff] via-[#ffffff] to-[#dacefd] text-black z-[100]"
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -34,7 +34,7 @@ export default function SplashScreen() {
             <motion.img
               src={logo}
               alt="Clinlix Logo"
-              className="w-32 h-32 mb-6 drop-shadow-2xl"
+              className="w-50 h-50 mb-6 drop-shadow-2xl"
               animate={{
                 y: [0, -10, 0],
                 scale: [1, 1.05, 1],
@@ -54,15 +54,6 @@ export default function SplashScreen() {
             >
               Trusted Cleaning, Every Single Time
             </motion.h1>
-
-            <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-sm text-white/80 mb-8"
-            >
-              Loading Clinlix...
-            </motion.p>
 
             <motion.div
               className="flex gap-1.5"
