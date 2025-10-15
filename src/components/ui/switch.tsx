@@ -3,30 +3,41 @@ import { Switch as HeadlessSwitch } from "@headlessui/react";
 
 import { cn } from "@/lib/utils";
 
-const Switch = React.forwardRef<
-  HTMLButtonElement,
-  Omit<React.ComponentProps<typeof HeadlessSwitch>, 'as'> & { className?: string }
->(({ className, checked, onChange, disabled, ...props }, ref) => (
-  <HeadlessSwitch
-    ref={ref}
-    checked={checked}
-    onChange={onChange}
-    disabled={disabled}
-    className={cn(
-      "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
-      checked ? "bg-primary" : "bg-input",
-      className,
-    )}
-    {...props}
-  >
-    <span
-      className={cn(
-        "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform",
-        checked ? "translate-x-5" : "translate-x-0",
-      )}
-    />
-  </HeadlessSwitch>
-));
+interface SwitchProps extends Omit<React.ComponentProps<typeof HeadlessSwitch>, 'as'> {
+  className?: string;
+  onCheckedChange?: (checked: boolean) => void;
+}
+
+const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
+  ({ className, checked, onChange, onCheckedChange, disabled, ...props }, ref) => {
+    const handleChange = (value: boolean) => {
+      onChange?.(value);
+      onCheckedChange?.(value);
+    };
+
+    return (
+      <HeadlessSwitch
+        ref={ref}
+        checked={checked}
+        onChange={handleChange}
+        disabled={disabled}
+        className={cn(
+          "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+          checked ? "bg-primary" : "bg-input",
+          className,
+        )}
+        {...props}
+      >
+        <span
+          className={cn(
+            "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform",
+            checked ? "translate-x-5" : "translate-x-0",
+          )}
+        />
+      </HeadlessSwitch>
+    );
+  }
+);
 Switch.displayName = "Switch";
 
 export { Switch };

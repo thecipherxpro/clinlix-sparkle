@@ -3,7 +3,33 @@ import { Tab } from "@headlessui/react";
 
 import { cn } from "@/lib/utils";
 
-const Tabs = Tab.Group;
+interface TabsProps extends Omit<React.ComponentProps<typeof Tab.Group>, 'selectedIndex' | 'onChange'> {
+  value?: string | number;
+  onValueChange?: (value: any) => void;
+  selectedIndex?: number;
+  defaultIndex?: number;
+  defaultValue?: string | number;
+  onChange?: (index: number) => void;
+}
+
+const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
+  ({ value, onValueChange, selectedIndex, defaultIndex, defaultValue, onChange, ...props }, ref) => {
+    const handleChange = (index: number) => {
+      onChange?.(index);
+      onValueChange?.(index);
+    };
+
+    return (
+      <Tab.Group 
+        selectedIndex={typeof value === 'number' ? value : selectedIndex} 
+        defaultIndex={typeof defaultValue === 'number' ? defaultValue : defaultIndex}
+        onChange={handleChange} 
+        {...props} 
+      />
+    );
+  }
+);
+Tabs.displayName = "Tabs";
 
 const TabsList = React.forwardRef<
   HTMLDivElement,
@@ -33,19 +59,22 @@ const TabsTrigger = React.forwardRef<
 ));
 TabsTrigger.displayName = "TabsTrigger";
 
-const TabsContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <Tab.Panel
-    ref={ref}
-    className={cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      className,
-    )}
-    {...props}
-  />
-));
+interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  value?: string | number;
+}
+
+const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
+  ({ className, value, ...props }, ref) => (
+    <Tab.Panel
+      ref={ref}
+      className={cn(
+        "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        className,
+      )}
+      {...props}
+    />
+  )
+);
 TabsContent.displayName = "TabsContent";
 
 export { Tabs, TabsList, TabsTrigger, TabsContent };

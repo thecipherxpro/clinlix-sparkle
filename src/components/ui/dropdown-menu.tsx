@@ -79,23 +79,27 @@ const DropdownMenuItem = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Menu.Item> & {
     inset?: boolean;
+    children?: React.ReactNode;
   }
 >(({ className, inset, children, ...props }, ref) => (
   <Menu.Item>
-    {({ active }) => (
-      <button
-        ref={ref}
-        className={cn(
-          "relative flex w-full cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
-          active && "bg-accent text-accent-foreground",
-          inset && "pl-8",
-          className,
-        )}
-        {...props}
-      >
-        {children}
-      </button>
-    )}
+    {(renderProps) => {
+      const content = typeof children === 'function' ? (children as any)(renderProps) : children;
+      return (
+        <button
+          ref={ref}
+          className={cn(
+            "relative flex w-full cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+            renderProps.active && "bg-accent text-accent-foreground",
+            inset && "pl-8",
+            className,
+          )}
+          {...props}
+        >
+          {content}
+        </button>
+      );
+    }}
   </Menu.Item>
 ));
 DropdownMenuItem.displayName = "DropdownMenuItem";

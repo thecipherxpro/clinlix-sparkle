@@ -1,26 +1,46 @@
 import * as React from "react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { Check } from "lucide-react";
+import MuiCheckbox from "@mui/material/Checkbox";
+import { styled } from "@mui/material/styles";
 
 import { cn } from "@/lib/utils";
 
-const Checkbox = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <CheckboxPrimitive.Root
-    ref={ref}
-    className={cn(
-      "peer h-2 w-2 sm:h-2 sm:w-2 md:h-2 md:w-2 shrink-0 rounded-sm border-2 border-primary ring-offset-background transition-all data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:border-primary/80",
-      className,
-    )}
-    {...props}
-  >
-    <CheckboxPrimitive.Indicator className={cn("flex items-center justify-center text-current")}>
-      <Check className="h-2 w-2 sm:h-2 sm:w-2 md:h-2 md:w-2" />
-    </CheckboxPrimitive.Indicator>
-  </CheckboxPrimitive.Root>
-));
-Checkbox.displayName = CheckboxPrimitive.Root.displayName;
+const StyledCheckbox = styled(MuiCheckbox)(({ theme }) => ({
+  width: "1rem",
+  height: "1rem",
+  "@media (min-width: 640px)": {
+    width: "1rem",
+    height: "1rem",
+  },
+  "@media (min-width: 768px)": {
+    width: "1rem",
+    height: "1rem",
+  },
+  "&.Mui-checked": {
+    color: "hsl(var(--primary))",
+  },
+  "&:hover": {
+    backgroundColor: "hsl(var(--primary) / 0.1)",
+  },
+  "&.Mui-focusVisible": {
+    outline: "2px solid hsl(var(--ring))",
+    outlineOffset: "2px",
+  },
+}));
+
+interface CheckboxProps extends Omit<React.ComponentProps<typeof MuiCheckbox>, 'onChange'> {
+  onCheckedChange?: (checked: boolean) => void;
+}
+
+const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
+  ({ className, onCheckedChange, ...props }, ref) => (
+    <StyledCheckbox
+      ref={ref}
+      className={cn(className)}
+      onChange={(e) => onCheckedChange?.(e.target.checked)}
+      {...props}
+    />
+  )
+);
+Checkbox.displayName = "Checkbox";
 
 export { Checkbox };

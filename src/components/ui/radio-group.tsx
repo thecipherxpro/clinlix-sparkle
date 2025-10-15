@@ -4,12 +4,29 @@ import { Circle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const RadioGroup = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<typeof HeadlessRadioGroup>
->(({ className, ...props }, ref) => {
-  return <HeadlessRadioGroup className={cn("grid gap-2", className)} {...props} />;
-});
+interface RadioGroupProps extends Omit<React.ComponentProps<typeof HeadlessRadioGroup>, 'value' | 'onChange'> {
+  value?: any;
+  onValueChange?: (value: any) => void;
+  onChange?: (value: any) => void;
+}
+
+const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
+  ({ className, value, onValueChange, onChange, ...props }, ref) => {
+    const handleChange = (val: any) => {
+      onChange?.(val);
+      onValueChange?.(val);
+    };
+
+    return (
+      <HeadlessRadioGroup 
+        className={cn("grid gap-2", className)} 
+        value={value}
+        onChange={handleChange}
+        {...props} 
+      />
+    );
+  }
+);
 RadioGroup.displayName = "RadioGroup";
 
 const RadioGroupItem = React.forwardRef<

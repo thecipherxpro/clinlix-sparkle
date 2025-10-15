@@ -4,11 +4,32 @@ import { Check, ChevronDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const Select = Listbox;
+interface SelectProps extends Omit<React.ComponentProps<typeof Listbox>, 'value' | 'onChange'> {
+  value?: any;
+  onValueChange?: (value: any) => void;
+  onChange?: (value: any) => void;
+}
+
+const Select = React.forwardRef<HTMLDivElement, SelectProps>(
+  ({ value, onValueChange, onChange, ...props }, ref) => {
+    const handleChange = (val: any) => {
+      onChange?.(val);
+      onValueChange?.(val);
+    };
+
+    return <Listbox value={value} onChange={handleChange} {...props} />;
+  }
+);
+Select.displayName = "Select";
 
 const SelectGroup = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
 
-const SelectValue = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
+interface SelectValueProps {
+  children?: React.ReactNode;
+  placeholder?: string;
+}
+
+const SelectValue = ({ children, placeholder }: SelectValueProps) => <>{children || placeholder}</>;
 
 const SelectTrigger = React.forwardRef<
   HTMLButtonElement,
@@ -68,25 +89,30 @@ SelectLabel.displayName = "SelectLabel";
 
 const SelectItem = React.forwardRef<
   HTMLLIElement,
-  React.ComponentProps<typeof Listbox.Option>
+  React.ComponentProps<typeof Listbox.Option> & {
+    children?: React.ReactNode;
+  }
 >(({ className, children, ...props }, ref) => (
   <Listbox.Option
     ref={ref}
-    className={({ active }) => cn(
+    className={({ active }: { active: boolean }) => cn(
       "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none disabled:pointer-events-none disabled:opacity-50",
       active && "bg-accent text-accent-foreground",
       className,
     )}
     {...props}
   >
-    {({ selected }) => (
-      <>
-        <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-          {selected && <Check className="h-4 w-4" />}
-        </span>
-        <span>{children}</span>
-      </>
-    )}
+    {(renderProps) => {
+      const content = typeof children === 'function' ? (children as any)(renderProps) : children;
+      return (
+        <>
+          <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+            {renderProps.selected && <Check className="h-4 w-4" />}
+          </span>
+          <span>{content}</span>
+        </>
+      );
+    }}
   </Listbox.Option>
 ));
 SelectItem.displayName = "SelectItem";

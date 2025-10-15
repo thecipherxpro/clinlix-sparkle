@@ -4,7 +4,22 @@ import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const Dialog = HeadlessDialog;
+interface DialogProps extends Omit<React.ComponentProps<typeof HeadlessDialog>, 'onClose'> {
+  onClose?: (value: boolean) => void;
+  onOpenChange?: (open: boolean) => void;
+}
+
+const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
+  ({ onClose, onOpenChange, ...props }, ref) => {
+    const handleClose = (value: boolean) => {
+      onClose?.(value);
+      onOpenChange?.(value);
+    };
+
+    return <HeadlessDialog onClose={handleClose} {...props} />;
+  }
+);
+Dialog.displayName = "Dialog";
 
 const DialogTrigger = React.forwardRef<
   HTMLButtonElement,
