@@ -1,107 +1,87 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-interface PremiumCardProps {
+interface JobCardProps {
   title: string;
   description: string;
-  badge?: string;
-  value?: string | React.ReactNode;
+  value?: string;
   icon?: React.ReactNode;
-  accentColor?: string;
+  heroColor?: string;
   onClick?: () => void;
   className?: string;
 }
 
-export const PremiumCard: React.FC<PremiumCardProps> = ({
+export const JobCard: React.FC<JobCardProps> = ({
   title,
   description,
-  badge,
   value,
   icon,
-  accentColor = '#7c3aed',
+  heroColor = '#fef4e2',
   onClick,
   className,
 }) => {
   return (
-    <div
+    <article
       onClick={onClick}
       className={cn(
-        "group relative w-full h-[254px] bg-card rounded-[20px] overflow-hidden",
-        "transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-        "shadow-[0_10px_15px_-3px_rgba(0,0,0,0.05)] border border-border/20",
-        "hover:translate-y-[-10px] hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_10px_10px_-5px_rgba(0,0,0,0.04)]",
-        "hover:border-primary/20 active:translate-y-[-5px] active:scale-[0.98]",
+        "mx-auto w-full max-w-[300px] bg-card rounded-2xl p-2 text-foreground",
+        "transition-all duration-300 hover:shadow-lg",
         onClick && "cursor-pointer",
         className
       )}
     >
-      {/* Shine Effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[shine_3s_infinite] transition-opacity duration-300" 
-           style={{ 
-             backgroundSize: '200% 100%',
-             backgroundPosition: '-100% 0'
-           }} 
-      />
-      
-      {/* Glow Effect */}
-      <div className="absolute inset-[-10px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-           style={{
-             background: `radial-gradient(circle at 50% 0%, ${accentColor}4D 0%, transparent 70%)`
-           }}
-      />
-
-      {/* Content */}
-      <div className="relative z-[2] p-5 h-full flex flex-col gap-3">
-        {/* Badge */}
-        {badge && (
-          <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-[0.7em] font-semibold scale-[0.8] opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-400 delay-100">
-            {badge}
-          </div>
-        )}
-
-        {/* Image/Icon Section */}
-        <div className="w-full h-[100px] rounded-xl relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-[-5px] group-hover:scale-[1.03] group-hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)]"
-             style={{ background: `linear-gradient(45deg, ${accentColor}CC, ${accentColor})` }}>
-          <div className="absolute inset-0 opacity-50"
-               style={{
-                 background: `
-                   radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 30%),
-                   repeating-linear-gradient(45deg, rgba(139, 92, 246, 0.1) 0px, rgba(139, 92, 246, 0.1) 2px, transparent 2px, transparent 4px)
-                 `
-               }}
-          />
-          {/* Icon or Value Display */}
-          <div className="absolute inset-0 flex items-center justify-center text-white">
-            {icon ? (
-              <div className="w-12 h-12">{icon}</div>
-            ) : (
-              <div className="text-4xl font-bold">{value}</div>
-            )}
-          </div>
-        </div>
-
-        {/* Text */}
-        <div className="flex flex-col gap-1">
-          <p className="text-foreground text-[1.1em] font-bold m-0 transition-all duration-300 group-hover:text-primary group-hover:translate-x-[2px]">
-            {title}
-          </p>
-          <p className="text-foreground text-[0.75em] m-0 opacity-70 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-[2px]">
-            {description}
-          </p>
-        </div>
-
-        {/* Footer */}
-        <div className="flex justify-between items-center mt-auto">
-          <div className="text-foreground font-bold text-[1em] transition-all duration-300 group-hover:text-primary group-hover:translate-x-[2px]">
-            {typeof value === 'string' ? value : ''}
-          </div>
-          <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center text-primary-foreground cursor-pointer transition-all duration-300 scale-[0.9] group-hover:scale-100 group-hover:shadow-[0_0_0_4px_rgba(124,58,237,0.2)]">
-            <svg height={16} width={16} viewBox="0 0 24 24" className="group-hover:animate-[pulse_1.5s_infinite]">
-              <path strokeWidth={2} stroke="currentColor" d="M4 12H20M12 4V20" fill="none" />
+      {/* Hero Section */}
+      <section 
+        className="rounded-lg rounded-b-none p-6 text-sm"
+        style={{ backgroundColor: heroColor }}
+      >
+        <header className="flex justify-between items-center flex-row gap-4 font-bold">
+          <span>{value || '$150/hr'}</span>
+          <div className="card__icon">
+            <svg 
+              height={20} 
+              width={20} 
+              stroke="currentColor" 
+              strokeWidth="1.5" 
+              viewBox="0 0 24 24" 
+              fill="none"
+            >
+              <path 
+                d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" 
+                strokeLinejoin="round" 
+                strokeLinecap="round" 
+              />
             </svg>
           </div>
+        </header>
+        <p className="my-8 text-[2rem] font-semibold pr-8 leading-tight">
+          {title}
+        </p>
+      </section>
+
+      {/* Footer */}
+      <footer className="flex flex-col min-[340px]:flex-row justify-start min-[340px]:justify-between items-start min-[340px]:items-center gap-4 p-3 font-bold text-sm">
+        <div className="flex justify-start items-center gap-3">
+          <div className="flex-shrink-0">
+            {icon || (
+              <svg height={35} width={28} viewBox="0 0 250 250">
+                <path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027" />
+                <path fill="#34A853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1" />
+                <path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782" />
+                <path fill="#EB4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251" />
+              </svg>
+            )}
+          </div>
+          <div>
+            <p className="font-bold text-sm leading-tight">
+              {description}
+            </p>
+          </div>
         </div>
-      </div>
-    </div>
+        <button className="w-full min-[340px]:w-max font-normal border-none cursor-pointer text-center py-2 px-5 rounded-2xl bg-foreground text-background text-base hover:opacity-90 transition-opacity">
+          view
+        </button>
+      </footer>
+    </article>
   );
 };

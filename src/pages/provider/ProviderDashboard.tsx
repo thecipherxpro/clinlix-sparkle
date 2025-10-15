@@ -8,7 +8,7 @@ import {
   CardHeader as UICardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { PremiumCard } from "@/components/ui/premium-card";
+import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -185,40 +185,43 @@ const ProviderDashboard = () => {
           </CardContent>
         </UICard>
 
-        {/* Quick Actions - Premium Cards */}
+        {/* Quick Actions - Job Cards */}
         <div>
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
-            <PremiumCard
-              title="Jobs"
-              description="View pending requests"
-              badge="NEW"
-              value={stats.pendingJobs.toString()}
-              accentColor="#a78bfa"
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(16px,4vw,24px)]">
+            <JobCard
+              title="View Pending Jobs"
+              description="Review new job requests"
+              value={`${stats.pendingJobs} Pending`}
+              icon={<Briefcase className="w-8 h-8" />}
+              heroColor="#fef4e2"
               onClick={() => navigate("/provider/jobs")}
             />
             
-            <PremiumCard
-              title="Schedule"
-              description="Manage availability"
-              icon={<Calendar className="w-12 h-12" />}
-              accentColor="#8b5cf6"
+            <JobCard
+              title="Manage Schedule"
+              description="Set your availability"
+              value="Available"
+              icon={<Calendar className="w-8 h-8" />}
+              heroColor="#e0f2fe"
               onClick={() => navigate("/provider/schedule")}
             />
             
-            <PremiumCard
-              title="Wallet"
-              description="Track payments"
+            <JobCard
+              title="Check Earnings"
+              description="View payment history"
               value={`€${stats.monthlyEarnings.toFixed(0)}`}
-              accentColor="#7c3aed"
+              icon={<DollarSign className="w-8 h-8" />}
+              heroColor="#dcfce7"
               onClick={() => navigate("/provider/wallet")}
             />
             
-            <PremiumCard
-              title="Profile"
-              description="Update details"
-              icon={<User className="w-12 h-12" />}
-              accentColor="#6d28d9"
+            <JobCard
+              title="Update Profile"
+              description="Edit your information"
+              value="Profile"
+              icon={<User className="w-8 h-8" />}
+              heroColor="#fae8ff"
               onClick={() => navigate("/provider/profile")}
             />
           </div>
