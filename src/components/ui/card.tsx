@@ -1,35 +1,26 @@
 import * as React from "react";
-import MuiCard from "@mui/material/Card";
-import MuiCardHeader from "@mui/material/CardHeader";
-import MuiCardContent from "@mui/material/CardContent";
-import MuiCardActions from "@mui/material/CardActions";
-import { styled } from "@mui/material/styles";
+import { Card as HeroCard, CardHeader as HeroCardHeader, CardBody, CardFooter as HeroCardFooter } from "@heroui/react";
 
 import { cn } from "@/lib/utils";
 
-const StyledCard = styled(MuiCard)({
-  borderRadius: "0.5rem",
-  border: "1px solid hsl(var(--border))",
-  backgroundColor: "hsl(var(--card))",
-  color: "hsl(var(--card-foreground))",
-  boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-  transition: "all 0.2s",
-});
-
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <StyledCard 
-      ref={ref} 
-      className={cn(className)} 
-      {...props} 
-    />
+  ({ className, children, ...props }, ref) => (
+    <div ref={ref} {...props}>
+      <HeroCard className={cn("border border-border bg-card text-card-foreground shadow-sm", className)}>
+        {children}
+      </HeroCard>
+    </div>
   )
 );
 Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
+  ({ className, children, ...props }, ref) => (
+    <div ref={ref} {...props}>
+      <HeroCardHeader className={cn("flex flex-col space-y-1.5", className)}>
+        {children}
+      </HeroCardHeader>
+    </div>
   )
 );
 CardHeader.displayName = "CardHeader";
@@ -49,13 +40,23 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
 CardDescription.displayName = "CardDescription";
 
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  ({ className, children, ...props }, ref) => (
+    <div ref={ref} {...props}>
+      <CardBody className={cn(className)}>
+        {children}
+      </CardBody>
+    </div>
+  )
 );
 CardContent.displayName = "CardContent";
 
 const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex items-center p-6 pt-0", className)} {...props} />
+  ({ className, children, ...props }, ref) => (
+    <div ref={ref} {...props}>
+      <HeroCardFooter className={cn("flex items-center", className)}>
+        {children}
+      </HeroCardFooter>
+    </div>
   )
 );
 CardFooter.displayName = "CardFooter";
