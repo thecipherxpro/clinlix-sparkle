@@ -188,41 +188,45 @@ const ProviderDashboard = () => {
         {/* Quick Actions - Job Cards */}
         <div>
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
-          <div className="grid grid-cols-2 gap-[clamp(16px,4vw,24px)]">
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
             <JobCard
               title="View Pending Jobs"
               description="Review new job requests"
               value={`${stats.pendingJobs} Pending`}
-              icon={<Briefcase className="w-8 h-8" />}
+              icon={<Briefcase className="w-5 h-5 sm:w-6 sm:h-6" />}
               heroColor="#fef4e2"
               onClick={() => navigate("/provider/jobs")}
+              className="min-h-[140px] sm:min-h-[160px]"
             />
             
             <JobCard
               title="Manage Schedule"
               description="Set your availability"
               value="Available"
-              icon={<Calendar className="w-8 h-8" />}
+              icon={<Calendar className="w-5 h-5 sm:w-6 sm:h-6" />}
               heroColor="#e0f2fe"
               onClick={() => navigate("/provider/schedule")}
+              className="min-h-[140px] sm:min-h-[160px]"
             />
             
             <JobCard
               title="Check Earnings"
               description="View payment history"
               value={`€${stats.monthlyEarnings.toFixed(0)}`}
-              icon={<DollarSign className="w-8 h-8" />}
+              icon={<DollarSign className="w-5 h-5 sm:w-6 sm:h-6" />}
               heroColor="#dcfce7"
               onClick={() => navigate("/provider/wallet")}
+              className="min-h-[140px] sm:min-h-[160px]"
             />
             
             <JobCard
               title="Update Profile"
               description="Edit your information"
               value="Profile"
-              icon={<User className="w-8 h-8" />}
+              icon={<User className="w-5 h-5 sm:w-6 sm:h-6" />}
               heroColor="#fae8ff"
               onClick={() => navigate("/provider/profile")}
+              className="min-h-[140px] sm:min-h-[160px]"
             />
           </div>
         </div>
