@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import logo from '@/assets/logo-clinlix.png';
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/logo-clinlix.png";
 
 export default function SplashScreen() {
   const [loading, setLoading] = useState(true);
@@ -20,14 +20,14 @@ export default function SplashScreen() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#6E45E2] via-[#8365FB] to-[#9F7FFF] text-white z-[100]"
+          className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-[#ffffff] via-[#ffffff] to-[#dacefd] text-white z-[100]"
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ 
+            transition={{
               duration: 0.6,
-              ease: [0.34, 1.56, 0.64, 1]
+              ease: [0.34, 1.56, 0.64, 1],
             }}
             className="flex flex-col items-center"
           >
@@ -35,17 +35,17 @@ export default function SplashScreen() {
               src={logo}
               alt="Clinlix Logo"
               className="w-32 h-32 mb-6 drop-shadow-2xl"
-              animate={{ 
+              animate={{
                 y: [0, -10, 0],
-                scale: [1, 1.05, 1]
+                scale: [1, 1.05, 1],
               }}
-              transition={{ 
+              transition={{
                 duration: 2,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut",
               }}
             />
-            
+
             <motion.h1
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -54,7 +54,7 @@ export default function SplashScreen() {
             >
               Trusted Cleaning, Every Single Time
             </motion.h1>
-            
+
             <motion.p
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -63,7 +63,7 @@ export default function SplashScreen() {
             >
               Loading Clinlix...
             </motion.p>
-            
+
             <motion.div
               className="flex gap-1.5"
               initial={{ opacity: 0 }}
@@ -76,12 +76,12 @@ export default function SplashScreen() {
                   className="w-2 h-2 bg-white rounded-full"
                   animate={{
                     scale: [1, 1.3, 1],
-                    opacity: [0.5, 1, 0.5]
+                    opacity: [0.5, 1, 0.5],
                   }}
                   transition={{
                     duration: 1,
                     repeat: Infinity,
-                    delay: i * 0.2
+                    delay: i * 0.2,
                   }}
                 />
               ))}
