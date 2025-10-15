@@ -189,91 +189,109 @@ const ProviderDashboard = () => {
         <div>
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
-            <Card isFooterBlurred radius="lg" className="w-full h-[300px] border-none">
+            <Card isFooterBlurred className="w-full h-[300px] relative overflow-hidden">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
                 <p className="text-tiny text-white/60 uppercase font-bold">Quick Access</p>
-                <h4 className="text-white/90 font-medium text-2xl">Jobs</h4>
+                <h4 className="text-white font-medium text-2xl">Jobs</h4>
               </CardHeader>
               <img
                 alt="Card background"
-                className="z-0 w-full h-full object-cover"
+                className="absolute inset-0 z-0 w-full h-full object-cover"
                 src="https://i.postimg.cc/3wgQwkjQ/Splash-New.png"
-              />
-              <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
-                <div className="flex flex-grow gap-2 items-center">
-                  <div className="flex flex-col">
-                    <p className="text-tiny text-white/60">View Pending</p>
-                    <p className="text-tiny text-white/60">Manage requests</p>
-                  </div>
-                </div>
-                <Button radius="full" size="sm" color="primary" onPress={() => navigate("/provider/jobs")}>
-                  Open
-                </Button>
-              </CardFooter>
-            </Card>
-
-            <Card isFooterBlurred radius="lg" className="w-full h-[300px] border-none">
-              <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/60 uppercase font-bold">Calendar</p>
-                <h4 className="text-white/90 font-medium text-2xl">Schedule</h4>
-              </CardHeader>
-              <img
-                alt="Card background"
-                className="z-0 w-full h-full object-cover"
-                src="https://heroui.com/images/card-example-4.jpeg"
-              />
-              <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
-                <div className="flex flex-grow gap-2 items-center">
-                  <div className="flex flex-col">
-                    <p className="text-tiny text-white/60">Set Times</p>
-                    <p className="text-tiny text-white/60">Manage availability</p>
-                  </div>
-                </div>
-                <Button radius="full" size="sm" color="primary" onPress={() => navigate("/provider/schedule")}>
-                  Open
-                </Button>
-              </CardFooter>
-            </Card>
-
-            <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-5">
-              <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/60 uppercase font-bold">New</p>
-                <h4 className="text-black font-medium text-2xl">Acme camera</h4>
-              </CardHeader>
-              <img
-                alt="Card example background"
-                className="absolute inset-0 z-0 w-full h-full scale-125 -translate-y-6 object-cover"
-                src="https://heroui.com/images/card-example-6.jpeg"
               />
               <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                 <div>
-                  <p className="text-black text-tiny">Available soon.</p>
-                  <p className="text-black text-tiny">Get notified.</p>
+                  <p className="text-black text-tiny">View Pending</p>
+                  <p className="text-black text-tiny">Manage requests</p>
                 </div>
-                <Button className="text-tiny" color="primary" radius="full" size="sm">
-                  Notify Me
+                <Button
+                  className="text-tiny"
+                  color="primary"
+                  radius="full"
+                  size="sm"
+                  onPress={() => navigate("/provider/jobs")}
+                >
+                  Open
                 </Button>
               </CardFooter>
             </Card>
 
-            <Card isFooterBlurred radius="lg" className="w-full h-[300px] border-none">
+            <Card isFooterBlurred className="w-full h-[300px] relative overflow-hidden">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                <p className="text-tiny text-white/60 uppercase font-bold">Settings</p>
-                <h4 className="text-white/90 font-medium text-2xl">Profile</h4>
+                <p className="text-tiny text-white/60 uppercase font-bold">Calendar</p>
+                <h4 className="text-white font-medium text-2xl">Schedule</h4>
               </CardHeader>
               <img
                 alt="Card background"
-                className="z-0 w-full h-full object-cover"
+                className="absolute inset-0 z-0 w-full h-full object-cover"
                 src="https://heroui.com/images/card-example-4.jpeg"
               />
-              <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
-                <div className="flex flex-grow gap-2 items-center">
-                  <div className="flex flex-col">
-                    <p className="text-tiny text-white/60">Edit Info</p>
-                    <p className="text-tiny text-white/60">Update details</p>
-                  </div>
+              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+                <div>
+                  <p className="text-black text-tiny">Set Times</p>
+                  <p className="text-black text-tiny">Manage availability</p>
                 </div>
-                <Button radius="full" size="sm" color="primary" onPress={() => navigate("/provider/profile")}>
+                <Button
+                  className="text-tiny"
+                  color="primary"
+                  radius="full"
+                  size="sm"
+                  onPress={() => navigate("/provider/schedule")}
+                >
+                  Open
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card isFooterBlurred className="w-full h-[300px] relative overflow-hidden">
+              <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                <p className="text-tiny text-white/60 uppercase font-bold">Finances</p>
+                <h4 className="text-white font-medium text-2xl">Wallet</h4>
+              </CardHeader>
+              <img
+                alt="Card background"
+                className="absolute inset-0 z-0 w-full h-full object-cover"
+                src="https://heroui.com/images/card-example-4.jpeg"
+              />
+              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+                <div>
+                  <p className="text-black text-tiny">View Earnings</p>
+                  <p className="text-black text-tiny">Track payments</p>
+                </div>
+                <Button
+                  className="text-tiny"
+                  color="primary"
+                  radius="full"
+                  size="sm"
+                  onPress={() => navigate("/provider/wallet")}
+                >
+                  Open
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card isFooterBlurred className="w-full h-[300px] relative overflow-hidden">
+              <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                <p className="text-tiny text-white/60 uppercase font-bold">Settings</p>
+                <h4 className="text-white font-medium text-2xl">Profile</h4>
+              </CardHeader>
+              <img
+                alt="Card background"
+                className="absolute inset-0 z-0 w-full h-full object-cover"
+                src="https://heroui.com/images/card-example-4.jpeg"
+              />
+              <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+                <div>
+                  <p className="text-black text-tiny">Edit Info</p>
+                  <p className="text-black text-tiny">Update details</p>
+                </div>
+                <Button
+                  className="text-tiny"
+                  color="primary"
+                  radius="full"
+                  size="sm"
+                  onPress={() => navigate("/provider/profile")}
+                >
                   Open
                 </Button>
               </CardFooter>
