@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import ActionCard from "@/components/ActionCard";
+import { Button } from "@/components/ui/button";
+import { Image } from "@heroui/react";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
 const ProviderDashboard = () => {
   const navigate = useNavigate();
@@ -160,70 +162,114 @@ const ProviderDashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Quick Actions - Auto-fit grid with responsive gaps */}
+        {/* Quick Actions - Hero UI Cards with Blurred Footer */}
         <div>
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
             Quick Actions
           </h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
-            <Card 
-              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all 
-                       border-0 bg-gradient-to-br from-primary/5 to-accent/5" 
-              onClick={() => navigate('/provider/jobs')}
-            >
-              <CardHeader className="space-y-1 pb-[clamp(12px,3vw,16px)] p-[clamp(16px,4vw,24px)]">
-                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
-                              rounded-xl bg-primary/10 flex items-center justify-center mb-2 shadow-md">
-                  <Briefcase className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-primary" />
-                </div>
-                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Jobs</CardTitle>
-                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Pending requests</CardDescription>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
+            <Card className="w-full h-[300px] relative overflow-hidden">
+              <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                <p className="text-tiny text-white/80 uppercase font-bold">Quick Access</p>
+                <h4 className="text-white font-medium text-2xl">Jobs</h4>
               </CardHeader>
+              <Image
+                removeWrapper
+                alt="Jobs background"
+                className="z-0 w-full h-full object-cover"
+                src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80"
+              />
+              <CardFooter className="absolute bg-white/30 backdrop-blur-md bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+                <div>
+                  <p className="text-foreground text-tiny font-semibold">View Pending</p>
+                  <p className="text-foreground/80 text-tiny">Manage requests</p>
+                </div>
+                <Button 
+                  className="text-tiny" 
+                  size="sm"
+                  onClick={() => navigate('/provider/jobs')}
+                >
+                  Open
+                </Button>
+              </CardFooter>
             </Card>
 
-            <Card 
-              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all 
-                       border-0 bg-gradient-to-br from-accent/5 to-primary/5" 
-              onClick={() => navigate('/provider/schedule')}
-            >
-              <CardHeader className="space-y-1 pb-[clamp(12px,3vw,16px)] p-[clamp(16px,4vw,24px)]">
-                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
-                              rounded-xl bg-accent/10 flex items-center justify-center mb-2">
-                  <Calendar className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-accent" />
-                </div>
-                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Schedule</CardTitle>
-                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Availability</CardDescription>
+            <Card className="w-full h-[300px] relative overflow-hidden">
+              <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                <p className="text-tiny text-white/80 uppercase font-bold">Calendar</p>
+                <h4 className="text-white font-medium text-2xl">Schedule</h4>
               </CardHeader>
+              <Image
+                removeWrapper
+                alt="Schedule background"
+                className="z-0 w-full h-full object-cover"
+                src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80"
+              />
+              <CardFooter className="absolute bg-white/30 backdrop-blur-md bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+                <div>
+                  <p className="text-foreground text-tiny font-semibold">Set Times</p>
+                  <p className="text-foreground/80 text-tiny">Manage availability</p>
+                </div>
+                <Button 
+                  className="text-tiny" 
+                  size="sm"
+                  onClick={() => navigate('/provider/schedule')}
+                >
+                  Open
+                </Button>
+              </CardFooter>
             </Card>
 
-            <Card 
-              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all 
-                       border-0 bg-gradient-to-br from-primary/5 to-accent/5" 
-              onClick={() => navigate('/provider/wallet')}
-            >
-              <CardHeader className="space-y-1 pb-[clamp(12px,3vw,16px)] p-[clamp(16px,4vw,24px)]">
-                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
-                              rounded-xl bg-primary/10 flex items-center justify-center mb-2">
-                  <DollarSign className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-primary" />
-                </div>
-                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Wallet</CardTitle>
-                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Earnings</CardDescription>
+            <Card className="w-full h-[300px] relative overflow-hidden">
+              <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                <p className="text-tiny text-white/80 uppercase font-bold">Finances</p>
+                <h4 className="text-white font-medium text-2xl">Wallet</h4>
               </CardHeader>
+              <Image
+                removeWrapper
+                alt="Wallet background"
+                className="z-0 w-full h-full object-cover"
+                src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80"
+              />
+              <CardFooter className="absolute bg-white/30 backdrop-blur-md bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+                <div>
+                  <p className="text-foreground text-tiny font-semibold">View Earnings</p>
+                  <p className="text-foreground/80 text-tiny">Track payments</p>
+                </div>
+                <Button 
+                  className="text-tiny" 
+                  size="sm"
+                  onClick={() => navigate('/provider/wallet')}
+                >
+                  Open
+                </Button>
+              </CardFooter>
             </Card>
 
-            <Card 
-              className="cursor-pointer hover:shadow-lg active:scale-95 transition-all 
-                       border-0 bg-gradient-to-br from-accent/5 to-primary/5" 
-              onClick={() => navigate('/provider/profile')}
-            >
-              <CardHeader className="space-y-1 pb-[clamp(12px,3vw,16px)] p-[clamp(16px,4vw,24px)]">
-                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
-                              rounded-xl bg-accent/10 flex items-center justify-center mb-2">
-                  <User className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-accent" />
-                </div>
-                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Profile</CardTitle>
-                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Your info</CardDescription>
+            <Card className="w-full h-[300px] relative overflow-hidden">
+              <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                <p className="text-tiny text-white/80 uppercase font-bold">Settings</p>
+                <h4 className="text-white font-medium text-2xl">Profile</h4>
               </CardHeader>
+              <Image
+                removeWrapper
+                alt="Profile background"
+                className="z-0 w-full h-full object-cover"
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
+              />
+              <CardFooter className="absolute bg-white/30 backdrop-blur-md bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+                <div>
+                  <p className="text-foreground text-tiny font-semibold">Edit Info</p>
+                  <p className="text-foreground/80 text-tiny">Update details</p>
+                </div>
+                <Button 
+                  className="text-tiny" 
+                  size="sm"
+                  onClick={() => navigate('/provider/profile')}
+                >
+                  Open
+                </Button>
+              </CardFooter>
             </Card>
           </div>
         </div>
