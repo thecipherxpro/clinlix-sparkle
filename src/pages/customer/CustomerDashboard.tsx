@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import MobileNav from "@/components/MobileNav";
@@ -122,66 +123,42 @@ const CustomerDashboard = () => {
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
             Quick Actions
           </h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
-            <Card 
-              className="cursor-pointer active:scale-95 hover:shadow-lg transition-all 
-                       border-0 bg-gradient-to-br from-primary/5 to-accent/5"
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)] auto-rows-fr">
+            <JobCard
+              title="Book Now"
+              description="Schedule service"
+              value="New Booking"
+              icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />}
+              heroColor="#fef4e2"
               onClick={() => navigate('/customer/booking')}
-            >
-              <CardHeader className="space-y-1 p-[clamp(16px,4vw,24px)] pb-[clamp(12px,3vw,16px)]">
-                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
-                              rounded-xl bg-primary/10 flex items-center justify-center mb-2">
-                  <Calendar className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-primary" />
-                </div>
-                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Book Now</CardTitle>
-                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Schedule service</CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card 
-              className="cursor-pointer active:scale-95 hover:shadow-lg transition-all 
-                       border-0 bg-gradient-to-br from-accent/5 to-primary/5"
+            />
+            
+            <JobCard
+              title="Addresses"
+              description="Your locations"
+              value="Manage"
+              icon={<MapPin className="w-4 h-4 sm:w-5 sm:h-5" />}
+              heroColor="#e0f2fe"
               onClick={() => navigate('/customer/my-addresses')}
-            >
-              <CardHeader className="space-y-1 p-[clamp(16px,4vw,24px)] pb-[clamp(12px,3vw,16px)]">
-                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
-                              rounded-xl bg-accent/10 flex items-center justify-center mb-2">
-                  <MapPin className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-accent" />
-                </div>
-                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Addresses</CardTitle>
-                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Your locations</CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card 
-              className="cursor-pointer active:scale-95 hover:shadow-lg transition-all 
-                       border-0 bg-gradient-to-br from-primary/5 to-accent/5"
+            />
+            
+            <JobCard
+              title="Payment"
+              description="Manage cards"
+              value="Methods"
+              icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />}
+              heroColor="#dcfce7"
               onClick={() => navigate('/customer/payment-methods')}
-            >
-              <CardHeader className="space-y-1 p-[clamp(16px,4vw,24px)] pb-[clamp(12px,3vw,16px)]">
-                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
-                              rounded-xl bg-primary/10 flex items-center justify-center mb-2">
-                  <CreditCard className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-primary" />
-                </div>
-                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Payment</CardTitle>
-                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Manage cards</CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card 
-              className="cursor-pointer active:scale-95 hover:shadow-lg transition-all 
-                       border-0 bg-gradient-to-br from-accent/5 to-primary/5"
+            />
+            
+            <JobCard
+              title="Profile"
+              description="Update info"
+              value="Settings"
+              icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />}
+              heroColor="#fae8ff"
               onClick={() => navigate('/customer/profile')}
-            >
-              <CardHeader className="space-y-1 p-[clamp(16px,4vw,24px)] pb-[clamp(12px,3vw,16px)]">
-                <div className="w-[clamp(40px,10vw,48px)] h-[clamp(40px,10vw,48px)] 
-                              rounded-xl bg-accent/10 flex items-center justify-center mb-2">
-                  <User className="w-[clamp(20px,5vw,24px)] h-[clamp(20px,5vw,24px)] text-accent" />
-                </div>
-                <CardTitle className="text-[clamp(14px,3.5vw,18px)]">Profile</CardTitle>
-                <CardDescription className="text-[clamp(11px,2.8vw,14px)]">Update info</CardDescription>
-              </CardHeader>
-            </Card>
+            />
           </div>
         </div>
 
