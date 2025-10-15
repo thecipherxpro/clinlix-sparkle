@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  Card as UICard,
-  CardContent,
-  CardDescription,
-  CardHeader as UICardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { JobCard } from "@/components/ui/premium-card";
+import { WobbleCard } from "@/components/ui/wobble-card";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -130,60 +124,47 @@ const ProviderDashboard = () => {
           />
         </div>
 
-        {/* Professional Stats Card - Auto-fit responsive */}
-        <UICard
-          className="border-0 shadow-lg bg-gradient-to-br from-card via-card to-primary/5 
-                       mb-[clamp(20px,5vw,32px)]"
-        >
-          <UICardHeader className="p-[clamp(16px,4vw,24px)]">
-            <CardTitle className="text-[clamp(20px,5vw,28px)]">Today's Overview</CardTitle>
-            <CardDescription className="text-[clamp(12px,3vw,14px)]">
-              Your current statistics and earnings
-            </CardDescription>
-          </UICardHeader>
-          <CardContent className="px-[clamp(16px,4vw,24px)] pb-[clamp(16px,4vw,24px)]">
-            <div className="grid grid-cols-3 gap-[clamp(12px,3vw,24px)]">
-              {/* Pending Jobs */}
-              <div className="flex flex-col items-center text-center">
-                <div
-                  className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
-                              rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center 
-                              mb-[clamp(8px,2vw,12px)]"
-                >
-                  <Briefcase className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-primary" />
-                </div>
-                <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Pending</p>
-                <p className="text-[clamp(20px,5vw,36px)] font-bold">{stats.pendingJobs}</p>
+        {/* Stats Cards with Wobble Effect */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-[clamp(16px,4vw,24px)] mb-[clamp(20px,5vw,32px)]">
+          <WobbleCard
+            containerClassName="bg-gradient-to-br from-primary to-primary/80 min-h-[200px]"
+            className="py-10"
+          >
+            <div className="flex flex-col items-center text-center text-white">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-3">
+                <Briefcase className="w-6 h-6" />
               </div>
-
-              {/* Active Today */}
-              <div className="flex flex-col items-center text-center">
-                <div
-                  className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
-                              rounded-lg md:rounded-xl bg-accent/10 flex items-center justify-center 
-                              mb-[clamp(8px,2vw,12px)]"
-                >
-                  <Clock className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-accent" />
-                </div>
-                <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Active</p>
-                <p className="text-[clamp(20px,5vw,36px)] font-bold">{stats.activeToday}</p>
-              </div>
-
-              {/* Monthly Earnings */}
-              <div className="flex flex-col items-center text-center">
-                <div
-                  className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
-                              rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center 
-                              mb-[clamp(8px,2vw,12px)]"
-                >
-                  <DollarSign className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-primary" />
-                </div>
-                <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Earnings</p>
-                <p className="text-[clamp(20px,5vw,36px)] font-bold">€{stats.monthlyEarnings.toFixed(2)}</p>
-              </div>
+              <p className="text-sm text-white/80 mb-2">Pending Jobs</p>
+              <p className="text-4xl font-bold">{stats.pendingJobs}</p>
             </div>
-          </CardContent>
-        </UICard>
+          </WobbleCard>
+
+          <WobbleCard
+            containerClassName="bg-gradient-to-br from-accent to-accent/80 min-h-[200px]"
+            className="py-10"
+          >
+            <div className="flex flex-col items-center text-center text-white">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-3">
+                <Clock className="w-6 h-6" />
+              </div>
+              <p className="text-sm text-white/80 mb-2">Active Today</p>
+              <p className="text-4xl font-bold">{stats.activeToday}</p>
+            </div>
+          </WobbleCard>
+
+          <WobbleCard
+            containerClassName="bg-gradient-to-br from-primary to-primary/80 min-h-[200px]"
+            className="py-10"
+          >
+            <div className="flex flex-col items-center text-center text-white">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-3">
+                <DollarSign className="w-6 h-6" />
+              </div>
+              <p className="text-sm text-white/80 mb-2">Monthly Earnings</p>
+              <p className="text-4xl font-bold">€{stats.monthlyEarnings.toFixed(2)}</p>
+            </div>
+          </WobbleCard>
+        </div>
 
         {/* Quick Actions - Job Cards */}
         <div>
