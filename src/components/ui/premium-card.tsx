@@ -66,7 +66,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             {icon}
           </div>
           <div>
-            <p className="font-medium text-[10px] sm:text-xs leading-tight">
+            <p className="font-medium text-[10px] sm:text-xs leading-tight truncate">
               {description}
             </p>
           </div>

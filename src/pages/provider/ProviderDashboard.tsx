@@ -8,8 +8,7 @@ import {
   CardHeader as UICardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { EvervaultCard, Icon } from "@/components/ui/evervault-card";
-import { Button } from "@/components/ui/button";
+import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -186,81 +185,45 @@ const ProviderDashboard = () => {
           </CardContent>
         </UICard>
 
-        {/* Quick Actions - Evervault Cards */}
+        {/* Quick Actions - Job Cards */}
         <div>
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
-            {/* Jobs Card */}
-            <div
-              className="border border-border dark:border-white/[0.2] flex flex-col items-start relative h-[300px] cursor-pointer hover:shadow-xl transition-shadow"
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
+            <JobCard
+              title="View Pending Jobs"
+              description="Review new job requests"
+              value={`${stats.pendingJobs} Pending`}
+              icon={<Briefcase className="w-4 h-4 sm:w-5 sm:h-5" />}
+              heroColor="#fef4e2"
               onClick={() => navigate("/provider/jobs")}
-            >
-              <Icon className="absolute h-6 w-6 -top-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -top-3 -right-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-foreground" />
-
-              <EvervaultCard text={stats.pendingJobs.toString()} />
-
-              <div className="absolute bottom-4 left-4 right-4">
-                <h4 className="text-foreground font-semibold text-lg mb-1">Jobs</h4>
-                <p className="text-sm text-muted-foreground">Requests</p>
-              </div>
-            </div>
-
-            {/* Schedule Card */}
-            <div
-              className="border border-border dark:border-white/[0.2] flex flex-col items-start relative h-[300px] cursor-pointer hover:shadow-xl transition-shadow"
+            />
+            
+            <JobCard
+              title="Manage Schedule"
+              description="Set your availability"
+              value="Available"
+              icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />}
+              heroColor="#e0f2fe"
               onClick={() => navigate("/provider/schedule")}
-            >
-              <Icon className="absolute h-6 w-6 -top-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -top-3 -right-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-foreground" />
-
-              <EvervaultCard text={<Calendar className="w-12 h-12" />} />
-
-              <div className="absolute bottom-4 left-4 right-4">
-                <h4 className="text-foreground font-semibold text-lg mb-1">Schedule</h4>
-                <p className="text-sm text-muted-foreground">Availability</p>
-              </div>
-            </div>
-
-            {/* Wallet Card */}
-            <div
-              className="border border-border dark:border-white/[0.2] flex flex-col items-start relative h-[300px] cursor-pointer hover:shadow-xl transition-shadow"
+            />
+            
+            <JobCard
+              title="Check Earnings"
+              description="View payment history"
+              value={`€${stats.monthlyEarnings.toFixed(0)}`}
+              icon={<DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />}
+              heroColor="#dcfce7"
               onClick={() => navigate("/provider/wallet")}
-            >
-              <Icon className="absolute h-6 w-6 -top-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -top-3 -right-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-foreground" />
-
-              <EvervaultCard text={`€${stats.monthlyEarnings.toFixed(0)}`} />
-
-              <div className="absolute bottom-4 left-4 right-4">
-                <h4 className="text-foreground font-semibold text-lg mb-1">Wallet</h4>
-                <p className="text-sm text-muted-foreground">Payments</p>
-              </div>
-            </div>
-
-            {/* Profile Card */}
-            <div
-              className="border border-border dark:border-white/[0.2] flex flex-col items-start relative h-[300px] cursor-pointer hover:shadow-xl transition-shadow"
+            />
+            
+            <JobCard
+              title="Update Profile"
+              description="Edit your information"
+              value="Profile"
+              icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />}
+              heroColor="#fae8ff"
               onClick={() => navigate("/provider/profile")}
-            >
-              <Icon className="absolute h-6 w-6 -top-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -top-3 -right-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-foreground" />
-
-              <EvervaultCard text={<User className="w-12 h-12" />} />
-
-              <div className="absolute bottom-4 left-4 right-4">
-                <h4 className="text-foreground font-semibold text-lg mb-1">Profile</h4>
-                <p className="text-sm text-muted-foreground">Update details</p>
-              </div>
-            </div>
+            />
           </div>
         </div>
       </main>
