@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { JobCard } from "@/components/ui/premium-card";
-import { WobbleCard } from "@/components/ui/wobble-card";
+import { LandscapeStatsCard } from "@/components/ui/landscape-stats-card";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -124,46 +124,13 @@ const ProviderDashboard = () => {
           />
         </div>
 
-        {/* Stats Cards with Wobble Effect */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-[clamp(16px,4vw,24px)] mb-[clamp(20px,5vw,32px)]">
-          <WobbleCard
-            containerClassName="bg-gradient-to-br from-primary to-primary/80 min-h-[200px]"
-            className="py-10"
-          >
-            <div className="flex flex-col items-center text-center text-white">
-              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-                <Briefcase className="w-6 h-6" />
-              </div>
-              <p className="text-sm text-white/80 mb-2">Pending Jobs</p>
-              <p className="text-4xl font-bold">{stats.pendingJobs}</p>
-            </div>
-          </WobbleCard>
-
-          <WobbleCard
-            containerClassName="bg-gradient-to-br from-accent to-accent/80 min-h-[200px]"
-            className="py-10"
-          >
-            <div className="flex flex-col items-center text-center text-white">
-              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-                <Clock className="w-6 h-6" />
-              </div>
-              <p className="text-sm text-white/80 mb-2">Active Today</p>
-              <p className="text-4xl font-bold">{stats.activeToday}</p>
-            </div>
-          </WobbleCard>
-
-          <WobbleCard
-            containerClassName="bg-gradient-to-br from-primary to-primary/80 min-h-[200px]"
-            className="py-10"
-          >
-            <div className="flex flex-col items-center text-center text-white">
-              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-                <DollarSign className="w-6 h-6" />
-              </div>
-              <p className="text-sm text-white/80 mb-2">Monthly Earnings</p>
-              <p className="text-4xl font-bold">€{stats.monthlyEarnings.toFixed(2)}</p>
-            </div>
-          </WobbleCard>
+        {/* Landscape Stats Card - Auto-fit responsive */}
+        <div className="mb-[clamp(20px,5vw,32px)] flex justify-center">
+          <LandscapeStatsCard
+            pendingJobs={stats.pendingJobs}
+            activeToday={stats.activeToday}
+            monthlyEarnings={stats.monthlyEarnings}
+          />
         </div>
 
         {/* Quick Actions - Job Cards */}
