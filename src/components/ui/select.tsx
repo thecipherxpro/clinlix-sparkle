@@ -11,13 +11,21 @@ interface SelectProps extends Omit<React.ComponentProps<typeof Listbox>, 'value'
 }
 
 const Select = React.forwardRef<HTMLDivElement, SelectProps>(
-  ({ value, onValueChange, onChange, ...props }, ref) => {
+  ({ value, onValueChange, onChange, className, ...props }, ref) => {
     const handleChange = (val: any) => {
       onChange?.(val);
       onValueChange?.(val);
     };
 
-    return <Listbox value={value} onChange={handleChange} {...props} />;
+    return (
+      <Listbox 
+        as="div" 
+        value={value} 
+        onChange={handleChange} 
+        className={cn("relative", className)}
+        {...props} 
+      />
+    );
   }
 );
 Select.displayName = "Select";
