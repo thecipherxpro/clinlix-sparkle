@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card as UICard, CardContent, CardDescription, CardHeader as UICardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card as UICard,
+  CardContent,
+  CardDescription,
+  CardHeader as UICardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Card, CardHeader, CardFooter, Image, Button } from "@heroui/react";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
@@ -16,7 +22,7 @@ const ProviderDashboard = () => {
   const [stats, setStats] = useState({
     pendingJobs: 0,
     activeToday: 0,
-    monthlyEarnings: 0
+    monthlyEarnings: 0,
   });
   useEffect(() => {
     checkUser();
@@ -24,57 +30,64 @@ const ProviderDashboard = () => {
   const checkUser = async () => {
     try {
       const {
-        data: {
-          user
-        }
+        data: { user },
       } = await supabase.auth.getUser();
       if (!user) {
         navigate("/auth");
         return;
       }
-      const {
-        data: profileData
-      } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+      const { data: profileData } = await supabase.from("profiles").select("*").eq("id", user.id).single();
       if (profileData?.role !== "provider") {
         navigate("/customer/dashboard");
         return;
       }
       setProfile(profileData);
-      const {
-        data: providerData
-      } = await supabase.from("provider_profiles").select("*").eq("user_id", user.id).single();
+      const { data: providerData } = await supabase
+        .from("provider_profiles")
+        .select("*")
+        .eq("user_id", user.id)
+        .single();
       setProviderProfile(providerData);
 
       // Fetch stats
       if (providerData?.id) {
-        const today = new Date().toISOString().split('T')[0];
-        const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
+        const today = new Date().toISOString().split("T")[0];
+        const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+          .toISOString()
+          .split("T")[0];
 
         // Fetch pending jobs
-        const {
-          count: pendingCount
-        } = await supabase.from("bookings").select("*", {
-          count: "exact",
-          head: true
-        }).eq("provider_id", providerData.id).eq("status", "pending");
+        const { count: pendingCount } = await supabase
+          .from("bookings")
+          .select("*", {
+            count: "exact",
+            head: true,
+          })
+          .eq("provider_id", providerData.id)
+          .eq("status", "pending");
 
         // Fetch active today
-        const {
-          count: activeCount
-        } = await supabase.from("bookings").select("*", {
-          count: "exact",
-          head: true
-        }).eq("provider_id", providerData.id).eq("status", "confirmed").eq("requested_date", today);
+        const { count: activeCount } = await supabase
+          .from("bookings")
+          .select("*", {
+            count: "exact",
+            head: true,
+          })
+          .eq("provider_id", providerData.id)
+          .eq("status", "confirmed")
+          .eq("requested_date", today);
 
         // Fetch monthly earnings
-        const {
-          data: walletData
-        } = await supabase.from("provider_wallet").select("payout_due").eq("provider_id", providerData.id).gte("created_at", firstDayOfMonth);
+        const { data: walletData } = await supabase
+          .from("provider_wallet")
+          .select("payout_due")
+          .eq("provider_id", providerData.id)
+          .gte("created_at", firstDayOfMonth);
         const monthlyTotal = walletData?.reduce((sum, record) => sum + Number(record.payout_due || 0), 0) || 0;
         setStats({
           pendingJobs: pendingCount || 0,
           activeToday: activeCount || 0,
-          monthlyEarnings: monthlyTotal
+          monthlyEarnings: monthlyTotal,
         });
       }
     } catch (error) {
@@ -84,39 +97,44 @@ const ProviderDashboard = () => {
     }
   };
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">
+    return (
+      <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>;
+      </div>
+    );
   }
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
       {/* Mobile-first header with auto-fit padding */}
       <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
-        <DashboardWelcomeBanner 
+        <DashboardWelcomeBanner
           user={{
-            name: profile?.first_name || 'User',
-            role: 'PROVIDER',
-            avatarUrl: profile?.avatar_url
-          }} 
+            name: profile?.first_name || "User",
+            role: "PROVIDER",
+            avatarUrl: profile?.avatar_url,
+          }}
         />
       </div>
 
       {/* Mobile-first main container with auto-fit max-width */}
-      <main className="w-full max-w-[min(1280px,calc(100%-32px))] mx-auto 
-                       px-[clamp(16px,4vw,32px)] py-[clamp(14px,3.5vw,24px)]">
-        
+      <main
+        className="w-full max-w-[min(1280px,calc(100%-32px))] mx-auto 
+                       px-[clamp(16px,4vw,32px)] py-[clamp(14px,3.5vw,24px)]"
+      >
         {/* Action Card - Auto-fit responsive */}
         <div className="mb-[clamp(20px,5vw,32px)]">
-          <ActionCard 
-            title="Start Your Day!" 
-            imageUrl={cleaningLadyImage} 
-            onSwipeClick={() => navigate('/provider/jobs')} 
+          <ActionCard
+            title="Start Your Day!"
+            imageUrl={cleaningLadyImage}
+            onSwipeClick={() => navigate("/provider/jobs")}
           />
         </div>
 
         {/* Professional Stats Card - Auto-fit responsive */}
-        <UICard className="border-0 shadow-lg bg-gradient-to-br from-card via-card to-primary/5 
-                       mb-[clamp(20px,5vw,32px)]">
+        <UICard
+          className="border-0 shadow-lg bg-gradient-to-br from-card via-card to-primary/5 
+                       mb-[clamp(20px,5vw,32px)]"
+        >
           <UICardHeader className="p-[clamp(16px,4vw,24px)]">
             <CardTitle className="text-[clamp(20px,5vw,28px)]">Today's Overview</CardTitle>
             <CardDescription className="text-[clamp(12px,3vw,14px)]">
@@ -127,9 +145,11 @@ const ProviderDashboard = () => {
             <div className="grid grid-cols-3 gap-[clamp(12px,3vw,24px)]">
               {/* Pending Jobs */}
               <div className="flex flex-col items-center text-center">
-                <div className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
+                <div
+                  className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
                               rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center 
-                              mb-[clamp(8px,2vw,12px)]">
+                              mb-[clamp(8px,2vw,12px)]"
+                >
                   <Briefcase className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-primary" />
                 </div>
                 <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Pending</p>
@@ -138,9 +158,11 @@ const ProviderDashboard = () => {
 
               {/* Active Today */}
               <div className="flex flex-col items-center text-center">
-                <div className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
+                <div
+                  className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
                               rounded-lg md:rounded-xl bg-accent/10 flex items-center justify-center 
-                              mb-[clamp(8px,2vw,12px)]">
+                              mb-[clamp(8px,2vw,12px)]"
+                >
                   <Clock className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-accent" />
                 </div>
                 <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Active</p>
@@ -149,9 +171,11 @@ const ProviderDashboard = () => {
 
               {/* Monthly Earnings */}
               <div className="flex flex-col items-center text-center">
-                <div className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
+                <div
+                  className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
                               rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center 
-                              mb-[clamp(8px,2vw,12px)]">
+                              mb-[clamp(8px,2vw,12px)]"
+                >
                   <DollarSign className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-primary" />
                 </div>
                 <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Earnings</p>
@@ -163,9 +187,7 @@ const ProviderDashboard = () => {
 
         {/* Quick Actions - Hero UI Cards with Blurred Footer */}
         <div>
-          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
-            Quick Actions
-          </h3>
+          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
             <Card isFooterBlurred className="w-full h-[300px]">
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
@@ -176,19 +198,19 @@ const ProviderDashboard = () => {
                 removeWrapper
                 alt="Card background"
                 className="z-0 w-full h-full object-cover"
-                src="https://heroui.com/images/card-example-4.jpeg"
+                src="https://i.postimg.cc/3wgQwkjQ/Splash-New.png"
               />
               <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                 <div>
                   <p className="text-black text-tiny">View Pending</p>
                   <p className="text-black text-tiny">Manage requests</p>
                 </div>
-                <Button 
-                  className="text-tiny" 
-                  color="primary" 
-                  radius="full" 
+                <Button
+                  className="text-tiny"
+                  color="primary"
+                  radius="full"
                   size="sm"
-                  onPress={() => navigate('/provider/jobs')}
+                  onPress={() => navigate("/provider/jobs")}
                 >
                   Open
                 </Button>
@@ -211,12 +233,12 @@ const ProviderDashboard = () => {
                   <p className="text-black text-tiny">Set Times</p>
                   <p className="text-black text-tiny">Manage availability</p>
                 </div>
-                <Button 
-                  className="text-tiny" 
-                  color="primary" 
-                  radius="full" 
+                <Button
+                  className="text-tiny"
+                  color="primary"
+                  radius="full"
                   size="sm"
-                  onPress={() => navigate('/provider/schedule')}
+                  onPress={() => navigate("/provider/schedule")}
                 >
                   Open
                 </Button>
@@ -239,12 +261,12 @@ const ProviderDashboard = () => {
                   <p className="text-black text-tiny">View Earnings</p>
                   <p className="text-black text-tiny">Track payments</p>
                 </div>
-                <Button 
-                  className="text-tiny" 
-                  color="primary" 
-                  radius="full" 
+                <Button
+                  className="text-tiny"
+                  color="primary"
+                  radius="full"
                   size="sm"
-                  onPress={() => navigate('/provider/wallet')}
+                  onPress={() => navigate("/provider/wallet")}
                 >
                   Open
                 </Button>
@@ -267,12 +289,12 @@ const ProviderDashboard = () => {
                   <p className="text-black text-tiny">Edit Info</p>
                   <p className="text-black text-tiny">Update details</p>
                 </div>
-                <Button 
-                  className="text-tiny" 
-                  color="primary" 
-                  radius="full" 
+                <Button
+                  className="text-tiny"
+                  color="primary"
+                  radius="full"
                   size="sm"
-                  onPress={() => navigate('/provider/profile')}
+                  onPress={() => navigate("/provider/profile")}
                 >
                   Open
                 </Button>
