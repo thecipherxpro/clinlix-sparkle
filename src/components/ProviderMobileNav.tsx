@@ -1,58 +1,48 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, Briefcase, Calendar, DollarSign, User } from "lucide-react";
-import FloatingIconBar from "./FloatingIconBar";
+import { FloatingDock } from "./ui/floating-dock";
 
 const ProviderMobileNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const navItems = [
+  const dockItems = [
     { 
-      id: "/provider/dashboard", 
-      icon: Home, 
-      label: "Home", 
-      color: "from-blue-500 to-blue-600" 
+      title: "Home",
+      icon: <Home className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      href: "/provider/dashboard",
+      onClick: () => navigate("/provider/dashboard")
     },
     { 
-      id: "/provider/jobs", 
-      icon: Briefcase, 
-      label: "Jobs", 
-      color: "from-purple-500 to-purple-600" 
+      title: "Jobs",
+      icon: <Briefcase className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      href: "/provider/jobs",
+      onClick: () => navigate("/provider/jobs")
     },
     { 
-      id: "/provider/schedule", 
-      icon: Calendar, 
-      label: "Schedule", 
-      color: "from-pink-500 to-pink-600",
-      hideLabel: true
+      title: "Schedule",
+      icon: <Calendar className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      href: "/provider/schedule",
+      onClick: () => navigate("/provider/schedule")
     },
     { 
-      id: "/provider/wallet", 
-      icon: DollarSign, 
-      label: "Wallet", 
-      color: "from-green-500 to-green-600" 
+      title: "Wallet",
+      icon: <DollarSign className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      href: "/provider/wallet",
+      onClick: () => navigate("/provider/wallet")
     },
     { 
-      id: "/provider/profile", 
-      icon: User, 
-      label: "Profile", 
-      color: "from-orange-500 to-orange-600" 
+      title: "Profile",
+      icon: <User className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      href: "/provider/profile",
+      onClick: () => navigate("/provider/profile")
     },
   ];
 
-  const handleTabChange = (tabId: string) => {
-    navigate(tabId);
-  };
-
   return (
-    <FloatingIconBar
-      items={navItems}
-      activeTab={location.pathname}
-      onTabChange={handleTabChange}
-      position="bottom"
-      showLabels={true}
-      showSeparators={true}
-    />
+    <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center">
+      <FloatingDock items={dockItems} />
+    </div>
   );
 };
 
