@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -83,9 +84,9 @@ const ProviderProfile = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-24 md:pb-8">
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
         <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="touch-target">
+          <HeroButton isIconOnly variant="light" onPress={() => navigate(-1)} className="touch-target">
             <ArrowLeft className="w-5 h-5" />
-          </Button>
+          </HeroButton>
           <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Provider Profile
           </h1>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -386,13 +387,13 @@ const JobDetail = () => {
       {/* Header */}
       <header className="sticky top-0 z-10 bg-card border-b px-4 py-3">
         <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate("/provider/jobs")}
+          <HeroButton
+            isIconOnly
+            variant="light"
+            onPress={() => navigate("/provider/jobs")}
           >
             <ArrowLeft className="h-5 w-5" />
-          </Button>
+          </HeroButton>
           <h1 className="text-lg sm:text-xl font-bold text-foreground">Job Details</h1>
         </div>
       </header>
