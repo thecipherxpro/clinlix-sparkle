@@ -144,25 +144,30 @@ export const LandscapeStatsCard: React.FC<LandscapeStatsCardProps> = ({
           </div>
         </div>
         
-        {/* Earnings Forecast */}
-        <div className="flex flex-col items-center justify-evenly h-full w-full px-[25px] py-[10px]">
-          <div className="w-full flex items-center justify-between text-muted-foreground text-[9pt]">
-            <p>Monthly Earnings</p>
-            <p className="font-bold">€{monthlyEarnings.toFixed(2)}</p>
-          </div>
-          
-          <div className="w-full h-[2px] bg-border rounded-[1px]" />
-          
-          <div className="w-full flex items-center justify-between text-muted-foreground text-[9pt]">
-            <p>This Week</p>
-            <p>€{(monthlyEarnings / 4).toFixed(2)}</p>
-          </div>
-          
-          <div className="w-full h-[2px] bg-border rounded-[1px]" />
-          
-          <div className="w-full flex items-center justify-between text-muted-foreground text-[9pt]">
-            <p>Average/Day</p>
-            <p>€{(monthlyEarnings / 30).toFixed(2)}</p>
+        {/* Earnings Card */}
+        <div className="flex items-center justify-center h-full w-full px-[15px] py-[12px]">
+          <div className="w-full rounded-[20px] bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 p-[16px] backdrop-blur-sm border border-primary/20 shadow-lg">
+            <div className="flex flex-col gap-[10px]">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col">
+                  <span className="text-[8pt] font-medium text-muted-foreground uppercase tracking-wider">Monthly</span>
+                  <span className="text-[18pt] font-bold text-foreground leading-none">€{monthlyEarnings.toFixed(0)}</span>
+                </div>
+                <DollarSign className="w-[30px] h-[30px] text-primary/60" />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-[8px] mt-[4px]">
+                <div className="bg-card/80 rounded-[12px] p-[8px] border border-border/50">
+                  <p className="text-[7pt] text-muted-foreground uppercase tracking-wide">Week</p>
+                  <p className="text-[12pt] font-semibold text-foreground">€{(monthlyEarnings / 4).toFixed(0)}</p>
+                </div>
+                
+                <div className="bg-card/80 rounded-[12px] p-[8px] border border-border/50">
+                  <p className="text-[7pt] text-muted-foreground uppercase tracking-wide">Day</p>
+                  <p className="text-[12pt] font-semibold text-foreground">€{(monthlyEarnings / 30).toFixed(0)}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
