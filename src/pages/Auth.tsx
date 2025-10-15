@@ -264,11 +264,11 @@ const Auth = () => {
                       id="remember"
                       checked={rememberMe}
                       onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                      className="w-[1px] h-[1px]"
+                      className="w-[0.5px] h-[0.5px]"
                     />
                     <label
                       htmlFor="remember"
-                      className="text-xs font-thin leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm font-medium  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Remember me
                     </label>
