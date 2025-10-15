@@ -174,9 +174,9 @@ const ProviderDashboard = () => {
               </CardHeader>
               <Image
                 removeWrapper
-                alt="Jobs background"
+                alt="Card background"
                 className="z-0 w-full h-full object-cover"
-                src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80"
+                src="https://heroui.com/images/card-example-4.jpeg"
               />
               <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                 <div>
@@ -202,9 +202,9 @@ const ProviderDashboard = () => {
               </CardHeader>
               <Image
                 removeWrapper
-                alt="Schedule background"
+                alt="Card background"
                 className="z-0 w-full h-full object-cover"
-                src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80"
+                src="https://heroui.com/images/card-example-4.jpeg"
               />
               <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                 <div>
@@ -230,9 +230,9 @@ const ProviderDashboard = () => {
               </CardHeader>
               <Image
                 removeWrapper
-                alt="Wallet background"
+                alt="Card background"
                 className="z-0 w-full h-full object-cover"
-                src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80"
+                src="https://heroui.com/images/card-example-4.jpeg"
               />
               <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                 <div>
@@ -258,9 +258,9 @@ const ProviderDashboard = () => {
               </CardHeader>
               <Image
                 removeWrapper
-                alt="Profile background"
+                alt="Card background"
                 className="z-0 w-full h-full object-cover"
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
+                src="https://heroui.com/images/card-example-4.jpeg"
               />
               <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                 <div>
