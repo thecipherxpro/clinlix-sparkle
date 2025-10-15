@@ -222,7 +222,7 @@ const ProviderDashboard = () => {
 
               <div className="absolute bottom-4 left-4 right-4">
                 <h4 className="text-foreground font-semibold text-lg mb-1">Schedule</h4>
-                <p className="text-sm text-muted-foreground">Manage availability</p>
+                <p className="text-sm text-muted-foreground">Availability</p>
               </div>
             </div>
 
@@ -240,7 +240,7 @@ const ProviderDashboard = () => {
 
               <div className="absolute bottom-4 left-4 right-4">
                 <h4 className="text-foreground font-semibold text-lg mb-1">Wallet</h4>
-                <p className="text-sm text-muted-foreground">Track payments</p>
+                <p className="text-sm text-muted-foreground">Payments</p>
               </div>
             </div>
 
