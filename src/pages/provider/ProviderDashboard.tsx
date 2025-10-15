@@ -8,8 +8,7 @@ import {
   CardHeader as UICardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { EvervaultCard, Icon } from "@/components/ui/evervault-card";
-import { Button } from "@/components/ui/button";
+import { PremiumCard } from "@/components/ui/premium-card";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -186,81 +185,42 @@ const ProviderDashboard = () => {
           </CardContent>
         </UICard>
 
-        {/* Quick Actions - Evervault Cards */}
+        {/* Quick Actions - Premium Cards */}
         <div>
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
-            {/* Jobs Card */}
-            <div 
-              className="border border-border dark:border-white/[0.2] flex flex-col items-start relative h-[300px] cursor-pointer hover:shadow-xl transition-shadow"
+            <PremiumCard
+              title="Jobs"
+              description="View pending requests"
+              badge="NEW"
+              value={stats.pendingJobs.toString()}
+              accentColor="#a78bfa"
               onClick={() => navigate("/provider/jobs")}
-            >
-              <Icon className="absolute h-6 w-6 -top-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -top-3 -right-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-foreground" />
-              
-              <EvervaultCard text={stats.pendingJobs.toString()} />
-              
-              <div className="absolute bottom-4 left-4 right-4">
-                <h4 className="text-foreground font-semibold text-lg mb-1">Jobs</h4>
-                <p className="text-sm text-muted-foreground">View pending requests</p>
-              </div>
-            </div>
-
-            {/* Schedule Card */}
-            <div 
-              className="border border-border dark:border-white/[0.2] flex flex-col items-start relative h-[300px] cursor-pointer hover:shadow-xl transition-shadow"
+            />
+            
+            <PremiumCard
+              title="Schedule"
+              description="Manage availability"
+              icon={<Calendar className="w-12 h-12" />}
+              accentColor="#8b5cf6"
               onClick={() => navigate("/provider/schedule")}
-            >
-              <Icon className="absolute h-6 w-6 -top-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -top-3 -right-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-foreground" />
-              
-              <EvervaultCard text={<Calendar className="w-12 h-12" />} />
-              
-              <div className="absolute bottom-4 left-4 right-4">
-                <h4 className="text-foreground font-semibold text-lg mb-1">Schedule</h4>
-                <p className="text-sm text-muted-foreground">Manage availability</p>
-              </div>
-            </div>
-
-            {/* Wallet Card */}
-            <div 
-              className="border border-border dark:border-white/[0.2] flex flex-col items-start relative h-[300px] cursor-pointer hover:shadow-xl transition-shadow"
+            />
+            
+            <PremiumCard
+              title="Wallet"
+              description="Track payments"
+              value={`€${stats.monthlyEarnings.toFixed(0)}`}
+              accentColor="#7c3aed"
               onClick={() => navigate("/provider/wallet")}
-            >
-              <Icon className="absolute h-6 w-6 -top-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -top-3 -right-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-foreground" />
-              
-              <EvervaultCard text={`€${stats.monthlyEarnings.toFixed(0)}`} />
-              
-              <div className="absolute bottom-4 left-4 right-4">
-                <h4 className="text-foreground font-semibold text-lg mb-1">Wallet</h4>
-                <p className="text-sm text-muted-foreground">Track payments</p>
-              </div>
-            </div>
-
-            {/* Profile Card */}
-            <div 
-              className="border border-border dark:border-white/[0.2] flex flex-col items-start relative h-[300px] cursor-pointer hover:shadow-xl transition-shadow"
+            />
+            
+            <PremiumCard
+              title="Profile"
+              description="Update details"
+              icon={<User className="w-12 h-12" />}
+              accentColor="#6d28d9"
               onClick={() => navigate("/provider/profile")}
-            >
-              <Icon className="absolute h-6 w-6 -top-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -top-3 -right-3 text-foreground" />
-              <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-foreground" />
-              
-              <EvervaultCard text={<User className="w-12 h-12" />} />
-              
-              <div className="absolute bottom-4 left-4 right-4">
-                <h4 className="text-foreground font-semibold text-lg mb-1">Profile</h4>
-                <p className="text-sm text-muted-foreground">Update details</p>
-              </div>
-            </div>
+            />
           </div>
         </div>
       </main>
