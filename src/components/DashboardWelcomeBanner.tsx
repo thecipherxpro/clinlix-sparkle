@@ -188,7 +188,7 @@ const DashboardWelcomeBanner = ({ user, onSearchClick, className }: DashboardWel
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mt-2">{user.name}</h1>
 
         {/* Role Badge */}
-        <div className="badge badge-soft badge-accent mt-3 text-xs uppercase tracking-wide font-semibold">
+        <div className="badge badge-soft badge-accent mt-3 text-sm uppercase tracking-wide font-semibold">
           {user.role} Portal
         </div>
 
