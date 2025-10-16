@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Upload, Search } from "lucide-react";
 import { toast } from "sonner";
-import { Chip } from "@heroui/react";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { cn } from "@/lib/utils";
 interface DashboardWelcomeBannerProps {
@@ -176,13 +175,9 @@ const DashboardWelcomeBanner = ({ user, onSearchClick, className }: DashboardWel
         </h1>
         
         {/* Role Badge */}
-        <Chip 
-          color="secondary" 
-          variant="flat"
-          className="mt-3 text-xs px-4 py-1.5 uppercase tracking-wide font-semibold"
-        >
+        <div className="badge badge-primary mt-3 text-xs uppercase tracking-wide font-semibold">
           {user.role} Portal
-        </Chip>
+        </div>
 
         {/* Search Field */}
         {onSearchClick && (
