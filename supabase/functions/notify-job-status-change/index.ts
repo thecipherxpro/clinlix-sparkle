@@ -107,7 +107,7 @@ Deno.serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const payload: StatusChangePayload = await req.json();
-    console.log('Job status change:', payload);
+    console.log('📬 Job status change notification:', payload);
 
     const { booking_id, new_status, customer_id, provider_id } = payload;
 
@@ -117,39 +117,75 @@ Deno.serve(async (req) => {
     // Get provider notification content  
     const providerContent = getStatusNotificationContent(new_status, 'provider');
 
-    // Send notification to customer
-    const { error: customerNotifError } = await supabase.functions.invoke('send-push-notification', {
-      body: {
-        user_ids: [customer_id],
+    // Store notification for customer directly in database
+    const { error: customerDbError } = await supabase
+      .from('notifications')
+      .insert({
+        user_id: customer_id,
         title: customerContent.title,
         body: customerContent.body,
         target_url: customerContent.target_url,
-        icon: 'https://clinlix.com/assets/logo-clinlix-BphsOeP6.png',
-        tag: `booking-${booking_id}`
-      }
-    });
+        read_status: false
+      });
 
-    if (customerNotifError) {
-      console.error('Error sending customer notification:', customerNotifError);
+    if (customerDbError) {
+      console.error('❌ Error storing customer notification:', customerDbError);
+    } else {
+      console.log('✅ Customer notification stored');
     }
 
-    // Send notification to provider if assigned
-    if (provider_id) {
-      const { error: providerNotifError } = await supabase.functions.invoke('send-push-notification', {
+    // Also try to send push notification to customer
+    try {
+      await supabase.functions.invoke('send-push-notification', {
         body: {
-          user_ids: [provider_id],
-          title: providerContent.title,
-          body: providerContent.body,
-          target_url: providerContent.target_url,
+          user_ids: [customer_id],
+          title: customerContent.title,
+          body: customerContent.body,
+          target_url: customerContent.target_url,
           icon: 'https://clinlix.com/assets/logo-clinlix-BphsOeP6.png',
           tag: `booking-${booking_id}`
         }
       });
+    } catch (pushError) {
+      console.log('⚠️ Push notification failed (user may not be subscribed):', pushError);
+    }
 
-      if (providerNotifError) {
-        console.error('Error sending provider notification:', providerNotifError);
+    // Store notification for provider if assigned
+    if (provider_id) {
+      const { error: providerDbError } = await supabase
+        .from('notifications')
+        .insert({
+          user_id: provider_id,
+          title: providerContent.title,
+          body: providerContent.body,
+          target_url: providerContent.target_url,
+          read_status: false
+        });
+
+      if (providerDbError) {
+        console.error('❌ Error storing provider notification:', providerDbError);
+      } else {
+        console.log('✅ Provider notification stored');
+      }
+
+      // Also try to send push notification to provider
+      try {
+        await supabase.functions.invoke('send-push-notification', {
+          body: {
+            user_ids: [provider_id],
+            title: providerContent.title,
+            body: providerContent.body,
+            target_url: providerContent.target_url,
+            icon: 'https://clinlix.com/assets/logo-clinlix-BphsOeP6.png',
+            tag: `booking-${booking_id}`
+          }
+        });
+      } catch (pushError) {
+        console.log('⚠️ Push notification failed (user may not be subscribed):', pushError);
       }
     }
+
+    console.log('✨ Notifications processed successfully');
 
     return new Response(
       JSON.stringify({ success: true, message: 'Notifications sent' }),
@@ -157,7 +193,7 @@ Deno.serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Error in notify-job-status-change:', error);
+    console.error('❌ Error in notify-job-status-change:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return new Response(
       JSON.stringify({ error: errorMessage }),
