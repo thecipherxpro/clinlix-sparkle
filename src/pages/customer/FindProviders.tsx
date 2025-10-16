@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@heroui/react";
 import { Slider } from "@/components/ui/slider";
 import { ArrowLeft, Search, SlidersHorizontal, UserX } from "lucide-react";
 import { toast } from "sonner";
@@ -218,11 +218,11 @@ const FindProviders = () => {
                       <Label htmlFor="verified">Verified Only</Label>
                       <p className="text-xs text-muted-foreground">Show only verified providers</p>
                     </div>
-                    <Switch
-                      id="verified"
-                      checked={verifiedOnly}
-                      onCheckedChange={setVerifiedOnly}
-                    />
+                  <Switch
+                    id="verified"
+                    isSelected={verifiedOnly}
+                    onValueChange={setVerifiedOnly}
+                  />
                   </div>
 
                   {/* Min Rating */}
