@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare } from "lucide-react";
@@ -111,16 +112,16 @@ const ProviderProfile = () => {
           {/* Header Info */}
           <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
             {provider.new_provider && (
-              <div className="badge badge-soft badge-secondary gap-1">
+              <Badge variant="secondary" className="gap-1">
                 <Sparkles className="w-3 h-3" />
                 NEW
-              </div>
+              </Badge>
             )}
             {provider.verified && (
-              <div className="badge badge-soft badge-primary gap-1">
+              <Badge variant="default" className="gap-1">
                 <Shield className="w-3 h-3" />
                 VERIFIED
-              </div>
+              </Badge>
             )}
           </div>
 
@@ -136,9 +137,9 @@ const ProviderProfile = () => {
           {provider.skills && provider.skills.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
               {provider.skills.map((skill: string, idx: number) => (
-                <div key={idx} className="badge badge-soft badge-outline">
+                <Badge key={idx} variant="outline">
                   {skill}
-                </div>
+                </Badge>
               ))}
             </div>
           )}
@@ -181,9 +182,9 @@ const ProviderProfile = () => {
                     <h3 className="font-semibold mb-3">Service Areas</h3>
                     <div className="flex flex-wrap gap-2">
                       {provider.service_areas.map((area: string, idx: number) => (
-                        <div key={idx} className="badge badge-soft badge-secondary">
+                        <Badge key={idx} variant="secondary">
                           {area}
-                        </div>
+                        </Badge>
                       ))}
                     </div>
                   </CardContent>
@@ -253,21 +254,21 @@ const ProviderProfile = () => {
         <div className="mobile-container py-3 sm:py-4 max-w-4xl">
           {hasConfirmedBooking ? (
             <div className="grid grid-cols-3 gap-2">
-              <Button variant="outline" size="sm" className="h-12 sm:h-10">
+              <Button variant="secondary" size="sm" className="h-12 sm:h-10">
                 <MessageSquare className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Message</span>
               </Button>
-              <Button variant="outline" size="sm" className="h-12 sm:h-10">
+              <Button variant="secondary" size="sm" className="h-12 sm:h-10">
                 <Phone className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Call</span>
               </Button>
-              <Button variant="outline" size="sm" className="h-12 sm:h-10">
+              <Button variant="secondary" size="sm" className="h-12 sm:h-10">
                 <Mail className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Email</span>
               </Button>
             </div>
           ) : (
-            <Button className="w-full h-12 sm:h-11 text-base" onClick={handleBookNow}>
+            <Button variant="default" className="w-full h-12 sm:h-11 text-base" onClick={handleBookNow}>
               Book Now
             </Button>
           )}

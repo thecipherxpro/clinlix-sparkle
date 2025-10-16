@@ -317,12 +317,13 @@ const ProviderProfilePage = () => {
           <Button 
             onClick={handleSaveProfile} 
             disabled={saving}
+            variant="default"
             className="flex-1 touch-target"
           >
             {saving ? "Saving..." : "Save Changes"}
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={() => navigate(`/providers/profile/${providerProfile?.id}`)}
             className="flex-1 touch-target"
             disabled={!providerProfile?.id}
