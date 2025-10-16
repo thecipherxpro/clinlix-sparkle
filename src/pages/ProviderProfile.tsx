@@ -23,44 +23,42 @@ const ProviderProfile = () => {
 
   const fetchProviderData = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-      const { data: providerData } = await supabase
-        .from('provider_profiles')
-        .select('*')
-        .eq('id', providerId)
-        .single();
+      const { data: providerData } = await supabase.from("provider_profiles").select("*").eq("id", providerId).single();
 
       setProvider(providerData);
 
       const { data: reviewsData } = await supabase
-        .from('provider_reviews')
-        .select('*, profiles(first_name, last_name)')
-        .eq('provider_id', providerId)
-        .order('created_at', { ascending: false });
+        .from("provider_reviews")
+        .select("*, profiles(first_name, last_name)")
+        .eq("provider_id", providerId)
+        .order("created_at", { ascending: false });
 
       setReviews(reviewsData || []);
 
       if (user) {
         const { data: bookingData } = await supabase
-          .from('bookings')
-          .select('id')
-          .eq('customer_id', user.id)
-          .eq('provider_id', providerId)
-          .in('status', ['confirmed', 'on_the_way', 'arrived', 'started', 'completed'])
+          .from("bookings")
+          .select("id")
+          .eq("customer_id", user.id)
+          .eq("provider_id", providerId)
+          .in("status", ["confirmed", "on_the_way", "arrived", "started", "completed"])
           .limit(1);
 
         setHasConfirmedBooking(!!bookingData && bookingData.length > 0);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleBookNow = () => {
-    navigate('/customer/booking');
+    navigate("/customer/booking");
   };
 
   if (loading) {
@@ -97,11 +95,14 @@ const ProviderProfile = () => {
         <div className="relative mb-6 sm:mb-8">
           <div className="h-32 sm:h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl" />
           <div className="absolute -bottom-12 sm:-bottom-16 left-4 sm:left-8">
-            <AvatarDisplay 
+            <AvatarDisplay
               userId={provider.user_id}
               avatarUrl={provider.photo_url}
               size={window.innerWidth >= 640 ? 128 : 96}
-              fallbackText={provider.full_name.split(' ').map((n: string) => n[0]).join('')}
+              fallbackText={provider.full_name
+                .split(" ")
+                .map((n: string) => n[0])
+                .join("")}
               className="border-4 border-background rounded-full"
             />
           </div>
@@ -111,7 +112,7 @@ const ProviderProfile = () => {
           {/* Header Info */}
           <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
             {provider.new_provider && (
-              <div className="badge badge-secondary gap-1">
+              <div className="badge badge-accent gap-1">
                 <Sparkles className="w-3 h-3" />
                 NEW
               </div>
@@ -148,7 +149,9 @@ const ProviderProfile = () => {
           {/* Tabs */}
           <Tabs defaultValue="about" className="w-full">
             <TabsList className="w-full h-12 sm:h-10">
-              <TabsTrigger value="about" className="flex-1">About</TabsTrigger>
+              <TabsTrigger value="about" className="flex-1">
+                About
+              </TabsTrigger>
               <TabsTrigger value="reviews" className="flex-1">
                 Reviews ({provider.rating_count})
               </TabsTrigger>
@@ -169,7 +172,8 @@ const ProviderProfile = () => {
                   <CardContent className="pt-6">
                     <h3 className="font-semibold mb-3">Experience</h3>
                     <p className="text-muted-foreground">
-                      {provider.experience_years} {provider.experience_years === 1 ? 'year' : 'years'} of professional cleaning experience
+                      {provider.experience_years} {provider.experience_years === 1 ? "year" : "years"} of professional
+                      cleaning experience
                     </p>
                   </CardContent>
                 </Card>
@@ -194,9 +198,7 @@ const ProviderProfile = () => {
                 <Card className="border-0 shadow-sm">
                   <CardContent className="pt-6">
                     <h3 className="font-semibold mb-3">Languages</h3>
-                    <p className="text-muted-foreground">
-                      {provider.languages.join(', ')}
-                    </p>
+                    <p className="text-muted-foreground">{provider.languages.join(", ")}</p>
                   </CardContent>
                 </Card>
               )}
@@ -224,9 +226,7 @@ const ProviderProfile = () => {
                               <Star
                                 key={idx}
                                 className={`w-4 h-4 ${
-                                  idx < review.rating
-                                    ? 'fill-yellow-400 text-yellow-400'
-                                    : 'text-muted-foreground'
+                                  idx < review.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
                                 }`}
                               />
                             ))}
@@ -236,9 +236,7 @@ const ProviderProfile = () => {
                           {new Date(review.created_at).toLocaleDateString()}
                         </p>
                       </div>
-                      {review.comment && (
-                        <p className="text-muted-foreground">{review.comment}</p>
-                      )}
+                      {review.comment && <p className="text-muted-foreground">{review.comment}</p>}
                     </CardContent>
                   </Card>
                 ))
