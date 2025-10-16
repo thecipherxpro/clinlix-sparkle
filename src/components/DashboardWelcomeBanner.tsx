@@ -177,7 +177,7 @@ const DashboardWelcomeBanner = ({ user, onSearchClick, className }: DashboardWel
         
         {/* Role Badge */}
         <Chip 
-          color="warning" 
+          color="secondary" 
           variant="flat"
           className="mt-3 text-xs px-4 py-1.5 uppercase tracking-wide font-semibold"
         >
