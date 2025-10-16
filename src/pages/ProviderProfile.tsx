@@ -123,16 +123,6 @@ const ProviderProfile = () => {
             </div>
           </div>
 
-          {provider.skills && provider.skills.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
-              {provider.skills.map((skill: string, idx: number) => (
-                <div key={idx} className="badge badge-outline">
-                  {skill}
-                </div>
-              ))}
-            </div>
-          )}
-
           <Separator className="my-4 sm:my-6" />
 
           {/* Tabs */}
@@ -147,6 +137,21 @@ const ProviderProfile = () => {
             </TabsList>
 
             <TabsContent value="about" className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
+              {provider.skills && provider.skills.length > 0 && (
+                <Card className="border-0 shadow-sm">
+                  <CardContent className="pt-6">
+                    <h3 className="font-semibold mb-3">Skills</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {provider.skills.map((skill: string, idx: number) => (
+                        <div key={idx} className="badge badge-outline">
+                          {skill}
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               {provider.bio && (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="pt-6">
