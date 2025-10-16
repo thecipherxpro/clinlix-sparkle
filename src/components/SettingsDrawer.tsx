@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@heroui/react";
+import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Drawer,
@@ -196,8 +196,8 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                           <p className="text-sm text-muted-foreground">Allow customers to book you regularly</p>
                         </div>
                       <Switch
-                        isSelected={profile?.accept_recurring ?? false}
-                        onValueChange={(checked) => updateSetting('accept_recurring', checked)}
+                        checked={profile?.accept_recurring ?? false}
+                        onCheckedChange={(checked) => updateSetting('accept_recurring', checked)}
                       />
                       </div>
                       <div className="flex items-center justify-between">
@@ -206,8 +206,8 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                           <p className="text-sm text-muted-foreground">Show as available for new bookings</p>
                         </div>
                       <Switch
-                        isSelected={profile?.available_status ?? true}
-                        onValueChange={(checked) => updateSetting('available_status', checked)}
+                        checked={profile?.available_status ?? true}
+                        onCheckedChange={(checked) => updateSetting('available_status', checked)}
                       />
                       </div>
                     </CardContent>
@@ -276,8 +276,8 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                       </p>
                     </div>
                   <Switch
-                    isSelected={profile?.notifications_enabled ?? true}
-                    onValueChange={(checked) => updateSetting('notifications_enabled', checked)}
+                    checked={profile?.notifications_enabled ?? true}
+                    onCheckedChange={(checked) => updateSetting('notifications_enabled', checked)}
                   />
                   </div>
                   <div className="flex items-center justify-between">
@@ -288,8 +288,8 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                       </p>
                     </div>
                   <Switch
-                    isSelected={profile?.sms_notifications ?? true}
-                    onValueChange={(checked) => updateSetting('sms_notifications', checked)}
+                    checked={profile?.sms_notifications ?? true}
+                    onCheckedChange={(checked) => updateSetting('sms_notifications', checked)}
                   />
                   </div>
                 </CardContent>

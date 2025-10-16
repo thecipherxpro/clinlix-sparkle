@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@heroui/react";
+import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Key, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
@@ -164,8 +164,8 @@ const ProviderSettings = () => {
                 <p className="text-sm text-muted-foreground">Allow customers to book you regularly</p>
               </div>
             <Switch
-              isSelected={profile?.accept_recurring ?? false}
-              onValueChange={(checked) => updateSetting('accept_recurring', checked)}
+              checked={profile?.accept_recurring ?? false}
+              onCheckedChange={(checked) => updateSetting('accept_recurring', checked)}
               className="ml-auto"
             />
             </div>
@@ -175,8 +175,8 @@ const ProviderSettings = () => {
                 <p className="text-sm text-muted-foreground">Show as available for new bookings</p>
               </div>
             <Switch
-              isSelected={profile?.available_status ?? true}
-              onValueChange={(checked) => updateSetting('available_status', checked)}
+              checked={profile?.available_status ?? true}
+              onCheckedChange={(checked) => updateSetting('available_status', checked)}
               className="ml-auto"
             />
             </div>
@@ -196,8 +196,8 @@ const ProviderSettings = () => {
                 <p className="text-sm text-muted-foreground">Receive real-time job updates</p>
               </div>
             <Switch
-              isSelected={isSubscribed}
-              onValueChange={async (checked) => {
+              checked={isSubscribed}
+              onCheckedChange={async (checked) => {
                 if (checked) {
                   const success = await subscribe();
                   if (success) toast.success('✅ Push notifications enabled');
@@ -206,7 +206,7 @@ const ProviderSettings = () => {
                   toast.success('Push notifications disabled');
                 }
               }}
-              isDisabled={pushLoading}
+              disabled={pushLoading}
               className="ml-auto"
             />
             </div>
@@ -216,8 +216,8 @@ const ProviderSettings = () => {
                 <p className="text-sm text-muted-foreground">Receive job updates via email</p>
               </div>
             <Switch
-              isSelected={profile?.notifications_enabled ?? true}
-              onValueChange={(checked) => updateSetting('notifications_enabled', checked)}
+              checked={profile?.notifications_enabled ?? true}
+              onCheckedChange={(checked) => updateSetting('notifications_enabled', checked)}
               className="ml-auto"
             />
             </div>
@@ -227,8 +227,8 @@ const ProviderSettings = () => {
                 <p className="text-sm text-muted-foreground">Receive job updates via SMS</p>
               </div>
             <Switch
-              isSelected={profile?.sms_notifications ?? true}
-              onValueChange={(checked) => updateSetting('sms_notifications', checked)}
+              checked={profile?.sms_notifications ?? true}
+              onCheckedChange={(checked) => updateSetting('sms_notifications', checked)}
               className="ml-auto"
             />
             </div>

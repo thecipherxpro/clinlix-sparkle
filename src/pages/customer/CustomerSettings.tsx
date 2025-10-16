@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@heroui/react";
+import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Key } from "lucide-react";
 import { toast } from "sonner";
 import MobileNav from "@/components/MobileNav";
@@ -164,8 +164,8 @@ const CustomerSettings = () => {
                 <p className="text-sm text-muted-foreground">Receive real-time updates in your browser or app</p>
               </div>
             <Switch
-              isSelected={isSubscribed}
-              onValueChange={async (checked) => {
+              checked={isSubscribed}
+              onCheckedChange={async (checked) => {
                 if (checked) {
                   const success = await subscribe();
                   if (success) toast.success('✅ Push notifications enabled');
@@ -174,7 +174,7 @@ const CustomerSettings = () => {
                   toast.success('Push notifications disabled');
                 }
               }}
-              isDisabled={pushLoading}
+              disabled={pushLoading}
               className="ml-auto"
             />
             </div>
@@ -184,8 +184,8 @@ const CustomerSettings = () => {
                 <p className="text-sm text-muted-foreground">Receive booking updates via email</p>
               </div>
             <Switch
-              isSelected={profile?.notifications_enabled ?? true}
-              onValueChange={(checked) => updateSetting('notifications_enabled', checked)}
+              checked={profile?.notifications_enabled ?? true}
+              onCheckedChange={(checked) => updateSetting('notifications_enabled', checked)}
               className="ml-auto"
             />
             </div>
@@ -195,8 +195,8 @@ const CustomerSettings = () => {
                 <p className="text-sm text-muted-foreground">Receive booking updates via SMS</p>
               </div>
             <Switch
-              isSelected={profile?.sms_notifications ?? true}
-              onValueChange={(checked) => updateSetting('sms_notifications', checked)}
+              checked={profile?.sms_notifications ?? true}
+              onCheckedChange={(checked) => updateSetting('sms_notifications', checked)}
               className="ml-auto"
             />
             </div>

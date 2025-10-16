@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@heroui/react";
+import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { ArrowLeft, Search, SlidersHorizontal, UserX } from "lucide-react";
 import { toast } from "sonner";
@@ -220,8 +220,8 @@ const FindProviders = () => {
                     </div>
                   <Switch
                     id="verified"
-                    isSelected={verifiedOnly}
-                    onValueChange={setVerifiedOnly}
+                    checked={verifiedOnly}
+                    onCheckedChange={setVerifiedOnly}
                   />
                   </div>
 
