@@ -37,24 +37,49 @@ interface SelectValueProps {
   placeholder?: string;
 }
 
-const SelectValue = ({ children, placeholder }: SelectValueProps) => <>{children || placeholder}</>;
+const SelectValue = ({ children, placeholder }: SelectValueProps) => {
+  // This component is used inside SelectTrigger which is inside a Listbox
+  // The actual selected value rendering is handled by SelectTrigger
+  return <>{children || placeholder}</>;
+};
 
 const SelectTrigger = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, children, ...props }, ref) => (
-  <Listbox.Button
-    ref={ref}
-    className={cn(
-      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-      className,
-    )}
-    {...props}
-  >
-    {children}
-    <ChevronDown className="h-4 w-4 opacity-50" />
-  </Listbox.Button>
-));
+>(({ className, children, ...props }, ref) => {
+  // Extract placeholder from SelectValue child if present
+  let placeholder = "Select...";
+  React.Children.forEach(children, (child) => {
+    if (React.isValidElement(child) && typeof child.type !== 'string') {
+      const childProps = child.props as any;
+      if (childProps.placeholder) {
+        placeholder = childProps.placeholder;
+      }
+    }
+  });
+
+  return (
+    <Listbox.Button
+      ref={ref}
+      className={cn(
+        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        className,
+      )}
+      {...props}
+    >
+      {({ value, open }: { value: any, open: boolean }) => {
+        // Find the display value from context - will be set by Select parent
+        const displayValue = (window as any).__selectDisplayValues?.[value] || placeholder;
+        return (
+          <>
+            <span className={!value ? "text-muted-foreground" : ""}>{displayValue}</span>
+            <ChevronDown className="h-4 w-4 opacity-50" />
+          </>
+        );
+      }}
+    </Listbox.Button>
+  );
+});
 SelectTrigger.displayName = "SelectTrigger";
 
 const SelectScrollUpButton = () => null;
@@ -101,30 +126,41 @@ const SelectItem = React.forwardRef<
     children?: React.ReactNode;
     value: string;
   }
->(({ className, children, value, ...props }, ref) => (
-  <Listbox.Option
-    ref={ref}
-    value={value}
-    className={({ active }: { active: boolean }) => cn(
-      "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none disabled:pointer-events-none disabled:opacity-50",
-      active && "bg-accent text-accent-foreground",
-      className,
-    )}
-    {...props}
-  >
-    {(renderProps) => {
-      const content = typeof children === 'function' ? (children as any)(renderProps) : children;
-      return (
-        <>
-          <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-            {renderProps.selected && <Check className="h-4 w-4" />}
-          </span>
-          <span>{content}</span>
-        </>
-      );
-    }}
-  </Listbox.Option>
-));
+>(({ className, children, value, ...props }, ref) => {
+  // Store display value for SelectTrigger to use
+  React.useEffect(() => {
+    if (!(window as any).__selectDisplayValues) {
+      (window as any).__selectDisplayValues = {};
+    }
+    const displayText = typeof children === 'string' ? children : value;
+    (window as any).__selectDisplayValues[value] = displayText;
+  }, [value, children]);
+
+  return (
+    <Listbox.Option
+      ref={ref}
+      value={value}
+      className={({ active }: { active: boolean }) => cn(
+        "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none disabled:pointer-events-none disabled:opacity-50",
+        active && "bg-accent text-accent-foreground",
+        className,
+      )}
+      {...props}
+    >
+      {(renderProps) => {
+        const content = typeof children === 'function' ? (children as any)(renderProps) : children;
+        return (
+          <>
+            <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+              {renderProps.selected && <Check className="h-4 w-4" />}
+            </span>
+            <span>{content}</span>
+          </>
+        );
+      }}
+    </Listbox.Option>
+  );
+});
 SelectItem.displayName = "SelectItem";
 
 const SelectSeparator = React.forwardRef<
