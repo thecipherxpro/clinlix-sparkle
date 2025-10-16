@@ -29,40 +29,36 @@ const DashboardWelcomeBanner = ({ user, onSearchClick, className }: DashboardWel
     setUploading(true);
     try {
       const {
-        data: {
-          user: authUser
-        }
+        data: { user: authUser },
       } = await supabase.auth.getUser();
       if (!authUser) throw new Error("Not authenticated");
       const fileExt = file.name.split(".").pop();
       const filePath = `${authUser.id}/profile.${fileExt}`;
-      const {
-        error: uploadError
-      } = await supabase.storage.from("avatars").upload(filePath, file, {
-        upsert: true
+      const { error: uploadError } = await supabase.storage.from("avatars").upload(filePath, file, {
+        upsert: true,
       });
       if (uploadError) throw uploadError;
       const {
-        data: {
-          publicUrl
-        }
+        data: { publicUrl },
       } = supabase.storage.from("avatars").getPublicUrl(filePath);
       const newAvatarUrl = `${publicUrl}?t=${new Date().getTime()}`;
-      const {
-        error: updateError
-      } = await supabase.from("profiles").update({
-        avatar_url: newAvatarUrl
-      }).eq("id", authUser.id);
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({
+          avatar_url: newAvatarUrl,
+        })
+        .eq("id", authUser.id);
       if (updateError) throw updateError;
 
       // Update provider_profiles if user is a provider
-      const {
-        data: profileData
-      } = await supabase.from("profiles").select("role").eq("id", authUser.id).single();
+      const { data: profileData } = await supabase.from("profiles").select("role").eq("id", authUser.id).single();
       if (profileData?.role === "provider") {
-        await supabase.from("provider_profiles").update({
-          photo_url: newAvatarUrl
-        }).eq("user_id", authUser.id);
+        await supabase
+          .from("provider_profiles")
+          .update({
+            photo_url: newAvatarUrl,
+          })
+          .eq("user_id", authUser.id);
       }
       setAvatarUrl(newAvatarUrl);
       toast.success("Profile picture updated successfully");
@@ -83,11 +79,27 @@ const DashboardWelcomeBanner = ({ user, onSearchClick, className }: DashboardWel
       <div className="h-32 sm:h-40 md:h-48 w-full overflow-hidden">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           <defs>
-            <linearGradient gradientTransform="rotate(222,648,379)" y2="100%" y1="0" x2="0" x1="0" gradientUnits="userSpaceOnUse" id="gradient-bg">
+            <linearGradient
+              gradientTransform="rotate(222,648,379)"
+              y2="100%"
+              y1="0"
+              x2="0"
+              x1="0"
+              gradientUnits="userSpaceOnUse"
+              id="gradient-bg"
+            >
               <stop stopColor="hsl(var(--card))" offset="0" />
               <stop stopColor="hsl(var(--primary))" offset="1" />
             </linearGradient>
-            <pattern viewBox="0 0 1080 900" y="0" x="0" height="250" width="300" id="pattern-triangles" patternUnits="userSpaceOnUse">
+            <pattern
+              viewBox="0 0 1080 900"
+              y="0"
+              x="0"
+              height="250"
+              width="300"
+              id="pattern-triangles"
+              patternUnits="userSpaceOnUse"
+            >
               <g fillOpacity="0.4">
                 <polygon points="90 150 0 300 180 300" fill="hsl(var(--primary) / 0.3)" />
                 <polygon points="90 150 180 0 0 0" fill="hsl(var(--accent) / 0.2)" />
@@ -126,36 +138,39 @@ const DashboardWelcomeBanner = ({ user, onSearchClick, className }: DashboardWel
       </div>
 
       {/* Avatar Overlapping Pattern - Centered */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2" style={{ top: 'calc(8rem + 0px)' }}>
-        <div 
+      <div
+        className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        style={{ top: "calc(8rem + 0px)" }}
+      >
+        <div
           className="relative group cursor-pointer flex-shrink-0 touch-manipulation active:scale-95 transition-transform"
           onClick={handleAvatarClick}
         >
-          <input 
-            ref={fileInputRef} 
-            type="file" 
-            accept="image/*" 
-            onChange={handleImageUpload} 
-            className="hidden" 
-            aria-label="Upload profile picture" 
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+            aria-label="Upload profile picture"
           />
-          
+
           {/* Outer ring */}
           <div className="bg-card rounded-full p-2 shadow-xl">
             <div className="relative">
-              <img 
-                src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} 
-                alt={user.name} 
-                className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-background shadow-md" 
+              <img
+                src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
+                alt={user.name}
+                className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-background shadow-md"
               />
-              
+
               {/* Upload loading state */}
               {uploading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full">
                   <Loader2 className="w-6 h-6 sm:w-7 sm:h-7 animate-spin text-primary" />
                 </div>
               )}
-              
+
               {/* Upload hover state */}
               {!uploading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -170,12 +185,10 @@ const DashboardWelcomeBanner = ({ user, onSearchClick, className }: DashboardWel
       {/* Content Below Avatar */}
       <div className="pt-14 sm:pt-16 md:pt-20 pb-4 sm:pb-6 px-4 sm:px-6 flex flex-col items-center text-center">
         {/* Name */}
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mt-2">
-          {user.name}
-        </h1>
-        
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mt-2">{user.name}</h1>
+
         {/* Role Badge */}
-        <div className="badge badge-primary mt-3 text-xs uppercase tracking-wide font-semibold">
+        <div className="badge badge-soft badge-accent mt-3 text-xs uppercase tracking-wide font-semibold">
           {user.role} Portal
         </div>
 
