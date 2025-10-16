@@ -40,7 +40,7 @@ export function MultiSelect({ options, selected, onChange, placeholder = "Select
       <div className="group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         <div className="flex gap-1 flex-wrap">
           {selected.map((item) => (
-            <div key={item} className="badge badge-warning gap-2">
+            <div key={item} className="badge badge-primary badge-lg gap-2">
               <span>{item}</span>
               <button
                 type="button"
