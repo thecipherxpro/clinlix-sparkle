@@ -1,13 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 
 const STATUS_CONFIG = {
-  pending: { variant: "secondary" as const, className: "hover:bg-secondary" },
-  confirmed: { variant: "default" as const, className: "hover:bg-primary" },
-  on_the_way: { variant: "outline" as const, className: "border-primary/50 text-primary hover:bg-transparent" },
-  arrived: { variant: "outline" as const, className: "border-accent text-accent-foreground bg-accent/10 hover:bg-accent/10" },
-  started: { variant: "default" as const, className: "bg-accent hover:bg-accent text-accent-foreground" },
-  completed: { variant: "default" as const, className: "bg-primary/80 hover:bg-primary/80" },
-  cancelled: { variant: "destructive" as const, className: "hover:bg-destructive" }
+  pending: { variant: "secondary" as const, className: "" },
+  confirmed: { variant: "default" as const, className: "" },
+  on_the_way: { variant: "outline" as const, className: "border-primary/50 text-primary bg-primary/5" },
+  arrived: { variant: "outline" as const, className: "border-accent/50 text-accent-foreground bg-accent/10" },
+  started: { variant: "default" as const, className: "bg-accent text-accent-foreground" },
+  completed: { variant: "default" as const, className: "bg-primary/80 text-primary-foreground" },
+  cancelled: { variant: "destructive" as const, className: "" }
 };
 
 const STATUS_LABELS = {
