@@ -10,13 +10,11 @@ import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Key, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
-import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 const ProviderSettings = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
-  const { permission, requestPermission, unsubscribeFromPush, loading: pushLoading } = usePushNotifications();
 
   useEffect(() => {
     loadProfile();
@@ -190,24 +188,6 @@ const ProviderSettings = () => {
             <CardDescription>Manage how you receive updates</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
-              <div className="space-y-0.5 flex-1">
-                <Label className="text-base">Push Notifications</Label>
-                <p className="text-sm text-muted-foreground">Receive instant updates about job requests</p>
-              </div>
-              <Switch
-                checked={permission === 'granted'}
-                onCheckedChange={async (checked) => {
-                  if (checked) {
-                    await requestPermission();
-                  } else {
-                    await unsubscribeFromPush();
-                  }
-                }}
-                disabled={pushLoading}
-                className="ml-auto"
-              />
-            </div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
               <div className="space-y-0.5 flex-1">
                 <Label className="text-base">Email Notifications</Label>
