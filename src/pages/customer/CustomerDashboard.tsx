@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { JobCard } from "@/components/ui/premium-card";
+import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -13,14 +14,14 @@ import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 
-const STATUS_COLORS = {
-  pending: "bg-yellow-500",
-  confirmed: "bg-blue-500",
-  on_the_way: "bg-purple-500",
-  arrived: "bg-indigo-500",
-  started: "bg-green-500",
-  completed: "bg-emerald-500",
-  cancelled: "bg-red-500"
+const STATUS_VARIANTS = {
+  pending: "secondary" as const,
+  confirmed: "default" as const,
+  on_the_way: "default" as const,
+  arrived: "default" as const,
+  started: "default" as const,
+  completed: "default" as const,
+  cancelled: "destructive" as const
 };
 
 const STATUS_LABELS = {
@@ -207,9 +208,13 @@ const CustomerDashboard = () => {
                     >
                       <CardContent className="p-4 space-y-3">
                         {/* Status Badge */}
-                        <div className={`badge ${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]}`}>
+                        <Badge 
+                          variant={STATUS_VARIANTS[booking.job_status as keyof typeof STATUS_VARIANTS]}
+                          size="default"
+                          className="w-fit"
+                        >
                           {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
-                        </div>
+                        </Badge>
 
                         {/* Date & Time */}
                         <div>
