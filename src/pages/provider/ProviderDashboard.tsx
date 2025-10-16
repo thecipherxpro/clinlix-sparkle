@@ -109,18 +109,13 @@ const ProviderDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
       {/* Mobile-first header with auto-fit padding */}
       <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex-1">
-            <DashboardWelcomeBanner
-              user={{
-                name: profile?.first_name || "User",
-                role: "PROVIDER",
-                avatarUrl: profile?.avatar_url,
-              }}
-            />
-          </div>
-          <NotificationCenter />
-        </div>
+        <DashboardWelcomeBanner
+          user={{
+            name: profile?.first_name || "User",
+            role: "PROVIDER",
+            avatarUrl: profile?.avatar_url,
+          }}
+        />
       </div>
 
       {/* Mobile-first main container with auto-fit max-width */}
