@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button as HeroButton, Chip } from "@heroui/react";
+import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -111,22 +111,16 @@ const ProviderProfile = () => {
           {/* Header Info */}
           <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
             {provider.new_provider && (
-              <Chip 
-                color="secondary" 
-                variant="flat"
-                startContent={<Sparkles className="w-3 h-3" />}
-              >
+              <div className="badge badge-secondary gap-1">
+                <Sparkles className="w-3 h-3" />
                 NEW
-              </Chip>
+              </div>
             )}
             {provider.verified && (
-              <Chip 
-                color="primary" 
-                variant="flat"
-                startContent={<Shield className="w-3 h-3" />}
-              >
+              <div className="badge badge-primary gap-1">
+                <Shield className="w-3 h-3" />
                 VERIFIED
-              </Chip>
+              </div>
             )}
           </div>
 
@@ -142,9 +136,9 @@ const ProviderProfile = () => {
           {provider.skills && provider.skills.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
               {provider.skills.map((skill: string, idx: number) => (
-                <Chip key={idx} variant="bordered" color="default">
+                <div key={idx} className="badge badge-outline">
                   {skill}
-                </Chip>
+                </div>
               ))}
             </div>
           )}
@@ -187,9 +181,9 @@ const ProviderProfile = () => {
                     <h3 className="font-semibold mb-3">Service Areas</h3>
                     <div className="flex flex-wrap gap-2">
                       {provider.service_areas.map((area: string, idx: number) => (
-                        <Chip key={idx} variant="flat" color="secondary">
+                        <div key={idx} className="badge badge-secondary">
                           {area}
-                        </Chip>
+                        </div>
                       ))}
                     </div>
                   </CardContent>
