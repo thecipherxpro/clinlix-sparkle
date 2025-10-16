@@ -146,35 +146,33 @@ const BookingDetails = () => {
       <main className="mobile-container py-4 sm:py-6 max-w-4xl space-y-4 sm:space-y-6">
         {/* Status Card */}
         <Card className="border-0 shadow-sm">
-          <CardHeader>
-          <div className="flex items-center justify-between">
-              <div>
-                <Badge className={`${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]} mb-2`}>
-                  {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
-                </Badge>
-                <CardTitle className="text-xl sm:text-2xl">{address?.label}</CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {address?.property_type} • {address?.layout_type}
-                </p>
-              </div>
+          <CardHeader className="space-y-3">
+            <Badge className={`${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]} w-fit`}>
+              {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
+            </Badge>
+            <div>
+              <CardTitle className="text-xl sm:text-2xl">{address?.label}</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1.5">
+                {address?.property_type} • {address?.layout_type}
+              </p>
             </div>
           </CardHeader>
         </Card>
 
         {/* Date & Time Card */}
         <Card className="border-0 shadow-sm">
-          <CardHeader>
+          <CardHeader className="pb-3">
             <CardTitle className="text-base sm:text-lg flex items-center gap-2">
               <Calendar className="w-5 h-5 text-primary" />
               Date & Time
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent>
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                 <Calendar className="w-5 h-5 text-primary" />
               </div>
-              <div>
+              <div className="flex-1">
                 <p className="font-medium text-sm sm:text-base">
                   {new Date(booking.requested_date).toLocaleDateString('en-US', {
                     weekday: 'long',
@@ -183,8 +181,8 @@ const BookingDetails = () => {
                     year: 'numeric'
                   })}
                 </p>
-                <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                  <Clock className="w-3 h-3" />
+                <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mt-1.5">
+                  <Clock className="w-3.5 h-3.5" />
                   {booking.requested_time}
                 </p>
               </div>
@@ -194,16 +192,16 @@ const BookingDetails = () => {
 
         {/* Address Card */}
         <Card className="border-0 shadow-sm">
-          <CardHeader>
+          <CardHeader className="pb-3">
             <CardTitle className="text-base sm:text-lg flex items-center gap-2">
               <MapPin className="w-5 h-5 text-accent" />
               Service Location
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-4">
             <div>
               <p className="font-medium text-sm sm:text-base">{address?.label}</p>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 leading-relaxed">
                 {address?.country === 'Portugal' ? (
                   <>
                     {address.rua}, {address.porta_andar && `${address.porta_andar}, `}
@@ -218,13 +216,13 @@ const BookingDetails = () => {
               </p>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm">
+            <div className="grid grid-cols-2 gap-4 text-xs sm:text-sm">
               <div>
-                <p className="text-muted-foreground">Property Type</p>
+                <p className="text-muted-foreground mb-1">Property Type</p>
                 <p className="font-medium">{address?.property_type}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Layout</p>
+                <p className="text-muted-foreground mb-1">Layout</p>
                 <p className="font-medium">{address?.layout_type}</p>
               </div>
             </div>
@@ -234,36 +232,37 @@ const BookingDetails = () => {
         {/* Provider Card */}
         {provider && (
           <Card className="border-0 shadow-sm">
-            <CardHeader>
+            <CardHeader className="pb-3">
               <CardTitle className="text-base sm:text-lg flex items-center gap-2">
                 <User className="w-5 h-5 text-primary" />
                 Provider Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3">
                 <AvatarDisplay 
                   userId={provider.user_id}
                   size={48}
                   fallbackText={provider.full_name.split(' ').map((n: string) => n[0]).join('')}
                 />
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm sm:text-base">{provider.full_name}</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1">
-                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                  <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                    <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                     {provider.rating_avg.toFixed(1)} ({provider.rating_count} reviews)
                   </p>
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
+                  className="shrink-0"
                   onClick={() => navigate(`/providers/profile/${provider.id}`)}
                 >
-                  View Profile
+                  View
                 </Button>
               </div>
               <Separator />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Button variant="outline" size="sm" className="w-full justify-start">
                   <Phone className="w-4 h-4 mr-2" />
                   Call Provider
@@ -279,7 +278,7 @@ const BookingDetails = () => {
 
         {/* Package & Pricing Card */}
         <Card className="border-0 shadow-sm">
-          <CardHeader>
+          <CardHeader className="pb-3">
             <CardTitle className="text-base sm:text-lg flex items-center gap-2">
               <Package className="w-5 h-5 text-accent" />
               Package Details
@@ -287,9 +286,9 @@ const BookingDetails = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <p className="text-xs sm:text-sm text-muted-foreground">Selected Package</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">Selected Package</p>
               <p className="font-semibold text-base sm:text-lg">{packageInfo?.package_name}</p>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1.5">
                 {packageInfo?.time_included} • {packageInfo?.bedroom_count} Bedrooms
               </p>
             </div>
@@ -298,12 +297,12 @@ const BookingDetails = () => {
               <>
                 <Separator />
                 <div>
-                  <p className="text-xs sm:text-sm text-muted-foreground mb-2">Add-ons</p>
-                  <div className="space-y-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-2.5">Add-ons</p>
+                  <div className="space-y-2.5">
                     {addons.map((addon) => (
-                      <div key={addon.id} className="flex justify-between items-center text-sm">
-                        <span>{addon.name_en}</span>
-                        <span className="font-medium">
+                      <div key={addon.id} className="flex justify-between items-center text-xs sm:text-sm">
+                        <span className="text-foreground">{addon.name_en}</span>
+                        <span className="font-medium text-foreground">
                           {address?.currency === 'EUR' ? '€' : '$'}{Number(addon.price).toFixed(2)}
                         </span>
                       </div>
@@ -315,39 +314,39 @@ const BookingDetails = () => {
 
             <Separator />
 
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+            <div className="space-y-2.5">
+              <div className="flex justify-between items-center text-xs sm:text-sm">
                 <span className="text-muted-foreground">Package Price</span>
-                <span className="font-medium">
+                <span className="font-medium text-foreground">
                   {address?.currency === 'EUR' ? '€' : '$'}{packageInfo?.one_time_price}
                 </span>
               </div>
               {addons.length > 0 && (
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between items-center text-xs sm:text-sm">
                   <span className="text-muted-foreground">Add-ons Total</span>
-                  <span className="font-medium">
+                  <span className="font-medium text-foreground">
                     {address?.currency === 'EUR' ? '€' : '$'}
                     {addons.reduce((sum, addon) => sum + Number(addon.price), 0).toFixed(2)}
                   </span>
                 </div>
               )}
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between items-center text-xs sm:text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium">
+                <span className="font-medium text-foreground">
                   {address?.currency === 'EUR' ? '€' : '$'}{booking.total_estimate}
                 </span>
               </div>
               {booking.overtime_minutes > 0 && (
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between items-center text-xs sm:text-sm">
                   <span className="text-muted-foreground">Overtime ({booking.overtime_minutes} min)</span>
-                  <span className="font-medium">
+                  <span className="font-medium text-foreground">
                     {address?.currency === 'EUR' ? '€' : '$'}
                     {((booking.total_final || booking.total_estimate) - booking.total_estimate).toFixed(2)}
                   </span>
                 </div>
               )}
-              <Separator />
-              <div className="flex justify-between items-center">
+              <Separator className="my-3" />
+              <div className="flex justify-between items-center pt-1">
                 <span className="font-semibold text-base sm:text-lg flex items-center gap-2">
                   <DollarSign className="w-5 h-5 text-primary" />
                   Final Total
@@ -358,8 +357,10 @@ const BookingDetails = () => {
               </div>
             </div>
 
+            <Separator />
+
             <div>
-              <Badge variant={booking.payment_status === 'paid' ? 'default' : 'secondary'}>
+              <Badge variant={booking.payment_status === 'paid' ? 'default' : 'secondary'} className="text-xs">
                 Payment: {booking.payment_status.toUpperCase()}
               </Badge>
             </div>
