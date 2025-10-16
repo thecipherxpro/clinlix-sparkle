@@ -113,7 +113,7 @@ const ProviderProfile = () => {
           <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
             {provider.new_provider && (
               <div className="badge badge-outline badge-secondary gap-1">
-                <Sparkles className="w-3 h-3" />
+                <Sparkles className="w-5 h-3" />
                 NEW
               </div>
             )}
