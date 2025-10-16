@@ -9,31 +9,31 @@ const ProviderMobileNav = () => {
   const dockItems = [
     { 
       title: "Home",
-      icon: <Home className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      icon: <Home className={`h-full w-full transition-all duration-300 ${location.pathname === '/provider/dashboard' ? 'text-primary' : 'text-neutral-500 dark:text-neutral-300'}`} />,
       href: "/provider/dashboard",
       onClick: () => navigate("/provider/dashboard")
     },
     { 
       title: "Jobs",
-      icon: <Briefcase className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      icon: <Briefcase className={`h-full w-full transition-all duration-300 ${location.pathname === '/provider/jobs' ? 'text-primary' : 'text-neutral-500 dark:text-neutral-300'}`} />,
       href: "/provider/jobs",
       onClick: () => navigate("/provider/jobs")
     },
     { 
       title: "Schedule",
-      icon: <Calendar className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      icon: <Calendar className={`h-full w-full transition-all duration-300 ${location.pathname === '/provider/schedule' ? 'text-primary' : 'text-neutral-500 dark:text-neutral-300'}`} />,
       href: "/provider/schedule",
       onClick: () => navigate("/provider/schedule")
     },
     { 
       title: "Wallet",
-      icon: <DollarSign className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      icon: <DollarSign className={`h-full w-full transition-all duration-300 ${location.pathname === '/provider/wallet' ? 'text-primary' : 'text-neutral-500 dark:text-neutral-300'}`} />,
       href: "/provider/wallet",
       onClick: () => navigate("/provider/wallet")
     },
     { 
       title: "Profile",
-      icon: <User className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      icon: <User className={`h-full w-full transition-all duration-300 ${location.pathname === '/provider/profile' ? 'text-primary' : 'text-neutral-500 dark:text-neutral-300'}`} />,
       href: "/provider/profile",
       onClick: () => navigate("/provider/profile")
     },
