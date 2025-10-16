@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectItem, Switch } from "@heroui/react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Key, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
@@ -154,25 +155,27 @@ const ProviderSettings = () => {
             <CardTitle>Availability Preferences</CardTitle>
             <CardDescription>Manage your work preferences</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Accept Recurring Clients</Label>
+          <CardContent className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+              <div className="space-y-0.5 flex-1">
+                <Label className="text-base">Accept Recurring Clients</Label>
                 <p className="text-sm text-muted-foreground">Allow customers to book you regularly</p>
               </div>
               <Switch
-                isSelected={profile?.accept_recurring ?? false}
-                onValueChange={(checked) => updateSetting('accept_recurring', checked)}
+                checked={profile?.accept_recurring ?? false}
+                onCheckedChange={(checked) => updateSetting('accept_recurring', checked)}
+                className="ml-auto"
               />
             </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Currently Available</Label>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+              <div className="space-y-0.5 flex-1">
+                <Label className="text-base">Currently Available</Label>
                 <p className="text-sm text-muted-foreground">Show as available for new bookings</p>
               </div>
               <Switch
-                isSelected={profile?.available_status ?? true}
-                onValueChange={(checked) => updateSetting('available_status', checked)}
+                checked={profile?.available_status ?? true}
+                onCheckedChange={(checked) => updateSetting('available_status', checked)}
+                className="ml-auto"
               />
             </div>
           </CardContent>
@@ -184,25 +187,27 @@ const ProviderSettings = () => {
             <CardTitle>Notifications</CardTitle>
             <CardDescription>Manage how you receive updates</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Email Notifications</Label>
+          <CardContent className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+              <div className="space-y-0.5 flex-1">
+                <Label className="text-base">Email Notifications</Label>
                 <p className="text-sm text-muted-foreground">Receive job updates via email</p>
               </div>
               <Switch
-                isSelected={profile?.notifications_enabled ?? true}
-                onValueChange={(checked) => updateSetting('notifications_enabled', checked)}
+                checked={profile?.notifications_enabled ?? true}
+                onCheckedChange={(checked) => updateSetting('notifications_enabled', checked)}
+                className="ml-auto"
               />
             </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>SMS Notifications</Label>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+              <div className="space-y-0.5 flex-1">
+                <Label className="text-base">SMS Notifications</Label>
                 <p className="text-sm text-muted-foreground">Receive job updates via SMS</p>
               </div>
               <Switch
-                isSelected={profile?.sms_notifications ?? true}
-                onValueChange={(checked) => updateSetting('sms_notifications', checked)}
+                checked={profile?.sms_notifications ?? true}
+                onCheckedChange={(checked) => updateSetting('sms_notifications', checked)}
+                className="ml-auto"
               />
             </div>
           </CardContent>
@@ -239,16 +244,16 @@ const ProviderSettings = () => {
           </CardHeader>
           <CardContent>
             <Select
-              label="Select Language"
-              selectedKeys={[profile?.language || 'en']}
-              onSelectionChange={(keys) => {
-                const value = Array.from(keys)[0] as string;
-                updateSetting('language', value);
-              }}
-              className="w-full"
+              value={profile?.language || 'en'}
+              onValueChange={(value) => updateSetting('language', value)}
             >
-              <SelectItem key="en">🇬🇧 English</SelectItem>
-              <SelectItem key="pt">🇵🇹 Portuguese</SelectItem>
+              <SelectTrigger className="h-11 text-base">
+                <SelectValue placeholder="Select language" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="en">🇬🇧 English</SelectItem>
+                <SelectItem value="pt">🇵🇹 Portuguese</SelectItem>
+              </SelectContent>
             </Select>
           </CardContent>
         </Card>

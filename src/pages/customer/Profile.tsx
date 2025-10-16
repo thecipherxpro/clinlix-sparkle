@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectItem } from "@heroui/react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, User, LogOut, Save } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
@@ -208,49 +208,50 @@ const Profile = () => {
 
               <Separator />
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label>Country *</Label>
+                  <Label htmlFor="country">Country *</Label>
                   <Select
-                    label="Select Country"
-                    selectedKeys={[formData.country]}
-                    onSelectionChange={(keys) => {
-                      const value = Array.from(keys)[0] as string;
-                      setFormData({
-                        ...formData,
-                        country: value,
-                        currency: value === 'Portugal' ? 'EUR' : 'CAD'
-                      });
-                    }}
-                    className="w-full"
+                    value={formData.country}
+                    onValueChange={(value) => setFormData({
+                      ...formData,
+                      country: value,
+                      currency: value === 'Portugal' ? 'EUR' : 'CAD'
+                    })}
                   >
-                    <SelectItem key="Portugal">🇵🇹 Portugal</SelectItem>
-                    <SelectItem key="Canada">🇨🇦 Canada</SelectItem>
+                    <SelectTrigger className="h-11 text-base">
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Portugal">🇵🇹 Portugal</SelectItem>
+                      <SelectItem value="Canada">🇨🇦 Canada</SelectItem>
+                    </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label>Currency</Label>
+                  <Label htmlFor="currency">Currency</Label>
                   <Input
+                    id="currency"
                     value={formData.currency}
                     disabled
-                    className="bg-muted"
+                    className="bg-muted h-11 text-base"
                   />
                 </div>
               </div>
 
               <div>
-                <Label>Language *</Label>
+                <Label htmlFor="language">Language *</Label>
                 <Select
-                  label="Select Language"
-                  selectedKeys={[formData.language]}
-                  onSelectionChange={(keys) => {
-                    const value = Array.from(keys)[0] as string;
-                    setFormData({ ...formData, language: value });
-                  }}
-                  className="w-full"
+                  value={formData.language}
+                  onValueChange={(value) => setFormData({ ...formData, language: value })}
                 >
-                  <SelectItem key="en">🇬🇧 English</SelectItem>
-                  <SelectItem key="pt">🇵🇹 Portuguese</SelectItem>
+                  <SelectTrigger className="h-11 text-base">
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">🇬🇧 English</SelectItem>
+                    <SelectItem value="pt">🇵🇹 Portuguese</SelectItem>
+                  </SelectContent>
                 </Select>
               </div>
 
