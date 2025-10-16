@@ -67,3 +67,74 @@ self.addEventListener('fetch', (event) => {
       })
   );
 });
+
+// 🔔 Push Notification Handler
+self.addEventListener('push', (event) => {
+  console.log('🔔 Push notification received:', event);
+  
+  let notificationData = {
+    title: 'Clinlix',
+    body: 'You have a new notification',
+    icon: 'https://clinlix.com/assets/logo-clinlix-BphsOeP6.png',
+    badge: 'https://clinlix.com/assets/logo-clinlix-BphsOeP6.png',
+    data: { url: '/' }
+  };
+
+  if (event.data) {
+    try {
+      const data = event.data.json();
+      notificationData = {
+        title: data.title || 'Clinlix',
+        body: data.body || 'You have a new notification',
+        icon: data.icon || 'https://clinlix.com/assets/logo-clinlix-BphsOeP6.png',
+        badge: data.badge || 'https://clinlix.com/assets/logo-clinlix-BphsOeP6.png',
+        data: { 
+          url: data.target_url || '/',
+          ...data 
+        },
+        vibrate: [100, 50, 100],
+        tag: data.tag || 'clinlix-notification',
+        requireInteraction: false
+      };
+    } catch (error) {
+      console.error('Error parsing push data:', error);
+    }
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(notificationData.title, {
+      body: notificationData.body,
+      icon: notificationData.icon,
+      badge: notificationData.badge,
+      data: notificationData.data,
+      vibrate: notificationData.vibrate,
+      tag: notificationData.tag,
+      requireInteraction: notificationData.requireInteraction
+    })
+  );
+});
+
+// 🖱️ Notification Click Handler
+self.addEventListener('notificationclick', (event) => {
+  console.log('🖱️ Notification clicked:', event);
+  
+  event.notification.close();
+
+  const urlToOpen = event.notification.data?.url || '/';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientList) => {
+        // Check if there's already a window open
+        for (const client of clientList) {
+          if (client.url.includes(urlToOpen) && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        // If no window is open, open a new one
+        if (clients.openWindow) {
+          return clients.openWindow(urlToOpen);
+        }
+      })
+  );
+});

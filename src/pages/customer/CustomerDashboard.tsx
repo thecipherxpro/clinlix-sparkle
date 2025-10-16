@@ -11,6 +11,8 @@ import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import AvatarDisplay from "@/components/AvatarDisplay";
 import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
+import { NotificationCenter } from "@/components/NotificationCenter";
+import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 
 const STATUS_COLORS = {
   pending: "bg-yellow-500",
@@ -104,14 +106,19 @@ const CustomerDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       {/* Mobile-first header with auto-fit padding */}
       <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
-        <DashboardWelcomeBanner 
-          user={{
-            name: profile?.first_name || 'User',
-            role: 'CUSTOMER',
-            avatarUrl: profile?.avatar_url
-          }}
-          onSearchClick={() => navigate('/customer/find-providers')}
-        />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex-1">
+            <DashboardWelcomeBanner 
+              user={{
+                name: profile?.first_name || 'User',
+                role: 'CUSTOMER',
+                avatarUrl: profile?.avatar_url
+              }}
+              onSearchClick={() => navigate('/customer/find-providers')}
+            />
+          </div>
+          <NotificationCenter />
+        </div>
       </div>
 
       {/* Mobile-first main container with auto-fit max-width and responsive padding */}
@@ -298,6 +305,8 @@ const CustomerDashboard = () => {
           onClose={() => setShowUnreviewedModal(false)} 
         />
       )}
+      
+      <NotificationPermissionPrompt />
       
       <MobileNav />
     </div>
