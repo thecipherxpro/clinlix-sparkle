@@ -176,13 +176,7 @@ const DashboardWelcomeBanner = ({ user, onSearchClick, className }: DashboardWel
         </h1>
         
         {/* Role Badge */}
-        <Chip 
-          color="warning" 
-          variant="flat"
-          className="mt-3 text-xs px-4 py-1.5 uppercase tracking-wide font-semibold"
-        >
-          {user.role} Portal
-        </Chip>
+        <Chip color="secondary">Secondary</Chip>
 
         {/* Search Field */}
         {onSearchClick && (
