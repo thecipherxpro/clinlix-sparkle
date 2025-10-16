@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { JobCard } from "@/components/ui/premium-card";
-import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -13,26 +12,7 @@ import AvatarDisplay from "@/components/AvatarDisplay";
 import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
-
-const STATUS_CONFIG = {
-  pending: { variant: "secondary" as const, className: "" },
-  confirmed: { variant: "default" as const, className: "" },
-  on_the_way: { variant: "outline" as const, className: "border-primary/50 text-primary" },
-  arrived: { variant: "outline" as const, className: "border-accent text-accent-foreground bg-accent/10" },
-  started: { variant: "default" as const, className: "bg-accent hover:bg-accent/80" },
-  completed: { variant: "default" as const, className: "bg-primary/80 hover:bg-primary" },
-  cancelled: { variant: "destructive" as const, className: "" }
-};
-
-const STATUS_LABELS = {
-  pending: "Pending",
-  confirmed: "Confirmed",
-  on_the_way: "On the Way",
-  arrived: "Arrived",
-  started: "In Progress",
-  completed: "Completed",
-  cancelled: "Cancelled"
-};
+import { StatusBadge } from "@/components/StatusBadge";
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
@@ -208,13 +188,7 @@ const CustomerDashboard = () => {
                     >
                       <CardContent className="p-4 space-y-3">
                         {/* Status Badge */}
-                        <Badge 
-                          variant={STATUS_CONFIG[booking.job_status as keyof typeof STATUS_CONFIG].variant}
-                          size="default"
-                          className={`w-fit ${STATUS_CONFIG[booking.job_status as keyof typeof STATUS_CONFIG].className}`}
-                        >
-                          {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
-                        </Badge>
+                        <StatusBadge status={booking.job_status} />
 
                         {/* Date & Time */}
                         <div>
