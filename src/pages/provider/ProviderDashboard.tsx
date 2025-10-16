@@ -101,7 +101,7 @@ const ProviderDashboard = () => {
       </div>
 
       {/* Mobile-first main container with auto-fit max-width */}
-      <main className="w-full max-w-[min(1280px,calc(100%-32px))] py-[clamp(14px,3.5vw,24px)] px-0 mx-[16px]">
+      <main className="w-full max-w-[min(1280px,calc(100%-32px))] py-[clamp(14px,3.5vw,24px)] mx-[17px] px-[2px]">
         {/* Action Card - Auto-fit responsive */}
         <div className="mb-[clamp(20px,5vw,32px)]">
           
