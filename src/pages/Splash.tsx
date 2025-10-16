@@ -1,22 +1,106 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo-clinlix.png";
 
 const Splash = () => {
   const navigate = useNavigate();
+  const [statusText, setStatusText] = useState("Connecting to Clinlix...");
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/auth");
-    }, 4000);
+    // Monitor online/offline status
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
-    return () => clearTimeout(timer);
+    const checkUserAndRedirect = async () => {
+      try {
+        // Check if offline
+        if (!navigator.onLine) {
+          setStatusText("You're offline. Clinlix will load as soon as you reconnect.");
+          return;
+        }
+
+        setStatusText("Connecting to Clinlix...");
+
+        // Get current session
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          console.error("Session error:", sessionError);
+          setTimeout(() => navigate("/auth"), 2500);
+          return;
+        }
+
+        // If no session, go to auth
+        if (!session) {
+          setTimeout(() => navigate("/auth"), 2500);
+          return;
+        }
+
+        // Fetch user profile and role
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", session.user.id)
+          .single();
+
+        if (profileError || !profile?.role) {
+          console.error("Profile error:", profileError);
+          // Session expired or invalid profile
+          await supabase.auth.signOut();
+          setStatusText("Your session has expired. Please log in again.");
+          setTimeout(() => navigate("/auth"), 2500);
+          return;
+        }
+
+        // Redirect based on role
+        setStatusText("Loading your dashboard...");
+        setTimeout(() => {
+          const roleStr = profile.role as string;
+          
+          if (roleStr === "customer") {
+            navigate("/customer/dashboard", { replace: true });
+          } else if (roleStr === "provider") {
+            navigate("/provider/dashboard", { replace: true });
+          } else if (roleStr === "admin") {
+            navigate("/admin/dashboard", { replace: true });
+          } else {
+            navigate("/auth", { replace: true });
+          }
+        }, 2500);
+
+      } catch (error) {
+        console.error("Unexpected error:", error);
+        setTimeout(() => navigate("/auth"), 2500);
+      }
+    };
+
+    // Wait for splash animation to settle, then check
+    const timer = setTimeout(checkUserAndRedirect, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#ffffff] via-[#ffffff] to-[#dacefd]">
-      <div className="animate-scale-in">
-        <img src={logo} alt="Clinlix Logo" className="w-48 h-48 object-contain animate-pulse" />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#6E45E2] via-[#7952E8] to-[#8365FB] px-6">
+      <div className="animate-scale-in flex flex-col items-center gap-6">
+        <img 
+          src={logo} 
+          alt="Clinlix Logo" 
+          className="w-48 h-48 object-contain animate-pulse" 
+          style={{ animationDuration: "2s" }}
+        />
+        <p className="text-white text-sm font-medium animate-fade-in" style={{ fontFamily: "Inter, Manrope, sans-serif" }}>
+          {isOffline ? "You're offline. Clinlix will load as soon as you reconnect." : statusText}
+        </p>
       </div>
     </div>
   );
