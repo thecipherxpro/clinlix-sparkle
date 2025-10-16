@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Calendar, Clock, MapPin, Phone, Mail, Star, Package, DollarSign, User } from "lucide-react";
 import { toast } from "sonner";
@@ -147,9 +146,9 @@ const BookingDetails = () => {
         {/* Status Card */}
         <Card className="border-0 shadow-sm">
           <CardHeader className="space-y-3">
-            <Badge className={`${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]} w-fit`}>
+            <div className={`badge ${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]} w-fit`}>
               {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
-            </Badge>
+            </div>
             <div>
               <CardTitle className="text-xl sm:text-2xl text-left">{address?.label}</CardTitle>
               <p className="text-sm text-muted-foreground mt-1.5 text-left">
@@ -360,9 +359,9 @@ const BookingDetails = () => {
             <Separator />
 
             <div>
-              <Badge variant={booking.payment_status === 'paid' ? 'default' : 'secondary'} className="text-xs">
+              <div className={`badge ${booking.payment_status === 'paid' ? 'badge-primary' : 'badge-secondary'} text-xs`}>
                 Payment: {booking.payment_status.toUpperCase()}
-              </Badge>
+              </div>
             </div>
           </CardContent>
         </Card>

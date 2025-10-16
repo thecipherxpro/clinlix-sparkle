@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, MapPin, Clock, Star } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
@@ -115,11 +114,11 @@ const MyBookings = () => {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <Badge className={STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]}>
+                <div className={`badge ${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]}`}>
                   {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
-                </Badge>
+                </div>
                 {booking.payment_status === 'paid' && (
-                  <Badge variant="outline">Paid</Badge>
+                  <div className="badge badge-outline">Paid</div>
                 )}
               </div>
               <CardTitle className="text-lg">

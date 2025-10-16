@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import MobileNav from "@/components/MobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
@@ -208,9 +207,9 @@ const CustomerDashboard = () => {
                     >
                       <CardContent className="p-4 space-y-3">
                         {/* Status Badge */}
-                        <Badge className={STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]}>
+                        <div className={`badge ${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]}`}>
                           {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
-                        </Badge>
+                        </div>
 
                         {/* Date & Time */}
                         <div>

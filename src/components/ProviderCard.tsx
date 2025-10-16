@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Star, CheckCircle, Sparkles } from "lucide-react";
 import AvatarDisplay from "@/components/AvatarDisplay";
 
@@ -83,16 +82,16 @@ const ProviderCard = ({
           <div className="flex items-start justify-between gap-2 mb-2">
             <h3 className="font-bold text-base sm:text-lg truncate">{fullName}</h3>
             {verified && (
-              <Badge className="bg-primary text-primary-foreground text-xs px-2 py-0.5 flex items-center gap-1 flex-shrink-0">
+              <div className="badge badge-primary text-xs px-2 py-0.5 flex items-center gap-1 flex-shrink-0">
                 <CheckCircle className="w-3 h-3" />
                 VERIFIED
-              </Badge>
+              </div>
             )}
             {!verified && newProvider && (
-              <Badge variant="secondary" className="text-xs px-2 py-0.5 flex items-center gap-1 flex-shrink-0">
+              <div className="badge badge-secondary text-xs px-2 py-0.5 flex items-center gap-1 flex-shrink-0">
                 <Sparkles className="w-3 h-3" />
                 NEW
-              </Badge>
+              </div>
             )}
           </div>
 

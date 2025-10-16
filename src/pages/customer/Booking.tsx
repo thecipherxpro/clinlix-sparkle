@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, ArrowRight, Check, Calendar, MapPin, User, Plus, CreditCard, Bath, ChefHat, Sofa, Layers, Sparkles, Square } from "lucide-react";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
@@ -579,9 +578,9 @@ const Booking = () => {
                         <div>
                           <h3 className="font-medium">{addon.name_en}</h3>
                           <p className="text-sm text-muted-foreground">{addon.name_pt}</p>
-                          <Badge variant="outline" className="mt-2">
+                          <div className="badge badge-outline mt-2">
                             {addon.type === 'flat' ? 'Fixed price' : 'Per room'}
-                          </Badge>
+                          </div>
                         </div>
                         <div className="flex items-center gap-3">
                           <p className="font-semibold">
@@ -669,7 +668,7 @@ const Booking = () => {
                     })} at {selectedTime}
                   </p>
                   {recurringService && (
-                    <Badge variant="secondary" className="mt-1">Recurring Service</Badge>
+                    <div className="badge badge-secondary mt-1">Recurring Service</div>
                   )}
                 </div>
 

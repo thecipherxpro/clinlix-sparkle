@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, DollarSign, TrendingUp, Clock, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
@@ -186,15 +185,14 @@ const ProviderWallet = () => {
                         <div className="text-lg font-semibold mb-2">
                           €{Number(entry.payout_due).toFixed(2)}
                         </div>
-                        <Badge 
-                          variant="outline" 
-                          className={entry.status === 'paid' 
+                        <div 
+                          className={`badge badge-outline ${entry.status === 'paid' 
                             ? 'bg-green-500/10 text-green-600 border-green-500/20' 
                             : 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20'
-                          }
+                          }`}
                         >
                           {entry.status}
-                        </Badge>
+                        </div>
                       </div>
                     </div>
                   ))

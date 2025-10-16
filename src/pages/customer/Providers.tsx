@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Search, Star, Sparkles, Shield } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
 import AvatarDisplay from "@/components/AvatarDisplay";
@@ -142,16 +141,16 @@ const Providers = () => {
                         </div>
                         <div className="flex gap-1">
                           {provider.new_provider && (
-                            <Badge variant="secondary" className="gap-1">
+                            <div className="badge badge-secondary gap-1">
                               <Sparkles className="w-3 h-3" />
                               NEW
-                            </Badge>
+                            </div>
                           )}
                           {provider.verified && (
-                            <Badge className="gap-1">
+                            <div className="badge badge-primary gap-1">
                               <Shield className="w-3 h-3" />
                               VERIFIED
-                            </Badge>
+                            </div>
                           )}
                         </div>
                       </div>
@@ -163,9 +162,9 @@ const Providers = () => {
                       {provider.skills && provider.skills.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-3">
                           {provider.skills.slice(0, 3).map((skill: string, idx: number) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
+                            <div key={idx} className="badge badge-outline text-xs">
                               {skill}
-                            </Badge>
+                            </div>
                           ))}
                         </div>
                       )}

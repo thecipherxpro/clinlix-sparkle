@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import AvatarDisplay from "@/components/AvatarDisplay";
 
@@ -112,16 +111,16 @@ const ProviderProfile = () => {
           {/* Header Info */}
           <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
             {provider.new_provider && (
-              <Badge variant="secondary" className="gap-1">
+              <div className="badge badge-secondary gap-1">
                 <Sparkles className="w-3 h-3" />
                 NEW
-              </Badge>
+              </div>
             )}
             {provider.verified && (
-              <Badge className="gap-1">
+              <div className="badge badge-primary gap-1">
                 <Shield className="w-3 h-3" />
                 VERIFIED
-              </Badge>
+              </div>
             )}
           </div>
 
@@ -137,9 +136,9 @@ const ProviderProfile = () => {
           {provider.skills && provider.skills.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
               {provider.skills.map((skill: string, idx: number) => (
-                <Badge key={idx} variant="outline">
+                <div key={idx} className="badge badge-outline">
                   {skill}
-                </Badge>
+                </div>
               ))}
             </div>
           )}
@@ -182,9 +181,9 @@ const ProviderProfile = () => {
                     <h3 className="font-semibold mb-3">Service Areas</h3>
                     <div className="flex flex-wrap gap-2">
                       {provider.service_areas.map((area: string, idx: number) => (
-                        <Badge key={idx} variant="secondary">
+                        <div key={idx} className="badge badge-secondary">
                           {area}
-                        </Badge>
+                        </div>
                       ))}
                     </div>
                   </CardContent>

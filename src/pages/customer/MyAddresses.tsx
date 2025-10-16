@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layers, Sparkles, Square } from "lucide-react";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
 import MobileNav from "@/components/MobileNav";
 
 const MyAddresses = () => {
@@ -493,7 +492,7 @@ const MyAddresses = () => {
                         <div className="flex items-center gap-2">
                           <CardTitle className="text-lg">{address.label}</CardTitle>
                           {address.is_primary && (
-                            <Badge variant="secondary">Primary</Badge>
+                            <div className="badge badge-secondary">Primary</div>
                           )}
                         </div>
                         <p className="text-sm text-muted-foreground mt-1">

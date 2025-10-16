@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -414,9 +413,9 @@ const JobDetail = () => {
                 <h2 className="text-base sm:text-lg font-bold truncate">
                   {job.profiles?.first_name || "Customer"} {job.profiles?.last_name || ""}
                 </h2>
-                <Badge variant="outline" className="mt-1 text-xs">
+                <div className="badge badge-outline mt-1 text-xs">
                   #{job.id.slice(0, 8)}
-                </Badge>
+                </div>
                 
                 {/* Contact Info - Mobile Friendly */}
                 {isJobConfirmed && (
