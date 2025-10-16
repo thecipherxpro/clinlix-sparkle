@@ -14,6 +14,8 @@ import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import ActionCard from "@/components/ActionCard";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
+import { NotificationCenter } from "@/components/NotificationCenter";
+import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 const ProviderDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
@@ -107,13 +109,18 @@ const ProviderDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
       {/* Mobile-first header with auto-fit padding */}
       <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
-        <DashboardWelcomeBanner
-          user={{
-            name: profile?.first_name || "User",
-            role: "PROVIDER",
-            avatarUrl: profile?.avatar_url,
-          }}
-        />
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <DashboardWelcomeBanner
+              user={{
+                name: profile?.first_name || "User",
+                role: "PROVIDER",
+                avatarUrl: profile?.avatar_url,
+              }}
+            />
+          </div>
+          <NotificationCenter />
+        </div>
       </div>
 
       {/* Mobile-first main container with auto-fit max-width */}
@@ -228,6 +235,7 @@ const ProviderDashboard = () => {
         </div>
       </main>
 
+      <NotificationPermissionPrompt />
       <ProviderMobileNav />
     </div>
   );
