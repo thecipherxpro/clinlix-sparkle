@@ -2,23 +2,24 @@ import * as React from "react";
 import { X } from "lucide-react";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Command as CommandPrimitive } from "cmdk";
-
 interface MultiSelectProps {
   options: string[];
   selected: string[];
   onChange: (selected: string[]) => void;
   placeholder?: string;
 }
-
-export function MultiSelect({ options, selected, onChange, placeholder = "Select items..." }: MultiSelectProps) {
+export function MultiSelect({
+  options,
+  selected,
+  onChange,
+  placeholder = "Select items..."
+}: MultiSelectProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
-
   const handleUnselect = (item: string) => {
-    onChange(selected.filter((s) => s !== item));
+    onChange(selected.filter(s => s !== item));
   };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const input = inputRef.current;
     if (input) {
@@ -32,61 +33,33 @@ export function MultiSelect({ options, selected, onChange, placeholder = "Select
       }
     }
   };
-
-  const selectables = options.filter((option) => !selected.includes(option));
-
-  return (
-    <Command onKeyDown={handleKeyDown} className="overflow-visible bg-transparent">
+  const selectables = options.filter(option => !selected.includes(option));
+  return <Command onKeyDown={handleKeyDown} className="overflow-visible bg-transparent">
       <div className="group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         <div className="flex gap-1 flex-wrap">
-          {selected.map((item) => (
-            <div key={item} className="badge badge-soft badge-secondary badge-lg gap-2">
+          {selected.map(item => <div key={item} className="badge badge-soft badge-secondary badge-lg gap-2 mx-px px-[18px] my-[3px]">
               <span>{item}</span>
-              <button
-                type="button"
-                onClick={() => handleUnselect(item)}
-                className="hover:text-error transition-colors"
-                aria-label="Remove"
-              >
+              <button type="button" onClick={() => handleUnselect(item)} className="hover:text-error transition-colors" aria-label="Remove">
                 <X className="h-3 w-3" />
               </button>
-            </div>
-          ))}
-          <CommandPrimitive.Input
-            ref={inputRef}
-            value={inputValue}
-            onValueChange={setInputValue}
-            onBlur={() => setOpen(false)}
-            onFocus={() => setOpen(true)}
-            placeholder={selected.length === 0 ? placeholder : ""}
-            className="ml-2 bg-transparent outline-none placeholder:text-muted-foreground flex-1"
-          />
+            </div>)}
+          <CommandPrimitive.Input ref={inputRef} value={inputValue} onValueChange={setInputValue} onBlur={() => setOpen(false)} onFocus={() => setOpen(true)} placeholder={selected.length === 0 ? placeholder : ""} className="ml-2 bg-transparent outline-none placeholder:text-muted-foreground flex-1" />
         </div>
       </div>
       <div className="relative mt-2">
-        {open && selectables.length > 0 ? (
-          <div className="absolute w-full z-10 top-0 rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
+        {open && selectables.length > 0 ? <div className="absolute w-full z-10 top-0 rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
             <CommandGroup className="h-full overflow-auto max-h-64">
-              {selectables.map((option) => (
-                <CommandItem
-                  key={option}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  onSelect={() => {
-                    setInputValue("");
-                    onChange([...selected, option]);
-                  }}
-                  className="cursor-pointer"
-                >
+              {selectables.map(option => <CommandItem key={option} onMouseDown={e => {
+            e.preventDefault();
+            e.stopPropagation();
+          }} onSelect={() => {
+            setInputValue("");
+            onChange([...selected, option]);
+          }} className="cursor-pointer">
                   {option}
-                </CommandItem>
-              ))}
+                </CommandItem>)}
             </CommandGroup>
-          </div>
-        ) : null}
+          </div> : null}
       </div>
-    </Command>
-  );
+    </Command>;
 }
