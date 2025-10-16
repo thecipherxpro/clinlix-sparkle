@@ -97,7 +97,7 @@ const ProviderDashboard = () => {
         name: profile?.first_name || "User",
         role: "PROVIDER",
         avatarUrl: profile?.avatar_url
-      }} />
+      }} className="shadow-md" />
       </div>
 
       {/* Mobile-first main container with auto-fit max-width */}
