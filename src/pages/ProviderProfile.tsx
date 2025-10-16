@@ -174,7 +174,7 @@ const ProviderProfile = () => {
                     <h3 className="font-semibold mb-3">Service Areas</h3>
                     <div className="flex flex-wrap gap-2">
                       {provider.service_areas.map((area: string, idx: number) => (
-                        <div key={idx} className="badge badge-accent px-[17px]">
+                        <div key={idx} className="badge badge-accent font-black-800 px-[17px]">
                           {area}
                         </div>
                       ))}
