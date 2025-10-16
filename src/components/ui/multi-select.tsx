@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Chip } from "@heroui/react";
+import { X } from "lucide-react";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Command as CommandPrimitive } from "cmdk";
 
@@ -40,9 +40,17 @@ export function MultiSelect({ options, selected, onChange, placeholder = "Select
       <div className="group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         <div className="flex gap-1 flex-wrap">
           {selected.map((item) => (
-            <Chip key={item} color="warning" variant="solid" onClose={() => handleUnselect(item)}>
-              {item}
-            </Chip>
+            <div key={item} className="badge badge-warning gap-2">
+              <span>{item}</span>
+              <button
+                type="button"
+                onClick={() => handleUnselect(item)}
+                className="hover:text-error transition-colors"
+                aria-label="Remove"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
           ))}
           <CommandPrimitive.Input
             ref={inputRef}
