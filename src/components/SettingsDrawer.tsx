@@ -109,14 +109,12 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="touch-target"
+        <button
+          className="btn btn-circle btn-ghost hover:bg-primary/10 hover:scale-105 transition-all duration-200 touch-target shadow-sm hover:shadow-md border border-transparent hover:border-primary/20"
           aria-label="Open settings"
         >
-          <Settings className="w-5 h-5" />
-        </Button>
+          <Settings className="w-5 h-5 text-primary" />
+        </button>
       </DrawerTrigger>
       
       <DrawerContent className="max-h-[85vh] flex flex-col">
