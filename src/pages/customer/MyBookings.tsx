@@ -177,6 +177,7 @@ const MyBookings = () => {
                 <div className="flex items-center gap-3">
                   <AvatarDisplay
                     userId={booking.provider_profiles.user_id}
+                    avatarUrl={booking.provider_profiles.photo_url}
                     size={40}
                     fallbackText={booking.provider_profiles.full_name
                       .split(" ")

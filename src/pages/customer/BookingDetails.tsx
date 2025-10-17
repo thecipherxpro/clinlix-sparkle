@@ -214,7 +214,7 @@ const BookingDetails = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-start gap-3">
-                <AvatarDisplay userId={provider.user_id} size={48} fallbackText={provider.full_name.split(' ').map((n: string) => n[0]).join('')} />
+                <AvatarDisplay userId={provider.user_id} avatarUrl={provider.photo_url} size={48} fallbackText={provider.full_name.split(' ').map((n: string) => n[0]).join('')} />
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm sm:text-base text-left">{provider.full_name}</p>
                   <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mt-1 text-left">
