@@ -28,7 +28,7 @@ export const StatusBadge = ({ status, className = "" }: StatusBadgeProps) => {
   const bgColor = STATUS_COLORS[status] || "badge-ghost";
 
   return (
-    <div className={`flex justify-center sm:justify-start ${className}`}>
+    <div className={`flex justify-start ${className}`}>
       <div className={`badge ${bgColor} border-0 shadow-md px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold animate-fade-in`}>
         {label}
       </div>
