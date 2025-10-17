@@ -1,4 +1,5 @@
-import { Star, BadgeInfo } from "lucide-react";
+import { BadgeInfo } from "lucide-react";
+import { CheckmarkBadge03Icon } from "hugeicons-react";
 
 interface ProviderAvatarBadgeProps {
   imageUrl?: string | null;
@@ -89,11 +90,9 @@ const ProviderAvatarBadge = ({
             <StarburstIcon />
           </div>
         ) : isVerified ? (
-          <Star 
-            size={size * 0.25} 
-            color="#9f00f5" 
-            fill="#9f00f5"
-            strokeWidth={2.25}
+          <CheckmarkBadge03Icon 
+            size={size * 0.25}
+            color="#9f00f5"
           />
         ) : (
           <BadgeInfo 
