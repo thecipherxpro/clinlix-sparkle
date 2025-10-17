@@ -124,21 +124,21 @@ const ProviderAvatarBadge = ({
           padding: size * 0.04
         }}
       >
-        {isNew ? (
-          <div className="text-black w-full h-full">
-            <StarburstIcon />
-          </div>
-        ) : isVerified ? (
-          <div className="w-full h-full">
-            <VerifiedBadgeIcon />
-          </div>
-        ) : (
-          <BadgeInfo 
-            size={size * 0.27} 
-            color="#005f6b" 
-            strokeWidth={1.5} 
-          />
-        )}
+      {isVerified ? (
+        <div className="w-full h-full">
+          <VerifiedBadgeIcon />
+        </div>
+      ) : isNew ? (
+        <div className="text-black w-full h-full">
+          <StarburstIcon />
+        </div>
+      ) : (
+        <BadgeInfo 
+          size={size * 0.27} 
+          color="#005f6b" 
+          strokeWidth={1.5} 
+        />
+      )}
       </div>
     </div>
   );
