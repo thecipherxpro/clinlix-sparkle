@@ -208,21 +208,21 @@ const BookingDetails = () => {
         {provider && (
           <Card className="border-0 shadow-sm rounded-xl overflow-hidden">
             {/* Colored Header */}
-            <div className="relative h-24 bg-gradient-to-r from-teal-500 to-teal-600">
+            <div className="relative h-20 bg-gradient-to-r from-teal-500 to-teal-600">
               {/* Avatar Positioned on Header */}
-              <div className="absolute -bottom-14 left-1/2 -translate-x-1/2">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2">
                 <div className="relative">
-                  <div className="w-10 h-10 rounded-full border-4 border-white overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
+                  <div className="w-20 h-20 rounded-full border-3 border-white overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
                     <AvatarDisplay
                       userId={provider.user_id}
                       avatarUrl={provider.photo_url}
-                      size={80}
+                      size={64}
                       fallbackText={provider.full_name?.[0] || "C"}
                     />
                   </div>
                   {provider.verified && (
-                    <div className="absolute bottom-1 right-1 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center border-3 border-white">
-                      <CheckCircle className="w-5 h-5 text-white fill-white" />
+                    <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center border-2 border-white">
+                      <CheckCircle className="w-4 h-4 text-white fill-white" />
                     </div>
                   )}
                 </div>
@@ -230,51 +230,50 @@ const BookingDetails = () => {
             </div>
 
             {/* Content Section */}
-            <CardContent className="pt-20 px-6 pb-6 text-center">
+            <CardContent className="pt-14 px-4 pb-4 text-center">
               {/* Provider Name */}
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">{provider.full_name}</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-1.5">{provider.full_name}</h3>
 
               {/* Bio/Description */}
-              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+              <p className="text-xs text-gray-600 mb-3 leading-relaxed">
                 {provider.bio ||
                   "Professional cleaning services with attention to detail and quality assurance for residential and commercial spaces."}
               </p>
 
               {/* Star Rating */}
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                <span className="text-lg font-bold text-gray-900">{provider.rating_avg?.toFixed(1) || "0.0"}</span>
-                <span className="text-sm text-gray-500">({provider.rating_count || 0} Reviews)</span>
+              <div className="flex items-center justify-center gap-1.5 mb-4">
+                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                <span className="text-base font-bold text-gray-900">{provider.rating_avg?.toFixed(1) || "0.0"}</span>
+                <span className="text-xs text-gray-500">({provider.rating_count || 0} Reviews)</span>
               </div>
 
               {/* Contact Icons Row */}
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <button className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
-                  <MapPin className="w-5 h-5 text-gray-600" />
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <MapPin className="w-4 h-4 text-gray-600" />
                 </button>
-                <button className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
-                  <Mail className="w-5 h-5 text-gray-600" />
+                <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <Mail className="w-4 h-4 text-gray-600" />
                 </button>
-                <button className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
-                  <Phone className="w-5 h-5 text-gray-600" />
+                <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <Phone className="w-4 h-4 text-gray-600" />
                 </button>
-                <button className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
-                  <MessageCircle className="w-5 h-5 text-gray-600" />
+                <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <MessageCircle className="w-4 h-4 text-gray-600" />
                 </button>
               </div>
 
               {/* Action Buttons */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <Button
                   variant="outline"
-                  size="lg"
                   className="w-full bg-gray-50 hover:bg-gray-100 border-2 border-gray-200 text-gray-700 font-semibold"
                 >
-                  <MessageCircle className="w-5 h-5 mr-2" />
+                  <MessageCircle className="w-4 h-4 mr-1.5" />
                   Chat
                 </Button>
-                <Button size="lg" className="w-full bg-teal-700 hover:bg-teal-800 text-white font-semibold shadow-md">
-                  <Phone className="w-5 h-5 mr-2" />
+                <Button className="w-full bg-teal-700 hover:bg-teal-800 text-white font-semibold shadow-md">
+                  <Phone className="w-4 h-4 mr-1.5" />
                   Call
                 </Button>
               </div>
