@@ -222,14 +222,13 @@ const BookingDetails = () => {
 
         {/* Package & Pricing Card */}
         <Card className="border-0 shadow-sm rounded-xl">
-          <CardHeader className="p-4 sm:p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 rounded-lg bg-accent/10 shrink-0">
-                <Package className="w-5 h-5 text-accent" />
-              </div>
-              <h3 className="text-base font-semibold text-gray-900 text-left">Package Details</h3>
+          <CardHeader className="flex flex-row items-center gap-3 p-4 sm:p-6 pb-3">
+            <div className="p-2 rounded-lg bg-accent/10 shrink-0">
+              <Package className="w-5 h-5 text-accent" />
             </div>
-            <div className="space-y-4">
+            <h3 className="text-base font-semibold text-gray-900 text-left">Package Details</h3>
+          </CardHeader>
+          <CardContent className="space-y-4 p-4 sm:p-6 pt-3">
             <div>
               <p className="text-xs sm:text-sm text-muted-foreground mb-1.5 text-left">Selected Package</p>
               <p className="font-semibold text-base sm:text-lg text-left">{packageInfo?.package_name}</p>
@@ -301,8 +300,7 @@ const BookingDetails = () => {
                 Payment: {booking.payment_status.toUpperCase()}
               </div>
             </div>
-            </div>
-          </CardHeader>
+          </CardContent>
         </Card>
 
         {/* Actions */}
