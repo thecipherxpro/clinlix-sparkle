@@ -5,7 +5,7 @@ import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Calendar, Clock, MapPin, Phone, Mail, Star, Package, DollarSign, User } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, MapPin, Phone, Mail, Star, Package, DollarSign, User, Home, Building2 } from "lucide-react";
 import { toast } from "sonner";
 import AvatarDisplay from "@/components/AvatarDisplay";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -105,14 +105,25 @@ const BookingDetails = () => {
         </div>
       </header>
 
-      <main className="mobile-container py-4 sm:py-6 max-w-4xl space-y-4 sm:space-y-6">
-        {/* Status Card */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader className="space-y-3">
-            <StatusBadge status={booking.job_status} />
-            <div>
-              <CardTitle className="text-xl sm:text-2xl text-left">{address?.label}</CardTitle>
-              <p className="text-sm text-muted-foreground mt-1.5 text-left">
+      <main className="mobile-container py-4 sm:py-6 max-w-4xl space-y-3 sm:space-y-4 pb-16">
+        {/* Status Badge */}
+        <div className="flex justify-center">
+          <StatusBadge status={booking.job_status} />
+        </div>
+
+        {/* Property Info Card */}
+        <Card className="border-0 shadow-sm rounded-xl">
+          <CardHeader className="flex flex-row items-center gap-3 p-4 sm:p-6">
+            <div className="p-2 rounded-lg bg-primary/10 shrink-0">
+              {address?.property_type === 'House' ? (
+                <Home className="w-5 h-5 text-primary" />
+              ) : (
+                <Building2 className="w-5 h-5 text-primary" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <CardTitle className="text-lg font-semibold text-left">{address?.label}</CardTitle>
+              <p className="text-sm text-gray-500 text-left">
                 {address?.property_type} • {address?.layout_type}
               </p>
             </div>
@@ -120,94 +131,82 @@ const BookingDetails = () => {
         </Card>
 
         {/* Date & Time Card */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+        <Card className="border-0 shadow-sm rounded-xl">
+          <CardHeader className="flex flex-row items-center gap-3 p-4 sm:p-6">
+            <div className="p-2 rounded-lg bg-primary/10 shrink-0">
               <Calendar className="w-5 h-5 text-primary" />
-              Date & Time
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                <Calendar className="w-5 h-5 text-primary" />
-              </div>
-              <div className="flex-1">
-                <p className="font-medium text-sm sm:text-base text-left">
-                  {new Date(booking.requested_date).toLocaleDateString('en-US', {
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-base font-semibold text-gray-900 text-left">Date & Time</h3>
+              <p className="text-sm text-gray-700 text-left mt-1">
+                {new Date(booking.requested_date).toLocaleDateString('en-US', {
                   weekday: 'long',
                   month: 'long',
                   day: 'numeric',
                   year: 'numeric'
                 })}
-                </p>
-                <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mt-1.5 text-left">
-                  <Clock className="w-3.5 h-3.5" />
-                  {booking.requested_time}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Address Card */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-accent" />
-              Service Location
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <p className="font-medium text-sm sm:text-base text-left">{address?.label}</p>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 leading-relaxed text-left">
-                {address?.country === 'Portugal' ? <>
-                    {address.rua}, {address.porta_andar && `${address.porta_andar}, `}
-                    {address.localidade}, {address.codigo_postal}
-                  </> : <>
-                    {address?.street}, {address?.apt_unit && `${address?.apt_unit}, `}
-                    {address?.city}, {address?.province} {address?.postal_code}
-                  </>}
+              </p>
+              <p className="text-xs text-gray-500 flex items-center gap-1 mt-1 text-left">
+                <Clock className="w-3.5 h-3.5" />
+                {booking.requested_time}
               </p>
             </div>
-            <Separator />
-            <div className="grid grid-cols-2 gap-4 text-xs sm:text-sm text-left">
-              <div>
-                <p className="text-muted-foreground mb-1 text-left">Property Type</p>
-                <p className="font-medium text-left">{address?.property_type}</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground mb-1 text-left">Layout</p>
-                <p className="font-medium text-left">{address?.layout_type}</p>
-              </div>
-            </div>
-          </CardContent>
+          </CardHeader>
         </Card>
 
-        {/* Provider Card */}
-        {provider && <Card className="border-0 shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base sm:text-lg flex items-start gap-2 text-left">
-                <User className="w-5 h-5 text-primary" />
-                Provider Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-start gap-3">
-                <AvatarDisplay userId={provider.user_id} avatarUrl={provider.photo_url} size={48} fallbackText={provider.full_name.split(' ').map((n: string) => n[0]).join('')} />
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm sm:text-base text-left">{provider.full_name}</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mt-1 text-left">
-                    <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-                    {provider.rating_avg.toFixed(1)} ({provider.rating_count} reviews)
-                  </p>
+        {/* Service Location Card */}
+        <Card className="border-0 shadow-sm rounded-xl">
+          <CardHeader className="flex flex-row items-start gap-3 p-4 sm:p-6">
+            <div className="p-2 rounded-lg bg-purple-100 shrink-0">
+              <MapPin className="w-5 h-5 text-purple-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-base font-semibold text-gray-900 text-left">Service Location</h3>
+              <p className="text-sm text-gray-700 text-left mt-1">
+                {address?.country === 'Portugal' 
+                  ? `${address.rua}${address.porta_andar ? `, ${address.porta_andar}` : ''}`
+                  : `${address?.street}${address?.apt_unit ? `, ${address?.apt_unit}` : ''}`
+                }
+              </p>
+              <p className="text-xs text-gray-500 text-left">
+                {address?.country === 'Portugal'
+                  ? `${address.localidade}, ${address.codigo_postal}`
+                  : `${address?.city}, ${address?.province} ${address?.postal_code}`
+                }
+              </p>
+              <div className="mt-2 text-xs text-gray-500 text-left">
+                Property Type: <span className="font-medium">{address?.property_type}</span>
+                <br />
+                Layout: <span className="font-medium">{address?.layout_type}</span>
+              </div>
+            </div>
+          </CardHeader>
+        </Card>
+
+        {/* Provider Information Card */}
+        {provider && <Card className="border-0 shadow-sm rounded-xl">
+            <CardHeader className="p-4 sm:p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <AvatarDisplay 
+                    userId={provider.user_id} 
+                    avatarUrl={provider.photo_url} 
+                    size={48} 
+                    fallbackText={provider.full_name?.[0] || 'C'} 
+                  />
+                  <div>
+                    <p className="font-medium text-sm text-gray-900 text-left">{provider.full_name}</p>
+                    <p className="text-xs text-gray-500 flex items-center gap-1 text-left">
+                      <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                      {provider.rating_avg?.toFixed(1) || '0.0'} ({provider.rating_count || 0} reviews)
+                    </p>
+                  </div>
                 </div>
-                <Button variant="outline" size="sm" className="shrink-0" onClick={() => navigate(`/providers/profile/${provider.id}`)}>
+                <Button variant="outline" size="sm" onClick={() => navigate(`/providers/profile/${provider.id}`)}>
                   View
                 </Button>
               </div>
-              <Separator />
+              <Separator className="my-4" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Button variant="outline" size="sm" className="w-full justify-start">
                   <Phone className="w-4 h-4 mr-2" />
@@ -218,18 +217,19 @@ const BookingDetails = () => {
                   Email Provider
                 </Button>
               </div>
-            </CardContent>
+            </CardHeader>
           </Card>}
 
         {/* Package & Pricing Card */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-              <Package className="w-5 h-5 text-accent" />
-              Package Details
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <Card className="border-0 shadow-sm rounded-xl">
+          <CardHeader className="p-4 sm:p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-accent/10 shrink-0">
+                <Package className="w-5 h-5 text-accent" />
+              </div>
+              <h3 className="text-base font-semibold text-gray-900 text-left">Package Details</h3>
+            </div>
+            <div className="space-y-4">
             <div>
               <p className="text-xs sm:text-sm text-muted-foreground mb-1.5 text-left">Selected Package</p>
               <p className="font-semibold text-base sm:text-lg text-left">{packageInfo?.package_name}</p>
@@ -301,11 +301,12 @@ const BookingDetails = () => {
                 Payment: {booking.payment_status.toUpperCase()}
               </div>
             </div>
-          </CardContent>
+            </div>
+          </CardHeader>
         </Card>
 
         {/* Actions */}
-        {canCancel && <Card className="border-0 shadow-sm border-destructive/20">
+        {canCancel && <Card className="border-0 shadow-sm border-destructive/20 rounded-xl">
             <CardContent className="pt-6">
               <Button variant="destructive" size="lg" className="w-full" onClick={handleCancelBooking}>
                 Cancel Booking
@@ -313,8 +314,8 @@ const BookingDetails = () => {
             </CardContent>
           </Card>}
 
-        {booking.job_status === 'completed' && <Card className="border-0 shadow-sm">
-            <CardContent className="pt-6">
+        {booking.job_status === 'completed' && <Card className="border-0 shadow-sm rounded-xl">
+            <CardContent className="pt-6 p-4 sm:p-6">
               <Button variant="outline" size="lg" className="w-full" onClick={() => navigate(`/customer/bookings/${booking.id}/review`)}>
                 <Star className="w-4 h-4 mr-2" />
                 Leave a Review
