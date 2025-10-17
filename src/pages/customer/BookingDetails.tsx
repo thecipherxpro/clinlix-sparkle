@@ -296,8 +296,8 @@ const BookingDetails = () => {
 
             <Separator />
 
-            <div>
-              <div className={`badge ${booking.payment_status === 'paid' ? 'badge-primary' : 'badge-secondary'} text-xs`}>
+            <div className="flex justify-center sm:justify-start">
+              <div className={`badge ${booking.payment_status === 'paid' ? 'badge-success text-white' : 'badge-warning text-white'} border-0 shadow-md px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold`}>
                 Payment: {booking.payment_status.toUpperCase()}
               </div>
             </div>

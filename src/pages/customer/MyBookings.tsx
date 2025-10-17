@@ -93,7 +93,11 @@ const MyBookings = () => {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <StatusBadge status={booking.job_status} className="w-auto" />
-                {booking.payment_status === "paid" && <div className="badge badge-outline badge-primary">Paid</div>}
+                {booking.payment_status === "paid" && (
+                  <div className="badge badge-success text-white border-0 shadow-md px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold">
+                    Paid
+                  </div>
+                )}
               </div>
               <CardTitle className="text-lg">{booking.customer_addresses?.label}</CardTitle>
               <p className="text-sm text-muted-foreground">
