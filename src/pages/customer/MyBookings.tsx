@@ -17,7 +17,7 @@ const STATUS_COLORS = {
   arrived: "bg-indigo-500",
   started: "bg-green-500",
   completed: "bg-emerald-500",
-  cancelled: "bg-red-500"
+  cancelled: "bg-red-500",
 };
 
 const STATUS_LABELS = {
@@ -27,7 +27,7 @@ const STATUS_LABELS = {
   arrived: "Arrived",
   started: "In Progress",
   completed: "Completed",
-  cancelled: "Cancelled"
+  cancelled: "Cancelled",
 };
 
 const MyBookings = () => {
@@ -42,72 +42,69 @@ const MyBookings = () => {
 
   const checkAuthAndFetchBookings = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (!user) {
-        navigate('/auth');
+        navigate("/auth");
         return;
       }
 
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
+      const { data: profileData } = await supabase.from("profiles").select("*").eq("id", user.id).single();
 
-      if (profileData?.role !== 'customer') {
-        navigate('/provider/dashboard');
+      if (profileData?.role !== "customer") {
+        navigate("/provider/dashboard");
         return;
       }
 
       const { data: bookingsData } = await supabase
-        .from('bookings')
-        .select(`
+        .from("bookings")
+        .select(
+          `
           *,
           customer_addresses(*, cleaning_packages(*)),
           provider_profiles(*)
-        `)
-        .eq('customer_id', user.id)
-        .order('requested_date', { ascending: false });
+        `,
+        )
+        .eq("customer_id", user.id)
+        .order("requested_date", { ascending: false });
 
       setBookings(bookingsData || []);
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Failed to load bookings');
+      console.error("Error:", error);
+      toast.error("Failed to load bookings");
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancelBooking = async (bookingId: string) => {
-    if (!confirm('Are you sure you want to cancel this booking?')) return;
+    if (!confirm("Are you sure you want to cancel this booking?")) return;
 
     try {
-      const { error } = await supabase
-        .from('bookings')
-        .update({ job_status: 'cancelled' })
-        .eq('id', bookingId);
+      const { error } = await supabase.from("bookings").update({ job_status: "cancelled" }).eq("id", bookingId);
 
       if (error) throw error;
 
-      toast.success('Booking cancelled');
+      toast.success("Booking cancelled");
       checkAuthAndFetchBookings();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to cancel booking');
+      toast.error(error.message || "Failed to cancel booking");
     }
   };
 
-  const activeBookings = bookings.filter(b => 
-    ['pending', 'confirmed', 'on_the_way', 'arrived', 'started'].includes(b.job_status)
+  const activeBookings = bookings.filter((b) =>
+    ["pending", "confirmed", "on_the_way", "arrived", "started"].includes(b.job_status),
   );
 
-  const completedBookings = bookings.filter(b => b.job_status === 'completed');
-  
-  const cancelledBookings = bookings.filter(b => b.job_status === 'cancelled');
+  const completedBookings = bookings.filter((b) => b.job_status === "completed");
+
+  const cancelledBookings = bookings.filter((b) => b.job_status === "cancelled");
 
   const renderBookingCard = (booking: any) => {
-    const canCancel = ['pending', 'confirmed'].includes(booking.job_status);
-    
+    const canCancel = ["pending", "confirmed"].includes(booking.job_status);
+
     return (
       <Card key={booking.id} className="border-0 shadow-sm">
         <CardHeader>
@@ -117,22 +114,14 @@ const MyBookings = () => {
                 <div className={`badge ${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]}`}>
                   {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
                 </div>
-                {booking.payment_status === 'paid' && (
-                  <div className="badge badge-outline">Paid</div>
-                )}
+                {booking.payment_status === "paid" && <div className="badge badge-outline badge-primary">Paid</div>}
               </div>
-              <CardTitle className="text-lg">
-                {booking.customer_addresses?.label}
-              </CardTitle>
+              <CardTitle className="text-lg">{booking.customer_addresses?.label}</CardTitle>
               <p className="text-sm text-muted-foreground">
                 {booking.customer_addresses?.property_type} • {booking.customer_addresses?.layout_type}
               </p>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate(`/customer/bookings/${booking.id}`)}
-            >
+            <Button variant="ghost" size="sm" onClick={() => navigate(`/customer/bookings/${booking.id}`)}>
               View Details
             </Button>
           </div>
@@ -146,11 +135,11 @@ const MyBookings = () => {
               </div>
               <div>
                 <p className="font-medium">
-                  {new Date(booking.requested_date).toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric'
+                  {new Date(booking.requested_date).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
                   })}
                 </p>
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
@@ -167,7 +156,7 @@ const MyBookings = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">
-                  {booking.customer_addresses?.country === 'Portugal' ? (
+                  {booking.customer_addresses?.country === "Portugal" ? (
                     <>
                       {booking.customer_addresses.rua}, {booking.customer_addresses.localidade}
                     </>
@@ -186,10 +175,13 @@ const MyBookings = () => {
             {booking.provider_profiles && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <AvatarDisplay 
+                  <AvatarDisplay
                     userId={booking.provider_profiles.user_id}
                     size={40}
-                    fallbackText={booking.provider_profiles.full_name.split(' ').map((n: string) => n[0]).join('')}
+                    fallbackText={booking.provider_profiles.full_name
+                      .split(" ")
+                      .map((n: string) => n[0])
+                      .join("")}
                   />
                   <div>
                     <p className="font-medium text-sm">{booking.provider_profiles.full_name}</p>
@@ -215,14 +207,12 @@ const MyBookings = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Package</p>
-                <p className="font-medium">
-                  {booking.customer_addresses?.cleaning_packages?.package_name}
-                </p>
+                <p className="font-medium">{booking.customer_addresses?.cleaning_packages?.package_name}</p>
               </div>
               <div className="text-right">
                 <p className="text-sm text-muted-foreground">Total</p>
                 <p className="font-semibold text-lg">
-                  {booking.customer_addresses?.currency === 'EUR' ? '€' : '$'}
+                  {booking.customer_addresses?.currency === "EUR" ? "€" : "$"}
                   {booking.total_final || booking.total_estimate}
                 </p>
               </div>
@@ -242,7 +232,7 @@ const MyBookings = () => {
               </div>
             )}
 
-            {booking.job_status === 'completed' && !booking.provider_reviews?.length && (
+            {booking.job_status === "completed" && !booking.provider_reviews?.length && (
               <div className="pt-2">
                 <Button
                   variant="outline"
@@ -273,7 +263,12 @@ const MyBookings = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
         <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target md:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/customer/dashboard")}
+            className="touch-target md:hidden"
+          >
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -304,10 +299,8 @@ const MyBookings = () => {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                    No upcoming bookings
-                  </p>
-                  <Button onClick={() => navigate('/customer/booking')} className="w-full sm:w-auto">
+                  <p className="text-sm sm:text-base text-muted-foreground mb-4">No upcoming bookings</p>
+                  <Button onClick={() => navigate("/customer/booking")} className="w-full sm:w-auto">
                     Book a Cleaning Service
                   </Button>
                 </CardContent>
@@ -322,9 +315,7 @@ const MyBookings = () => {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm sm:text-base text-muted-foreground">
-                    No completed bookings
-                  </p>
+                  <p className="text-sm sm:text-base text-muted-foreground">No completed bookings</p>
                 </CardContent>
               </Card>
             ) : (
@@ -337,9 +328,7 @@ const MyBookings = () => {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm sm:text-base text-muted-foreground">
-                    No cancelled bookings
-                  </p>
+                  <p className="text-sm sm:text-base text-muted-foreground">No cancelled bookings</p>
                 </CardContent>
               </Card>
             ) : (
@@ -348,7 +337,7 @@ const MyBookings = () => {
           </TabsContent>
         </Tabs>
       </main>
-      
+
       <MobileNav />
     </div>
   );
