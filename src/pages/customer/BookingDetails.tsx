@@ -230,21 +230,6 @@ const BookingDetails = () => {
                 </span>
               </div>
 
-              {/* Contact Icons Row */}
-              <div className="flex items-center gap-2 mb-4">
-                <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors touch-target">
-                  <MapPin className="w-4 h-4 text-gray-600" />
-                </button>
-                <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors touch-target">
-                  <Mail className="w-4 h-4 text-gray-600" />
-                </button>
-                <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors touch-target">
-                  <Phone className="w-4 h-4 text-gray-600" />
-                </button>
-                <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors touch-target">
-                  <MessageCircle className="w-4 h-4 text-gray-600" />
-                </button>
-              </div>
 
               {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-2">
