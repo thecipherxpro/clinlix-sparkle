@@ -119,8 +119,8 @@ const ProviderAvatarBadge = ({
       <div 
         className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 bg-white rounded-full shadow-sm flex items-center justify-center"
         style={{ 
-          width: size * 0.35, 
-          height: size * 0.35,
+          width: size * 0.42, 
+          height: size * 0.42,
           padding: size * 0.04
         }}
       >
