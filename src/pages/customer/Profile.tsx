@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -262,10 +261,14 @@ const Profile = () => {
               <Separator />
 
 
-              <Button type="submit" className="w-full h-12 sm:h-10" disabled={saving}>
+              <button 
+                type="submit" 
+                className="btn btn-primary w-full h-12 sm:h-10 text-base font-medium" 
+                disabled={saving}
+              >
                 <Save className="w-4 h-4 mr-2" />
                 {saving ? 'Saving...' : 'Save Changes'}
-              </Button>
+              </button>
             </form>
           </CardContent>
         </Card>
@@ -276,14 +279,13 @@ const Profile = () => {
             <CardTitle className="text-destructive">Danger Zone</CardTitle>
           </CardHeader>
           <CardContent>
-            <Button
-              variant="destructive"
+            <button
               onClick={handleLogout}
-              className="w-full h-12 sm:h-10"
+              className="btn btn-error w-full h-12 sm:h-10 text-base font-medium"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Logout
-            </Button>
+            </button>
           </CardContent>
         </Card>
       </main>
