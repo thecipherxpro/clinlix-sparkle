@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, Tab } from "@heroui/react";
 import { useToast } from "@/hooks/use-toast";
 import { 
   ArrowLeft, 
@@ -451,20 +451,26 @@ const JobDetail = () => {
         </Card>
 
         {/* Tabbed Interface */}
-        <Tabs defaultValue="when" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="when" className="text-xs sm:text-sm">
-              <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-              <span>When</span>
-            </TabsTrigger>
-            <TabsTrigger value="where" className="text-xs sm:text-sm">
-              <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-              <span>Where</span>
-            </TabsTrigger>
-          </TabsList>
-
-          {/* WHEN TAB */}
-          <TabsContent value="when" className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
+        <Tabs 
+          defaultSelectedKey="when" 
+          color="secondary"
+          radius="lg"
+          className="w-full"
+          classNames={{
+            tabList: "grid w-full grid-cols-2",
+            tab: "text-xs sm:text-sm h-12"
+          }}
+        >
+          <Tab 
+            key="when" 
+            title={
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span>When</span>
+              </div>
+            }
+          >
+            <div className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base sm:text-lg">Booking Details</CardTitle>
@@ -626,10 +632,19 @@ const JobDetail = () => {
                 </Button>
               )}
             </div>
-          </TabsContent>
+            </div>
+          </Tab>
 
-          {/* WHERE TAB */}
-          <TabsContent value="where" className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
+          <Tab 
+            key="where" 
+            title={
+              <div className="flex items-center gap-1 sm:gap-2">
+                <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span>Where</span>
+              </div>
+            }
+          >
+            <div className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
             {/* Customer Address */}
             <Card>
               <CardHeader className="pb-3">
@@ -741,7 +756,8 @@ const JobDetail = () => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+            </div>
+          </Tab>
         </Tabs>
       </div>
 

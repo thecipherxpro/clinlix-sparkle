@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, Tab } from "@heroui/react";
 import { ArrowLeft, DollarSign, TrendingUp, Clock, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
@@ -138,14 +138,18 @@ const ProviderWallet = () => {
             <CardDescription>View all your transactions</CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="all" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="all" className="text-sm">All</TabsTrigger>
-                <TabsTrigger value="pending" className="text-sm">Pending</TabsTrigger>
-                <TabsTrigger value="paid" className="text-sm">Paid</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="all" className="space-y-3">
+            <Tabs 
+              defaultSelectedKey="all" 
+              color="secondary"
+              radius="lg"
+              className="space-y-4"
+              classNames={{
+                tabList: "grid w-full grid-cols-3",
+                tab: "text-sm h-12"
+              }}
+            >
+              <Tab key="all" title="All">
+                <div className="space-y-3 mt-4">
                 {wallet.length === 0 ? (
                   <div className="py-12 text-center">
                     <DollarSign className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
@@ -197,9 +201,11 @@ const ProviderWallet = () => {
                     </div>
                   ))
                 )}
-              </TabsContent>
+                </div>
+              </Tab>
 
-              <TabsContent value="pending" className="space-y-3">
+              <Tab key="pending" title="Pending">
+                <div className="space-y-3 mt-4">
                 {wallet.filter(e => e.status === 'pending').length === 0 ? (
                   <div className="py-12 text-center text-muted-foreground">
                     No pending payouts
@@ -223,9 +229,11 @@ const ProviderWallet = () => {
                       </div>
                     ))
                 )}
-              </TabsContent>
+                </div>
+              </Tab>
 
-              <TabsContent value="paid" className="space-y-3">
+              <Tab key="paid" title="Paid">
+                <div className="space-y-3 mt-4">
                 {completedPayouts.length === 0 ? (
                   <div className="py-12 text-center text-muted-foreground">
                     No completed payouts yet
@@ -253,7 +261,8 @@ const ProviderWallet = () => {
                     </div>
                   ))
                 )}
-              </TabsContent>
+                </div>
+              </Tab>
             </Tabs>
           </CardContent>
         </Card>

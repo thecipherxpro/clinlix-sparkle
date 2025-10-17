@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, Tab } from "@heroui/react";
 import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import AvatarDisplay from "@/components/AvatarDisplay";
@@ -126,17 +126,18 @@ const ProviderProfile = () => {
           <Separator className="my-4 sm:my-6" />
 
           {/* Tabs */}
-          <Tabs defaultValue="about" className="w-full">
-            <TabsList className="w-full h-12 sm:h-10">
-              <TabsTrigger value="about" className="flex-1">
-                About
-              </TabsTrigger>
-              <TabsTrigger value="reviews" className="flex-1">
-                Reviews ({provider.rating_count})
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="about" className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
+          <Tabs 
+            defaultSelectedKey="about" 
+            color="secondary" 
+            radius="lg"
+            className="w-full"
+            classNames={{
+              tabList: "w-full",
+              tab: "h-12 sm:h-10"
+            }}
+          >
+            <Tab key="about" title="About">
+              <div className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
               {provider.skills && provider.skills.length > 0 && (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="pt-6">
@@ -196,9 +197,11 @@ const ProviderProfile = () => {
                   </CardContent>
                 </Card>
               )}
-            </TabsContent>
+              </div>
+            </Tab>
 
-            <TabsContent value="reviews" className="space-y-4 mt-4 sm:mt-6">
+            <Tab key="reviews" title={`Reviews (${provider.rating_count})`}>
+              <div className="space-y-4 mt-4 sm:mt-6">
               {reviews.length === 0 ? (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="pt-12 pb-12 text-center">
@@ -233,7 +236,8 @@ const ProviderProfile = () => {
                   </Card>
                 ))
               )}
-            </TabsContent>
+              </div>
+            </Tab>
           </Tabs>
         </div>
       </main>

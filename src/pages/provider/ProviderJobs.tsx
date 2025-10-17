@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, Tab } from "@heroui/react";
 import { Clock, CheckCircle, Flag } from "lucide-react";
 import JobRequestsList from "@/components/provider/jobs/JobRequestsList";
 import ConfirmedJobsList from "@/components/provider/jobs/ConfirmedJobsList";
@@ -17,42 +17,58 @@ const ProviderJobs = () => {
       </header>
 
       {/* Tabs Navigation */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="w-full grid grid-cols-3 h-auto p-1 bg-muted/30 sticky top-[73px] z-10">
-          <TabsTrigger 
-            value="requests" 
-            className="flex flex-col items-center gap-1 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-          >
-            <Clock className="h-4 w-4" />
-            <span className="text-xs font-medium">Job Requests</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="confirmed"
-            className="flex flex-col items-center gap-1 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-          >
-            <CheckCircle className="h-4 w-4" />
-            <span className="text-xs font-medium">Confirmed</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="completed"
-            className="flex flex-col items-center gap-1 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-          >
-            <Flag className="h-4 w-4" />
-            <span className="text-xs font-medium">Completed</span>
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="requests" className="mt-0">
+      <Tabs 
+        selectedKey={activeTab} 
+        onSelectionChange={(key) => setActiveTab(key as string)} 
+        color="secondary"
+        radius="lg"
+        className="w-full"
+        classNames={{
+          tabList: "w-full grid grid-cols-3 bg-muted/30 sticky top-[73px] z-10",
+          tab: "h-auto py-3"
+        }}
+      >
+        <Tab 
+          key="requests"
+          title={
+            <div className="flex flex-col items-center gap-1">
+              <Clock className="h-4 w-4" />
+              <span className="text-xs font-medium">Job Requests</span>
+            </div>
+          }
+        >
+          <div className="mt-0">
           <JobRequestsList />
-        </TabsContent>
+          </div>
+        </Tab>
 
-        <TabsContent value="confirmed" className="mt-0">
+        <Tab 
+          key="confirmed"
+          title={
+            <div className="flex flex-col items-center gap-1">
+              <CheckCircle className="h-4 w-4" />
+              <span className="text-xs font-medium">Confirmed</span>
+            </div>
+          }
+        >
+          <div className="mt-0">
           <ConfirmedJobsList />
-        </TabsContent>
+          </div>
+        </Tab>
 
-        <TabsContent value="completed" className="mt-0">
+        <Tab 
+          key="completed"
+          title={
+            <div className="flex flex-col items-center gap-1">
+              <Flag className="h-4 w-4" />
+              <span className="text-xs font-medium">Completed</span>
+            </div>
+          }
+        >
+          <div className="mt-0">
           <CompletedJobsList />
-        </TabsContent>
+          </div>
+        </Tab>
       </Tabs>
 
       <ProviderMobileNav />

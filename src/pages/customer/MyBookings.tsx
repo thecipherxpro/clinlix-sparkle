@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, Tab } from "@heroui/react";
 import { ArrowLeft, Calendar, MapPin, Clock, Star } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
@@ -262,23 +262,27 @@ const MyBookings = () => {
       </header>
 
       <main className="mobile-container py-4 sm:py-8 max-w-4xl">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full grid grid-cols-3 h-12 sm:h-10">
-            <TabsTrigger value="active" className="text-xs sm:text-base">
-              Active
-              <span className="ml-1">({activeBookings.length})</span>
-            </TabsTrigger>
-            <TabsTrigger value="completed" className="text-xs sm:text-base">
-              Completed
-              <span className="ml-1">({completedBookings.length})</span>
-            </TabsTrigger>
-            <TabsTrigger value="cancelled" className="text-xs sm:text-base">
-              Cancelled
-              <span className="ml-1">({cancelledBookings.length})</span>
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="active" className="space-y-4 mt-4 sm:mt-6">
+        <Tabs 
+          selectedKey={activeTab} 
+          onSelectionChange={(key) => setActiveTab(key as string)} 
+          color="secondary"
+          radius="lg"
+          className="w-full"
+          classNames={{
+            tabList: "w-full grid grid-cols-3",
+            tab: "h-12 sm:h-10 text-xs sm:text-base"
+          }}
+        >
+          <Tab 
+            key="active" 
+            title={
+              <div className="flex items-center gap-1">
+                <span>Active</span>
+                <span>({activeBookings.length})</span>
+              </div>
+            }
+          >
+            <div className="space-y-4 mt-4 sm:mt-6">
             {activeBookings.length === 0 ? (
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
@@ -292,9 +296,19 @@ const MyBookings = () => {
             ) : (
               activeBookings.map(renderBookingCard)
             )}
-          </TabsContent>
+            </div>
+          </Tab>
 
-          <TabsContent value="completed" className="space-y-4 mt-4 sm:mt-6">
+          <Tab 
+            key="completed" 
+            title={
+              <div className="flex items-center gap-1">
+                <span>Completed</span>
+                <span>({completedBookings.length})</span>
+              </div>
+            }
+          >
+            <div className="space-y-4 mt-4 sm:mt-6">
             {completedBookings.length === 0 ? (
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
@@ -305,9 +319,19 @@ const MyBookings = () => {
             ) : (
               completedBookings.map(renderBookingCard)
             )}
-          </TabsContent>
+            </div>
+          </Tab>
 
-          <TabsContent value="cancelled" className="space-y-4 mt-4 sm:mt-6">
+          <Tab 
+            key="cancelled" 
+            title={
+              <div className="flex items-center gap-1">
+                <span>Cancelled</span>
+                <span>({cancelledBookings.length})</span>
+              </div>
+            }
+          >
+            <div className="space-y-4 mt-4 sm:mt-6">
             {cancelledBookings.length === 0 ? (
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
@@ -318,7 +342,8 @@ const MyBookings = () => {
             ) : (
               cancelledBookings.map(renderBookingCard)
             )}
-          </TabsContent>
+            </div>
+          </Tab>
         </Tabs>
       </main>
 

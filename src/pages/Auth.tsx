@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, Tab } from "@heroui/react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
@@ -174,23 +174,19 @@ const Auth = () => {
         </CardHeader>
 
         <CardContent className="px-6 pb-8">
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "login" | "register")} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2 bg-secondary/50 p-1 rounded-[16px]">
-              <TabsTrigger
-                value="login"
-                className="rounded-[12px] data-[state=active]:bg-background data-[state=active]:shadow-sm"
-              >
-                Log in
-              </TabsTrigger>
-              <TabsTrigger
-                value="register"
-                className="rounded-[12px] data-[state=active]:bg-background data-[state=active]:shadow-sm"
-              >
-                Sign Up
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="login" className="space-y-5 mt-6">
+          <Tabs 
+            selectedKey={activeTab} 
+            onSelectionChange={(key) => setActiveTab(key as "login" | "register")} 
+            color="secondary"
+            radius="lg"
+            className="space-y-6"
+            classNames={{
+              tabList: "w-full",
+              tab: "h-[44px]"
+            }}
+          >
+            <Tab key="login" title="Log in">
+              <div className="space-y-5 mt-6">
               <div className="text-center space-y-2 mb-6">
                 <p className="text-sm text-muted-foreground">
                   Enter your email and password to securely access your account and manage your services.
@@ -343,9 +339,11 @@ const Auth = () => {
                   <FaApple className="w-5 h-5" />
                 </Button>
               </div>
-            </TabsContent>
+              </div>
+            </Tab>
 
-            <TabsContent value="register" className="space-y-5 mt-6">
+            <Tab key="register" title="Sign Up">
+              <div className="space-y-5 mt-6">
               <div className="text-center space-y-2 mb-6">
                 <p className="text-sm text-muted-foreground">Sign up to book or manage cleaning services easily.</p>
               </div>
@@ -574,7 +572,8 @@ const Auth = () => {
                   <FaApple className="w-5 h-5" />
                 </Button>
               </div>
-            </TabsContent>
+              </div>
+            </Tab>
           </Tabs>
         </CardContent>
       </Card>
