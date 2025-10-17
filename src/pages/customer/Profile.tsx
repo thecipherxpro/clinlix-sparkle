@@ -123,9 +123,13 @@ const Profile = () => {
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
         <div className="mobile-container py-3 sm:py-4 flex items-center justify-between gap-3 sm:gap-4">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target md:hidden">
+            <button 
+              onClick={() => navigate('/customer/dashboard')} 
+              className="btn btn-ghost btn-circle md:hidden hover:bg-primary/10 transition-all duration-200"
+              aria-label="Go back"
+            >
               <ArrowLeft className="w-5 h-5" />
-            </Button>
+            </button>
             <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               My Profile
             </h1>
