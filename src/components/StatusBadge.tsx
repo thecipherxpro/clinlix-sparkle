@@ -1,15 +1,3 @@
-import { Badge } from "@/components/ui/badge";
-
-const STATUS_CONFIG = {
-  pending: { variant: "secondary" as const, className: "" },
-  confirmed: { variant: "default" as const, className: "" },
-  on_the_way: { variant: "outline" as const, className: "border-primary/50 text-primary bg-primary/5" },
-  arrived: { variant: "outline" as const, className: "border-accent/50 text-accent-foreground bg-accent/10" },
-  started: { variant: "default" as const, className: "bg-accent text-accent-foreground" },
-  completed: { variant: "default" as const, className: "bg-primary/80 text-primary-foreground" },
-  cancelled: { variant: "destructive" as const, className: "" }
-};
-
 const STATUS_LABELS = {
   pending: "Pending",
   confirmed: "Confirmed",
@@ -20,23 +8,30 @@ const STATUS_LABELS = {
   cancelled: "Cancelled"
 };
 
+const STATUS_COLORS = {
+  pending: "badge-warning text-white",
+  confirmed: "badge-info text-white",
+  on_the_way: "bg-gradient-to-r from-purple-500 to-purple-700 text-white",
+  arrived: "badge-primary text-white",
+  started: "badge-success text-white",
+  completed: "badge-accent text-white",
+  cancelled: "badge-error text-white"
+};
+
 interface StatusBadgeProps {
-  status: keyof typeof STATUS_CONFIG;
-  size?: "default" | "sm" | "lg";
+  status: keyof typeof STATUS_LABELS;
   className?: string;
 }
 
-export const StatusBadge = ({ status, size = "default", className = "" }: StatusBadgeProps) => {
-  const config = STATUS_CONFIG[status];
-  const label = STATUS_LABELS[status];
+export const StatusBadge = ({ status, className = "" }: StatusBadgeProps) => {
+  const label = STATUS_LABELS[status] || "Unknown";
+  const bgColor = STATUS_COLORS[status] || "badge-ghost";
 
   return (
-    <Badge
-      variant={config.variant}
-      size={size}
-      className={`w-fit ${config.className} ${className}`}
-    >
-      {label}
-    </Badge>
+    <div className={`flex justify-center sm:justify-start ${className}`}>
+      <div className={`badge ${bgColor} border-0 shadow-md px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold animate-fade-in`}>
+        {label}
+      </div>
+    </div>
   );
 };
