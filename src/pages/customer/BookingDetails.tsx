@@ -8,7 +8,6 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Calendar, Clock, MapPin, Phone, Mail, Star, Package, DollarSign, User } from "lucide-react";
 import { toast } from "sonner";
 import AvatarDisplay from "@/components/AvatarDisplay";
-
 const STATUS_COLORS = {
   pending: "bg-yellow-500",
   confirmed: "bg-blue-500",
@@ -18,7 +17,6 @@ const STATUS_COLORS = {
   completed: "bg-emerald-500",
   cancelled: "bg-red-500"
 };
-
 const STATUS_LABELS = {
   pending: "Pending",
   confirmed: "Confirmed",
@@ -28,37 +26,36 @@ const STATUS_LABELS = {
   completed: "Completed",
   cancelled: "Cancelled"
 };
-
 const BookingDetails = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const {
+    id
+  } = useParams();
   const [booking, setBooking] = useState<any>(null);
   const [addons, setAddons] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     fetchBookingDetails();
   }, [id]);
-
   const fetchBookingDetails = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) {
         navigate('/auth');
         return;
       }
-
-      const { data: bookingData, error } = await supabase
-        .from('bookings')
-        .select(`
+      const {
+        data: bookingData,
+        error
+      } = await supabase.from('bookings').select(`
           *,
           customer_addresses(*, cleaning_packages(*)),
           provider_profiles(*)
-        `)
-        .eq('id', id)
-        .single();
-
+        `).eq('id', id).single();
       if (error) throw error;
 
       // Verify this booking belongs to the current user
@@ -67,16 +64,14 @@ const BookingDetails = () => {
         navigate('/customer/bookings');
         return;
       }
-
       setBooking(bookingData);
 
       // Fetch addon details if any
       if (bookingData.addon_ids && bookingData.addon_ids.length > 0) {
-        const { data: addonsData, error: addonsError } = await supabase
-          .from('cleaning_addons')
-          .select('*')
-          .in('id', bookingData.addon_ids);
-
+        const {
+          data: addonsData,
+          error: addonsError
+        } = await supabase.from('cleaning_addons').select('*').in('id', bookingData.addon_ids);
         if (addonsError) {
           console.error('Error fetching addons:', addonsError);
         } else {
@@ -91,51 +86,36 @@ const BookingDetails = () => {
       setLoading(false);
     }
   };
-
   const handleCancelBooking = async () => {
     if (!confirm('Are you sure you want to cancel this booking?')) return;
-
     try {
-      const { error } = await supabase
-        .from('bookings')
-        .update({ job_status: 'cancelled' })
-        .eq('id', id);
-
+      const {
+        error
+      } = await supabase.from('bookings').update({
+        job_status: 'cancelled'
+      }).eq('id', id);
       if (error) throw error;
-
       toast.success('Booking cancelled');
       fetchBookingDetails();
     } catch (error: any) {
       toast.error(error.message || 'Failed to cancel booking');
     }
   };
-
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+    return <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
+      </div>;
   }
-
   if (!booking) return null;
-
   const canCancel = ['pending', 'confirmed'].includes(booking.job_status);
   const address = booking.customer_addresses;
   const provider = booking.provider_profiles;
   const packageInfo = address?.cleaning_packages;
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-6">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-6">
       {/* Header */}
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
         <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
-          <HeroButton 
-            isIconOnly
-            variant="light"
-            onPress={() => navigate('/customer/bookings')} 
-            className="touch-target"
-          >
+          <HeroButton isIconOnly variant="light" onPress={() => navigate('/customer/bookings')} className="touch-target">
             <ArrowLeft className="w-5 h-5" />
           </HeroButton>
           <h1 className="text-lg sm:text-xl font-bold text-left">Booking Details</h1>
@@ -174,11 +154,11 @@ const BookingDetails = () => {
               <div className="flex-1">
                 <p className="font-medium text-sm sm:text-base text-left">
                   {new Date(booking.requested_date).toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric'
-                  })}
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
                 </p>
                 <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mt-1.5 text-left">
                   <Clock className="w-3.5 h-3.5" />
@@ -201,17 +181,13 @@ const BookingDetails = () => {
             <div>
               <p className="font-medium text-sm sm:text-base text-left">{address?.label}</p>
               <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 leading-relaxed text-left">
-                {address?.country === 'Portugal' ? (
-                  <>
+                {address?.country === 'Portugal' ? <>
                     {address.rua}, {address.porta_andar && `${address.porta_andar}, `}
                     {address.localidade}, {address.codigo_postal}
-                  </>
-                ) : (
-                  <>
+                  </> : <>
                     {address?.street}, {address?.apt_unit && `${address?.apt_unit}, `}
                     {address?.city}, {address?.province} {address?.postal_code}
-                  </>
-                )}
+                  </>}
               </p>
             </div>
             <Separator />
@@ -229,21 +205,16 @@ const BookingDetails = () => {
         </Card>
 
         {/* Provider Card */}
-        {provider && (
-          <Card className="border-0 shadow-sm">
+        {provider && <Card className="border-0 shadow-sm">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+              <CardTitle className="text-base sm:text-lg flex items-start gap-2 text-left">
                 <User className="w-5 h-5 text-primary" />
                 Provider Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-start gap-3">
-                <AvatarDisplay 
-                  userId={provider.user_id}
-                  size={48}
-                  fallbackText={provider.full_name.split(' ').map((n: string) => n[0]).join('')}
-                />
+                <AvatarDisplay userId={provider.user_id} size={48} fallbackText={provider.full_name.split(' ').map((n: string) => n[0]).join('')} />
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm sm:text-base text-left">{provider.full_name}</p>
                   <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mt-1 text-left">
@@ -251,12 +222,7 @@ const BookingDetails = () => {
                     {provider.rating_avg.toFixed(1)} ({provider.rating_count} reviews)
                   </p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="shrink-0"
-                  onClick={() => navigate(`/providers/profile/${provider.id}`)}
-                >
+                <Button variant="outline" size="sm" className="shrink-0" onClick={() => navigate(`/providers/profile/${provider.id}`)}>
                   View
                 </Button>
               </div>
@@ -272,8 +238,7 @@ const BookingDetails = () => {
                 </Button>
               </div>
             </CardContent>
-          </Card>
-        )}
+          </Card>}
 
         {/* Package & Pricing Card */}
         <Card className="border-0 shadow-sm">
@@ -292,24 +257,20 @@ const BookingDetails = () => {
               </p>
             </div>
 
-            {addons.length > 0 && (
-              <>
+            {addons.length > 0 && <>
                 <Separator />
                 <div>
                   <p className="text-xs sm:text-sm text-muted-foreground mb-2.5 text-left">Add-ons</p>
                   <div className="space-y-2.5">
-                    {addons.map((addon) => (
-                      <div key={addon.id} className="flex justify-between items-center text-xs sm:text-sm">
+                    {addons.map(addon => <div key={addon.id} className="flex justify-between items-center text-xs sm:text-sm">
                         <span className="text-foreground text-left">{addon.name_en}</span>
                         <span className="font-medium text-foreground text-right">
                           {address?.currency === 'EUR' ? '€' : '$'}{Number(addon.price).toFixed(2)}
                         </span>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </div>
-              </>
-            )}
+              </>}
 
             <Separator />
 
@@ -320,30 +281,26 @@ const BookingDetails = () => {
                   {address?.currency === 'EUR' ? '€' : '$'}{packageInfo?.one_time_price}
                 </span>
               </div>
-              {addons.length > 0 && (
-                <div className="flex justify-between items-center text-xs sm:text-sm">
+              {addons.length > 0 && <div className="flex justify-between items-center text-xs sm:text-sm">
                   <span className="text-muted-foreground text-left">Add-ons Total</span>
                   <span className="font-medium text-foreground text-right">
                     {address?.currency === 'EUR' ? '€' : '$'}
                     {addons.reduce((sum, addon) => sum + Number(addon.price), 0).toFixed(2)}
                   </span>
-                </div>
-              )}
+                </div>}
               <div className="flex justify-between items-center text-xs sm:text-sm">
                 <span className="text-muted-foreground text-left">Subtotal</span>
                 <span className="font-medium text-foreground text-right">
                   {address?.currency === 'EUR' ? '€' : '$'}{booking.total_estimate}
                 </span>
               </div>
-              {booking.overtime_minutes > 0 && (
-                <div className="flex justify-between items-center text-xs sm:text-sm">
+              {booking.overtime_minutes > 0 && <div className="flex justify-between items-center text-xs sm:text-sm">
                   <span className="text-muted-foreground text-left">Overtime ({booking.overtime_minutes} min)</span>
                   <span className="font-medium text-foreground text-right">
                     {address?.currency === 'EUR' ? '€' : '$'}
                     {((booking.total_final || booking.total_estimate) - booking.total_estimate).toFixed(2)}
                   </span>
-                </div>
-              )}
+                </div>}
               <Separator className="my-3" />
               <div className="flex justify-between items-center pt-1">
                 <span className="font-semibold text-base sm:text-lg flex items-center gap-2 text-left">
@@ -367,39 +324,23 @@ const BookingDetails = () => {
         </Card>
 
         {/* Actions */}
-        {canCancel && (
-          <Card className="border-0 shadow-sm border-destructive/20">
+        {canCancel && <Card className="border-0 shadow-sm border-destructive/20">
             <CardContent className="pt-6">
-              <Button
-                variant="destructive"
-                size="lg"
-                className="w-full"
-                onClick={handleCancelBooking}
-              >
+              <Button variant="destructive" size="lg" className="w-full" onClick={handleCancelBooking}>
                 Cancel Booking
               </Button>
             </CardContent>
-          </Card>
-        )}
+          </Card>}
 
-        {booking.job_status === 'completed' && (
-          <Card className="border-0 shadow-sm">
+        {booking.job_status === 'completed' && <Card className="border-0 shadow-sm">
             <CardContent className="pt-6">
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full"
-                onClick={() => navigate(`/customer/bookings/${booking.id}/review`)}
-              >
+              <Button variant="outline" size="lg" className="w-full" onClick={() => navigate(`/customer/bookings/${booking.id}/review`)}>
                 <Star className="w-4 h-4 mr-2" />
                 Leave a Review
               </Button>
             </CardContent>
-          </Card>
-        )}
+          </Card>}
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default BookingDetails;
