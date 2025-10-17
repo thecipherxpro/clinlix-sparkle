@@ -8,24 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Calendar, Clock, MapPin, Phone, Mail, Star, Package, DollarSign, User } from "lucide-react";
 import { toast } from "sonner";
 import AvatarDisplay from "@/components/AvatarDisplay";
-const STATUS_COLORS = {
-  pending: "bg-yellow-500",
-  confirmed: "bg-blue-500",
-  on_the_way: "bg-purple-500",
-  arrived: "bg-indigo-500",
-  started: "bg-green-500",
-  completed: "bg-emerald-500",
-  cancelled: "bg-red-500"
-};
-const STATUS_LABELS = {
-  pending: "Pending",
-  confirmed: "Confirmed",
-  on_the_way: "On the Way",
-  arrived: "Arrived",
-  started: "In Progress",
-  completed: "Completed",
-  cancelled: "Cancelled"
-};
+import { StatusBadge } from "@/components/StatusBadge";
 const BookingDetails = () => {
   const navigate = useNavigate();
   const {
@@ -126,9 +109,7 @@ const BookingDetails = () => {
         {/* Status Card */}
         <Card className="border-0 shadow-sm">
           <CardHeader className="space-y-3">
-            <div className={`badge ${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]} w-fit`}>
-              {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
-            </div>
+            <StatusBadge status={booking.job_status} />
             <div>
               <CardTitle className="text-xl sm:text-2xl text-left">{address?.label}</CardTitle>
               <p className="text-sm text-muted-foreground mt-1.5 text-left">

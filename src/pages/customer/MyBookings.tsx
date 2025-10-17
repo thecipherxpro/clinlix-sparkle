@@ -9,26 +9,7 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
 import AvatarDisplay from "@/components/AvatarDisplay";
-
-const STATUS_COLORS = {
-  pending: "bg-yellow-500",
-  confirmed: "bg-blue-500",
-  on_the_way: "bg-purple-500",
-  arrived: "bg-indigo-500",
-  started: "bg-green-500",
-  completed: "bg-emerald-500",
-  cancelled: "bg-red-500",
-};
-
-const STATUS_LABELS = {
-  pending: "Pending",
-  confirmed: "Confirmed",
-  on_the_way: "On the Way",
-  arrived: "Arrived",
-  started: "In Progress",
-  completed: "Completed",
-  cancelled: "Cancelled",
-};
+import { StatusBadge } from "@/components/StatusBadge";
 
 const MyBookings = () => {
   const navigate = useNavigate();
@@ -111,9 +92,7 @@ const MyBookings = () => {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <div className={`badge ${STATUS_COLORS[booking.job_status as keyof typeof STATUS_COLORS]}`}>
-                  {STATUS_LABELS[booking.job_status as keyof typeof STATUS_LABELS]}
-                </div>
+                <StatusBadge status={booking.job_status} className="w-auto" />
                 {booking.payment_status === "paid" && <div className="badge badge-outline badge-primary">Paid</div>}
               </div>
               <CardTitle className="text-lg">{booking.customer_addresses?.label}</CardTitle>
