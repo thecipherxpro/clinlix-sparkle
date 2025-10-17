@@ -37,7 +37,7 @@ const BookingDetails = () => {
       } = await supabase.from('bookings').select(`
           *,
           customer_addresses(*, cleaning_packages(*)),
-          provider_profiles(*)
+          provider_profiles(*, profiles(phone))
         `).eq('id', id).single();
       if (error) throw error;
 
@@ -234,6 +234,8 @@ const BookingDetails = () => {
                 </Button>
                 <Button 
                   className="w-full bg-teal-700 hover:bg-teal-800 text-white font-semibold shadow-md touch-target"
+                  onClick={() => provider?.profiles?.phone && window.open(`tel:${provider.profiles.phone}`)}
+                  disabled={!provider?.profiles?.phone}
                 >
                   <Phone className="w-4 h-4 mr-2" />
                   Call
