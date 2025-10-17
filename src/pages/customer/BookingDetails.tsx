@@ -115,7 +115,11 @@ const BookingDetails = () => {
         <Card className="border-0 shadow-sm rounded-xl">
           <CardHeader className="flex flex-row items-center gap-3 p-4 sm:p-6">
             <div className="p-2 rounded-lg bg-primary/10 shrink-0">
-              {address?.property_type === 'House' ? <Home className="w-5 h-5 text-primary" /> : <Building2 className="w-5 h-5 text-primary" />}
+              {address?.property_type === 'House' ? (
+                <Home className="w-5 h-5 text-primary" />
+              ) : (
+                <Building2 className="w-5 h-5 text-primary" />
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <CardTitle className="text-lg font-semibold text-left">{address?.label}</CardTitle>
@@ -136,11 +140,11 @@ const BookingDetails = () => {
               <h3 className="text-base font-semibold text-gray-900 text-left">Date & Time</h3>
               <p className="text-sm text-gray-700 text-left mt-1">
                 {new Date(booking.requested_date).toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric'
-              })}
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
               </p>
               <p className="text-xs text-gray-500 flex items-center gap-1 mt-1 text-left">
                 <Clock className="w-3.5 h-3.5" />
@@ -159,10 +163,16 @@ const BookingDetails = () => {
             <div className="flex-1 min-w-0">
               <h3 className="text-base font-semibold text-gray-900 text-left">Service Location</h3>
               <p className="text-sm text-gray-700 text-left mt-1">
-                {address?.country === 'Portugal' ? `${address.rua}${address.porta_andar ? `, ${address.porta_andar}` : ''}` : `${address?.street}${address?.apt_unit ? `, ${address?.apt_unit}` : ''}`}
+                {address?.country === 'Portugal' 
+                  ? `${address.rua}${address.porta_andar ? `, ${address.porta_andar}` : ''}`
+                  : `${address?.street}${address?.apt_unit ? `, ${address?.apt_unit}` : ''}`
+                }
               </p>
               <p className="text-xs text-gray-500 text-left">
-                {address?.country === 'Portugal' ? `${address.localidade}, ${address.codigo_postal}` : `${address?.city}, ${address?.province} ${address?.postal_code}`}
+                {address?.country === 'Portugal'
+                  ? `${address.localidade}, ${address.codigo_postal}`
+                  : `${address?.city}, ${address?.province} ${address?.postal_code}`
+                }
               </p>
               <div className="mt-2 text-xs text-gray-500 text-left">
                 Property Type: <span className="font-medium">{address?.property_type}</span>
@@ -174,66 +184,87 @@ const BookingDetails = () => {
         </Card>
 
         {/* Provider Information Card */}
-        {provider && <Card className="border-0 shadow-sm rounded-xl">
-            <CardHeader className="p-4 sm:p-6">
-              <div className="flex items-start gap-4">
-                {/* Avatar with Verified Badge */}
-                <div className="relative shrink-0">
-                  <div className="w-10h-10 overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5 rounded-none px-0 py-0 \nitems-start \n">
-                    <AvatarDisplay userId={provider.user_id} avatarUrl={provider.photo_url} size={80} fallbackText={provider.full_name?.[0] || 'C'} />
+        {provider && <Card className="border-0 shadow-sm rounded-xl overflow-hidden">
+            {/* Colored Header */}
+            <div className="relative h-24 bg-gradient-to-r from-teal-500 to-teal-600">
+              {/* Avatar Positioned on Header */}
+              <div className="absolute -bottom-14 left-1/2 -translate-x-1/2">
+                <div className="relative">
+                  <div className="w-28 h-28 rounded-full border-4 border-white overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
+                    <AvatarDisplay 
+                      userId={provider.user_id} 
+                      avatarUrl={provider.photo_url} 
+                      size={112} 
+                      fallbackText={provider.full_name?.[0] || 'C'} 
+                    />
                   </div>
-                  {provider.verified && <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center border-2 border-white">
-                      <CheckCircle className="w-3.5 h-3.5 text-white fill-white" />
-                    </div>}
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  {/* Name and Action Icons */}
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <h3 className="text-xl font-bold text-gray-900 text-left">
-                      {provider.full_name}
-                    </h3>
-                    <div className="flex gap-2 shrink-0">
-                      <button className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
-                        <MapPin className="w-4 h-4 text-gray-700" />
-                      </button>
-                      <button className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
-                        <Mail className="w-4 h-4 text-gray-700" />
-                      </button>
+                  {provider.verified && (
+                    <div className="absolute bottom-1 right-1 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center border-3 border-white">
+                      <CheckCircle className="w-5 h-5 text-white fill-white" />
                     </div>
-                  </div>
-
-                  {/* Bio/Description */}
-                  <p className="text-sm text-gray-600 mb-3 leading-relaxed text-left">
-                    {provider.bio || 'Professional cleaning services with attention to detail and quality assurance for residential and commercial spaces.'}
-                  </p>
-
-                  {/* Star Rating */}
-                  <div className="flex items-center gap-1.5 mb-4">
-                    <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                    <span className="text-lg font-bold text-gray-900">
-                      {provider.rating_avg?.toFixed(1) || '0.0'}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      ({provider.rating_count || 0} Reviews)
-                    </span>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <Button variant="outline" size="default" className="w-full bg-gray-50 hover:bg-gray-100 border-gray-200">
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Chat
-                    </Button>
-                    <Button size="default" className="w-full bg-teal-600 hover:bg-teal-700 text-white">
-                      <Phone className="w-4 h-4 mr-2" />
-                      Call
-                    </Button>
-                  </div>
+                  )}
                 </div>
               </div>
-            </CardHeader>
+            </div>
+
+            {/* Content Section */}
+            <CardContent className="pt-20 px-6 pb-6 text-center">
+              {/* Provider Name */}
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                {provider.full_name}
+              </h3>
+
+              {/* Bio/Description */}
+              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                {provider.bio || 'Professional cleaning services with attention to detail and quality assurance for residential and commercial spaces.'}
+              </p>
+
+              {/* Star Rating */}
+              <div className="flex items-center justify-center gap-2 mb-6">
+                <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                <span className="text-lg font-bold text-gray-900">
+                  {provider.rating_avg?.toFixed(1) || '0.0'}
+                </span>
+                <span className="text-sm text-gray-500">
+                  ({provider.rating_count || 0} Reviews)
+                </span>
+              </div>
+
+              {/* Contact Icons Row */}
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <button className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <MapPin className="w-5 h-5 text-gray-600" />
+                </button>
+                <button className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <Mail className="w-5 h-5 text-gray-600" />
+                </button>
+                <button className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <Phone className="w-5 h-5 text-gray-600" />
+                </button>
+                <button className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <MessageCircle className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-3">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="w-full bg-gray-50 hover:bg-gray-100 border-2 border-gray-200 text-gray-700 font-semibold"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Chat
+                </Button>
+                <Button 
+                  size="lg" 
+                  className="w-full bg-teal-700 hover:bg-teal-800 text-white font-semibold shadow-md"
+                >
+                  <Phone className="w-5 h-5 mr-2" />
+                  Call
+                </Button>
+              </div>
+            </CardContent>
           </Card>}
 
         {/* Package & Pricing Card */}
