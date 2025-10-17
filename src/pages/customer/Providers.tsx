@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Search, Star, Sparkles, Shield } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
-import AvatarDisplay from "@/components/AvatarDisplay";
+import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 
 const Providers = () => {
   const navigate = useNavigate();
@@ -120,12 +120,13 @@ const Providers = () => {
               <Card key={provider.id} className="border-0 shadow-sm hover:shadow-lg transition-all">
                 <CardHeader className="pb-4">
                   <div className="flex items-start gap-4">
-                    <AvatarDisplay 
-                      userId={provider.user_id}
-                      avatarUrl={provider.photo_url}
+                    <ProviderAvatarBadge
+                      imageUrl={provider.photo_url}
+                      isVerified={provider.verified}
+                      createdAt={provider.created_at}
                       size={64}
-                      fallbackText={getInitials(provider.full_name)}
-                      className="border-2 border-primary/20 rounded-full flex-shrink-0"
+                      alt={provider.full_name}
+                      className="flex-shrink-0"
                     />
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">

@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Tabs, Tab } from "@heroui/react";
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
-import AvatarDisplay from "@/components/AvatarDisplay";
+import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import ProviderCard from "@/components/ProviderCard";
 
 const STEPS = [
@@ -677,10 +677,12 @@ const Booking = () => {
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Provider</p>
                   <div className="flex items-center gap-3 mt-2">
-                    <AvatarDisplay 
-                      userId={selectedProvider?.user_id}
+                    <ProviderAvatarBadge
+                      imageUrl={selectedProvider?.photo_url}
+                      isVerified={selectedProvider?.verified}
+                      createdAt={selectedProvider?.created_at}
                       size={40}
-                      fallbackText={selectedProvider?.full_name.split(' ').map((n: string) => n[0]).join('')}
+                      alt={selectedProvider?.full_name}
                     />
                     <div>
                       <p className="font-medium">{selectedProvider?.full_name}</p>

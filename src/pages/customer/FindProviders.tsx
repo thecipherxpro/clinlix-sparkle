@@ -338,6 +338,7 @@ const FindProviders = () => {
                 skills={provider.skills || []}
                 bio={provider.bio}
                 showActions={true}
+                createdAt={provider.created_at}
               />
             ))
           )}

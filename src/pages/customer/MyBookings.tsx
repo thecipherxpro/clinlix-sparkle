@@ -8,7 +8,7 @@ import { ArrowLeft, Calendar, MapPin, Clock, Star } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
-import AvatarDisplay from "@/components/AvatarDisplay";
+import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import { StatusBadge } from "@/components/StatusBadge";
 
 const MyBookings = () => {
@@ -158,14 +158,12 @@ const MyBookings = () => {
             {booking.provider_profiles && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <AvatarDisplay
-                    userId={booking.provider_profiles.user_id}
-                    avatarUrl={booking.provider_profiles.photo_url}
+                  <ProviderAvatarBadge
+                    imageUrl={booking.provider_profiles.photo_url}
+                    isVerified={booking.provider_profiles.verified}
+                    createdAt={booking.provider_profiles.created_at}
                     size={40}
-                    fallbackText={booking.provider_profiles.full_name
-                      .split(" ")
-                      .map((n: string) => n[0])
-                      .join("")}
+                    alt={booking.provider_profiles.full_name}
                   />
                   <div>
                     <p className="font-medium text-sm">{booking.provider_profiles.full_name}</p>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, CheckCircle, Sparkles } from "lucide-react";
-import AvatarDisplay from "@/components/AvatarDisplay";
+import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 
 interface ProviderCardProps {
   providerId: string;
@@ -20,6 +20,7 @@ interface ProviderCardProps {
   showActions?: boolean;
   onSelect?: (providerId: string) => void;
   isSelected?: boolean;
+  createdAt?: string;
 }
 
 const ProviderCard = ({
@@ -37,6 +38,7 @@ const ProviderCard = ({
   showActions = true,
   onSelect,
   isSelected = false,
+  createdAt,
 }: ProviderCardProps) => {
   const navigate = useNavigate();
 
@@ -68,11 +70,12 @@ const ProviderCard = ({
     >
       <div className="flex gap-4">
         {/* Avatar */}
-        <AvatarDisplay 
-          userId={userId}
-          avatarUrl={photoUrl}
+        <ProviderAvatarBadge
+          imageUrl={photoUrl}
+          isVerified={verified}
+          createdAt={createdAt}
           size={64}
-          fallbackText={getInitials(fullName)}
+          alt={fullName}
           className="flex-shrink-0"
         />
 

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Calendar, Clock, MapPin, Phone, Mail, Star, Package, DollarSign, User, Home, Building2, MessageCircle, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
-import AvatarDisplay from "@/components/AvatarDisplay";
+import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import { StatusBadge } from "@/components/StatusBadge";
 const BookingDetails = () => {
   const navigate = useNavigate();
@@ -189,21 +189,13 @@ const BookingDetails = () => {
             <div className="relative h-16 bg-gradient-to-r from-teal-500 to-teal-600">
               {/* Avatar Positioned on Header - Left Aligned */}
               <div className="absolute -bottom-10 left-4">
-                <div className="relative">
-                  <div className="w-20 h-20 rounded-full border-3 border-white overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
-                    <AvatarDisplay 
-                      userId={provider.user_id} 
-                      avatarUrl={provider.photo_url} 
-                      size={80} 
-                      fallbackText={provider.full_name?.[0] || 'C'} 
-                    />
-                  </div>
-                  {provider.verified && (
-                    <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center border-2 border-white">
-                      <CheckCircle className="w-4 h-4 text-white fill-white" />
-                    </div>
-                  )}
-                </div>
+                <ProviderAvatarBadge
+                  imageUrl={provider.photo_url}
+                  isVerified={provider.verified}
+                  createdAt={provider.created_at}
+                  size={80}
+                  alt={provider.full_name}
+                />
               </div>
             </div>
 

@@ -8,7 +8,7 @@ import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react"
 import MobileNav from "@/components/MobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import AvatarDisplay from "@/components/AvatarDisplay";
+import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
@@ -212,10 +212,12 @@ const CustomerDashboard = () => {
                         {/* Provider */}
                         {booking.provider_profiles && (
                           <div className="flex items-center gap-2 pt-2 border-t">
-                            <AvatarDisplay 
-                              userId={booking.provider_profiles.user_id}
+                            <ProviderAvatarBadge
+                              imageUrl={booking.provider_profiles.photo_url}
+                              isVerified={booking.provider_profiles.verified}
+                              createdAt={booking.provider_profiles.created_at}
                               size={32}
-                              fallbackText={booking.provider_profiles.full_name.split(' ').map((n: string) => n[0]).join('')}
+                              alt={booking.provider_profiles.full_name}
                             />
                             <div className="flex-1 min-w-0">
                               <p className="font-medium text-xs line-clamp-1">

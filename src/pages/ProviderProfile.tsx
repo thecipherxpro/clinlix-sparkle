@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, Tab } from "@heroui/react";
 import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import AvatarDisplay from "@/components/AvatarDisplay";
+import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 const ProviderProfile = () => {
   const { providerId } = useParams();
   const navigate = useNavigate();
@@ -84,15 +84,12 @@ const ProviderProfile = () => {
         <div className="relative mb-6 sm:mb-8">
           <div className="h-32 sm:h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl" />
           <div className="absolute -bottom-12 sm:-bottom-16 left-4 sm:left-8">
-            <AvatarDisplay
-              userId={provider.user_id}
-              avatarUrl={provider.photo_url}
+            <ProviderAvatarBadge
+              imageUrl={provider.photo_url}
+              isVerified={provider.verified}
+              createdAt={provider.created_at}
               size={window.innerWidth >= 640 ? 128 : 96}
-              fallbackText={provider.full_name
-                .split(" ")
-                .map((n: string) => n[0])
-                .join("")}
-              className="border-4 border-background rounded-full"
+              alt={provider.full_name}
             />
           </div>
         </div>
