@@ -212,7 +212,7 @@ const BookingDetails = () => {
               {/* Avatar Positioned on Header */}
               <div className="absolute -bottom-14 left-1/2 -translate-x-1/2">
                 <div className="relative">
-                  <div className="w-10 h-10 rounded-full border-4 border-white overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
+                  <div className="w-20 h-20 rounded-full border-4 border-white overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
                     <AvatarDisplay
                       userId={provider.user_id}
                       avatarUrl={provider.photo_url}
