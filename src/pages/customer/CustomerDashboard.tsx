@@ -9,6 +9,7 @@ import MobileNav from "@/components/MobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
+import ProviderCarouselCard from "@/components/ProviderCarouselCard";
 import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
@@ -18,6 +19,7 @@ const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
+  const [providers, setProviders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showUnreviewedModal, setShowUnreviewedModal] = useState(false);
 
@@ -61,6 +63,16 @@ const CustomerDashboard = () => {
         .limit(5);
 
       setUpcomingBookings(bookingsData || []);
+
+      // Fetch all providers
+      const { data: providersData } = await supabase
+        .from('provider_profiles')
+        .select('*')
+        .order('rating_avg', { ascending: false })
+        .order('verified', { ascending: false })
+        .limit(10);
+
+      setProviders(providersData || []);
       
       // Show unreviewed jobs modal after data is loaded
       if (profileData) {
@@ -249,28 +261,64 @@ const CustomerDashboard = () => {
           )}
         </div>
 
-        {/* Recommended Providers - Auto-fit responsive */}
+        {/* Recommended Providers - Carousel */}
         <div>
-          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
-            Recommended Providers
-          </h3>
-          <Card className="border-0 shadow-sm">
-            <CardContent className="pt-[clamp(24px,6vw,32px)] pb-[clamp(24px,6vw,32px)]">
-              <div className="text-center py-[clamp(32px,8vw,48px)]">
-                <p className="text-[clamp(13px,3.2vw,16px)] text-muted-foreground 
-                             mb-[clamp(16px,4vw,20px)]">
-                  We're learning your preferences
-                </p>
-                <Button 
-                  onClick={() => navigate('/customer/find-providers')} 
-                  className="w-full sm:w-auto px-[clamp(24px,6vw,32px)] 
-                           py-[clamp(12px,3vw,16px)] text-[clamp(14px,3.5vw,16px)]"
-                >
-                  Browse Providers
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="flex items-center justify-between mb-[clamp(12px,3vw,16px)]">
+            <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold">
+              Recommended Providers
+            </h3>
+            <Button 
+              variant="link" 
+              className="text-[clamp(12px,3vw,14px)]" 
+              onClick={() => navigate('/customer/find-providers')}
+            >
+              View All
+            </Button>
+          </div>
+
+          {providers.length === 0 ? (
+            <Card className="border-0 shadow-sm">
+              <CardContent className="pt-[clamp(24px,6vw,32px)] pb-[clamp(24px,6vw,32px)]">
+                <div className="text-center py-[clamp(32px,8vw,48px)]">
+                  <p className="text-[clamp(13px,3.2vw,16px)] text-muted-foreground 
+                               mb-[clamp(16px,4vw,20px)]">
+                    No providers available at the moment
+                  </p>
+                  <Button 
+                    onClick={() => navigate('/customer/find-providers')} 
+                    className="w-full sm:w-auto px-[clamp(24px,6vw,32px)] 
+                             py-[clamp(12px,3vw,16px)] text-[clamp(14px,3.5vw,16px)]"
+                  >
+                    Browse Providers
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Carousel className="w-full" opts={{ align: "start", loop: false }}>
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {providers.map((provider) => (
+                  <CarouselItem key={provider.id} className="pl-2 md:pl-4 basis-[85%] sm:basis-[60%] md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                    <ProviderCarouselCard
+                      providerId={provider.id}
+                      fullName={provider.full_name}
+                      photoUrl={provider.photo_url}
+                      verified={provider.verified}
+                      newProvider={provider.new_provider}
+                      ratingAvg={provider.rating_avg || 0}
+                      ratingCount={provider.rating_count || 0}
+                      serviceAreas={provider.service_areas || []}
+                      skills={provider.skills || []}
+                      bio={provider.bio}
+                      createdAt={provider.created_at}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden sm:flex -left-4" />
+              <CarouselNext className="hidden sm:flex -right-4" />
+            </Carousel>
+          )}
         </div>
       </main>
       
