@@ -124,10 +124,10 @@ const ProviderProfile = () => {
 
           {/* Tabs */}
           <div className="w-full">
-            <div role="tablist" className="tabs tabs-boxed bg-muted/50 p-1 rounded-2xl shadow-inner mb-6">
+            <div role="tablist" className="tabs tabs-boxed bg-muted/50 p-1 rounded-2xl shadow-inner mb-6 grid grid-cols-2 gap-1">
               <button
                 role="tab"
-                className={`tab rounded-xl font-semibold transition-all duration-200 h-12 flex items-center gap-2 ${
+                className={`tab rounded-xl font-semibold transition-all duration-200 h-12 flex items-center justify-center gap-2 ${
                   activeTab === "about"
                     ? "tab-active bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
                     : "hover:bg-muted-foreground/10"
@@ -139,7 +139,7 @@ const ProviderProfile = () => {
               </button>
               <button
                 role="tab"
-                className={`tab rounded-xl font-semibold transition-all duration-200 h-12 flex items-center gap-2 ${
+                className={`tab rounded-xl font-semibold transition-all duration-200 h-12 flex items-center justify-center gap-2 ${
                   activeTab === "reviews"
                     ? "tab-active bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
                     : "hover:bg-muted-foreground/10"
