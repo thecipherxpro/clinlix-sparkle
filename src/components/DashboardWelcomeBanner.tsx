@@ -129,7 +129,7 @@ const DashboardWelcomeBanner = ({
       <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2" style={{
       top: "calc(6rem + 0px)"
     }}>
-        <div className="relative group cursor-pointer flex-shrink-0 touch-manipulation active:scale-95 transition-transform" onClick={handleAvatarClick}>
+        <div className="relative group cursor-pointer flex-shrink-0 touch-manipulation active:scale-95 transition-transform touch-target" onClick={handleAvatarClick}>
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" aria-label="Upload profile picture" />
 
           {/* Outer ring */}
@@ -164,9 +164,15 @@ const DashboardWelcomeBanner = ({
         {/* Search Field */}
         {onSearchClick && <div className="w-full max-w-md mt-3 relative">
             <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <input type="text" placeholder="Find a provider" className="w-full pl-9 pr-3 py-2 rounded-lg border bg-background 
+            <input 
+              type="text" 
+              placeholder="Find a provider" 
+              className="w-full pl-9 pr-3 py-2.5 sm:py-2 rounded-lg border bg-background 
                        focus:ring-2 focus:ring-primary focus:border-transparent 
-                       outline-none transition-all text-sm" onClick={onSearchClick} readOnly />
+                       outline-none transition-all text-sm min-h-[44px] touch-target cursor-pointer" 
+              onClick={onSearchClick} 
+              readOnly 
+            />
           </div>}
       </div>
     </div>;

@@ -84,7 +84,7 @@ const ProviderWallet = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       <header className="bg-card/50 backdrop-blur-sm sticky top-0 z-10 border-b safe-top">
         <div className="mobile-container py-4">
           <div className="flex items-center gap-3">
@@ -144,8 +144,8 @@ const ProviderWallet = () => {
               radius="lg"
               className="space-y-4"
               classNames={{
-                tabList: "grid w-full grid-cols-3",
-                tab: "text-sm h-12"
+                tabList: "grid w-full grid-cols-3 gap-2 bg-muted/30 p-1 rounded-lg",
+                tab: "text-xs sm:text-sm h-11 min-h-[44px] data-[selected=true]:bg-gradient-to-br data-[selected=true]:from-primary/10 data-[selected=true]:to-accent/10 data-[selected=true]:shadow-sm rounded-md"
               }}
             >
               <Tab key="all" title="All">

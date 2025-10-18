@@ -268,7 +268,7 @@ const MyBookings = () => {
           className="w-full"
           classNames={{
             tabList: "w-full grid grid-cols-3 gap-2 bg-card/50 backdrop-blur-sm p-2 rounded-full border border-border/50 shadow-lg",
-            tab: "h-12 sm:h-10 text-xs sm:text-base rounded-full data-[selected=true]:bg-gradient-to-br data-[selected=true]:from-primary data-[selected=true]:to-secondary data-[selected=true]:text-primary-foreground data-[selected=true]:shadow-[0_4px_12px_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.1),inset_0_-2px_4px_rgba(0,0,0,0.1)] data-[selected=true]:transform data-[selected=true]:translate-y-[-2px] hover:bg-accent/20 transition-all duration-300 font-semibold",
+            tab: "h-12 sm:h-11 text-xs sm:text-sm md:text-base rounded-full data-[selected=true]:bg-gradient-to-br data-[selected=true]:from-primary data-[selected=true]:to-secondary data-[selected=true]:text-primary-foreground data-[selected=true]:shadow-[0_4px_12px_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.1),inset_0_-2px_4px_rgba(0,0,0,0.1)] data-[selected=true]:transform data-[selected=true]:translate-y-[-2px] hover:bg-accent/20 transition-all duration-300 font-semibold min-h-[44px]",
             cursor: "hidden"
           }}
         >
