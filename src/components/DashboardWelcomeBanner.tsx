@@ -80,7 +80,7 @@ const DashboardWelcomeBanner = ({
   };
   return <div className={cn("relative w-full bg-card rounded-[20px] shadow-lg border overflow-hidden", className)}>
       {/* Geometric Pattern Background */}
-      <div className="h-32 sm:h-40 md:h-48 w-full overflow-hidden">
+      <div className="h-24 sm:h-32 md:h-40 w-full overflow-hidden">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           <defs>
             <linearGradient gradientTransform="rotate(222,648,379)" y2="100%" y1="0" x2="0" x1="0" gradientUnits="userSpaceOnUse" id="gradient-bg">
@@ -127,15 +127,15 @@ const DashboardWelcomeBanner = ({
 
       {/* Avatar Overlapping Pattern - Centered */}
       <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2" style={{
-      top: "calc(8rem + 0px)"
+      top: "calc(6rem + 0px)"
     }}>
         <div className="relative group cursor-pointer flex-shrink-0 touch-manipulation active:scale-95 transition-transform" onClick={handleAvatarClick}>
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" aria-label="Upload profile picture" />
 
           {/* Outer ring */}
-          <div className="bg-card rounded-full p-2 shadow-xl">
+          <div className="bg-card rounded-full p-1.5 shadow-xl">
             <div className="relative">
-              <img src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt={user.name} className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-background shadow-md" />
+              <img src={avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt={user.name} className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full object-cover border-3 border-background shadow-md" />
 
               {/* Upload loading state */}
               {uploading && <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full">
@@ -152,19 +152,19 @@ const DashboardWelcomeBanner = ({
       </div>
 
       {/* Content Below Avatar */}
-      <div className="pt-14 sm:pt-16 md:pt-20 pb-4 sm:pb-6 px-4 sm:px-6 flex flex-col items-center text-center">
+      <div className="pt-10 sm:pt-12 md:pt-16 pb-3 sm:pb-4 px-3 sm:px-4 flex flex-col items-center text-center">
         {/* Name */}
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mt-2">{user.name}</h1>
+        <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mt-1">{user.name}</h1>
 
         {/* Role Badge */}
-        <div className="badge badge-soft badge-accent mt-3 text-sm uppercase tracking-wide font-semibold px-[17px]">
+        <div className="badge badge-soft badge-accent mt-2 text-xs sm:text-sm uppercase tracking-wide font-semibold px-3 sm:px-4">
           {user.role} Portal
         </div>
 
         {/* Search Field */}
-        {onSearchClick && <div className="w-full max-w-md mt-4 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <input type="text" placeholder="Find a provider" className="w-full pl-10 pr-4 py-2.5 rounded-lg border bg-background 
+        {onSearchClick && <div className="w-full max-w-md mt-3 relative">
+            <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <input type="text" placeholder="Find a provider" className="w-full pl-9 pr-3 py-2 rounded-lg border bg-background 
                        focus:ring-2 focus:ring-primary focus:border-transparent 
                        outline-none transition-all text-sm" onClick={onSearchClick} readOnly />
           </div>}
