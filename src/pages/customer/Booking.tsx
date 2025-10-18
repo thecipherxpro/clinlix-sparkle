@@ -4,7 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ArrowRight, Check, Calendar, MapPin, User, Plus, CreditCard, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Home, Mail, Phone } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Calendar as CalendarIcon, MapPin, User, Plus, CreditCard, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Home, Mail, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
 import { toast } from "sonner";
 import { Tabs, Tab } from "@heroui/react";
 import { Separator } from "@/components/ui/separator";
@@ -14,7 +16,7 @@ import ProviderCard from "@/components/ProviderCard";
 
 const STEPS = [
   { id: 1, name: "Where", icon: MapPin },
-  { id: 2, name: "When", icon: Calendar },
+  { id: 2, name: "When", icon: CalendarIcon },
   { id: 3, name: "Who", icon: User },
   { id: 4, name: "Add-ons", icon: Plus },
   { id: 5, name: "Payment", icon: CreditCard },
@@ -33,7 +35,7 @@ const Booking = () => {
   
   // Booking selections
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
@@ -90,6 +92,9 @@ const Booking = () => {
   };
 
   const fetchAvailableProviders = async () => {
+    if (!selectedDate) return;
+    
+    const dateString = format(selectedDate, 'yyyy-MM-dd');
     const { data } = await supabase
       .from('provider_availability')
       .select(`
@@ -103,7 +108,7 @@ const Booking = () => {
           )
         )
       `)
-      .eq('date', selectedDate);
+      .eq('date', dateString);
 
     const providers = data?.map(d => d.provider_profiles).filter(Boolean) || [];
     setAvailableProviders(providers);
@@ -155,6 +160,8 @@ const Booking = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
+      const dateString = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '';
+      
       const { data: bookingData, error } = await supabase
         .from('bookings')
         .insert([{
@@ -163,7 +170,7 @@ const Booking = () => {
           address_id: selectedAddress.id,
           package_id: selectedAddress.cleaning_packages.id,
           addon_ids: selectedAddons,
-          requested_date: selectedDate,
+          requested_date: dateString,
           requested_time: selectedTime,
           total_estimate: calculateTotal(),
           status: 'pending',
@@ -190,12 +197,7 @@ const Booking = () => {
         : `${selectedAddress.street}, ${selectedAddress.city}, ${selectedAddress.country}`;
 
       // Format date
-      const formattedDate = new Date(selectedDate).toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-      });
+      const formattedDate = selectedDate ? format(selectedDate, 'EEEE, MMMM d, yyyy') : '';
 
       const currency = customerProfile?.currency === 'EUR' ? '€' : '$';
 
@@ -253,8 +255,17 @@ const Booking = () => {
   const generateTimeOptions = () => {
     const times = [];
     for (let hour = 7; hour <= 19; hour++) {
-      times.push(`${hour.toString().padStart(2, '0')}:00`);
-      times.push(`${hour.toString().padStart(2, '0')}:30`);
+      const period = hour >= 12 ? 'PM' : 'AM';
+      const displayHour = hour > 12 ? hour - 12 : hour;
+      
+      times.push({
+        value: `${hour.toString().padStart(2, '0')}:00`,
+        display: `${displayHour}:00 ${period}`
+      });
+      times.push({
+        value: `${hour.toString().padStart(2, '0')}:30`,
+        display: `${displayHour}:30 ${period}`
+      });
     }
     return times;
   };
@@ -494,44 +505,69 @@ const Booking = () => {
               <p className="text-muted-foreground">Pick your preferred date and time</p>
             </div>
 
-            <Card className="border-0 shadow-sm">
-              <CardContent className="pt-6 space-y-4">
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Date</label>
-                  <Select value={selectedDate} onValueChange={setSelectedDate}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a date" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {generateDateOptions().map((date) => (
-                        <SelectItem key={date} value={date}>
-                          {new Date(date).toLocaleDateString('en-US', {
-                            weekday: 'long',
-                            month: 'long',
-                            day: 'numeric'
-                          })}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+            <Card className="border-0 shadow-sm bg-card/80 backdrop-blur-sm">
+              <CardContent className="pt-6 space-y-6">
+                {/* Calendar */}
+                <div className="flex justify-center">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={setSelectedDate}
+                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                    className="rounded-md border-0"
+                    classNames={{
+                      months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                      month: "space-y-4",
+                      caption: "flex justify-center pt-1 relative items-center mb-4",
+                      caption_label: "text-xl font-semibold",
+                      nav: "space-x-1 flex items-center",
+                      nav_button: "h-10 w-10 bg-transparent hover:bg-muted rounded-md flex items-center justify-center",
+                      nav_button_previous: "absolute left-1",
+                      nav_button_next: "absolute right-1",
+                      table: "w-full border-collapse space-y-1",
+                      head_row: "flex justify-between mb-2",
+                      head_cell: "text-muted-foreground rounded-md w-12 font-normal text-sm uppercase",
+                      row: "flex w-full mt-2 justify-between",
+                      cell: "relative p-0 text-center focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-transparent",
+                      day: "h-12 w-12 p-0 font-semibold text-lg hover:bg-muted rounded-full flex items-center justify-center",
+                      day_selected: "bg-gradient-to-br from-[#FF6B35] to-[#F7931E] text-white hover:bg-gradient-to-br hover:from-[#FF6B35] hover:to-[#F7931E]",
+                      day_today: "bg-accent text-accent-foreground",
+                      day_outside: "text-muted-foreground/40 opacity-50",
+                      day_disabled: "text-muted-foreground/30 line-through",
+                      day_hidden: "invisible"
+                    }}
+                  />
                 </div>
 
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Time</label>
-                  <Select value={selectedTime} onValueChange={setSelectedTime}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a time" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {generateTimeOptions().map((time) => (
-                        <SelectItem key={time} value={time}>
-                          {time}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                {/* Time Slots */}
+                {selectedDate && (
+                  <div className="space-y-3">
+                    <label className="text-sm font-medium block">Select Time</label>
+                    <div className="relative">
+                      <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+                        <div className="flex gap-3 min-w-max px-1">
+                          {generateTimeOptions().map((time) => (
+                            <button
+                              key={time.value}
+                              onClick={() => setSelectedTime(time.value)}
+                              className={`
+                                px-6 py-3 rounded-full font-medium text-base whitespace-nowrap transition-all
+                                ${selectedTime === time.value
+                                  ? 'bg-gradient-to-br from-[#FF6B35] to-[#F7931E] text-white shadow-lg scale-105'
+                                  : 'bg-muted/50 hover:bg-muted text-foreground'
+                                }
+                              `}
+                            >
+                              {time.display}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
+                {/* Recurring Service */}
                 <div className="flex items-center gap-2 pt-2">
                   <input
                     type="checkbox"
@@ -558,7 +594,7 @@ const Booking = () => {
             <div>
               <h2 className="text-xl sm:text-2xl font-bold mb-2">Choose your provider</h2>
               <p className="text-sm sm:text-base text-muted-foreground">
-                {availableProviders.length} provider{availableProviders.length !== 1 ? 's' : ''} available on {selectedDate && new Date(selectedDate).toLocaleDateString()}
+                {availableProviders.length} provider{availableProviders.length !== 1 ? 's' : ''} available on {selectedDate && format(selectedDate, 'MMMM d, yyyy')}
               </p>
             </div>
 
