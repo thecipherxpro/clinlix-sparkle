@@ -477,34 +477,60 @@ const MyAddresses = () => {
         ) : (
           <div className="space-y-4">
             {addresses.map((address) => (
-              <Card key={address.id} className="border-0 shadow-sm">
-                <CardHeader>
+              <Card key={address.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-card via-card to-accent/5">
+                <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                        {address.is_primary ? (
-                          <Star className="w-6 h-6 text-primary fill-primary" />
-                        ) : (
-                          <Home className="w-6 h-6 text-primary" />
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border-2 border-primary/20 backdrop-blur-sm">
+                          {address.property_type === 'House' ? (
+                            <Home className="w-7 h-7 text-primary" />
+                          ) : (
+                            <div className="flex flex-col gap-0.5">
+                              <div className="flex gap-0.5">
+                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
+                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
+                              </div>
+                              <div className="flex gap-0.5">
+                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
+                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
+                              </div>
+                              <div className="flex gap-0.5">
+                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
+                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        {address.is_primary && (
+                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center border-2 border-card">
+                            <Star className="w-3 h-3 text-yellow-900 fill-yellow-900" />
+                          </div>
                         )}
                       </div>
                       <div>
-                        <div className="flex items-center gap-2">
-                          <CardTitle className="text-lg">{address.label}</CardTitle>
+                        <div className="flex items-center gap-2 mb-1">
+                          <CardTitle className="text-lg font-bold">{address.label}</CardTitle>
                           {address.is_primary && (
-                            <div className="badge badge-secondary">Primary</div>
+                            <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 text-yellow-700 dark:text-yellow-300 border border-yellow-400/30">
+                              Primary
+                            </span>
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-sm font-medium text-foreground/70">
                           {address.first_name} {address.last_name}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {address.property_type} • {address.layout_type}
                         </p>
                       </div>
                     </div>
                     <div className="flex gap-2">
                       <Button
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
                         onClick={() => openEditForm(address)}
+                        className="border-primary/20 hover:bg-primary/10 hover:border-primary/40"
                       >
                         Edit
                       </Button>
@@ -512,95 +538,108 @@ const MyAddresses = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDelete(address.id)}
+                        className="hover:bg-destructive/10 hover:text-destructive"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="text-sm">
-                      <p className="font-medium mb-1">Address</p>
-                      <p className="text-muted-foreground">
-                        {address.country === 'Portugal' ? (
-                          <>
-                            {address.rua}, {address.porta_andar && `${address.porta_andar}, `}
-                            {address.codigo_postal} {address.localidade}, {address.distrito}
-                          </>
-                        ) : (
-                          <>
-                            {address.street}, {address.apt_unit && `${address.apt_unit}, `}
-                            {address.city}, {address.province} {address.postal_code}
-                          </>
-                        )}
-                      </p>
-                      <p className="text-muted-foreground mt-1">
-                        {address.country} {address.country === 'Portugal' ? '🇵🇹' : '🇨🇦'}
-                      </p>
-                    </div>
 
-                    <div className="text-sm">
-                      <p className="font-medium mb-1">Property</p>
-                      <p className="text-muted-foreground">
-                        {address.property_type} • {address.layout_type}
-                      </p>
-                    </div>
+                <div className="px-6 pb-1">
+                  <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
+                </div>
 
-                    {address.cleaning_packages && (
-                      <div className="text-sm">
-                        <p className="font-medium mb-2">Cleaning Package</p>
-                        <div className="bg-accent/20 rounded-lg p-3">
-                          <div className="flex justify-between items-start mb-2">
-                            <div>
-                              <p className="font-medium">{address.cleaning_packages.package_name}</p>
-                              <p className="text-xs text-muted-foreground">
-                                {address.cleaning_packages.time_included} included
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <p className="font-semibold">
-                                {address.currency === 'EUR' ? '€' : '$'}
-                                {address.cleaning_packages.recurring_price}
-                              </p>
-                              <p className="text-xs text-muted-foreground">recurring</p>
-                            </div>
-                          </div>
-                          <div className="mt-3">
-                            <p className="text-xs text-muted-foreground mb-2">Included Services:</p>
-                            <div className="grid grid-cols-3 gap-2">
-                              {address.cleaning_packages.areas_included?.map((area: string, idx: number) => {
-                                const getServiceIcon = (service: string) => {
-                                  switch(service.toLowerCase()) {
-                                    case 'bathroom': return <Bath className="w-4 h-4" />;
-                                    case 'kitchen': return <ChefHat className="w-4 h-4" />;
-                                    case 'livingroom': return <Sofa className="w-4 h-4" />;
-                                    case 'floors': return <Layers className="w-4 h-4" />;
-                                    case 'dusting': return <Sparkles className="w-4 h-4" />;
-                                    case 'surfaces': return <Square className="w-4 h-4" />;
-                                    default: return <Square className="w-4 h-4" />;
-                                  }
-                                };
-                                
-                                return (
-                                  <div key={idx} className="flex items-center gap-1.5 bg-background/50 rounded-md p-1.5">
-                                    <span className="text-primary">
-                                      {getServiceIcon(area)}
-                                    </span>
-                                    <span className="text-xs capitalize">{area}</span>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
+                <CardContent className="pt-4 space-y-4">
+                  <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                    <div className="flex items-start gap-3">
+                      <div className="mt-0.5">
+                        <MapPin className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Address</p>
+                        <p className="text-sm font-medium leading-relaxed">
+                          {address.country === 'Portugal' ? (
+                            <>
+                              {address.rua}
+                              {address.porta_andar && <>, {address.porta_andar}</>}
+                              <br />
+                              {address.codigo_postal} {address.localidade}
+                              <br />
+                              {address.distrito}, {address.country} 🇵🇹
+                            </>
+                          ) : (
+                            <>
+                              {address.street}
+                              {address.apt_unit && <>, {address.apt_unit}</>}
+                              <br />
+                              {address.city}, {address.province}
+                              <br />
+                              {address.postal_code}, {address.country} 🇨🇦
+                            </>
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {address.cleaning_packages && (
+                    <div className="bg-gradient-to-br from-primary/5 to-accent/10 rounded-xl p-4 border border-primary/20">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Cleaning Package</p>
+                          <p className="font-bold text-base">{address.cleaning_packages.package_name}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            {address.cleaning_packages.time_included} included
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                            {address.currency === 'EUR' ? '€' : '$'}
+                            {address.cleaning_packages.recurring_price}
+                          </p>
+                          <p className="text-xs font-medium text-muted-foreground">recurring</p>
                         </div>
                       </div>
-                    )}
+                      <div className="mt-3 pt-3 border-t border-border/50">
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Included Services</p>
+                        <div className="grid grid-cols-3 gap-2">
+                          {address.cleaning_packages.areas_included?.map((area: string, idx: number) => {
+                            const getServiceIcon = (service: string) => {
+                              switch(service.toLowerCase()) {
+                                case 'bathroom': return <Bath className="w-4 h-4" />;
+                                case 'kitchen': return <ChefHat className="w-4 h-4" />;
+                                case 'livingroom': return <Sofa className="w-4 h-4" />;
+                                case 'floors': return <Layers className="w-4 h-4" />;
+                                case 'dusting': return <Sparkles className="w-4 h-4" />;
+                                case 'surfaces': return <Square className="w-4 h-4" />;
+                                default: return <Square className="w-4 h-4" />;
+                              }
+                            };
+                            
+                            return (
+                              <div key={idx} className="flex items-center gap-1.5 bg-card/80 backdrop-blur-sm rounded-lg p-2 border border-border/50 hover:border-primary/30 transition-colors">
+                                <span className="text-primary flex-shrink-0">
+                                  {getServiceIcon(area)}
+                                </span>
+                                <span className="text-xs font-medium capitalize truncate">{area}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
-                    <div className="text-sm">
-                      <p className="font-medium mb-1">Contact</p>
-                      <p className="text-muted-foreground">{address.phone}</p>
-                      <p className="text-muted-foreground">{address.email}</p>
+                  <div className="flex items-center gap-4 text-sm bg-muted/20 rounded-lg p-3 border border-border/30">
+                    <div className="flex items-center gap-2 flex-1">
+                      <span className="text-xs font-semibold text-muted-foreground">📞</span>
+                      <span className="font-medium">{address.phone}</span>
+                    </div>
+                    <div className="w-px h-6 bg-border"></div>
+                    <div className="flex items-center gap-2 flex-1">
+                      <span className="text-xs font-semibold text-muted-foreground">✉️</span>
+                      <span className="font-medium truncate">{address.email}</span>
                     </div>
                   </div>
                 </CardContent>
