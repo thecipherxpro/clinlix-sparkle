@@ -4,8 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, Tab } from "@heroui/react";
-import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare } from "lucide-react";
+import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare, Info, MessageCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 const ProviderProfile = () => {
@@ -15,6 +14,7 @@ const ProviderProfile = () => {
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasConfirmedBooking, setHasConfirmedBooking] = useState(false);
+  const [activeTab, setActiveTab] = useState<"about" | "reviews">("about");
   useEffect(() => {
     fetchProviderData();
   }, [providerId]);
@@ -123,18 +123,38 @@ const ProviderProfile = () => {
           <Separator className="my-4 sm:my-6" />
 
           {/* Tabs */}
-          <Tabs 
-            defaultSelectedKey="about" 
-            color="secondary" 
-            radius="lg"
-            className="w-full"
-            classNames={{
-              tabList: "w-full",
-              tab: "h-12 sm:h-10"
-            }}
-          >
-            <Tab key="about" title="About">
-              <div className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
+          <div className="w-full">
+            <div role="tablist" className="tabs tabs-boxed bg-muted/50 p-1 rounded-2xl shadow-inner mb-6">
+              <button
+                role="tab"
+                className={`tab rounded-xl font-semibold transition-all duration-200 h-12 flex items-center gap-2 ${
+                  activeTab === "about"
+                    ? "tab-active bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
+                    : "hover:bg-muted-foreground/10"
+                }`}
+                onClick={() => setActiveTab("about")}
+              >
+                <Info className="w-4 h-4" />
+                <span className="hidden sm:inline">About</span>
+              </button>
+              <button
+                role="tab"
+                className={`tab rounded-xl font-semibold transition-all duration-200 h-12 flex items-center gap-2 ${
+                  activeTab === "reviews"
+                    ? "tab-active bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
+                    : "hover:bg-muted-foreground/10"
+                }`}
+                onClick={() => setActiveTab("reviews")}
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span className="hidden sm:inline">Reviews</span>
+                <span className="badge badge-sm ml-1">{provider.rating_count}</span>
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            {activeTab === "about" && (
+              <div className="space-y-4 sm:space-y-6 animate-in fade-in-50 duration-300">
               {provider.skills && provider.skills.length > 0 && (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="pt-6">
@@ -195,10 +215,10 @@ const ProviderProfile = () => {
                 </Card>
               )}
               </div>
-            </Tab>
+            )}
 
-            <Tab key="reviews" title={`Reviews (${provider.rating_count})`}>
-              <div className="space-y-4 mt-4 sm:mt-6">
+            {activeTab === "reviews" && (
+              <div className="space-y-4 animate-in fade-in-50 duration-300">
               {reviews.length === 0 ? (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="pt-12 pb-12 text-center">
@@ -234,8 +254,8 @@ const ProviderProfile = () => {
                 ))
               )}
               </div>
-            </Tab>
-          </Tabs>
+            )}
+          </div>
         </div>
       </main>
 
