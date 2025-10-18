@@ -224,6 +224,16 @@
   .scrollbar-track-transparent::-webkit-scrollbar-track {
     background: transparent;
   }
+
+  /* Hide scrollbar completely while maintaining scroll functionality */
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+  }
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 

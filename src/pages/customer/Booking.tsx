@@ -292,7 +292,7 @@ const Booking = () => {
       </header>
 
       {/* Progress Steps */}
-      <div className="border-b bg-card/30 backdrop-blur-sm overflow-x-auto">
+      <div className="border-b bg-card/30 backdrop-blur-sm overflow-x-auto hide-scrollbar">
         <div className="mobile-container py-3 sm:py-4">
           <div className="flex items-center justify-between max-w-4xl mx-auto min-w-max px-2">
             {STEPS.map((step, idx) => (
@@ -544,7 +544,7 @@ const Booking = () => {
                   <div className="space-y-3">
                     <label className="text-sm font-medium block">Select Time</label>
                     <div className="relative">
-                      <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+                      <div className="overflow-x-auto pb-2 hide-scrollbar">
                         <div className="flex gap-3 min-w-max px-1">
                           {generateTimeOptions().map((time) => (
                             <button
