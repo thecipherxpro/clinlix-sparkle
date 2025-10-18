@@ -350,32 +350,34 @@ const Booking = () => {
                       onClick={() => setSelectedAddress(address)}
                     >
                       <CardHeader className="space-y-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground shadow-md flex-shrink-0">
-                            {isHouse ? (
-                              <Home className="w-5 h-5" />
-                            ) : (
-                              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <rect x="3" y="3" width="18" height="18" rx="2" />
-                                <line x1="3" y1="9" x2="21" y2="9" />
-                                <line x1="9" y1="21" x2="9" y2="9" />
-                              </svg>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <h3 className="font-bold text-lg text-foreground">
-                                {address.label}
-                              </h3>
-                              {address.is_primary && (
-                                <span className="px-2.5 py-0.5 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground text-xs font-semibold rounded-full shadow-sm">
-                                  Primary
-                                </span>
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-start gap-3 flex-1">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground shadow-md flex-shrink-0">
+                              {isHouse ? (
+                                <Home className="w-5 h-5" />
+                              ) : (
+                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                                  <line x1="3" y1="9" x2="21" y2="9" />
+                                  <line x1="9" y1="21" x2="9" y2="9" />
+                                </svg>
                               )}
                             </div>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {address.property_type} • {address.layout_type}
-                            </p>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <h3 className="font-bold text-lg text-foreground">
+                                  {address.label}
+                                </h3>
+                                {address.is_primary && (
+                                  <span className="px-2.5 py-0.5 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground text-xs font-semibold rounded-full shadow-sm">
+                                    Primary
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-sm text-muted-foreground mt-1">
+                                {address.property_type} • {address.layout_type}
+                              </p>
+                            </div>
                           </div>
                           {selectedAddress?.id === address.id && (
                             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md flex-shrink-0">
@@ -414,18 +416,22 @@ const Booking = () => {
 
                         {address.cleaning_packages && (
                           <div className="bg-gradient-to-br from-primary/5 to-accent/10 rounded-xl p-4 border border-primary/20">
-                            <div className="mb-3">
-                              <p className="font-semibold text-base text-foreground">
-                                {address.cleaning_packages.package_name}
-                              </p>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                {address.cleaning_packages.time_included} included
-                              </p>
-                              <p className="text-xl font-bold text-primary mt-2">
-                                {address.currency === 'EUR' ? '€' : '$'}
-                                {address.cleaning_packages.recurring_price}
-                                <span className="text-xs text-muted-foreground font-normal ml-2">recurring</span>
-                              </p>
+                            <div className="flex justify-between items-start mb-3">
+                              <div>
+                                <p className="font-semibold text-base text-foreground">
+                                  {address.cleaning_packages.package_name}
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {address.cleaning_packages.time_included} included
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-xl font-bold text-primary">
+                                  {address.currency === 'EUR' ? '€' : '$'}
+                                  {address.cleaning_packages.recurring_price}
+                                </p>
+                                <p className="text-xs text-muted-foreground">recurring</p>
+                              </div>
                             </div>
                             
                             <div className="h-px bg-gradient-to-r from-transparent via-border/50 to-transparent my-3" />
@@ -460,14 +466,15 @@ const Booking = () => {
                           </div>
                         )}
 
-                        <div className="space-y-2 text-xs bg-muted/20 rounded-lg p-3 border border-border/30">
-                          <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-3 text-xs bg-muted/20 rounded-lg p-3 border border-border/30">
+                          <div className="flex items-center gap-1.5 flex-1">
                             <Mail className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-                            <span className="text-muted-foreground">{address.email}</span>
+                            <span className="text-muted-foreground truncate">{address.email}</span>
                           </div>
-                          <div className="flex items-center gap-1.5">
+                          <div className="w-px h-6 bg-border" />
+                          <div className="flex items-center gap-1.5 flex-1">
                             <Phone className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-                            <span className="text-muted-foreground">{address.phone}</span>
+                            <span className="text-muted-foreground truncate">{address.phone}</span>
                           </div>
                         </div>
                       </CardContent>
