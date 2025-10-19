@@ -17,8 +17,10 @@ import ProviderSchedule from "./pages/provider/ProviderSchedule";
 import ProviderWallet from "./pages/provider/ProviderWallet";
 import ProviderProfilePage from "./pages/provider/ProviderProfilePage";
 import ProviderReviews from "./pages/provider/ProviderReviews";
-import Providers from "./pages/customer/Providers";
 import FindProviders from "./pages/customer/FindProviders";
+import Providers from "./pages/customer/Providers";
+import ProviderProfile from "./pages/ProviderProfile";
+import HowItWorks from "./pages/customer/HowItWorks";
 import MyAddresses from "./pages/customer/MyAddresses";
 import Booking from "./pages/customer/Booking";
 import MyBookings from "./pages/customer/MyBookings";
@@ -28,7 +30,6 @@ import Profile from "./pages/customer/Profile";
 import PaymentMethods from "./pages/customer/PaymentMethods";
 import CustomerSettings from "./pages/customer/CustomerSettings";
 import ProviderSettings from "./pages/provider/ProviderSettings";
-import ProviderProfile from "./pages/ProviderProfile";
 import JobDetail from "./pages/provider/JobDetail";
 import NotFound from "./pages/NotFound";
 
@@ -59,6 +60,7 @@ const App = () => (
           <Route path="/customer/profile" element={<Profile />} />
           <Route path="/customer/settings" element={<CustomerSettings />} />
           <Route path="/customer/payment-methods" element={<PaymentMethods />} />
+          <Route path="/customer/how-it-works" element={<HowItWorks />} />
           <Route path="/providers/profile/:providerId" element={<ProviderProfile />} />
           <Route path="/provider/dashboard" element={<ProviderDashboard />} />
           <Route path="/provider/jobs" element={<ProviderJobs />} />
