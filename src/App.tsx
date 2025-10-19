@@ -21,6 +21,7 @@ import FindProviders from "./pages/customer/FindProviders";
 import Providers from "./pages/customer/Providers";
 import ProviderProfile from "./pages/ProviderProfile";
 import HowItWorks from "./pages/customer/HowItWorks";
+import Pricing from "./pages/customer/Pricing";
 import MyAddresses from "./pages/customer/MyAddresses";
 import Booking from "./pages/customer/Booking";
 import MyBookings from "./pages/customer/MyBookings";
@@ -60,7 +61,8 @@ const App = () => (
           <Route path="/customer/profile" element={<Profile />} />
           <Route path="/customer/settings" element={<CustomerSettings />} />
           <Route path="/customer/payment-methods" element={<PaymentMethods />} />
-          <Route path="/customer/how-it-works" element={<HowItWorks />} />
+            <Route path="/customer/how-it-works" element={<HowItWorks />} />
+            <Route path="/customer/pricing" element={<Pricing />} />
           <Route path="/providers/profile/:providerId" element={<ProviderProfile />} />
           <Route path="/provider/dashboard" element={<ProviderDashboard />} />
           <Route path="/provider/jobs" element={<ProviderJobs />} />

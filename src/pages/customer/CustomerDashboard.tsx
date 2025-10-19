@@ -249,38 +249,28 @@ const CustomerDashboard = () => {
           )}
         </div>
 
-        {/* How It Works CTA */}
-        <Card 
-          className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10"
-          onClick={() => navigate('/customer/how-it-works')}
-        >
-          <CardContent className="p-[clamp(24px,6vw,32px)]">
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="flex-1 text-center md:text-left">
-                <h3 className="text-[clamp(20px,5vw,28px)] font-bold mb-3">
-                  New to Clinlix?
-                </h3>
-                <p className="text-[clamp(14px,3.5vw,16px)] text-muted-foreground mb-4">
-                  Discover how easy it is to book professional cleaning services in just a few simple steps.
-                </p>
-                <Button 
-                  size="lg"
-                  className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
-                >
-                  Learn How It Works
-                </Button>
-              </div>
-              <div className="w-full md:w-auto flex justify-center">
-                <div className="relative w-32 h-32 md:w-40 md:h-40">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full animate-pulse"></div>
-                  <div className="absolute inset-4 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                    <Search className="w-16 h-16 md:w-20 md:h-20 text-white" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {/* CTA Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
+          {/* How It Works CTA */}
+          <JobCard
+            title="How It Works"
+            description="Learn the booking process"
+            value="8 Simple Steps"
+            icon={<Search className="w-4 h-4 sm:w-5 sm:h-5" />}
+            heroColor="#f0f9ff"
+            onClick={() => navigate('/customer/how-it-works')}
+          />
+          
+          {/* Pricing Model CTA */}
+          <JobCard
+            title="Pricing Model"
+            description="View our transparent pricing"
+            value="Fixed Rates"
+            icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />}
+            heroColor="#fef3c7"
+            onClick={() => navigate('/customer/pricing')}
+          />
+        </div>
       </main>
       
       {profile && showUnreviewedModal && (
