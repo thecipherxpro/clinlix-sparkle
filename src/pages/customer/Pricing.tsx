@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChevronLeft, Check, Plus } from "lucide-react";
+import { ChevronLeft, Check, Plus, Home, Sparkles, Clock, Euro, DollarSign, BedDouble, Sofa, Bath } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
-import Pricing3DHero from "@/components/Pricing3DHero";
+import pricingHeroStatic from "@/assets/pricing-hero-static.png";
 
 const pricingData = {
   EUR: {
@@ -159,7 +159,7 @@ const Pricing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       {/* Header */}
-      <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)] pb-4">
+      <div className="w-full px-4 sm:px-6 pt-4 sm:pt-6 pb-4">
         <Button
           variant="ghost"
           onClick={() => navigate('/customer/dashboard')}
@@ -168,92 +168,110 @@ const Pricing = () => {
           <ChevronLeft className="w-4 h-4 mr-2" />
           {data.translations.backButton}
         </Button>
-        <h1 className="text-[clamp(28px,7vw,40px)] font-bold mb-2">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
           {data.translations.title}
         </h1>
-        <p className="text-muted-foreground text-[clamp(14px,3.5vw,18px)]">
+        <p className="text-sm sm:text-base text-muted-foreground">
           {data.translations.subtitle}
         </p>
       </div>
 
-      {/* 3D Hero */}
-      <div className="w-full max-w-[min(1200px,calc(100%-32px))] mx-auto px-[clamp(16px,4vw,32px)] mb-8">
-        <Pricing3DHero 
-          currency={data.currency}
-          prices={{
-            br1: data.packages[0].oneTimePrice,
-            br2: data.packages[1].oneTimePrice,
-            br3: data.packages[2].oneTimePrice
-          }}
-        />
-        <div className="text-center mt-4">
-          <h2 className="text-2xl sm:text-3xl font-bold">{data.translations.heroTitle}</h2>
+      {/* Hero Image */}
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 mb-8">
+        <div className="relative h-48 sm:h-64 md:h-80 rounded-xl overflow-hidden shadow-xl">
+          <img 
+            src={pricingHeroStatic} 
+            alt="Pricing Model"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+            <div className="p-4 sm:p-6">
+              <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-bold">
+                {data.translations.heroTitle}
+              </h2>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <main className="w-full max-w-[min(1200px,calc(100%-32px))] mx-auto px-[clamp(16px,4vw,32px)] py-[clamp(20px,5vw,32px)]">
+      <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         
         {/* Country Tabs */}
-        <Tabs defaultValue="EUR" className="w-full" onValueChange={(value) => setSelectedCurrency(value as "EUR" | "CAD")}>
+        <Tabs value={selectedCurrency} className="w-full" onValueChange={(value) => setSelectedCurrency(value as "EUR" | "CAD")}>
           <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
-            <TabsTrigger value="EUR" className="text-sm sm:text-base">
+            <TabsTrigger value="EUR" className="text-xs sm:text-sm md:text-base">
               🇵🇹 Portugal (EUR)
             </TabsTrigger>
-            <TabsTrigger value="CAD" className="text-sm sm:text-base">
+            <TabsTrigger value="CAD" className="text-xs sm:text-sm md:text-base">
               🇨🇦 Canada (CAD)
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value={selectedCurrency} className="space-y-8">
+          <TabsContent value="EUR" className="space-y-8">
             {/* Package Pricing Section */}
             <div>
-              <h2 className="text-[clamp(24px,6vw,32px)] font-bold mb-2">
-                {data.translations.packagePricing}
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
+                {pricingData.EUR.translations.packagePricing}
               </h2>
-              <p className="text-muted-foreground text-[clamp(14px,3.5vw,16px)] mb-6">
-                {data.translations.packageSubtitle}
+              <p className="text-sm sm:text-base text-muted-foreground mb-6">
+                {pricingData.EUR.translations.packageSubtitle}
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {data.packages.map((pkg) => (
-                  <Card key={pkg.code} className="border-2 hover:border-primary transition-all">
-                    <CardHeader>
-                      <div className="flex items-center justify-between mb-2">
-                        <CardTitle className="text-xl">{pkg.bedrooms} BR</CardTitle>
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                          {pkg.timeIncluded}
-                        </span>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {pricingData.EUR.packages.map((pkg) => (
+                  <Card key={pkg.code} className="border-2 hover:border-primary transition-all hover:shadow-lg overflow-hidden">
+                    <div className={`h-3 ${pkg.bedrooms === 1 ? 'bg-blue-500' : pkg.bedrooms === 2 ? 'bg-green-500' : 'bg-orange-500'}`} />
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <Home className={`w-6 h-6 sm:w-8 sm:h-8 ${pkg.bedrooms === 1 ? 'text-blue-500' : pkg.bedrooms === 2 ? 'text-green-500' : 'text-orange-500'}`} />
+                          <div>
+                            <CardTitle className="text-lg sm:text-xl">{pkg.bedrooms} QT</CardTitle>
+                            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                              {pkg.timeIncluded}
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <CardDescription className="font-semibold text-lg">
+                      <CardDescription className="font-semibold text-sm sm:text-base">
                         {pkg.name}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       {/* Pricing */}
-                      <div className="space-y-2">
-                        <div className="flex items-baseline justify-between">
-                          <span className="text-sm text-muted-foreground">{data.translations.oneTime}</span>
-                          <span className="text-2xl font-bold text-primary">
-                            {data.currency}{pkg.oneTimePrice}
+                      <div className="space-y-3 bg-secondary/20 rounded-lg p-3 sm:p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-primary" />
+                            <span className="text-xs sm:text-sm text-muted-foreground">{pricingData.EUR.translations.oneTime}</span>
+                          </div>
+                          <span className="text-xl sm:text-2xl font-bold text-primary flex items-center">
+                            <Euro className="w-4 h-4 sm:w-5 sm:h-5" />
+                            {pkg.oneTimePrice}
                           </span>
                         </div>
-                        <div className="flex items-baseline justify-between">
-                          <span className="text-sm text-muted-foreground">{data.translations.recurring}</span>
-                          <span className="text-2xl font-bold text-green-600">
-                            {data.currency}{pkg.recurringPrice}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-green-600" />
+                            <span className="text-xs sm:text-sm text-muted-foreground">{pricingData.EUR.translations.recurring}</span>
+                          </div>
+                          <span className="text-xl sm:text-2xl font-bold text-green-600 flex items-center">
+                            <Euro className="w-4 h-4 sm:w-5 sm:h-5" />
+                            {pkg.recurringPrice}
                           </span>
                         </div>
                       </div>
 
                       {/* Areas Included */}
-                      <div className="pt-4 border-t">
-                        <p className="text-xs font-semibold mb-3 uppercase text-muted-foreground">
-                          {data.translations.areasIncluded}
+                      <div className="pt-3 border-t">
+                        <p className="text-xs font-semibold mb-3 uppercase text-muted-foreground flex items-center gap-2">
+                          <Bath className="w-4 h-4" />
+                          {pricingData.EUR.translations.areasIncluded}
                         </p>
                         <ul className="space-y-2">
                           {pkg.areas.map((area, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm">
+                            <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm">
                               <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
                               <span>{area}</span>
                             </li>
@@ -265,7 +283,7 @@ const Pricing = () => {
                         className="w-full mt-4"
                         onClick={() => navigate('/customer/booking')}
                       >
-                        {data.translations.bookNow}
+                        {pricingData.EUR.translations.bookNow}
                       </Button>
                     </CardContent>
                   </Card>
@@ -275,27 +293,30 @@ const Pricing = () => {
 
             {/* Add-ons Section */}
             <div>
-              <h2 className="text-[clamp(24px,6vw,32px)] font-bold mb-2">
-                {data.translations.addons}
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
+                {pricingData.EUR.translations.addons}
               </h2>
-              <p className="text-muted-foreground text-[clamp(14px,3.5vw,16px)] mb-6">
-                {data.translations.addonsSubtitle}
+              <p className="text-sm sm:text-base text-muted-foreground mb-6">
+                {pricingData.EUR.translations.addonsSubtitle}
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {data.addons.map((addon, idx) => (
-                  <Card key={idx} className="border hover:border-primary/50 transition-all">
-                    <CardContent className="p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                {pricingData.EUR.addons.map((addon, idx) => (
+                  <Card key={idx} className="border hover:border-primary/50 transition-all hover:shadow-md">
+                    <CardContent className="p-3 sm:p-4">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <Plus className="w-5 h-5 text-primary" />
-                          <h3 className="font-semibold text-base">{addon.name}</h3>
+                          <div className="p-2 bg-primary/10 rounded-lg">
+                            <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                          </div>
+                          <h3 className="font-semibold text-sm sm:text-base">{addon.name}</h3>
                         </div>
-                        <span className="text-xl font-bold text-primary">
-                          {data.currency}{addon.price}
+                        <span className="text-lg sm:text-xl font-bold text-primary flex items-center">
+                          <Euro className="w-4 h-4" />
+                          {addon.price}
                         </span>
                       </div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs sm:text-sm text-muted-foreground ml-10">
                         {addon.description}
                       </p>
                     </CardContent>
@@ -307,39 +328,205 @@ const Pricing = () => {
             {/* Overtime Pricing */}
             <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-950/20 dark:to-yellow-950/20 border-orange-200 dark:border-orange-800">
               <CardHeader>
-                <CardTitle className="text-xl">{data.translations.extraTime}</CardTitle>
-                <CardDescription>{data.translations.extraTimeDesc}</CardDescription>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-6 h-6 text-orange-600" />
+                  <CardTitle className="text-lg sm:text-xl">{pricingData.EUR.translations.extraTime}</CardTitle>
+                </div>
+                <CardDescription>{pricingData.EUR.translations.extraTimeDesc}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">{data.translations.timeIncrement}</span>
-                  <span className="font-semibold">{data.overtime.increment} {data.translations.minutes}</span>
+                  <span className="text-sm text-muted-foreground">{pricingData.EUR.translations.timeIncrement}</span>
+                  <span className="font-semibold">{pricingData.EUR.overtime.increment} {pricingData.EUR.translations.minutes}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">{data.translations.pricePerIncrement}</span>
-                  <span className="text-2xl font-bold text-orange-600">
-                    {data.currency}{data.overtime.price}
+                  <span className="text-sm text-muted-foreground">{pricingData.EUR.translations.pricePerIncrement}</span>
+                  <span className="text-xl sm:text-2xl font-bold text-orange-600 flex items-center">
+                    <Euro className="w-5 h-5" />
+                    {pricingData.EUR.overtime.price}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground pt-2 border-t">
-                  {data.translations.extraTimeNote} {data.overtime.increment} {data.translations.extraTimeNotice}
+                <p className="text-xs sm:text-sm text-muted-foreground pt-2 border-t">
+                  {pricingData.EUR.translations.extraTimeNote} {pricingData.EUR.overtime.increment} {pricingData.EUR.translations.extraTimeNotice}
                 </p>
               </CardContent>
             </Card>
 
             {/* CTA Section */}
             <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-0">
-              <CardContent className="p-8 text-center">
-                <h3 className="text-2xl font-bold mb-3">{data.translations.readyToBook}</h3>
-                <p className="text-muted-foreground mb-6">
-                  {data.translations.readyToBookDesc}
+              <CardContent className="p-6 sm:p-8 text-center">
+                <h3 className="text-xl sm:text-2xl font-bold mb-3">{pricingData.EUR.translations.readyToBook}</h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-6">
+                  {pricingData.EUR.translations.readyToBookDesc}
                 </p>
                 <Button 
                   size="lg"
-                  className="px-8"
+                  className="px-6 sm:px-8"
                   onClick={() => navigate('/customer/booking')}
                 >
-                  {data.translations.bookYourCleaning}
+                  {pricingData.EUR.translations.bookYourCleaning}
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="CAD" className="space-y-8">
+            {/* Package Pricing Section */}
+            <div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
+                {pricingData.CAD.translations.packagePricing}
+              </h2>
+              <p className="text-sm sm:text-base text-muted-foreground mb-6">
+                {pricingData.CAD.translations.packageSubtitle}
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {pricingData.CAD.packages.map((pkg) => (
+                  <Card key={pkg.code} className="border-2 hover:border-primary transition-all hover:shadow-lg overflow-hidden">
+                    <div className={`h-3 ${pkg.bedrooms === 1 ? 'bg-blue-500' : pkg.bedrooms === 2 ? 'bg-green-500' : 'bg-orange-500'}`} />
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <Home className={`w-6 h-6 sm:w-8 sm:h-8 ${pkg.bedrooms === 1 ? 'text-blue-500' : pkg.bedrooms === 2 ? 'text-green-500' : 'text-orange-500'}`} />
+                          <div>
+                            <CardTitle className="text-lg sm:text-xl">{pkg.bedrooms} BR</CardTitle>
+                            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                              {pkg.timeIncluded}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <CardDescription className="font-semibold text-sm sm:text-base">
+                        {pkg.name}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {/* Pricing */}
+                      <div className="space-y-3 bg-secondary/20 rounded-lg p-3 sm:p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-primary" />
+                            <span className="text-xs sm:text-sm text-muted-foreground">{pricingData.CAD.translations.oneTime}</span>
+                          </div>
+                          <span className="text-xl sm:text-2xl font-bold text-primary flex items-center">
+                            <DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />
+                            {pkg.oneTimePrice}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-green-600" />
+                            <span className="text-xs sm:text-sm text-muted-foreground">{pricingData.CAD.translations.recurring}</span>
+                          </div>
+                          <span className="text-xl sm:text-2xl font-bold text-green-600 flex items-center">
+                            <DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />
+                            {pkg.recurringPrice}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Areas Included */}
+                      <div className="pt-3 border-t">
+                        <p className="text-xs font-semibold mb-3 uppercase text-muted-foreground flex items-center gap-2">
+                          <Bath className="w-4 h-4" />
+                          {pricingData.CAD.translations.areasIncluded}
+                        </p>
+                        <ul className="space-y-2">
+                          {pkg.areas.map((area, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              <span>{area}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <Button 
+                        className="w-full mt-4"
+                        onClick={() => navigate('/customer/booking')}
+                      >
+                        {pricingData.CAD.translations.bookNow}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Add-ons Section */}
+            <div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
+                {pricingData.CAD.translations.addons}
+              </h2>
+              <p className="text-sm sm:text-base text-muted-foreground mb-6">
+                {pricingData.CAD.translations.addonsSubtitle}
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                {pricingData.CAD.addons.map((addon, idx) => (
+                  <Card key={idx} className="border hover:border-primary/50 transition-all hover:shadow-md">
+                    <CardContent className="p-3 sm:p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="p-2 bg-primary/10 rounded-lg">
+                            <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                          </div>
+                          <h3 className="font-semibold text-sm sm:text-base">{addon.name}</h3>
+                        </div>
+                        <span className="text-lg sm:text-xl font-bold text-primary flex items-center">
+                          <DollarSign className="w-4 h-4" />
+                          {addon.price}
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-muted-foreground ml-10">
+                        {addon.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Overtime Pricing */}
+            <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-950/20 dark:to-yellow-950/20 border-orange-200 dark:border-orange-800">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-6 h-6 text-orange-600" />
+                  <CardTitle className="text-lg sm:text-xl">{pricingData.CAD.translations.extraTime}</CardTitle>
+                </div>
+                <CardDescription>{pricingData.CAD.translations.extraTimeDesc}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">{pricingData.CAD.translations.timeIncrement}</span>
+                  <span className="font-semibold">{pricingData.CAD.overtime.increment} {pricingData.CAD.translations.minutes}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">{pricingData.CAD.translations.pricePerIncrement}</span>
+                  <span className="text-xl sm:text-2xl font-bold text-orange-600 flex items-center">
+                    <DollarSign className="w-5 h-5" />
+                    {pricingData.CAD.overtime.price}
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-muted-foreground pt-2 border-t">
+                  {pricingData.CAD.translations.extraTimeNote} {pricingData.CAD.overtime.increment} {pricingData.CAD.translations.extraTimeNotice}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* CTA Section */}
+            <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-0">
+              <CardContent className="p-6 sm:p-8 text-center">
+                <h3 className="text-xl sm:text-2xl font-bold mb-3">{pricingData.CAD.translations.readyToBook}</h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-6">
+                  {pricingData.CAD.translations.readyToBookDesc}
+                </p>
+                <Button 
+                  size="lg"
+                  className="px-6 sm:px-8"
+                  onClick={() => navigate('/customer/booking')}
+                >
+                  {pricingData.CAD.translations.bookYourCleaning}
                 </Button>
               </CardContent>
             </Card>
