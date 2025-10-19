@@ -155,6 +155,7 @@ const Pricing = () => {
   const [selectedCurrency, setSelectedCurrency] = useState<"EUR" | "CAD">("EUR");
   
   const data = pricingData[selectedCurrency];
+  const translations = data?.translations || pricingData.EUR.translations;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
@@ -166,13 +167,13 @@ const Pricing = () => {
           className="mb-4"
         >
           <ChevronLeft className="w-4 h-4 mr-2" />
-          {data.translations.backButton}
+          {translations.backButton}
         </Button>
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
-          {data.translations.title}
+          {translations.title}
         </h1>
         <p className="text-sm sm:text-base text-muted-foreground">
-          {data.translations.subtitle}
+          {translations.subtitle}
         </p>
       </div>
 
@@ -187,7 +188,7 @@ const Pricing = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
             <div className="p-4 sm:p-6">
               <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-bold">
-                {data.translations.heroTitle}
+                {translations.heroTitle}
               </h2>
             </div>
           </div>
