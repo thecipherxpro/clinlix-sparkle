@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import logo from "@/assets/logo-clinlix.png";
 
 const Splash = () => {
   const navigate = useNavigate();
@@ -90,15 +89,14 @@ const Splash = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#6E45E2] via-[#7952E8] to-[#8365FB] px-6">
-      <div className="animate-scale-in flex flex-col items-center gap-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-6">
+      <div className="flex flex-col items-center gap-6 w-full max-w-md">
         <img 
-          src={logo} 
-          alt="Clinlix Logo" 
-          className="w-48 h-48 object-contain animate-pulse" 
-          style={{ animationDuration: "2s" }}
+          src="/images/splash-animation.gif" 
+          alt="Clinlix Loading" 
+          className="w-full h-auto"
         />
-        <p className="text-white text-sm font-medium animate-fade-in" style={{ fontFamily: "Inter, Manrope, sans-serif" }}>
+        <p className="text-foreground text-sm font-medium text-center animate-fade-in" style={{ fontFamily: "Inter, Manrope, sans-serif" }}>
           {isOffline ? "You're offline. Clinlix will load as soon as you reconnect." : statusText}
         </p>
       </div>
