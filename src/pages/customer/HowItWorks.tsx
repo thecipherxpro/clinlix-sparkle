@@ -2,57 +2,119 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, Calendar, MapPin, CreditCard, CheckCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import MobileNav from "@/components/MobileNav";
+import step1Image from "@/assets/how-it-works/step-1-address.png";
+import step2Image from "@/assets/how-it-works/step-2-booking.png";
+import step3Image from "@/assets/how-it-works/step-3-pricing.png";
+import step4Image from "@/assets/how-it-works/step-4-datetime.png";
+import step5Image from "@/assets/how-it-works/step-5-provider.png";
+import step6Image from "@/assets/how-it-works/step-6-addons.png";
+import step7Image from "@/assets/how-it-works/step-7-payment.png";
+import step8Image from "@/assets/how-it-works/step-8-confirmation.png";
 
 const steps = [
   {
     id: 1,
-    title: "Select Your Service",
-    description: "Choose from our range of professional cleaning packages tailored to your needs.",
-    icon: Calendar,
+    title: "Add Your Address",
+    description: "Start by adding your service location. You can save up to 5 addresses for easy booking.",
+    image: step1Image,
     color: "from-blue-500 to-cyan-500",
     details: [
-      "Browse available cleaning packages",
-      "View pricing and service details",
-      "Select date and time that works for you"
+      "Add up to 5 service addresses",
+      "Save locations for quick access",
+      "Include any special instructions"
     ]
   },
   {
     id: 2,
-    title: "Choose Location",
-    description: "Add your address and any special instructions for our cleaning professionals.",
-    icon: MapPin,
-    color: "from-purple-500 to-pink-500",
+    title: "Select Address & Services",
+    description: "Go to the booking page and choose your address and the cleaning services you need.",
+    image: step2Image,
+    color: "from-purple-500 to-indigo-500",
     details: [
-      "Enter your service address",
-      "Add access instructions",
-      "Specify any special requirements"
+      "Select from your saved addresses",
+      "Choose cleaning services",
+      "View available service options"
     ]
   },
   {
     id: 3,
-    title: "Confirm & Pay",
-    description: "Review your booking details and complete your payment securely.",
-    icon: CreditCard,
-    color: "from-orange-500 to-red-500",
+    title: "View Fixed Pricing",
+    description: "Our prices are fixed based on your property layout and number of bedrooms.",
+    image: step3Image,
+    color: "from-orange-500 to-yellow-500",
     details: [
-      "Review booking summary",
-      "Choose payment method",
-      "Receive instant confirmation"
+      "Transparent fixed pricing",
+      "Based on property size",
+      "Number of bedrooms determines cost",
+      "No hidden fees on base service"
     ]
   },
   {
     id: 4,
-    title: "Enjoy Clean Space",
-    description: "Sit back and relax while our verified professionals take care of everything.",
-    icon: CheckCircle,
+    title: "Choose Date & Time",
+    description: "Select when you want the cleaning service. We're available from 7 AM to 7 PM.",
+    image: step4Image,
+    color: "from-teal-500 to-cyan-500",
+    details: [
+      "Pick your preferred date",
+      "Choose time slot (7 AM - 7 PM)",
+      "Flexible scheduling options"
+    ]
+  },
+  {
+    id: 5,
+    title: "Select Service Provider",
+    description: "Browse available providers for your chosen time. View profiles, ratings, and adjust time to see more options.",
+    image: step5Image,
     color: "from-green-500 to-emerald-500",
     details: [
-      "Track your provider in real-time",
-      "Professional service guaranteed",
-      "Rate and review your experience"
+      "View provider profiles",
+      "Check ratings and reviews",
+      "Adjust time for more providers",
+      "See provider availability"
+    ]
+  },
+  {
+    id: 6,
+    title: "Add Optional Add-ons",
+    description: "Enhance your service with optional add-ons like deep cleaning, window washing, or carpet cleaning.",
+    image: step6Image,
+    color: "from-pink-500 to-purple-500",
+    details: [
+      "Deep cleaning options",
+      "Window washing service",
+      "Carpet cleaning available",
+      "Customize your service"
+    ]
+  },
+  {
+    id: 7,
+    title: "Payment & Confirmation",
+    description: "Add your payment method and confirm your booking. Your card will be charged once the provider accepts.",
+    image: step7Image,
+    color: "from-blue-500 to-indigo-500",
+    details: [
+      "Secure payment processing",
+      "Add payment method",
+      "Confirm booking details",
+      "Charged after provider acceptance"
+    ]
+  },
+  {
+    id: 8,
+    title: "Provider Confirms",
+    description: "Once confirmed, you'll receive an email with provider details and your card will be charged. Extra time may be needed for larger jobs with additional pricing.",
+    image: step8Image,
+    color: "from-green-500 to-emerald-500",
+    details: [
+      "Email confirmation sent",
+      "Provider contact details shared",
+      "Card charged after confirmation",
+      "Extra time may be needed for larger jobs",
+      "Additional pricing applies for extended time"
     ]
   }
 ];
@@ -78,7 +140,6 @@ const HowItWorks = () => {
   };
 
   const step = steps[currentStep];
-  const Icon = step.icon;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
@@ -96,7 +157,7 @@ const HowItWorks = () => {
           How It Works
         </h1>
         <p className="text-muted-foreground text-[clamp(14px,3.5vw,16px)]">
-          Book professional cleaning in 4 simple steps
+          Book professional cleaning in {steps.length} simple steps
         </p>
       </div>
 
@@ -133,65 +194,28 @@ const HowItWorks = () => {
           ))}
         </div>
 
-        {/* Step Card with 3D Effect */}
+        {/* Step Card */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
-            initial={{ opacity: 0, x: 100, rotateY: -20 }}
-            animate={{ opacity: 1, x: 0, rotateY: 0 }}
-            exit={{ opacity: 0, x: -100, rotateY: 20 }}
-            transition={{ duration: 0.5, type: "spring" }}
-            style={{ perspective: "1000px" }}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.4 }}
           >
             <Card className="border-0 shadow-2xl overflow-hidden">
-              {/* 3D Icon Section */}
-              <div className={`relative h-64 bg-gradient-to-br ${step.color} p-8 flex items-center justify-center overflow-hidden`}>
-                <motion.div
-                  animate={{
-                    rotateY: [0, 360],
-                    scale: [1, 1.1, 1]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="relative"
-                >
-                  <div className="absolute inset-0 bg-white/20 rounded-full blur-3xl" />
-                  <Icon className="w-32 h-32 text-white relative z-10" strokeWidth={1.5} />
-                </motion.div>
-                
-                {/* Floating Elements */}
-                <motion.div
-                  animate={{
-                    y: [0, -20, 0],
-                    x: [0, 10, 0]
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="absolute top-10 right-10 w-20 h-20 bg-white/10 rounded-full backdrop-blur-sm"
+              {/* Image Section */}
+              <div className="relative h-64 sm:h-80 overflow-hidden">
+                <img 
+                  src={step.image} 
+                  alt={step.title}
+                  className="w-full h-full object-cover"
                 />
-                <motion.div
-                  animate={{
-                    y: [0, 20, 0],
-                    x: [0, -10, 0]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.5
-                  }}
-                  className="absolute bottom-10 left-10 w-16 h-16 bg-white/10 rounded-full backdrop-blur-sm"
-                />
+                <div className={`absolute inset-0 bg-gradient-to-t ${step.color} opacity-20`} />
               </div>
 
               {/* Content Section */}
-              <div className="p-8">
+              <div className="p-6 sm:p-8">
                 <h2 className="text-[clamp(24px,6vw,32px)] font-bold mb-4">
                   Step {step.id}: {step.title}
                 </h2>
@@ -200,13 +224,13 @@ const HowItWorks = () => {
                 </p>
                 
                 {/* Details List */}
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-3">
                   {step.details.map((detail, idx) => (
                     <motion.li
                       key={idx}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.1 + 0.3 }}
+                      transition={{ delay: idx * 0.1 + 0.2 }}
                       className="flex items-start gap-3"
                     >
                       <div className={`w-6 h-6 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center flex-shrink-0 mt-0.5`}>
