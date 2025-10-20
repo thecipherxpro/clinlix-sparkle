@@ -70,7 +70,9 @@ const areaTranslations: Record<string, { pt: string; en: string }> = {
   livingroom: { pt: "Sala de Estar", en: "Living Room" },
   floors: { pt: "Pavimentos", en: "Floors" },
   dusting: { pt: "Desempoeiramento", en: "Dusting" },
-  surfaces: { pt: "Superfícies", en: "Surfaces" }
+  surfaces: { pt: "Superfícies", en: "Surfaces" },
+  bedroom: { pt: "Quarto", en: "Bedroom" },
+  bedrooms: { pt: "Quartos", en: "Bedrooms" }
 };
 
 // EUR to CAD conversion rate (approximate)
@@ -123,7 +125,10 @@ const Pricing = () => {
     if (pkg.bedroom_count === 0) {
       return t.studio;
     }
-    return `${pkg.bedroom_count} ${t.bedrooms}`;
+    const bedroomWord = pkg.bedroom_count === 1 ? 
+      (selectedCurrency === "EUR" ? "Quarto" : "Bedroom") : 
+      t.bedrooms;
+    return `${pkg.bedroom_count} ${bedroomWord}`;
   };
 
   const getTranslatedAreas = (areas: string[]) => {
