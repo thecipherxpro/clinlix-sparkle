@@ -336,7 +336,7 @@ const Pricing = () => {
                     <span className="text-sm text-muted-foreground">{t.pricePerIncrement}</span>
                     <span className="text-xl sm:text-2xl font-bold text-orange-600 flex items-center">
                       <CurrencyIcon className="w-5 h-5" />
-                      {convertPrice(selectedCurrency === "EUR" ? overtimeRule.price_eur : overtimeRule.price_cad)}
+                      {selectedCurrency === "EUR" ? overtimeRule.price_eur : overtimeRule.price_cad}
                     </span>
                   </div>
                   <p className="text-xs sm:text-sm text-muted-foreground pt-2 border-t">
