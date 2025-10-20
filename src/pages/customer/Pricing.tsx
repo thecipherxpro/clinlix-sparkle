@@ -84,7 +84,7 @@ const Pricing = () => {
   const [overtimeRule, setOvertimeRule] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   
-  const t = translations[selectedCurrency];
+  const t = translations[selectedCurrency] || translations.EUR;
   const currencySymbol = selectedCurrency === "EUR" ? "€" : "$";
   const CurrencyIcon = selectedCurrency === "EUR" ? Euro : DollarSign;
 
