@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare, Info, MessageCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
+import { AnimatedTabs } from "@/components/ui/animated-tabs";
 const ProviderProfile = () => {
   const { providerId } = useParams();
   const navigate = useNavigate();
@@ -124,33 +125,15 @@ const ProviderProfile = () => {
 
           {/* Tabs */}
           <div className="w-full">
-            <div role="tablist" className="tabs tabs-boxed bg-muted/50 p-1 rounded-2xl shadow-inner mb-6 grid grid-cols-2 gap-1">
-              <button
-                role="tab"
-                className={`tab rounded-xl font-semibold transition-all duration-200 h-12 flex items-center justify-center gap-2 ${
-                  activeTab === "about"
-                    ? "tab-active bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
-                    : "hover:bg-muted-foreground/10"
-                }`}
-                onClick={() => setActiveTab("about")}
-              >
-                <Info className="w-4 h-4" />
-                <span className="hidden sm:inline">About</span>
-              </button>
-              <button
-                role="tab"
-                className={`tab rounded-xl font-semibold transition-all duration-200 h-12 flex items-center justify-center gap-2 ${
-                  activeTab === "reviews"
-                    ? "tab-active bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
-                    : "hover:bg-muted-foreground/10"
-                }`}
-                onClick={() => setActiveTab("reviews")}
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span className="hidden sm:inline">Reviews</span>
-                <span className="badge badge-sm ml-1">{provider.rating_count}</span>
-              </button>
-            </div>
+            <AnimatedTabs 
+              tabs={[
+                { key: 'about', label: 'About', icon: <Info className="w-4 h-4" /> },
+                { key: 'reviews', label: `Reviews (${provider.rating_count})`, icon: <MessageCircle className="w-4 h-4" /> }
+              ]}
+              selected={activeTab}
+              onTabChange={(key) => setActiveTab(key as "about" | "reviews")}
+              className="mb-6"
+            />
 
             {/* Tab Content */}
             {activeTab === "about" && (

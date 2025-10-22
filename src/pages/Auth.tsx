@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, Tab } from "@heroui/react";
+import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
@@ -174,19 +174,18 @@ const Auth = () => {
         </CardHeader>
 
         <CardContent className="px-6 pb-8">
-          <Tabs 
-            selectedKey={activeTab} 
-            onSelectionChange={(key) => setActiveTab(key as "login" | "register")} 
-            color="secondary"
-            radius="lg"
-            className="space-y-6"
-            classNames={{
-              tabList: "w-full",
-              tab: "h-[44px]"
-            }}
-          >
-            <Tab key="login" title="Log in">
-              <div className="space-y-5 mt-6">
+          <AnimatedTabs 
+            tabs={[
+              { key: 'login', label: 'Log in' },
+              { key: 'register', label: 'Sign Up' }
+            ]}
+            selected={activeTab}
+            onTabChange={(key) => setActiveTab(key as "login" | "register")}
+            className="mb-6"
+          />
+          
+          {activeTab === 'login' && (
+            <div className="space-y-5 mt-6">
               <div className="text-center space-y-2 mb-6">
                 <p className="text-sm text-muted-foreground">
                   Enter your email and password to securely access your account and manage your services.
@@ -339,11 +338,11 @@ const Auth = () => {
                   <FaApple className="w-5 h-5" />
                 </Button>
               </div>
-              </div>
-            </Tab>
+            </div>
+          )}
 
-            <Tab key="register" title="Sign Up">
-              <div className="space-y-5 mt-6">
+          {activeTab === 'register' && (
+            <div className="space-y-5 mt-6">
               <div className="text-center space-y-2 mb-6">
                 <p className="text-sm text-muted-foreground">Sign up to book or manage cleaning services easily.</p>
               </div>
@@ -573,8 +572,7 @@ const Auth = () => {
                 </Button>
               </div>
               </div>
-            </Tab>
-          </Tabs>
+            )}
         </CardContent>
       </Card>
     </div>

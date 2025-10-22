@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, Tab } from "@heroui/react";
+import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import { ArrowLeft, DollarSign, TrendingUp, Clock, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
@@ -138,19 +138,19 @@ const ProviderWallet = () => {
             <CardDescription>View all your transactions</CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs 
-              defaultSelectedKey="all" 
-              color="secondary"
-              radius="lg"
-              className="space-y-4"
-              classNames={{
-                tabList: "grid w-full grid-cols-3 gap-2 bg-muted/30 p-1 rounded-lg",
-                tab: "text-xs sm:text-sm h-11 min-h-[44px] data-[selected=true]:bg-gradient-to-br data-[selected=true]:from-primary/10 data-[selected=true]:to-accent/10 data-[selected=true]:shadow-sm rounded-md"
-              }}
-            >
-              <Tab key="all" title="All">
-                <div className="space-y-3 mt-4">
-                {wallet.length === 0 ? (
+            <AnimatedTabs 
+              tabs={[
+                { key: 'all', label: 'All' },
+                { key: 'pending', label: 'Pending' },
+                { key: 'paid', label: 'Paid' }
+              ]}
+              selected="all"
+              onTabChange={() => {}}
+              className="mb-4"
+            />
+            
+            <div className="space-y-3">
+            {wallet.length === 0 ? (
                   <div className="py-12 text-center">
                     <DollarSign className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
                     <p className="text-muted-foreground">No earnings yet</p>
@@ -201,69 +201,7 @@ const ProviderWallet = () => {
                     </div>
                   ))
                 )}
-                </div>
-              </Tab>
-
-              <Tab key="pending" title="Pending">
-                <div className="space-y-3 mt-4">
-                {wallet.filter(e => e.status === 'pending').length === 0 ? (
-                  <div className="py-12 text-center text-muted-foreground">
-                    No pending payouts
-                  </div>
-                ) : (
-                  wallet
-                    .filter(e => e.status === 'pending')
-                    .map((entry) => (
-                      <div key={entry.id} className="flex items-start justify-between p-4 border rounded-lg">
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium mb-1">
-                            {entry.booking?.package?.package_name || "Cleaning Service"}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {new Date(entry.created_at).toLocaleDateString()}
-                          </div>
-                        </div>
-                        <div className="text-lg font-semibold">
-                          €{Number(entry.payout_due).toFixed(2)}
-                        </div>
-                      </div>
-                    ))
-                )}
-                </div>
-              </Tab>
-
-              <Tab key="paid" title="Paid">
-                <div className="space-y-3 mt-4">
-                {completedPayouts.length === 0 ? (
-                  <div className="py-12 text-center text-muted-foreground">
-                    No completed payouts yet
-                  </div>
-                ) : (
-                  completedPayouts.map((entry) => (
-                    <div key={entry.id} className="flex items-start justify-between p-4 border rounded-lg">
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium mb-1">
-                          {entry.booking?.package?.package_name || "Cleaning Service"}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {new Date(entry.created_at).toLocaleDateString()}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-semibold mb-1">
-                          €{Number(entry.payout_due).toFixed(2)}
-                        </div>
-                        <div className="flex items-center gap-1 text-sm text-green-600">
-                          <CheckCircle className="w-4 h-4" />
-                          Paid
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-                </div>
-              </Tab>
-            </Tabs>
+            </div>
           </CardContent>
         </Card>
       </main>

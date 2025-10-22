@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, Tab } from "@heroui/react";
+import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import { ArrowLeft, Calendar, MapPin, Clock, Star } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
@@ -260,29 +260,20 @@ const MyBookings = () => {
       </header>
 
       <main className="mobile-container py-4 sm:py-8 max-w-4xl">
-        <Tabs 
-          selectedKey={activeTab} 
-          onSelectionChange={(key) => setActiveTab(key as string)} 
-          color="secondary"
-          radius="full"
-          className="w-full"
-          classNames={{
-            tabList: "w-full grid grid-cols-3 gap-2 bg-card/50 backdrop-blur-sm p-2 rounded-full border border-border/50 shadow-lg",
-            tab: "h-12 sm:h-11 text-xs sm:text-sm md:text-base rounded-full data-[selected=true]:bg-gradient-to-br data-[selected=true]:from-primary data-[selected=true]:to-secondary data-[selected=true]:text-primary-foreground data-[selected=true]:shadow-[0_4px_12px_rgba(0,0,0,0.15),0_2px_4px_rgba(0,0,0,0.1),inset_0_-2px_4px_rgba(0,0,0,0.1)] data-[selected=true]:transform data-[selected=true]:translate-y-[-2px] hover:bg-accent/20 transition-all duration-300 font-semibold min-h-[44px]",
-            cursor: "hidden"
-          }}
-        >
-          <Tab 
-            key="active" 
-            title={
-              <div className="flex items-center gap-1">
-                <span>Active</span>
-                <span>({activeBookings.length})</span>
-              </div>
-            }
-          >
-            <div className="space-y-4 mt-4 sm:mt-6">
-            {activeBookings.length === 0 ? (
+        <AnimatedTabs 
+          tabs={[
+            { key: 'active', label: `Active (${activeBookings.length})` },
+            { key: 'completed', label: `Completed (${completedBookings.length})` },
+            { key: 'cancelled', label: `Cancelled (${cancelledBookings.length})` }
+          ]}
+          selected={activeTab}
+          onTabChange={(key) => setActiveTab(key as string)}
+          className="mb-6"
+        />
+        
+        {activeTab === 'active' && (
+          <div className="space-y-4">
+          {activeBookings.length === 0 ? (
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
@@ -295,20 +286,12 @@ const MyBookings = () => {
             ) : (
               activeBookings.map(renderBookingCard)
             )}
-            </div>
-          </Tab>
+          </div>
+        )}
 
-          <Tab 
-            key="completed" 
-            title={
-              <div className="flex items-center gap-1">
-                <span>Completed</span>
-                <span>({completedBookings.length})</span>
-              </div>
-            }
-          >
-            <div className="space-y-4 mt-4 sm:mt-6">
-            {completedBookings.length === 0 ? (
+        {activeTab === 'completed' && (
+          <div className="space-y-4">
+          {completedBookings.length === 0 ? (
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
@@ -318,20 +301,12 @@ const MyBookings = () => {
             ) : (
               completedBookings.map(renderBookingCard)
             )}
-            </div>
-          </Tab>
+          </div>
+        )}
 
-          <Tab 
-            key="cancelled" 
-            title={
-              <div className="flex items-center gap-1">
-                <span>Cancelled</span>
-                <span>({cancelledBookings.length})</span>
-              </div>
-            }
-          >
-            <div className="space-y-4 mt-4 sm:mt-6">
-            {cancelledBookings.length === 0 ? (
+        {activeTab === 'cancelled' && (
+          <div className="space-y-4">
+          {cancelledBookings.length === 0 ? (
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
@@ -341,9 +316,8 @@ const MyBookings = () => {
             ) : (
               cancelledBookings.map(renderBookingCard)
             )}
-            </div>
-          </Tab>
-        </Tabs>
+          </div>
+        )}
       </main>
 
       <MobileNav />

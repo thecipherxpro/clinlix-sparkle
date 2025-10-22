@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, Tab } from "@heroui/react";
+
 import { useToast } from "@/hooks/use-toast";
 import { 
   ArrowLeft, 
@@ -632,6 +632,7 @@ const JobDetail = () => {
                 </Button>
               )}
             </div>
+            </Card>
             </div>
           </Tab>
 
@@ -645,9 +646,10 @@ const JobDetail = () => {
             }
           >
             <div className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
-            {/* Customer Address */}
             <Card>
               <CardHeader className="pb-3">
+                <CardTitle className="text-base sm:text-lg">Customer Address</CardTitle>
+              </CardHeader>
                 <CardTitle className="text-base sm:text-lg">Customer Address</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
@@ -713,10 +715,12 @@ const JobDetail = () => {
                 )}
               </CardContent>
             </Card>
-
+            
             {/* Property Info */}
             <Card>
               <CardHeader className="pb-3">
+                <CardTitle className="text-base sm:text-lg">Property Information</CardTitle>
+              </CardHeader>
                 <CardTitle className="text-base sm:text-lg">Property Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">

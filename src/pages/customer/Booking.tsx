@@ -8,7 +8,7 @@ import { ArrowLeft, ArrowRight, Check, Calendar as CalendarIcon, MapPin, User, P
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { Tabs, Tab } from "@heroui/react";
+
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
