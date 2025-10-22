@@ -1,5 +1,3 @@
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-
 interface JobStatusBarProps {
   currentStatus: string;
 }
@@ -17,38 +15,15 @@ const JobStatusBar = ({ currentStatus }: JobStatusBarProps) => {
 
   return (
     <div className="py-4 w-full">
-      <div className="md:hidden">
-        <Carousel
-          opts={{
-            align: "start",
-            dragFree: true,
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-2">
-            {stages.map((stage, index) => {
-              const isCompleted = index <= currentIndex;
-              
-              return (
-                <CarouselItem key={stage.key} className="pl-2 basis-1/3">
-                  <div className={`step ${isCompleted ? "step-primary" : ""} text-xs`}>
-                    {stage.label}
-                  </div>
-                </CarouselItem>
-              );
-            })}
-          </CarouselContent>
-        </Carousel>
-      </div>
-      <div className="hidden md:block">
-        <ul className="steps steps-vertical w-full">
+      <div className="overflow-x-auto scrollbar-hide md:overflow-visible">
+        <ul className="steps steps-horizontal min-w-max md:min-w-0 md:w-full md:steps-vertical">
           {stages.map((stage, index) => {
             const isCompleted = index <= currentIndex;
             
             return (
               <li 
                 key={stage.key} 
-                className={`step text-sm ${isCompleted ? "step-primary" : ""}`}
+                className={`step text-xs sm:text-sm ${isCompleted ? "step-primary" : ""}`}
               >
                 {stage.label}
               </li>
