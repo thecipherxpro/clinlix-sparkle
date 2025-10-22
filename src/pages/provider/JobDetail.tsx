@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button as HeroButton } from "@heroui/react";
+import { Button as HeroButton, Tabs, Tab } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -632,7 +632,6 @@ const JobDetail = () => {
                 </Button>
               )}
             </div>
-            </Card>
             </div>
           </Tab>
 
@@ -648,8 +647,6 @@ const JobDetail = () => {
             <div className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base sm:text-lg">Customer Address</CardTitle>
-              </CardHeader>
                 <CardTitle className="text-base sm:text-lg">Customer Address</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
@@ -721,8 +718,6 @@ const JobDetail = () => {
               <CardHeader className="pb-3">
                 <CardTitle className="text-base sm:text-lg">Property Information</CardTitle>
               </CardHeader>
-                <CardTitle className="text-base sm:text-lg">Property Information</CardTitle>
-              </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
                 <div className="flex items-start gap-3">
                   <Home className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
@@ -736,12 +731,12 @@ const JobDetail = () => {
 
                 <div className="flex items-start gap-3">
                   <Package className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium text-sm sm:text-base">Layout</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground capitalize">
-                    {job.customer_addresses?.layout_type || `${job.cleaning_packages?.bedroom_count || 0} Bedrooms`}
-                  </p>
-                </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-sm sm:text-base">Layout</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground capitalize">
+                      {job.customer_addresses?.layout_type || `${job.cleaning_packages?.bedroom_count || 0} Bedrooms`}
+                    </p>
+                  </div>
                 </div>
 
                 <div>
