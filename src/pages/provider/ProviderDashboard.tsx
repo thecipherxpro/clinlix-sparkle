@@ -101,66 +101,50 @@ const ProviderDashboard = () => {
       </div>
 
       {/* Mobile-first main container with auto-fit max-width */}
-      <main className="w-full max-w-[min(1280px,calc(100%-32px))] mx-auto 
-                       px-[clamp(16px,4vw,32px)] py-[clamp(16px,4vw,24px)]">
+      <main className="w-full max-w-[min(1280px,calc(100%-32px))] mx-auto py-[clamp(16px,4vw,24px)] px-0">
         {/* Action Card - Auto-fit responsive */}
         <div className="mb-[clamp(20px,5vw,32px)]">
           
         </div>
 
-        {/* Beautiful Stats Card with Weather Card Design */}
-        <div className="relative h-[180px] rounded-[25px] overflow-hidden shadow-[rgba(0,0,0,0.15)_2px_3px_4px] 
-                        mb-[clamp(20px,5vw,32px)] transition-all duration-100 hover:shadow-lg">
-          {/* Info Section */}
-          <div className="relative flex items-center justify-between w-full h-[75%] text-white">
-            {/* Background Design */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#ec7263] to-[#d85d4f] overflow-hidden">
-              <div className="absolute top-[-80%] right-[-50%] w-[300px] h-[300px] bg-[#efc745] opacity-40 rounded-full"></div>
-              <div className="absolute top-[-70%] right-[-30%] w-[210px] h-[210px] bg-[#efc745] opacity-40 rounded-full"></div>
-              <div className="absolute top-[-35%] right-[-8%] w-[100px] h-[100px] bg-[#efc745] opacity-100 rounded-full"></div>
-            </div>
-
-            {/* Left Side - Main Stat */}
-            <div className="flex flex-col justify-around h-full z-10 pl-[18px]">
-              <div className="text-base font-medium">Pending Jobs</div>
-              <div className="text-[34pt] font-medium leading-[1.2]">{stats.pendingJobs}</div>
-            </div>
-
-            {/* Right Side - Time & Location */}
-            <div className="flex flex-col items-end justify-around h-full pr-[18px] z-10">
-              <div className="flex flex-col items-end">
-                <div className="text-[19pt] leading-[1em]">
-                  {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+        {/* Professional Stats Card - Auto-fit responsive */}
+        <UICard className="border-0 shadow-lg bg-gradient-to-br from-card via-card to-primary/5 
+                       mb-[clamp(20px,5vw,32px)]">
+          <UICardHeader className="p-[clamp(16px,4vw,24px)]">
+            <CardTitle className="text-[clamp(20px,5vw,28px)]">Today's Overview</CardTitle>
+            <CardDescription className="text-[clamp(12px,3vw,14px)]">
+              Your current statistics and earnings
+            </CardDescription>
+          </UICardHeader>
+          <CardContent className="px-[clamp(16px,4vw,24px)] pb-[clamp(16px,4vw,24px)]">
+            <div className="grid grid-cols-3 gap-[clamp(12px,3vw,24px)]">
+              {/* Pending Jobs */}
+              <div className="flex flex-col items-center text-center">
+                <div className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
+                              rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center 
+                              mb-[clamp(8px,2vw,12px)]">
+                  <Briefcase className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-primary" />
                 </div>
-                <div className="text-[15px]">
-                  {new Date().toLocaleDateString('en-US', { weekday: 'short', month: '2-digit', day: '2-digit' }).toUpperCase()}
-                </div>
+                <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Pending</p>
+                <p className="text-[clamp(20px,5vw,36px)] font-bold">{stats.pendingJobs}</p>
               </div>
-              <div className="text-base font-medium">Dashboard</div>
-            </div>
-          </div>
 
-          {/* Days Section - Stats Buttons */}
-          <div className="flex items-center justify-between w-full h-[25%] bg-[#974859] gap-[2px] shadow-[inset_0px_2px_5px_#974859]">
-            <button
-              onClick={() => navigate("/provider/jobs")}
-              className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
-                         cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]"
-            >
-              <span className="text-[14pt] font-bold text-white">{stats.pendingJobs}</span>
-              <span className="text-[8pt] font-medium text-white opacity-70">Available Jobs</span>
-            </button>
-            
-            <button 
-              onClick={() => navigate("/provider/wallet")}
-              className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
-                         cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]"
-            >
-              <span className="text-[14pt] font-bold text-white">€{stats.monthlyEarnings.toFixed(0)}</span>
-              <span className="text-[8pt] font-medium text-white opacity-70">Earned This Month</span>
-            </button>
-          </div>
-        </div>
+              {/* Active Today */}
+              <div className="flex flex-col items-center text-center">
+                <div className="w-[clamp(32px,8vw,48px)] h-[clamp(32px,8vw,48px)] 
+                              rounded-lg md:rounded-xl bg-accent/10 flex items-center justify-center 
+                              mb-[clamp(8px,2vw,12px)]">
+                  <Clock className="w-[clamp(16px,4vw,24px)] h-[clamp(16px,4vw,24px)] text-accent" />
+                </div>
+                <p className="text-[clamp(9px,2.2vw,14px)] text-muted-foreground mb-1">Active</p>
+                <p className="text-[clamp(20px,5vw,36px)] font-bold">{stats.activeToday}</p>
+              </div>
+
+              {/* Monthly Earnings */}
+              
+            </div>
+          </CardContent>
+        </UICard>
 
         {/* Quick Actions - Job Cards */}
         <div>
