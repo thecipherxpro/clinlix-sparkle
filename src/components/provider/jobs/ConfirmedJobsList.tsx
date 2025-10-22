@@ -110,6 +110,7 @@ const ConfirmedJobsList = () => {
                 userId={job.customer_id}
                 size={40}
                 fallbackText={getInitials(job.profiles.first_name, job.profiles.last_name)}
+                className="ring-2 ring-purple-500"
               />
               <div className="flex-1">
                 <h3 className="font-semibold text-foreground">
