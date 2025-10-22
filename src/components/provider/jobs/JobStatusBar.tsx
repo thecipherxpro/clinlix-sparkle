@@ -10,11 +10,11 @@ interface JobStatusBarProps {
 
 const JobStatusBar = ({ currentStatus }: JobStatusBarProps) => {
   const stages = [
-    { key: "confirmed", label: "Confirmed" },
-    { key: "on_the_way", label: "On the way" },
-    { key: "arrived", label: "Arrived" },
-    { key: "started", label: "Started" },
-    { key: "completed", label: "Completed" },
+    { key: "confirmed", label: "Confirmed", color: "step-info" },
+    { key: "on_the_way", label: "On the way", color: "step-warning" },
+    { key: "arrived", label: "Arrived", color: "step-secondary" },
+    { key: "started", label: "Started", color: "step-accent" },
+    { key: "completed", label: "Completed", color: "step-success" },
   ];
 
   const currentIndex = stages.findIndex((s) => s.key === currentStatus);
@@ -38,7 +38,7 @@ const JobStatusBar = ({ currentStatus }: JobStatusBarProps) => {
                   return (
                     <li 
                       key={stage.key} 
-                      className={`step text-xs sm:text-sm ${isCompleted ? "step-primary" : ""}`}
+                      className={`step text-xs sm:text-sm ${isCompleted ? stage.color : ""}`}
                     >
                       {stage.label}
                     </li>
@@ -57,7 +57,7 @@ const JobStatusBar = ({ currentStatus }: JobStatusBarProps) => {
             return (
               <li 
                 key={stage.key} 
-                className={`step text-xs sm:text-sm ${isCompleted ? "step-primary" : ""}`}
+                className={`step text-xs sm:text-sm ${isCompleted ? stage.color : ""}`}
               >
                 {stage.label}
               </li>
