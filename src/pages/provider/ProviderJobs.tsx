@@ -21,40 +21,45 @@ const ProviderJobs = () => {
       </header>
 
       {/* Tabs Navigation */}
-      <div className="bg-card/30 backdrop-blur-sm border-b sticky top-[69px] sm:top-[73px] z-10">
-        <div className="mobile-container py-3">
+      <div className="bg-card/30 backdrop-blur-sm border-b">
+        <div className="mobile-container py-3 sm:py-4">
           <Tabs 
             selectedKey={activeTab}
             onSelectionChange={(key) => setActiveTab(key as string)}
+            size="md"
+            fullWidth
             classNames={{
-              tabList: "w-full bg-muted p-1 rounded-lg",
-              cursor: "bg-background shadow-sm",
+              tabList: "w-full bg-muted/50 p-1 rounded-lg gap-1",
+              cursor: "bg-background shadow-sm rounded-md",
+              tab: "h-10 sm:h-11 px-2 sm:px-4 text-xs sm:text-sm",
+              tabContent: "group-data-[selected=true]:text-foreground"
             }}
           >
             <Tab 
               key="requests" 
               title={
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  Job Requests
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Job Requests</span>
+                  <span className="sm:hidden">Requests</span>
                 </div>
               } 
             />
             <Tab 
               key="confirmed" 
               title={
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4" />
-                  Confirmed
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <CheckCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span>Confirmed</span>
                 </div>
               } 
             />
             <Tab 
               key="completed" 
               title={
-                <div className="flex items-center gap-2">
-                  <Flag className="h-4 w-4" />
-                  Completed
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <Flag className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span>Completed</span>
                 </div>
               } 
             />
