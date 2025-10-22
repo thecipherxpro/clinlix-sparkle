@@ -15,20 +15,22 @@ const JobStatusBar = ({ currentStatus }: JobStatusBarProps) => {
 
   return (
     <div className="py-4 w-full">
-      <ul className="steps steps-horizontal w-full md:steps-vertical">
-        {stages.map((stage, index) => {
-          const isCompleted = index <= currentIndex;
-          
-          return (
-            <li 
-              key={stage.key} 
-              className={`step text-xs sm:text-sm ${isCompleted ? "step-primary" : ""}`}
-            >
-              {stage.label}
-            </li>
-          );
-        })}
-      </ul>
+      <div className="overflow-x-auto scrollbar-hide md:overflow-visible">
+        <ul className="steps steps-horizontal min-w-max md:min-w-0 md:w-full md:steps-vertical">
+          {stages.map((stage, index) => {
+            const isCompleted = index <= currentIndex;
+            
+            return (
+              <li 
+                key={stage.key} 
+                className={`step text-xs sm:text-sm ${isCompleted ? "step-primary" : ""}`}
+              >
+                {stage.label}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 };
