@@ -30,17 +30,22 @@ const JobStatusBar = ({ currentStatus }: JobStatusBarProps) => {
           className="w-full"
         >
           <CarouselContent className="-ml-2">
-            {stages.map((stage, index) => {
-              const isCompleted = index <= currentIndex;
-              
-              return (
-                <CarouselItem key={stage.key} className="pl-2 basis-1/3">
-                  <div className={`step ${isCompleted ? "step-primary" : ""} text-xs sm:text-sm`}>
-                    {stage.label}
-                  </div>
-                </CarouselItem>
-              );
-            })}
+            <CarouselItem className="pl-2 basis-full">
+              <ul className="steps steps-horizontal w-full min-w-max">
+                {stages.map((stage, index) => {
+                  const isCompleted = index <= currentIndex;
+                  
+                  return (
+                    <li 
+                      key={stage.key} 
+                      className={`step text-xs sm:text-sm ${isCompleted ? "step-primary" : ""}`}
+                    >
+                      {stage.label}
+                    </li>
+                  );
+                })}
+              </ul>
+            </CarouselItem>
           </CarouselContent>
         </Carousel>
       </div>
