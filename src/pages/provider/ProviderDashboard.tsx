@@ -142,16 +142,7 @@ const ProviderDashboard = () => {
 
           {/* Days Section - Stats Buttons */}
           <div className="flex items-center justify-between w-full h-[25%] bg-[#974859] gap-[2px] shadow-[inset_0px_2px_5px_#974859]">
-            <button 
-              onClick={() => navigate("/provider/schedule")}
-              className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
-                         cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]"
-            >
-              <span className="text-[14pt] font-bold text-white">{stats.activeToday}</span>
-              <span className="text-[8pt] font-medium text-white opacity-70">Active Jobs</span>
-            </button>
-            
-            <button 
+            <button
               onClick={() => navigate("/provider/jobs")}
               className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
                          cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]"
