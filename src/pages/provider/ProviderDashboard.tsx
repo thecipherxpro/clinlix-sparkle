@@ -149,36 +149,30 @@ const ProviderDashboard = () => {
           {/* Days Section - Stats Buttons */}
           <div className="flex items-center justify-between w-full h-[25%] bg-[#974859] gap-[2px] shadow-[inset_0px_2px_5px_#974859]">
             <button 
-              onClick={() => navigate("/provider/jobs")}
-              className="flex items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
-                         cursor-pointer transition-all duration-100 gap-2 hover:scale-90 hover:rounded-[10px]"
+              onClick={() => navigate("/provider/schedule")}
+              className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
+                         cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]"
             >
-              <span className="text-[10pt] font-medium text-white opacity-70">PENDING</span>
-              <div className="flex items-center w-5 h-full">
-                <Briefcase className="w-full h-5" stroke="white" fill="white" />
-              </div>
+              <span className="text-[14pt] font-bold text-white">{stats.activeToday}</span>
+              <span className="text-[8pt] font-medium text-white opacity-70">Active Jobs</span>
             </button>
             
             <button 
-              onClick={() => navigate("/provider/schedule")}
-              className="flex items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
-                         cursor-pointer transition-all duration-100 gap-2 hover:scale-90 hover:rounded-[10px]"
+              onClick={() => navigate("/provider/jobs")}
+              className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
+                         cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]"
             >
-              <span className="text-[10pt] font-medium text-white opacity-70">TODAY</span>
-              <div className="flex items-center w-5 h-full">
-                <Clock className="w-full h-5" stroke="white" fill="white" />
-              </div>
+              <span className="text-[14pt] font-bold text-white">{stats.pendingJobs}</span>
+              <span className="text-[8pt] font-medium text-white opacity-70">Available Jobs</span>
             </button>
             
             <button 
               onClick={() => navigate("/provider/wallet")}
-              className="flex items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
-                         cursor-pointer transition-all duration-100 gap-2 hover:scale-90 hover:rounded-[10px]"
+              className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
+                         cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]"
             >
-              <span className="text-[10pt] font-medium text-white opacity-70">€{stats.monthlyEarnings.toFixed(0)}</span>
-              <div className="flex items-center w-5 h-full">
-                <DollarSign className="w-full h-5" stroke="white" fill="white" />
-              </div>
+              <span className="text-[14pt] font-bold text-white">€{stats.monthlyEarnings.toFixed(0)}</span>
+              <span className="text-[8pt] font-medium text-white opacity-70">Earned This Month</span>
             </button>
           </div>
         </div>
