@@ -101,8 +101,7 @@ const ProviderDashboard = () => {
       </div>
 
       {/* Mobile-first main container with auto-fit max-width */}
-      <main className="w-full max-w-[min(1280px,calc(100%-32px))] mx-auto 
-                       px-[clamp(16px,4vw,32px)] py-[clamp(16px,4vw,24px)]">
+      <main className="w-full max-w-[min(1280px,calc(100%-32px))] mx-auto \n                       px-0[clamp(16px,4vw,32px)] py-[clamp(16px,4vw,24px)]">
         {/* Action Card - Auto-fit responsive */}
         <div className="mb-[clamp(20px,5vw,32px)]">
           
@@ -130,10 +129,18 @@ const ProviderDashboard = () => {
             <div className="flex flex-col items-end justify-around h-full pr-[18px] z-10">
               <div className="flex flex-col items-end">
                 <div className="text-[19pt] leading-[1em]">
-                  {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                  {new Date().toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false
+                })}
                 </div>
                 <div className="text-[15px]">
-                  {new Date().toLocaleDateString('en-US', { weekday: 'short', month: '2-digit', day: '2-digit' }).toUpperCase()}
+                  {new Date().toLocaleDateString('en-US', {
+                  weekday: 'short',
+                  month: '2-digit',
+                  day: '2-digit'
+                }).toUpperCase()}
                 </div>
               </div>
               <div className="text-base font-medium">Dashboard</div>
@@ -142,20 +149,14 @@ const ProviderDashboard = () => {
 
           {/* Days Section - Stats Buttons */}
           <div className="flex items-center justify-between w-full h-[25%] bg-[#974859] gap-[2px] shadow-[inset_0px_2px_5px_#974859]">
-            <button
-              onClick={() => navigate("/provider/jobs")}
-              className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
-                         cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]"
-            >
+            <button onClick={() => navigate("/provider/jobs")} className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
+                         cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]">
               <span className="text-[14pt] font-bold text-white">{stats.pendingJobs}</span>
               <span className="text-[8pt] font-medium text-white opacity-70">Available Jobs</span>
             </button>
             
-            <button 
-              onClick={() => navigate("/provider/wallet")}
-              className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
-                         cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]"
-            >
+            <button onClick={() => navigate("/provider/wallet")} className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
+                         cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]">
               <span className="text-[14pt] font-bold text-white">€{stats.monthlyEarnings.toFixed(0)}</span>
               <span className="text-[8pt] font-medium text-white opacity-70">Earned This Month</span>
             </button>
