@@ -122,14 +122,8 @@ const ProviderDashboard = () => {
 
             {/* Left Side - Main Stat */}
             <div className="flex flex-col justify-around h-full z-10 pl-[18px]">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10">
-                  <Briefcase className="w-full h-full" stroke="white" fill="white" />
-                </div>
-                <div className="text-sm font-medium">Pending</div>
-              </div>
+              <div className="text-base font-medium">Pending Jobs</div>
               <div className="text-[34pt] font-medium leading-[1.2]">{stats.pendingJobs}</div>
-              <div className="text-sm">Jobs waiting</div>
             </div>
 
             {/* Right Side - Time & Location */}
