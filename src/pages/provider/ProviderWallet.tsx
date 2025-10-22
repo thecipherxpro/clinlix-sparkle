@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AnimatedTabs } from "@/components/ui/animated-tabs";
+import { Tabs, Tab } from "@heroui/react";
 import { ArrowLeft, DollarSign, TrendingUp, Clock, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import ProviderMobileNav from "@/components/ProviderMobileNav";
@@ -138,16 +138,18 @@ const ProviderWallet = () => {
             <CardDescription>View all your transactions</CardDescription>
           </CardHeader>
           <CardContent>
-            <AnimatedTabs 
-              tabs={[
-                { key: 'all', label: 'All' },
-                { key: 'pending', label: 'Pending' },
-                { key: 'paid', label: 'Paid' }
-              ]}
-              selected="all"
-              onTabChange={() => {}}
-              className="mb-4"
-            />
+            <Tabs 
+              selectedKey="all"
+              onSelectionChange={() => {}}
+              classNames={{
+                tabList: "w-full bg-muted p-1 rounded-lg mb-4",
+                cursor: "bg-background shadow-sm",
+              }}
+            >
+              <Tab key="all" title="All" />
+              <Tab key="pending" title="Pending" />
+              <Tab key="paid" title="Paid" />
+            </Tabs>
             
             <div className="space-y-3">
             {wallet.length === 0 ? (

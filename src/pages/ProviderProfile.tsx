@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare, Info, MessageCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
-import { AnimatedTabs } from "@/components/ui/animated-tabs";
+import { Tabs, Tab } from "@heroui/react";
 const ProviderProfile = () => {
   const { providerId } = useParams();
   const navigate = useNavigate();
@@ -125,15 +125,33 @@ const ProviderProfile = () => {
 
           {/* Tabs */}
           <div className="w-full">
-            <AnimatedTabs 
-              tabs={[
-                { key: 'about', label: 'About', icon: <Info className="w-4 h-4" /> },
-                { key: 'reviews', label: `Reviews (${provider.rating_count})`, icon: <MessageCircle className="w-4 h-4" /> }
-              ]}
-              selected={activeTab}
-              onTabChange={(key) => setActiveTab(key as "about" | "reviews")}
-              className="mb-6"
-            />
+            <Tabs 
+              selectedKey={activeTab}
+              onSelectionChange={(key) => setActiveTab(key as "about" | "reviews")}
+              classNames={{
+                tabList: "w-full bg-muted p-1 rounded-lg mb-6",
+                cursor: "bg-background shadow-sm",
+              }}
+            >
+              <Tab 
+                key="about" 
+                title={
+                  <div className="flex items-center gap-2">
+                    <Info className="w-4 h-4" />
+                    About
+                  </div>
+                } 
+              />
+              <Tab 
+                key="reviews" 
+                title={
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4" />
+                    Reviews ({provider.rating_count})
+                  </div>
+                } 
+              />
+            </Tabs>
 
             {/* Tab Content */}
             {activeTab === "about" && (

@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AnimatedTabs } from "@/components/ui/animated-tabs";
+import { Tabs, Tab } from "@heroui/react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
@@ -174,15 +174,18 @@ const Auth = () => {
         </CardHeader>
 
         <CardContent className="px-6 pb-8">
-          <AnimatedTabs 
-            tabs={[
-              { key: 'login', label: 'Log in' },
-              { key: 'register', label: 'Sign Up' }
-            ]}
-            selected={activeTab}
-            onTabChange={(key) => setActiveTab(key as "login" | "register")}
-            className="mb-6"
-          />
+          <Tabs 
+            selectedKey={activeTab}
+            onSelectionChange={(key) => setActiveTab(key as "login" | "register")}
+            classNames={{
+              tabList: "w-full bg-muted p-1 rounded-lg mb-6",
+              tab: "h-12",
+              cursor: "bg-background shadow-sm",
+            }}
+          >
+            <Tab key="login" title="Log in" />
+            <Tab key="register" title="Sign Up" />
+          </Tabs>
           
           {activeTab === 'login' && (
             <div className="space-y-5 mt-6">

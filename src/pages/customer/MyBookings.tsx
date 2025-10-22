@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AnimatedTabs } from "@/components/ui/animated-tabs";
+import { Tabs, Tab } from "@heroui/react";
 import { ArrowLeft, Calendar, MapPin, Clock, Star } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
@@ -260,16 +260,18 @@ const MyBookings = () => {
       </header>
 
       <main className="mobile-container py-4 sm:py-8 max-w-4xl">
-        <AnimatedTabs 
-          tabs={[
-            { key: 'active', label: `Active (${activeBookings.length})` },
-            { key: 'completed', label: `Completed (${completedBookings.length})` },
-            { key: 'cancelled', label: `Cancelled (${cancelledBookings.length})` }
-          ]}
-          selected={activeTab}
-          onTabChange={(key) => setActiveTab(key as string)}
-          className="mb-6"
-        />
+        <Tabs 
+          selectedKey={activeTab}
+          onSelectionChange={(key) => setActiveTab(key as string)}
+          classNames={{
+            tabList: "w-full bg-muted p-1 rounded-lg mb-6",
+            cursor: "bg-background shadow-sm",
+          }}
+        >
+          <Tab key="active" title={`Active (${activeBookings.length})`} />
+          <Tab key="completed" title={`Completed (${completedBookings.length})`} />
+          <Tab key="cancelled" title={`Cancelled (${cancelledBookings.length})`} />
+        </Tabs>
         
         {activeTab === 'active' && (
           <div className="space-y-4">
