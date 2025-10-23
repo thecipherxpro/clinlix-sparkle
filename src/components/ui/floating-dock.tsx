@@ -35,53 +35,19 @@ const FloatingDockMobile = ({
   items: { title: string; icon: React.ReactNode; href: string; onClick?: () => void }[];
   className?: string;
 }) => {
-  const [open, setOpen] = useState(false);
   return (
     <div className={cn("relative block md:hidden", className)}>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            layoutId="nav"
-            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 flex gap-2 bg-gray-50 dark:bg-neutral-900 rounded-2xl px-4 py-3"
+      <div className="flex gap-2 bg-gray-50 dark:bg-neutral-900 rounded-2xl px-4 py-3 shadow-lg">
+        {items.map((item) => (
+          <button
+            key={item.title}
+            onClick={item.onClick}
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-800 hover:bg-gray-300 dark:hover:bg-neutral-700 transition-colors"
           >
-            {items.map((item, idx) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                }}
-                exit={{
-                  opacity: 0,
-                  scale: 0,
-                  transition: {
-                    delay: idx * 0.05,
-                  },
-                }}
-                transition={{ delay: (items.length - 1 - idx) * 0.05 }}
-              >
-                <button
-                  onClick={() => {
-                    item.onClick?.();
-                    setOpen(false);
-                  }}
-                  key={item.title}
-                  className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-800 hover:bg-gray-300 dark:hover:bg-neutral-700 transition-colors"
-                >
-                  <div className="h-5 w-5">{item.icon}</div>
-                </button>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-800 border-2 border-gray-200 dark:border-neutral-700"
-      >
-        <IconLayoutNavbarCollapse className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
-      </button>
+            <div className="h-5 w-5">{item.icon}</div>
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
