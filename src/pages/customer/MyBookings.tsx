@@ -214,7 +214,7 @@ const MyBookings = () => {
               </div>
             )}
 
-            {booking.job_status === "completed" && !booking.provider_reviews?.length && (
+            {booking.job_status === "completed" && !booking.has_review && (
               <div className="pt-2">
                 <Button
                   variant="outline"
