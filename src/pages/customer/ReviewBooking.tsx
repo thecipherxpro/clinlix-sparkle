@@ -44,7 +44,7 @@ const ReviewBooking = () => {
 
       if (error) throw error;
 
-      if (bookingData.status !== 'completed') {
+      if (bookingData.job_status !== 'completed') {
         toast.error('You can only review completed bookings');
         navigate('/customer/bookings');
         return;
