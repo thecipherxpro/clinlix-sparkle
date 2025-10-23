@@ -88,7 +88,8 @@ const ReviewBooking = () => {
         return;
       }
 
-      const { error } = await supabase
+      // Insert review
+      const { error: reviewError } = await supabase
         .from('provider_reviews')
         .insert({
           booking_id: id,
@@ -98,7 +99,15 @@ const ReviewBooking = () => {
           comment: reviewText || null
         });
 
-      if (error) throw error;
+      if (reviewError) throw reviewError;
+
+      // Mark booking as reviewed
+      const { error: bookingError } = await supabase
+        .from('bookings')
+        .update({ has_review: true })
+        .eq('id', id);
+
+      if (bookingError) throw bookingError;
 
       toast.success('✅ Thank you! Your feedback helps improve Clinlix.');
       navigate('/customer/bookings');
@@ -138,43 +147,54 @@ const ReviewBooking = () => {
       </header>
 
       <main className="mobile-container py-6 max-w-2xl space-y-6">
-        {/* Provider Info */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-center text-xl sm:text-2xl">
-              How was your cleaning?
-            </CardTitle>
-            <p className="text-center text-sm text-muted-foreground">
-              Rate your experience with {booking.provider_profiles?.full_name}
-            </p>
-          </CardHeader>
-        </Card>
+        {/* Rating Card */}
+        <Card className="p-6 rounded-2xl shadow-xl border-0">
+          <h2 className="text-lg font-semibold text-foreground mb-2">Rate Your Cleaning</h2>
+          <p className="text-sm text-muted-foreground mb-6">
+            Your feedback helps us improve our service
+          </p>
 
-        {/* Rating Section */}
-        <Card className="border-0 shadow-sm">
-          <CardContent className="pt-8 pb-8">
-            <div className="flex justify-center gap-2 mb-8">
+          {/* Provider Info */}
+          <div className="flex items-center gap-4 mb-6 pb-6 border-b">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">
+              {booking.provider_profiles?.full_name?.split(' ').map((n: string) => n[0]).join('')}
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-foreground">
+                {booking.provider_profiles?.full_name}
+              </h3>
+              <p className="text-muted-foreground text-sm">
+                {booking.customer_addresses?.cleaning_packages?.package_name}
+              </p>
+            </div>
+          </div>
+
+          {/* Star Rating */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-foreground">Your Rating</label>
+            <div className="flex justify-center gap-2 mb-4">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
                   onClick={() => setRating(star)}
                   onMouseEnter={() => setHoveredRating(star)}
                   onMouseLeave={() => setHoveredRating(0)}
-                  className="transition-transform hover:scale-110 active:scale-95 touch-target"
+                  className={`transition-transform ${
+                    star <= (hoveredRating || rating) ? 'scale-110' : ''
+                  } touch-target`}
                 >
                   <Star
-                    className={`w-12 h-12 sm:w-14 sm:h-14 transition-colors ${
-                      star <= (hoveredRating || rating)
-                        ? 'fill-yellow-400 text-yellow-400'
-                        : 'text-muted-foreground'
-                    }`}
+                    size={30}
+                    className={star <= (hoveredRating || rating) ? "text-yellow-400" : "text-gray-300"}
+                    fill={star <= (hoveredRating || rating) ? "#FACC15" : "none"}
+                    strokeWidth={1.5}
                   />
                 </button>
               ))}
             </div>
 
             {rating > 0 && (
-              <p className="text-center text-sm text-muted-foreground mb-6">
+              <p className="text-center text-sm text-muted-foreground mb-4">
                 {rating === 5 && "Excellent! 🎉"}
                 {rating === 4 && "Great! 👍"}
                 {rating === 3 && "Good 👌"}
@@ -182,68 +202,71 @@ const ReviewBooking = () => {
                 {rating === 1 && "Needs improvement 😔"}
               </p>
             )}
+          </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                Tell us more about your experience (optional)
-              </label>
-              <Textarea
-                placeholder="Share details about the service quality, professionalism, or any suggestions..."
-                value={reviewText}
-                onChange={(e) => setReviewText(e.target.value)}
-                rows={4}
-                className="resize-none"
-              />
-            </div>
-          </CardContent>
+          {/* Review Text */}
+          <div className="mt-4 space-y-2">
+            <label className="text-sm font-medium text-foreground">
+              Write your experience... (Optional)
+            </label>
+            <Textarea
+              placeholder="Share details about your cleaning experience..."
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              rows={4}
+              className="resize-none w-full border rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:outline-none"
+            />
+          </div>
         </Card>
 
-        {/* Booking Details Summary */}
-        <Card className="border-0 shadow-sm bg-muted/30">
-          <CardContent className="pt-6 space-y-2">
-            <div className="flex justify-between text-sm">
+        {/* Booking Summary */}
+        <Card className="p-6 rounded-2xl shadow-sm border-0">
+          <h3 className="font-semibold text-foreground mb-4">Booking Summary</h3>
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
               <span className="text-muted-foreground">Service</span>
-              <span className="font-medium">
+              <span className="font-medium text-foreground">
                 {booking.customer_addresses?.cleaning_packages?.package_name || 'Cleaning Service'}
               </span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between">
               <span className="text-muted-foreground">Completed</span>
-              <span className="font-medium">
+              <span className="font-medium text-foreground">
                 {new Date(booking.completed_at || booking.requested_date).toLocaleDateString('en-US', {
-                  month: 'short',
+                  month: 'long',
                   day: 'numeric',
                   year: 'numeric'
                 })}
               </span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between pt-2 border-t">
               <span className="text-muted-foreground">Total Paid</span>
-              <span className="font-medium">
+              <span className="font-semibold text-foreground">
                 {booking.customer_addresses?.currency === 'EUR' ? '€' : '$'}
                 {booking.total_final || booking.total_estimate}
               </span>
             </div>
-          </CardContent>
+          </div>
         </Card>
 
-        {/* Submit Button */}
-        <Button
-          onClick={handleSubmitReview}
-          disabled={submitting || rating === 0}
-          className="w-full h-12 text-base bg-gradient-to-r from-primary to-accent"
-          size="lg"
-        >
-          {submitting ? 'Submitting...' : 'Submit Review'}
-        </Button>
-
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/customer/bookings')}
-          className="w-full"
-        >
-          Skip for Now
-        </Button>
+        {/* Action Buttons */}
+        <div className="space-y-3">
+          <Button
+            onClick={handleSubmitReview}
+            disabled={submitting || rating === 0}
+            className="w-full h-12 shadow-lg"
+            size="lg"
+          >
+            {submitting ? 'Submitting...' : 'Submit Review'}
+          </Button>
+          <Button
+            onClick={() => navigate('/customer/bookings')}
+            variant="ghost"
+            className="w-full text-muted-foreground hover:text-foreground"
+          >
+            Skip for Now
+          </Button>
+        </div>
       </main>
     </div>
   );

@@ -79,13 +79,13 @@ const UnreviewedJobsModal = ({ userId, onClose }: UnreviewedJobsModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md rounded-2xl">
         <DialogHeader>
-          <DialogTitle className="text-center text-xl">
-            How was your cleaning?
+          <DialogTitle className="text-center text-xl font-semibold text-foreground">
+            How was your cleaning experience?
           </DialogTitle>
-          <DialogDescription className="text-center">
-            Please rate your last service experience
+          <DialogDescription className="text-center text-muted-foreground">
+            Your feedback helps us keep Clinlix clean & trusted
           </DialogDescription>
         </DialogHeader>
 
@@ -99,7 +99,7 @@ const UnreviewedJobsModal = ({ userId, onClose }: UnreviewedJobsModalProps) => {
                 fallbackText={unreviewed.provider_profiles.full_name.split(' ').map((n: string) => n[0]).join('')}
               />
               <div>
-                <p className="font-semibold">{unreviewed.provider_profiles.full_name}</p>
+                <p className="font-semibold text-foreground">{unreviewed.provider_profiles.full_name}</p>
                 <p className="text-sm text-muted-foreground">
                   {unreviewed.customer_addresses?.cleaning_packages?.package_name}
                 </p>
@@ -123,7 +123,7 @@ const UnreviewedJobsModal = ({ userId, onClose }: UnreviewedJobsModalProps) => {
           <div className="space-y-3">
             <Button
               onClick={handleReviewNow}
-              className="w-full h-12 bg-gradient-to-r from-primary to-accent text-base"
+              className="w-full h-12 text-base shadow-lg"
               size="lg"
             >
               <Star className="w-5 h-5 mr-2" />
@@ -132,7 +132,7 @@ const UnreviewedJobsModal = ({ userId, onClose }: UnreviewedJobsModalProps) => {
             <Button
               onClick={handleLater}
               variant="ghost"
-              className="w-full"
+              className="w-full text-muted-foreground hover:text-foreground"
             >
               Remind Me Later
             </Button>

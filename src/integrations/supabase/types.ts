@@ -22,6 +22,7 @@ export type Database = {
           confirmed_at: string | null
           created_at: string | null
           customer_id: string
+          has_review: boolean | null
           id: string
           job_status: string | null
           overtime_minutes: number | null
@@ -44,6 +45,7 @@ export type Database = {
           confirmed_at?: string | null
           created_at?: string | null
           customer_id: string
+          has_review?: boolean | null
           id?: string
           job_status?: string | null
           overtime_minutes?: number | null
@@ -66,6 +68,7 @@ export type Database = {
           confirmed_at?: string | null
           created_at?: string | null
           customer_id?: string
+          has_review?: boolean | null
           id?: string
           job_status?: string | null
           overtime_minutes?: number | null
