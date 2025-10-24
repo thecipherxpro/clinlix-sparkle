@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ArrowRight, Check, Calendar as CalendarIcon, MapPin, User, Plus, CreditCard, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Home, Mail, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Calendar as CalendarIcon, MapPin, User, Plus, CreditCard, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Home, Mail, Phone, ChevronLeft, ChevronRight, Building2 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -305,128 +305,140 @@ const Booking = () => {
                   </Button>
                 </CardContent>
               </Card> : <div className="grid gap-4">
-                {addresses.map(address => {
-            const isHouse = address.property_type === 'House';
-            return <Card key={address.id} className={`cursor-pointer transition-all duration-300 ${selectedAddress?.id === address.id ? 'border-2 border-primary shadow-lg hover:shadow-xl bg-gradient-to-br from-card via-card to-primary/5' : 'border border-border shadow-lg hover:shadow-xl bg-gradient-to-br from-card via-card to-accent/5'}`} onClick={() => setSelectedAddress(address)}>
-                      <CardHeader className="space-y-4 p-4 sm:p-6">
+                {addresses.map(address => <Card key={address.id} className={`cursor-pointer transition-all duration-200 overflow-hidden ${selectedAddress?.id === address.id ? 'border-2 border-primary shadow-md' : 'border shadow-sm hover:shadow-md'}`} onClick={() => setSelectedAddress(address)}>
+                      <CardHeader className="p-4 pb-3">
                         <div className="flex items-start justify-between gap-3">
-                          <div className="flex items-start gap-2.5 sm:gap-3  ">
-                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground shadow-md flex-shrink-0">
-                              {isHouse ? <Home className="w-4 h-4 sm:w-5 sm:h-5" /> : <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                                  <line x1="3" y1="9" x2="21" y2="9" />
-                                  <line x1="9" y1="21" x2="9" y2="9" />
-                                </svg>}
+                          <div className="flex items-start gap-3 flex-1 min-w-0">
+                            <div className="relative flex-shrink-0">
+                              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                                {address.property_type === 'House' ? <Home className="w-6 h-6 text-primary" /> : <Building2 className="w-6 h-6 text-primary" />}
+                              </div>
+                              {address.is_primary && <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
+                                  <Check className="w-2.5 h-2.5 text-yellow-900 fill-yellow-900" />
+                                </div>}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-start gap-2 flex-wrap">
-                                <h3 className="font-bold text-base sm:text-lg text-foreground break-words">
-                                  {address.label}
-                                </h3>
-                                {address.is_primary && <span className="px-2 sm:px-2.5 py-0.5 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground text-xs font-semibold rounded-full shadow-sm whitespace-nowrap">
+                              <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                <CardTitle className="text-base font-semibold truncate">{address.label}</CardTitle>
+                                {address.is_primary && <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
                                     Primary
                                   </span>}
                               </div>
-                              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                              <p className="text-sm text-muted-foreground truncate">
+                                {address.first_name} {address.last_name}
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-0.5">
                                 {address.property_type} • {address.layout_type}
                               </p>
                             </div>
                           </div>
-                          {selectedAddress?.id === address.id && <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary flex items-center justify-center shadow-md flex-shrink-0">
-                              <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
+                          {selectedAddress?.id === address.id && <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md flex-shrink-0">
+                              <Check className="w-5 h-5 text-primary-foreground" />
                             </div>}
                         </div>
-
-                        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
                       </CardHeader>
 
-                      <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6 pt-0">
-                        <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-border/50">
-                          <div className="flex items-start gap-2 sm:gap-2.5">
+                      <CardContent className="p-4 pt-0 space-y-3">
+                        {/* Address Section */}
+                        <div className="bg-muted/50 rounded-lg p-3">
+                          <div className="flex items-start gap-2">
                             <MapPin className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                             <div className="flex-1 min-w-0">
-                              <p className="text-xs sm:text-sm font-medium text-foreground break-words">
-                                {address.country === 'Portugal' ? address.rua : address.street}
+                              <p className="text-xs font-medium text-muted-foreground mb-1">ADDRESS</p>
+                              <p className="text-sm leading-relaxed break-words">
+                                {address.country === 'Portugal' ? <>
+                                    {address.rua}
+                                    {address.porta_andar && <>, {address.porta_andar}</>}
+                                    <br />
+                                    {address.codigo_postal} {address.localidade}
+                                    <br />
+                                    {address.distrito}, {address.country} 🇵🇹
+                                  </> : <>
+                                    {address.street}
+                                    {address.apt_unit && <>, {address.apt_unit}</>}
+                                    <br />
+                                    {address.city}, {address.province}
+                                    <br />
+                                    {address.postal_code}, {address.country} 🇨🇦
+                                  </>}
                               </p>
-                              {address.porta_andar && <p className="text-xs text-muted-foreground mt-0.5 break-words">
-                                  {address.porta_andar}
-                                </p>}
-                              <p className="text-xs text-muted-foreground mt-1 break-words">
-                                {address.country === 'Portugal' ? `${address.codigo_postal} ${address.localidade}, ${address.distrito}` : `${address.city}, ${address.province} ${address.postal_code}`}
-                              </p>
-                              <p className="text-xs text-muted-foreground break-words">{address.country}</p>
                             </div>
                           </div>
                         </div>
 
-                        {address.cleaning_packages && <div className="bg-gradient-to-br from-primary/5 to-accent/10 rounded-xl p-3 sm:p-4 border border-primary/20">
-                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-0 mb-3">
+                        {/* Package Section */}
+                        {address.cleaning_packages && <div className="bg-primary/5 rounded-lg p-3 border border-primary/10">
+                            <div className="flex items-start justify-between gap-3 mb-3">
                               <div className="flex-1 min-w-0">
-                                <p className="font-semibold text-sm sm:text-base text-foreground break-words">
-                                  {address.cleaning_packages.package_name}
-                                </p>
-                                <p className="text-xs text-muted-foreground mt-1">
+                                <p className="text-xs font-medium text-muted-foreground mb-1">PACKAGE</p>
+                                <p className="font-semibold text-sm truncate">{address.cleaning_packages.package_name}</p>
+                                <p className="text-xs text-muted-foreground">
                                   {address.cleaning_packages.time_included} included
                                 </p>
                               </div>
-                              <div className="flex justify-between sm:block sm:text-right sm:flex-shrink-0 sm:ml-3">
-                                <p className="text-lg sm:text-xl font-bold text-primary whitespace-nowrap">
+                              <div className="text-right flex-shrink-0">
+                                <p className="text-2xl sm:text-3xl font-bold text-primary">
                                   {address.currency === 'EUR' ? '€' : '$'}
-                                  {address.cleaning_packages.recurring_price}
+                                  {address.cleaning_packages.one_time_price}
                                 </p>
-                                <p className="text-xs text-muted-foreground self-end sm:self-auto">recurring</p>
+                                <p className="text-[10px] sm:text-xs font-medium text-muted-foreground -mt-0.5">one-time</p>
+                                <div className="mt-1 pt-1 border-t border-border/30">
+                                  <p className="text-base sm:text-lg font-semibold text-muted-foreground">
+                                    {address.currency === 'EUR' ? '€' : '$'}
+                                    {address.cleaning_packages.recurring_price}
+                                  </p>
+                                  <p className="text-[10px] sm:text-xs text-muted-foreground/70">recurring</p>
+                                </div>
                               </div>
                             </div>
                             
-                            <div className="h-px bg-gradient-to-r from-transparent via-border/50 to-transparent my-3" />
-                            
-                            <div>
-                              <p className="text-xs font-medium text-muted-foreground mb-2">Included Services:</p>
-                              <div className="grid grid-cols-3 gap-2">
+                            {/* Services Grid */}
+                            <div className="pt-3 border-t border-border/50">
+                              <p className="text-xs font-medium text-muted-foreground mb-2">SERVICES</p>
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                 {address.cleaning_packages.areas_included?.map((area: string, idx: number) => {
                         const getServiceIcon = (service: string) => {
                           switch (service.toLowerCase()) {
                             case 'bathroom':
-                              return <Bath className="w-4 h-4" />;
+                              return <Bath className="w-3.5 h-3.5" />;
                             case 'kitchen':
-                              return <ChefHat className="w-4 h-4" />;
+                              return <ChefHat className="w-3.5 h-3.5" />;
                             case 'livingroom':
-                              return <Sofa className="w-4 h-4" />;
+                              return <Sofa className="w-3.5 h-3.5" />;
                             case 'floors':
-                              return <Layers className="w-4 h-4" />;
+                              return <Layers className="w-3.5 h-3.5" />;
                             case 'dusting':
-                              return <Sparkles className="w-4 h-4" />;
+                              return <Sparkles className="w-3.5 h-3.5" />;
                             case 'surfaces':
-                              return <Square className="w-4 h-4" />;
+                              return <Square className="w-3.5 h-3.5" />;
                             default:
-                              return <Square className="w-4 h-4" />;
+                              return <Square className="w-3.5 h-3.5" />;
                           }
                         };
-                        return <div key={idx} className="flex items-center gap-1.5 bg-background/80 rounded-lg px-2.5 py-2 border border-border/30 hover:border-primary/30 transition-colors">
+                        return <div key={idx} className="flex items-center gap-1.5 bg-background rounded-md p-2 min-w-0">
                                       <span className="text-primary flex-shrink-0">
                                         {getServiceIcon(area)}
                                       </span>
-                                      <span className="text-xs font-medium capitalize truncate">{area}</span>
+                                      <span className="text-xs capitalize leading-tight break-words">{area}</span>
                                     </div>;
                       })}
                               </div>
                             </div>
                           </div>}
 
-                        <div className="flex items-center gap-3 text-xs bg-muted/20 rounded-lg p-3 border border-border/30">
-                          <div className="flex items-center gap-1.5 flex-1">
-                            <Mail className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-                            <span className="text-muted-foreground truncate">{address.email}</span>
+                        {/* Contact Section */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-2.5 min-w-0">
+                            <Phone className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                            <span className="text-xs break-all leading-tight">{address.phone}</span>
                           </div>
-                          <div className="w-px h-6 bg-border" />
-                          <div className="flex items-center gap-1.5 flex-1">
-                            <Phone className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-                            <span className="text-muted-foreground truncate">{address.phone}</span>
+                          <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-2.5 min-w-0">
+                            <Mail className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                            <span className="text-xs break-all leading-tight">{address.email}</span>
                           </div>
                         </div>
                       </CardContent>
-                    </Card>;
-          })}
+                    </Card>)}
               </div>}
           </div>}
 
