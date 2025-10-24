@@ -594,11 +594,18 @@ const MyAddresses = () => {
                           </p>
                         </div>
                         <div className="text-right flex-shrink-0">
-                          <p className="text-xl font-bold text-primary">
+                          <p className="text-2xl sm:text-3xl font-bold text-primary">
                             {address.currency === 'EUR' ? '€' : '$'}
-                            {address.cleaning_packages.recurring_price}
+                            {address.cleaning_packages.one_time_price}
                           </p>
-                          <p className="text-xs text-muted-foreground">recurring</p>
+                          <p className="text-[10px] sm:text-xs font-medium text-muted-foreground -mt-0.5">one-time</p>
+                          <div className="mt-1 pt-1 border-t border-border/30">
+                            <p className="text-base sm:text-lg font-semibold text-muted-foreground">
+                              {address.currency === 'EUR' ? '€' : '$'}
+                              {address.cleaning_packages.recurring_price}
+                            </p>
+                            <p className="text-[10px] sm:text-xs text-muted-foreground/70">recurring</p>
+                          </div>
                         </div>
                       </div>
                       
