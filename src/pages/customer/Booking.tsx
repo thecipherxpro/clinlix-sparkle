@@ -368,21 +368,21 @@ const Booking = () => {
 
                         {/* Package Section */}
                         {address.cleaning_packages && <div className="bg-primary/5 rounded-lg p-3 border border-primary/10">
-                            <div className="flex items-start justify-between gap-3 mb-3">
-                              <div className="flex-1 min-w-0">
+                            <div className="space-y-3 mb-3">
+                              <div>
                                 <p className="text-xs font-medium text-muted-foreground mb-1">PACKAGE</p>
-                                <p className="font-semibold text-sm truncate">{address.cleaning_packages.package_name}</p>
+                                <p className="font-semibold text-sm">{address.cleaning_packages.package_name}</p>
                                 <p className="text-xs text-muted-foreground">
                                   {address.cleaning_packages.time_included} included
                                 </p>
                               </div>
-                              <div className="text-right flex-shrink-0">
+                              <div>
                                 <p className="text-2xl sm:text-3xl font-bold text-primary">
                                   {address.currency === 'EUR' ? '€' : '$'}
                                   {address.cleaning_packages.one_time_price}
                                 </p>
                                 <p className="text-[10px] sm:text-xs font-medium text-muted-foreground -mt-0.5">one-time</p>
-                                <div className="mt-1 pt-1 border-t border-border/30">
+                                <div className="mt-2">
                                   <p className="text-base sm:text-lg font-semibold text-muted-foreground">
                                     {address.currency === 'EUR' ? '€' : '$'}
                                     {address.cleaning_packages.recurring_price}
