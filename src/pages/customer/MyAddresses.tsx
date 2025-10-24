@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Building2, Edit, Mail, Phone, MoreVertical } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -514,31 +513,40 @@ const MyAddresses = () => {
                         </p>
                       </div>
                     </div>
-                    <DropdownMenu as="div" className="relative flex-shrink-0">
-                      <DropdownMenuTrigger className="inline-flex items-center justify-center h-9 w-9 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
-                        <MoreVertical className="w-4 h-4" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="absolute right-0 mt-2 w-40 z-50">
-                        <DropdownMenuItem>
-                          <button
+                    <Sheet>
+                      <SheetTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-9 w-9 flex-shrink-0"
+                        >
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </SheetTrigger>
+                      <SheetContent side="bottom" className="h-auto">
+                        <SheetHeader>
+                          <SheetTitle>Address Actions</SheetTitle>
+                        </SheetHeader>
+                        <div className="flex flex-col gap-2 mt-4">
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start gap-2"
                             onClick={() => openEditForm(address)}
-                            className="w-full text-left"
                           >
                             <Edit className="w-4 h-4" />
-                            Edit
-                          </button>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <button
+                            Edit Address
+                          </Button>
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start gap-2 text-destructive hover:text-destructive border-destructive/20 hover:bg-destructive/10"
                             onClick={() => handleDelete(address.id)}
-                            className="w-full text-left text-destructive"
                           >
                             <Trash2 className="w-4 h-4" />
-                            Delete
-                          </button>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                            Delete Address
+                          </Button>
+                        </div>
+                      </SheetContent>
+                    </Sheet>
                   </div>
                 </CardHeader>
 
