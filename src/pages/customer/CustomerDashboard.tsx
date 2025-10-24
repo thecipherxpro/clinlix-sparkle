@@ -13,55 +13,47 @@ import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 import { StatusBadge } from "@/components/StatusBadge";
-
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showUnreviewedModal, setShowUnreviewedModal] = useState(false);
-
   useEffect(() => {
     checkUser();
   }, []);
-
   const checkUser = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) {
         navigate('/auth');
         return;
       }
-
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
+      const {
+        data: profileData
+      } = await supabase.from('profiles').select('*').eq('id', user.id).single();
       if (profileData?.role !== 'customer') {
         navigate('/provider/dashboard');
         return;
       }
-
       setProfile(profileData);
 
       // Fetch upcoming bookings
-      const { data: bookingsData } = await supabase
-        .from('bookings')
-        .select(`
+      const {
+        data: bookingsData
+      } = await supabase.from('bookings').select(`
           *,
           customer_addresses(*, cleaning_packages(*)),
           provider_profiles(*)
-        `)
-        .eq('customer_id', user.id)
-        .in('job_status', ['pending', 'confirmed', 'on_the_way', 'arrived', 'started'])
-        .order('requested_date', { ascending: true })
-        .limit(5);
-
+        `).eq('customer_id', user.id).in('job_status', ['pending', 'confirmed', 'on_the_way', 'arrived', 'started']).order('requested_date', {
+        ascending: true
+      }).limit(5);
       setUpcomingBookings(bookingsData || []);
-      
+
       // Show unreviewed jobs modal after data is loaded
       if (profileData) {
         setTimeout(() => setShowUnreviewedModal(true), 1000);
@@ -72,33 +64,23 @@ const CustomerDashboard = () => {
       setLoading(false);
     }
   };
-
-
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+    return <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       {/* Mobile-first header with auto-fit padding */}
       <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
-        <DashboardWelcomeBanner 
-          user={{
-            name: profile?.first_name || 'User',
-            role: 'CUSTOMER',
-            avatarUrl: profile?.avatar_url
-          }}
-          onSearchClick={() => navigate('/customer/find-providers')}
-        />
+        <DashboardWelcomeBanner user={{
+        name: profile?.first_name || 'User',
+        role: 'CUSTOMER',
+        avatarUrl: profile?.avatar_url
+      }} onSearchClick={() => navigate('/customer/find-providers')} />
       </div>
 
       {/* Mobile-first main container with auto-fit max-width and responsive padding */}
-      <main className="w-full max-w-[min(1280px,calc(100%-32px))] mx-auto 
-                       px-[clamp(16px,4vw,32px)] py-[clamp(16px,4vw,32px)]">
+      <main className="w-full max-w-[min(1280px,calc(100%-32px))] py-[clamp(16px,4vw,32px)] px-0 mx-[18px]">
 
         {/* Quick Actions - Auto-fit grid with responsive gaps */}
         <div className="mb-[clamp(20px,5vw,32px)]">
@@ -106,41 +88,13 @@ const CustomerDashboard = () => {
             Quick Actions
           </h3>
           <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)] auto-rows-fr">
-            <JobCard
-              title="Book Now"
-              description="Schedule service"
-              value="New Booking"
-              icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />}
-              heroColor="#fef4e2"
-              onClick={() => navigate('/customer/booking')}
-            />
+            <JobCard title="Book Now" description="Schedule service" value="New Booking" icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef4e2" onClick={() => navigate('/customer/booking')} />
             
-            <JobCard
-              title="Addresses"
-              description="Your locations"
-              value="Manage"
-              icon={<MapPin className="w-4 h-4 sm:w-5 sm:h-5" />}
-              heroColor="#e0f2fe"
-              onClick={() => navigate('/customer/my-addresses')}
-            />
+            <JobCard title="Addresses" description="Your locations" value="Manage" icon={<MapPin className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#e0f2fe" onClick={() => navigate('/customer/my-addresses')} />
             
-            <JobCard
-              title="Payment"
-              description="Manage cards"
-              value="Methods"
-              icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />}
-              heroColor="#dcfce7"
-              onClick={() => navigate('/customer/payment-methods')}
-            />
+            <JobCard title="Payment" description="Manage cards" value="Methods" icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#dcfce7" onClick={() => navigate('/customer/payment-methods')} />
             
-            <JobCard
-              title="Profile"
-              description="Update info"
-              value="Settings"
-              icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />}
-              heroColor="#fae8ff"
-              onClick={() => navigate('/customer/profile')}
-            />
+            <JobCard title="Profile" description="Update info" value="Settings" icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fae8ff" onClick={() => navigate('/customer/profile')} />
           </div>
         </div>
 
@@ -148,17 +102,12 @@ const CustomerDashboard = () => {
         <div className="mb-[clamp(20px,5vw,32px)]">
           <div className="flex items-center justify-between mb-[clamp(12px,3vw,16px)]">
             <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold">Upcoming Bookings</h3>
-            <Button 
-              variant="link" 
-              className="text-[clamp(12px,3vw,14px)]" 
-              onClick={() => navigate('/customer/bookings')}
-            >
+            <Button variant="link" className="text-[clamp(12px,3vw,14px)]" onClick={() => navigate('/customer/bookings')}>
               View All
             </Button>
           </div>
 
-          {upcomingBookings.length === 0 ? (
-            <Card className="border-0 shadow-sm">
+          {upcomingBookings.length === 0 ? <Card className="border-0 shadow-sm">
               <CardContent className="pt-[clamp(24px,6vw,32px)] pb-[clamp(24px,6vw,32px)]">
                 <div className="text-center py-[clamp(32px,8vw,48px)]">
                   <Calendar className="w-[clamp(48px,12vw,64px)] h-[clamp(48px,12vw,64px)] 
@@ -167,25 +116,19 @@ const CustomerDashboard = () => {
                                mb-[clamp(16px,4vw,20px)]">
                     You haven't booked yet
                   </p>
-                  <Button 
-                    onClick={() => navigate('/customer/booking')} 
-                    className="w-full sm:w-auto px-[clamp(24px,6vw,32px)] 
-                             py-[clamp(12px,3vw,16px)] text-[clamp(14px,3.5vw,16px)]"
-                  >
+                  <Button onClick={() => navigate('/customer/booking')} className="w-full sm:w-auto px-[clamp(24px,6vw,32px)] 
+                             py-[clamp(12px,3vw,16px)] text-[clamp(14px,3.5vw,16px)]">
                     Book Now
                   </Button>
                 </div>
               </CardContent>
-            </Card>
-          ) : (
-            <Carousel className="w-full" opts={{ align: "start", loop: false }}>
+            </Card> : <Carousel className="w-full" opts={{
+          align: "start",
+          loop: false
+        }}>
               <CarouselContent className="-ml-2 md:-ml-4">
-                {upcomingBookings.map((booking) => (
-                  <CarouselItem key={booking.id} className="pl-2 md:pl-4 basis-[85%] sm:basis-[70%] md:basis-1/2 lg:basis-1/3">
-                    <Card 
-                      className="border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full"
-                      onClick={() => navigate(`/customer/bookings/${booking.id}`)}
-                    >
+                {upcomingBookings.map(booking => <CarouselItem key={booking.id} className="pl-2 md:pl-4 basis-[85%] sm:basis-[70%] md:basis-1/2 lg:basis-1/3">
+                    <Card className="border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full" onClick={() => navigate(`/customer/bookings/${booking.id}`)}>
                       <CardContent className="p-4 space-y-3">
                         {/* Status Badge */}
                         <StatusBadge status={booking.job_status} />
@@ -198,10 +141,10 @@ const CustomerDashboard = () => {
                           <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                             <Calendar className="w-3 h-3" />
                             {new Date(booking.requested_date).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric'
-                            })}
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
                           </p>
                           <p className="text-xs text-muted-foreground flex items-center gap-1">
                             <Clock className="w-3 h-3" />
@@ -210,15 +153,8 @@ const CustomerDashboard = () => {
                         </div>
 
                         {/* Provider */}
-                        {booking.provider_profiles && (
-                          <div className="flex items-center gap-2 pt-2 border-t">
-                            <ProviderAvatarBadge
-                              imageUrl={booking.provider_profiles.photo_url}
-                              isVerified={booking.provider_profiles.verified}
-                              createdAt={booking.provider_profiles.created_at}
-                              size={32}
-                              alt={booking.provider_profiles.full_name}
-                            />
+                        {booking.provider_profiles && <div className="flex items-center gap-2 pt-2 border-t">
+                            <ProviderAvatarBadge imageUrl={booking.provider_profiles.photo_url} isVerified={booking.provider_profiles.verified} createdAt={booking.provider_profiles.created_at} size={32} alt={booking.provider_profiles.full_name} />
                             <div className="flex-1 min-w-0">
                               <p className="font-medium text-xs line-clamp-1">
                                 {booking.provider_profiles.full_name}
@@ -227,8 +163,7 @@ const CustomerDashboard = () => {
                                 {booking.customer_addresses?.cleaning_packages?.package_name}
                               </p>
                             </div>
-                          </div>
-                        )}
+                          </div>}
 
                         {/* Price */}
                         <div className="flex items-center justify-between pt-2 border-t">
@@ -240,51 +175,28 @@ const CustomerDashboard = () => {
                         </div>
                       </CardContent>
                     </Card>
-                  </CarouselItem>
-                ))}
+                  </CarouselItem>)}
               </CarouselContent>
               <CarouselPrevious className="hidden sm:flex -left-4" />
               <CarouselNext className="hidden sm:flex -right-4" />
-            </Carousel>
-          )}
+            </Carousel>}
         </div>
 
         {/* CTA Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
           {/* How It Works CTA */}
-          <JobCard
-            title="How It Works"
-            description="Learn the booking process"
-            value="8 Simple Steps"
-            icon={<Search className="w-4 h-4 sm:w-5 sm:h-5" />}
-            heroColor="#f0f9ff"
-            onClick={() => navigate('/customer/how-it-works')}
-          />
+          <JobCard title="How It Works" description="Learn the booking process" value="8 Simple Steps" icon={<Search className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#f0f9ff" onClick={() => navigate('/customer/how-it-works')} />
           
           {/* Pricing Model CTA */}
-          <JobCard
-            title="Pricing Model"
-            description="View our transparent pricing"
-            value="Fixed Rates"
-            icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />}
-            heroColor="#fef3c7"
-            onClick={() => navigate('/customer/pricing')}
-          />
+          <JobCard title="Pricing Model" description="View our transparent pricing" value="Fixed Rates" icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef3c7" onClick={() => navigate('/customer/pricing')} />
         </div>
       </main>
       
-      {profile && showUnreviewedModal && (
-        <UnreviewedJobsModal 
-          userId={profile.id} 
-          onClose={() => setShowUnreviewedModal(false)} 
-        />
-      )}
+      {profile && showUnreviewedModal && <UnreviewedJobsModal userId={profile.id} onClose={() => setShowUnreviewedModal(false)} />}
       
       <NotificationPermissionPrompt />
       
       <MobileNav />
-    </div>
-  );
+    </div>;
 };
-
 export default CustomerDashboard;
