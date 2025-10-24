@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layers, Sparkles, Square } from "lucide-react";
+import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Building2, Edit, Mail, Phone } from "lucide-react";
 import { toast } from "sonner";
 import MobileNav from "@/components/MobileNav";
 
@@ -477,47 +477,34 @@ const MyAddresses = () => {
         ) : (
           <div className="space-y-4">
             {addresses.map((address) => (
-              <Card key={address.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-card via-card to-accent/5">
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="relative">
-                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border-2 border-primary/20 backdrop-blur-sm">
+              <Card key={address.id} className="border shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
+                <CardHeader className="p-4 pb-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3 flex-1 min-w-0">
+                      <div className="relative flex-shrink-0">
+                        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
                           {address.property_type === 'House' ? (
-                            <Home className="w-7 h-7 text-primary" />
+                            <Home className="w-6 h-6 text-primary" />
                           ) : (
-                            <div className="flex flex-col gap-0.5">
-                              <div className="flex gap-0.5">
-                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
-                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
-                              </div>
-                              <div className="flex gap-0.5">
-                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
-                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
-                              </div>
-                              <div className="flex gap-0.5">
-                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
-                                <div className="w-1.5 h-1.5 rounded-sm bg-primary"></div>
-                              </div>
-                            </div>
+                            <Building2 className="w-6 h-6 text-primary" />
                           )}
                         </div>
                         {address.is_primary && (
-                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center border-2 border-card">
-                            <Star className="w-3 h-3 text-yellow-900 fill-yellow-900" />
+                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
+                            <Star className="w-2.5 h-2.5 text-yellow-900 fill-yellow-900" />
                           </div>
                         )}
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <CardTitle className="text-lg font-bold">{address.label}</CardTitle>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <CardTitle className="text-base font-semibold truncate">{address.label}</CardTitle>
                           {address.is_primary && (
-                            <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 text-yellow-700 dark:text-yellow-300 border border-yellow-400/30">
+                            <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
                               Primary
                             </span>
                           )}
                         </div>
-                        <p className="text-sm font-medium text-foreground/70">
+                        <p className="text-sm text-muted-foreground truncate">
                           {address.first_name} {address.last_name}
                         </p>
                         <p className="text-xs text-muted-foreground mt-0.5">
@@ -525,20 +512,20 @@ const MyAddresses = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1 flex-shrink-0">
                       <Button
-                        variant="outline"
-                        size="sm"
+                        variant="ghost"
+                        size="icon"
                         onClick={() => openEditForm(address)}
-                        className="border-primary/20 hover:bg-primary/10 hover:border-primary/40"
+                        className="h-9 w-9"
                       >
-                        Edit
+                        <Edit className="w-4 h-4" />
                       </Button>
                       <Button
                         variant="ghost"
-                        size="sm"
+                        size="icon"
                         onClick={() => handleDelete(address.id)}
-                        className="hover:bg-destructive/10 hover:text-destructive"
+                        className="h-9 w-9 text-destructive hover:text-destructive hover:bg-destructive/10"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -546,19 +533,14 @@ const MyAddresses = () => {
                   </div>
                 </CardHeader>
 
-                <div className="px-6 pb-1">
-                  <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
-                </div>
-
-                <CardContent className="pt-4 space-y-4">
-                  <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-                    <div className="flex items-start gap-3">
-                      <div className="mt-0.5">
-                        <MapPin className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Address</p>
-                        <p className="text-sm font-medium leading-relaxed">
+                <CardContent className="p-4 pt-0 space-y-3">
+                  {/* Address Section */}
+                  <div className="bg-muted/50 rounded-lg p-3">
+                    <div className="flex items-start gap-2">
+                      <MapPin className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium text-muted-foreground mb-1">ADDRESS</p>
+                        <p className="text-sm leading-relaxed break-words">
                           {address.country === 'Portugal' ? (
                             <>
                               {address.rua}
@@ -583,46 +565,49 @@ const MyAddresses = () => {
                     </div>
                   </div>
 
+                  {/* Package Section */}
                   {address.cleaning_packages && (
-                    <div className="bg-gradient-to-br from-primary/5 to-accent/10 rounded-xl p-4 border border-primary/20">
-                      <div className="flex items-center justify-between mb-3">
-                        <div>
-                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Cleaning Package</p>
-                          <p className="font-bold text-base">{address.cleaning_packages.package_name}</p>
-                          <p className="text-xs text-muted-foreground mt-0.5">
+                    <div className="bg-primary/5 rounded-lg p-3 border border-primary/10">
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-muted-foreground mb-1">PACKAGE</p>
+                          <p className="font-semibold text-sm truncate">{address.cleaning_packages.package_name}</p>
+                          <p className="text-xs text-muted-foreground">
                             {address.cleaning_packages.time_included} included
                           </p>
                         </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                        <div className="text-right flex-shrink-0">
+                          <p className="text-xl font-bold text-primary">
                             {address.currency === 'EUR' ? '€' : '$'}
                             {address.cleaning_packages.recurring_price}
                           </p>
-                          <p className="text-xs font-medium text-muted-foreground">recurring</p>
+                          <p className="text-xs text-muted-foreground">recurring</p>
                         </div>
                       </div>
-                      <div className="mt-3 pt-3 border-t border-border/50">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Included Services</p>
-                        <div className="grid grid-cols-3 gap-2">
+                      
+                      {/* Services Grid */}
+                      <div className="pt-3 border-t border-border/50">
+                        <p className="text-xs font-medium text-muted-foreground mb-2">SERVICES</p>
+                        <div className="grid grid-cols-3 gap-1.5">
                           {address.cleaning_packages.areas_included?.map((area: string, idx: number) => {
                             const getServiceIcon = (service: string) => {
                               switch(service.toLowerCase()) {
-                                case 'bathroom': return <Bath className="w-4 h-4" />;
-                                case 'kitchen': return <ChefHat className="w-4 h-4" />;
-                                case 'livingroom': return <Sofa className="w-4 h-4" />;
-                                case 'floors': return <Layers className="w-4 h-4" />;
-                                case 'dusting': return <Sparkles className="w-4 h-4" />;
-                                case 'surfaces': return <Square className="w-4 h-4" />;
-                                default: return <Square className="w-4 h-4" />;
+                                case 'bathroom': return <Bath className="w-3.5 h-3.5" />;
+                                case 'kitchen': return <ChefHat className="w-3.5 h-3.5" />;
+                                case 'livingroom': return <Sofa className="w-3.5 h-3.5" />;
+                                case 'floors': return <Layers className="w-3.5 h-3.5" />;
+                                case 'dusting': return <Sparkles className="w-3.5 h-3.5" />;
+                                case 'surfaces': return <Square className="w-3.5 h-3.5" />;
+                                default: return <Square className="w-3.5 h-3.5" />;
                               }
                             };
                             
                             return (
-                              <div key={idx} className="flex items-center gap-1.5 bg-card/80 backdrop-blur-sm rounded-lg p-2 border border-border/50 hover:border-primary/30 transition-colors">
+                              <div key={idx} className="flex items-center gap-1.5 bg-background rounded-md p-1.5">
                                 <span className="text-primary flex-shrink-0">
                                   {getServiceIcon(area)}
                                 </span>
-                                <span className="text-xs font-medium capitalize truncate">{area}</span>
+                                <span className="text-xs capitalize truncate">{area}</span>
                               </div>
                             );
                           })}
@@ -631,15 +616,15 @@ const MyAddresses = () => {
                     </div>
                   )}
 
-                  <div className="flex items-center gap-4 text-sm bg-muted/20 rounded-lg p-3 border border-border/30">
-                    <div className="flex items-center gap-2 flex-1">
-                      <span className="text-xs font-semibold text-muted-foreground">📞</span>
-                      <span className="font-medium">{address.phone}</span>
+                  {/* Contact Section */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-2">
+                      <Phone className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                      <span className="text-xs truncate">{address.phone}</span>
                     </div>
-                    <div className="w-px h-6 bg-border"></div>
-                    <div className="flex items-center gap-2 flex-1">
-                      <span className="text-xs font-semibold text-muted-foreground">✉️</span>
-                      <span className="font-medium truncate">{address.email}</span>
+                    <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-2">
+                      <Mail className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                      <span className="text-xs truncate">{address.email}</span>
                     </div>
                   </div>
                 </CardContent>
