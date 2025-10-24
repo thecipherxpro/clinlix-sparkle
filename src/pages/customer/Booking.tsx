@@ -307,7 +307,7 @@ const Booking = () => {
               </Card> : <div className="grid gap-4">
                 {addresses.map(address => <Card key={address.id} className={`cursor-pointer transition-all duration-200 overflow-hidden ${selectedAddress?.id === address.id ? 'border-2 border-primary shadow-md' : 'border shadow-sm hover:shadow-md'}`} onClick={() => setSelectedAddress(address)}>
                       <CardHeader className="p-4 pb-3">
-                        <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-3">
                           <div className="flex items-start gap-3 flex-1 min-w-0">
                             <div className="relative flex-shrink-0">
                               <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -323,6 +323,9 @@ const Booking = () => {
                                 {address.is_primary && <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
                                     Primary
                                   </span>}
+                                {selectedAddress?.id === address.id && <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md">
+                                    <Check className="w-4 h-4 text-primary-foreground" />
+                                  </div>}
                               </div>
                               <p className="text-sm text-muted-foreground truncate">
                                 {address.first_name} {address.last_name}
@@ -332,9 +335,6 @@ const Booking = () => {
                               </p>
                             </div>
                           </div>
-                          {selectedAddress?.id === address.id && <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md flex-shrink-0">
-                              <Check className="w-5 h-5 text-primary-foreground" />
-                            </div>}
                         </div>
                       </CardHeader>
 
