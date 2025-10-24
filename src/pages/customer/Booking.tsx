@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ArrowRight, Check, Calendar as CalendarIcon, MapPin, User, Plus, CreditCard, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Home, Mail, Phone, ChevronLeft, ChevronRight, Building2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Calendar as CalendarIcon, MapPin, User, Plus, CreditCard, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Home, Mail, Phone, ChevronLeft, ChevronRight, Building2, Star } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -307,33 +307,41 @@ const Booking = () => {
               </Card> : <div className="grid gap-4">
                 {addresses.map(address => <Card key={address.id} className={`cursor-pointer transition-all duration-200 overflow-hidden ${selectedAddress?.id === address.id ? 'border-2 border-primary shadow-md' : 'border shadow-sm hover:shadow-md'}`} onClick={() => setSelectedAddress(address)}>
                       <CardHeader className="p-4 pb-3">
-                        <div className="flex items-start gap-3">
-                          <div className="flex items-start gap-3 flex-1 min-w-0">
-                            <div className="relative flex-shrink-0">
-                              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                                {address.property_type === 'House' ? <Home className="w-6 h-6 text-primary" /> : <Building2 className="w-6 h-6 text-primary" />}
-                              </div>
-                              {address.is_primary && <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
-                                  <Check className="w-2.5 h-2.5 text-yellow-900 fill-yellow-900" />
-                                </div>}
+                        <div className="flex items-start gap-3 flex-1 min-w-0">
+                          <div className="relative flex-shrink-0">
+                            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                              {address.property_type === 'House' ? (
+                                <Home className="w-6 h-6 text-primary" />
+                              ) : (
+                                <Building2 className="w-6 h-6 text-primary" />
+                              )}
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                <CardTitle className="text-base font-semibold truncate">{address.label}</CardTitle>
-                                {address.is_primary && <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
-                                    Primary
-                                  </span>}
-                                {selectedAddress?.id === address.id && <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md">
-                                    <Check className="w-4 h-4 text-primary-foreground" />
-                                  </div>}
+                            {address.is_primary && (
+                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
+                                <Star className="w-2.5 h-2.5 text-yellow-900 fill-yellow-900" />
                               </div>
-                              <p className="text-sm text-muted-foreground truncate">
-                                {address.first_name} {address.last_name}
-                              </p>
-                              <p className="text-xs text-muted-foreground mt-0.5">
-                                {address.property_type} • {address.layout_type}
-                              </p>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                              <CardTitle className="text-base font-semibold truncate">{address.label}</CardTitle>
+                              {address.is_primary && (
+                                <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+                                  Primary
+                                </span>
+                              )}
+                              {selectedAddress?.id === address.id && (
+                                <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md">
+                                  <Check className="w-4 h-4 text-primary-foreground" />
+                                </div>
+                              )}
                             </div>
+                            <p className="text-sm text-muted-foreground truncate">
+                              {address.first_name} {address.last_name}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              {address.property_type} • {address.layout_type}
+                            </p>
                           </div>
                         </div>
                       </CardHeader>
