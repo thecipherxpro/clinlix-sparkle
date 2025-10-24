@@ -375,7 +375,7 @@ const Booking = () => {
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-start sm:items-center gap-2 flex-wrap">
+                              <div className="flex items-start gap-2 flex-wrap">
                                 <h3 className="font-bold text-base sm:text-lg text-foreground break-words">
                                   {address.label}
                                 </h3>
