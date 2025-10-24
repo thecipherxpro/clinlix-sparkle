@@ -7,8 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Building2, Edit, Mail, Phone } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Building2, Edit, Mail, Phone, MoreVertical } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import MobileNav from "@/components/MobileNav";
 
 const MyAddresses = () => {
@@ -512,24 +514,31 @@ const MyAddresses = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="flex gap-1 flex-shrink-0">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => openEditForm(address)}
-                        className="h-9 w-9"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(address.id)}
-                        className="h-9 w-9 text-destructive hover:text-destructive hover:bg-destructive/10"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
+                    <DropdownMenu as="div" className="relative flex-shrink-0">
+                      <DropdownMenuTrigger className="inline-flex items-center justify-center h-9 w-9 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <MoreVertical className="w-4 h-4" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="absolute right-0 mt-2 w-40 z-50">
+                        <DropdownMenuItem>
+                          <button
+                            onClick={() => openEditForm(address)}
+                            className="w-full text-left"
+                          >
+                            <Edit className="w-4 h-4" />
+                            Edit
+                          </button>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <button
+                            onClick={() => handleDelete(address.id)}
+                            className="w-full text-left text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Delete
+                          </button>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </CardHeader>
 
