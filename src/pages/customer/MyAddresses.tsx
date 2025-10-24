@@ -11,6 +11,7 @@ import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layer
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import MobileNav from "@/components/MobileNav";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
 
 const MyAddresses = () => {
   const navigate = useNavigate();
@@ -513,8 +514,8 @@ const MyAddresses = () => {
                         </p>
                       </div>
                     </div>
-                    <Sheet>
-                      <SheetTrigger asChild>
+                    <Dropdown>
+                      <DropdownTrigger>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -522,31 +523,26 @@ const MyAddresses = () => {
                         >
                           <MoreVertical className="w-4 h-4" />
                         </Button>
-                      </SheetTrigger>
-                      <SheetContent side="bottom" className="h-auto">
-                        <SheetHeader>
-                          <SheetTitle>Address Actions</SheetTitle>
-                        </SheetHeader>
-                        <div className="flex flex-col gap-2 mt-4">
-                          <Button
-                            variant="outline"
-                            className="w-full justify-start gap-2"
-                            onClick={() => openEditForm(address)}
-                          >
-                            <Edit className="w-4 h-4" />
-                            Edit Address
-                          </Button>
-                          <Button
-                            variant="outline"
-                            className="w-full justify-start gap-2 text-destructive hover:text-destructive border-destructive/20 hover:bg-destructive/10"
-                            onClick={() => handleDelete(address.id)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Delete Address
-                          </Button>
-                        </div>
-                      </SheetContent>
-                    </Sheet>
+                      </DropdownTrigger>
+                      <DropdownMenu aria-label="Address actions">
+                        <DropdownItem
+                          key="edit"
+                          startContent={<Edit className="w-4 h-4" />}
+                          onPress={() => openEditForm(address)}
+                        >
+                          Edit Address
+                        </DropdownItem>
+                        <DropdownItem
+                          key="delete"
+                          className="text-danger"
+                          color="danger"
+                          startContent={<Trash2 className="w-4 h-4" />}
+                          onPress={() => handleDelete(address.id)}
+                        >
+                          Delete Address
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
                   </div>
                 </CardHeader>
 
