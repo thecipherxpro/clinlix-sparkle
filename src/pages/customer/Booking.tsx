@@ -360,14 +360,14 @@ const Booking = () => {
                       }`}
                       onClick={() => setSelectedAddress(address)}
                     >
-                      <CardHeader className="space-y-4">
+                      <CardHeader className="space-y-4 p-4 sm:p-6">
                         <div className="flex items-start justify-between gap-3">
-                          <div className="flex items-start gap-3 flex-1">
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground shadow-md flex-shrink-0">
+                          <div className="flex items-start gap-2.5 sm:gap-3 flex-1 min-w-0">
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground shadow-md flex-shrink-0">
                               {isHouse ? (
-                                <Home className="w-5 h-5" />
+                                <Home className="w-4 h-4 sm:w-5 sm:h-5" />
                               ) : (
-                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                   <rect x="3" y="3" width="18" height="18" rx="2" />
                                   <line x1="3" y1="9" x2="21" y2="9" />
                                   <line x1="9" y1="21" x2="9" y2="9" />
@@ -375,24 +375,24 @@ const Booking = () => {
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <h3 className="font-bold text-lg text-foreground">
+                              <div className="flex items-start sm:items-center gap-2 flex-wrap">
+                                <h3 className="font-bold text-base sm:text-lg text-foreground break-words">
                                   {address.label}
                                 </h3>
                                 {address.is_primary && (
-                                  <span className="px-2.5 py-0.5 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground text-xs font-semibold rounded-full shadow-sm">
+                                  <span className="px-2 sm:px-2.5 py-0.5 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground text-xs font-semibold rounded-full shadow-sm whitespace-nowrap">
                                     Primary
                                   </span>
                                 )}
                               </div>
-                              <p className="text-sm text-muted-foreground mt-1">
+                              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                                 {address.property_type} • {address.layout_type}
                               </p>
                             </div>
                           </div>
                           {selectedAddress?.id === address.id && (
-                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md flex-shrink-0">
-                              <Check className="w-5 h-5 text-primary-foreground" />
+                            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary flex items-center justify-center shadow-md flex-shrink-0">
+                              <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
                             </div>
                           )}
                         </div>
@@ -400,48 +400,48 @@ const Booking = () => {
                         <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
                       </CardHeader>
 
-                      <CardContent className="space-y-4">
-                        <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-                          <div className="flex items-start gap-2">
+                      <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6 pt-0">
+                        <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-border/50">
+                          <div className="flex items-start gap-2 sm:gap-2.5">
                             <MapPin className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-foreground">
+                              <p className="text-xs sm:text-sm font-medium text-foreground break-words">
                                 {address.country === 'Portugal' 
                                   ? address.rua 
                                   : address.street}
                               </p>
                               {address.porta_andar && (
-                                <p className="text-xs text-muted-foreground mt-0.5">
+                                <p className="text-xs text-muted-foreground mt-0.5 break-words">
                                   {address.porta_andar}
                                 </p>
                               )}
-                              <p className="text-xs text-muted-foreground mt-1">
+                              <p className="text-xs text-muted-foreground mt-1 break-words">
                                 {address.country === 'Portugal'
                                   ? `${address.codigo_postal} ${address.localidade}, ${address.distrito}`
                                   : `${address.city}, ${address.province} ${address.postal_code}`}
                               </p>
-                              <p className="text-xs text-muted-foreground">{address.country}</p>
+                              <p className="text-xs text-muted-foreground break-words">{address.country}</p>
                             </div>
                           </div>
                         </div>
 
                         {address.cleaning_packages && (
-                          <div className="bg-gradient-to-br from-primary/5 to-accent/10 rounded-xl p-4 border border-primary/20">
-                            <div className="flex justify-between items-start mb-3">
-                              <div>
-                                <p className="font-semibold text-base text-foreground">
+                          <div className="bg-gradient-to-br from-primary/5 to-accent/10 rounded-xl p-3 sm:p-4 border border-primary/20">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-0 mb-3">
+                              <div className="flex-1 min-w-0">
+                                <p className="font-semibold text-sm sm:text-base text-foreground break-words">
                                   {address.cleaning_packages.package_name}
                                 </p>
                                 <p className="text-xs text-muted-foreground mt-1">
                                   {address.cleaning_packages.time_included} included
                                 </p>
                               </div>
-                              <div className="text-right">
-                                <p className="text-xl font-bold text-primary">
+                              <div className="flex justify-between sm:block sm:text-right sm:flex-shrink-0 sm:ml-3">
+                                <p className="text-lg sm:text-xl font-bold text-primary whitespace-nowrap">
                                   {address.currency === 'EUR' ? '€' : '$'}
                                   {address.cleaning_packages.recurring_price}
                                 </p>
-                                <p className="text-xs text-muted-foreground">recurring</p>
+                                <p className="text-xs text-muted-foreground self-end sm:self-auto">recurring</p>
                               </div>
                             </div>
                             
