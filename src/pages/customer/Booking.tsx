@@ -8,31 +8,45 @@ import { ArrowLeft, ArrowRight, Check, Calendar as CalendarIcon, MapPin, User, P
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { toast } from "sonner";
-
 import { Separator } from "@/components/ui/separator";
 import MobileNav from "@/components/MobileNav";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import ProviderCard from "@/components/ProviderCard";
-
-const STEPS = [
-  { id: 1, name: "Where", icon: MapPin },
-  { id: 2, name: "When", icon: CalendarIcon },
-  { id: 3, name: "Who", icon: User },
-  { id: 4, name: "Add-ons", icon: Plus },
-  { id: 5, name: "Payment", icon: CreditCard },
-  { id: 6, name: "Review", icon: Check }
-];
-
+const STEPS = [{
+  id: 1,
+  name: "Where",
+  icon: MapPin
+}, {
+  id: 2,
+  name: "When",
+  icon: CalendarIcon
+}, {
+  id: 3,
+  name: "Who",
+  icon: User
+}, {
+  id: 4,
+  name: "Add-ons",
+  icon: Plus
+}, {
+  id: 5,
+  name: "Payment",
+  icon: CreditCard
+}, {
+  id: 6,
+  name: "Review",
+  icon: Check
+}];
 const Booking = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(true);
-  
+
   // Data
   const [addresses, setAddresses] = useState<any[]>([]);
   const [availableProviders, setAvailableProviders] = useState<any[]>([]);
   const [addons, setAddons] = useState<any[]>([]);
-  
+
   // Booking selections
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
@@ -40,49 +54,41 @@ const Booking = () => {
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [recurringService, setRecurringService] = useState(false);
-
   useEffect(() => {
     checkAuthAndFetchData();
   }, []);
-
   useEffect(() => {
     if (currentStep === 3 && selectedDate) {
       fetchAvailableProviders();
     }
   }, [currentStep, selectedDate]);
-
   const checkAuthAndFetchData = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) {
         navigate('/auth');
         return;
       }
-
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
+      const {
+        data: profileData
+      } = await supabase.from('profiles').select('*').eq('id', user.id).single();
       if (profileData?.role !== 'customer') {
         navigate('/provider/dashboard');
         return;
       }
-
-      const { data: addressesData } = await supabase
-        .from('customer_addresses')
-        .select('*, cleaning_packages(*)')
-        .eq('customer_id', user.id)
-        .order('is_primary', { ascending: false });
-
+      const {
+        data: addressesData
+      } = await supabase.from('customer_addresses').select('*, cleaning_packages(*)').eq('customer_id', user.id).order('is_primary', {
+        ascending: false
+      });
       setAddresses(addressesData || []);
-
-      const { data: addonsData } = await supabase
-        .from('cleaning_addons')
-        .select('*');
-
+      const {
+        data: addonsData
+      } = await supabase.from('cleaning_addons').select('*');
       setAddons(addonsData || []);
     } catch (error) {
       console.error('Error:', error);
@@ -90,14 +96,12 @@ const Booking = () => {
       setLoading(false);
     }
   };
-
   const fetchAvailableProviders = async () => {
     if (!selectedDate) return;
-    
     const dateString = format(selectedDate, 'yyyy-MM-dd');
-    const { data } = await supabase
-      .from('provider_availability')
-      .select(`
+    const {
+      data
+    } = await supabase.from('provider_availability').select(`
         provider_id, 
         provider_profiles(
           *,
@@ -107,28 +111,19 @@ const Booking = () => {
             email
           )
         )
-      `)
-      .eq('date', dateString);
-
+      `).eq('date', dateString);
     const providers = data?.map(d => d.provider_profiles).filter(Boolean) || [];
     setAvailableProviders(providers);
   };
-
   const calculateTotal = () => {
     if (!selectedAddress?.cleaning_packages) return 0;
-    
-    const basePrice = recurringService
-      ? selectedAddress.cleaning_packages.recurring_price
-      : selectedAddress.cleaning_packages.one_time_price;
-    
+    const basePrice = recurringService ? selectedAddress.cleaning_packages.recurring_price : selectedAddress.cleaning_packages.one_time_price;
     const addonsTotal = selectedAddons.reduce((sum, addonId) => {
       const addon = addons.find(a => a.id === addonId);
       return sum + (addon?.price || 0);
     }, 0);
-    
     return parseFloat(basePrice) + addonsTotal;
   };
-
   const handleNext = () => {
     if (currentStep === 1 && !selectedAddress) {
       toast.error('Choose an address to continue');
@@ -142,63 +137,55 @@ const Booking = () => {
       toast.error('Choose a provider to continue booking');
       return;
     }
-    
     if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     } else {
       handleConfirmBooking();
     }
   };
-
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
-
   const handleConfirmBooking = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       const dateString = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '';
-      
-      const { data: bookingData, error } = await supabase
-        .from('bookings')
-        .insert([{
-          customer_id: user!.id,
-          provider_id: selectedProvider.id,
-          address_id: selectedAddress.id,
-          package_id: selectedAddress.cleaning_packages.id,
-          addon_ids: selectedAddons,
-          requested_date: dateString,
-          requested_time: selectedTime,
-          total_estimate: calculateTotal(),
-          status: 'pending',
-          payment_status: 'pending'
-        }])
-        .select()
-        .single();
-
+      const {
+        data: bookingData,
+        error
+      } = await supabase.from('bookings').insert([{
+        customer_id: user!.id,
+        provider_id: selectedProvider.id,
+        address_id: selectedAddress.id,
+        package_id: selectedAddress.cleaning_packages.id,
+        addon_ids: selectedAddons,
+        requested_date: dateString,
+        requested_time: selectedTime,
+        total_estimate: calculateTotal(),
+        status: 'pending',
+        payment_status: 'pending'
+      }]).select().single();
       if (error) throw error;
 
       // Get customer profile data
-      const { data: customerProfile } = await supabase
-        .from('profiles')
-        .select('first_name, last_name, email, currency')
-        .eq('id', user!.id)
-        .single();
+      const {
+        data: customerProfile
+      } = await supabase.from('profiles').select('first_name, last_name, email, currency').eq('id', user!.id).single();
 
       // Get provider profile data from the joined data
       const providerProfile = selectedProvider.profiles;
 
       // Format address
-      const formattedAddress = selectedAddress.country === 'Portugal'
-        ? `${selectedAddress.rua}, ${selectedAddress.localidade}, ${selectedAddress.country}`
-        : `${selectedAddress.street}, ${selectedAddress.city}, ${selectedAddress.country}`;
+      const formattedAddress = selectedAddress.country === 'Portugal' ? `${selectedAddress.rua}, ${selectedAddress.localidade}, ${selectedAddress.country}` : `${selectedAddress.street}, ${selectedAddress.city}, ${selectedAddress.country}`;
 
       // Format date
       const formattedDate = selectedDate ? format(selectedDate, 'EEEE, MMMM d, yyyy') : '';
-
       const currency = customerProfile?.currency === 'EUR' ? '€' : '$';
 
       // Send booking confirmation email to customer
@@ -233,14 +220,12 @@ const Booking = () => {
           acceptUrl: `https://clinlix.com/provider/jobs`
         }
       }).catch(err => console.error('Error sending provider email:', err));
-
       toast.success("Booking sent! We'll notify you when your provider confirms.");
       navigate('/customer/dashboard');
     } catch (error: any) {
       toast.error(error.message || 'Failed to create booking');
     }
   };
-
   const generateDateOptions = () => {
     const dates = [];
     const today = new Date();
@@ -251,13 +236,11 @@ const Booking = () => {
     }
     return dates;
   };
-
   const generateTimeOptions = () => {
     const times = [];
     for (let hour = 7; hour <= 19; hour++) {
       const period = hour >= 12 ? 'PM' : 'AM';
       const displayHour = hour > 12 ? hour - 12 : hour;
-      
       times.push({
         value: `${hour.toString().padStart(2, '0')}:00`,
         display: `${displayHour}:00 ${period}`
@@ -269,17 +252,12 @@ const Booking = () => {
     }
     return times;
   };
-
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+    return <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
         <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target">
@@ -295,46 +273,28 @@ const Booking = () => {
       <div className="border-b bg-card/30 backdrop-blur-sm overflow-x-auto hide-scrollbar">
         <div className="mobile-container py-3 sm:py-4">
           <div className="flex items-center justify-between max-w-4xl mx-auto min-w-max px-2">
-            {STEPS.map((step, idx) => (
-              <div key={step.id} className="flex items-center">
+            {STEPS.map((step, idx) => <div key={step.id} className="flex items-center">
                 <div className="flex flex-col items-center">
-                  <div
-                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
-                      currentStep >= step.id
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-secondary text-secondary-foreground'
-                    }`}
-                  >
-                    {currentStep > step.id ? (
-                      <Check className="w-4 h-4 sm:w-5 sm:h-5" />
-                    ) : (
-                      <step.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                    )}
+                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${currentStep >= step.id ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}`}>
+                    {currentStep > step.id ? <Check className="w-4 h-4 sm:w-5 sm:h-5" /> : <step.icon className="w-4 h-4 sm:w-5 sm:h-5" />}
                   </div>
                   <span className="text-xs mt-1 hidden md:block whitespace-nowrap">{step.name}</span>
                 </div>
-                {idx < STEPS.length - 1 && (
-                  <div className={`w-8 sm:w-12 md:w-20 h-0.5 mx-1 sm:mx-2 ${
-                    currentStep > step.id ? 'bg-primary' : 'bg-secondary'
-                  }`} />
-                )}
-              </div>
-            ))}
+                {idx < STEPS.length - 1 && <div className={`w-8 sm:w-12 md:w-20 h-0.5 mx-1 sm:mx-2 ${currentStep > step.id ? 'bg-primary' : 'bg-secondary'}`} />}
+              </div>)}
           </div>
         </div>
       </div>
 
       <main className="mobile-container py-4 sm:py-8 max-w-4xl">
         {/* Step 1: Where */}
-        {currentStep === 1 && (
-          <div className="space-y-4 sm:space-y-6">
+        {currentStep === 1 && <div className="space-y-4 sm:space-y-6">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold mb-2">Which location should we clean?</h2>
               <p className="text-sm sm:text-base text-muted-foreground">Choose from your saved addresses</p>
             </div>
 
-            {addresses.length === 0 ? (
-              <Card className="border-0 shadow-sm">
+            {addresses.length === 0 ? <Card className="border-0 shadow-sm">
                 <CardContent className="pt-12 pb-12 text-center">
                   <MapPin className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
                   <p className="text-muted-foreground mb-4">
@@ -344,57 +304,37 @@ const Booking = () => {
                     Add Your First Address
                   </Button>
                 </CardContent>
-              </Card>
-            ) : (
-              <div className="grid gap-4">
-                {addresses.map((address) => {
-                  const isHouse = address.property_type === 'House';
-                  
-                  return (
-                    <Card
-                      key={address.id}
-                      className={`cursor-pointer transition-all duration-300 ${
-                        selectedAddress?.id === address.id
-                          ? 'border-2 border-primary shadow-lg hover:shadow-xl bg-gradient-to-br from-card via-card to-primary/5'
-                          : 'border border-border shadow-lg hover:shadow-xl bg-gradient-to-br from-card via-card to-accent/5'
-                      }`}
-                      onClick={() => setSelectedAddress(address)}
-                    >
+              </Card> : <div className="grid gap-4">
+                {addresses.map(address => {
+            const isHouse = address.property_type === 'House';
+            return <Card key={address.id} className={`cursor-pointer transition-all duration-300 ${selectedAddress?.id === address.id ? 'border-2 border-primary shadow-lg hover:shadow-xl bg-gradient-to-br from-card via-card to-primary/5' : 'border border-border shadow-lg hover:shadow-xl bg-gradient-to-br from-card via-card to-accent/5'}`} onClick={() => setSelectedAddress(address)}>
                       <CardHeader className="space-y-4 p-4 sm:p-6">
                         <div className="flex items-start justify-between gap-3">
-                          <div className="flex items-start gap-2.5 sm:gap-3 flex-1 min-w-0">
+                          <div className="flex items-start gap-2.5 sm:gap-3  ">
                             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground shadow-md flex-shrink-0">
-                              {isHouse ? (
-                                <Home className="w-4 h-4 sm:w-5 sm:h-5" />
-                              ) : (
-                                <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              {isHouse ? <Home className="w-4 h-4 sm:w-5 sm:h-5" /> : <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                   <rect x="3" y="3" width="18" height="18" rx="2" />
                                   <line x1="3" y1="9" x2="21" y2="9" />
                                   <line x1="9" y1="21" x2="9" y2="9" />
-                                </svg>
-                              )}
+                                </svg>}
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-start gap-2 flex-wrap">
                                 <h3 className="font-bold text-base sm:text-lg text-foreground break-words">
                                   {address.label}
                                 </h3>
-                                {address.is_primary && (
-                                  <span className="px-2 sm:px-2.5 py-0.5 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground text-xs font-semibold rounded-full shadow-sm whitespace-nowrap">
+                                {address.is_primary && <span className="px-2 sm:px-2.5 py-0.5 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground text-xs font-semibold rounded-full shadow-sm whitespace-nowrap">
                                     Primary
-                                  </span>
-                                )}
+                                  </span>}
                               </div>
                               <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                                 {address.property_type} • {address.layout_type}
                               </p>
                             </div>
                           </div>
-                          {selectedAddress?.id === address.id && (
-                            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary flex items-center justify-center shadow-md flex-shrink-0">
+                          {selectedAddress?.id === address.id && <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary flex items-center justify-center shadow-md flex-shrink-0">
                               <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
-                            </div>
-                          )}
+                            </div>}
                         </div>
 
                         <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
@@ -406,27 +346,20 @@ const Booking = () => {
                             <MapPin className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                             <div className="flex-1 min-w-0">
                               <p className="text-xs sm:text-sm font-medium text-foreground break-words">
-                                {address.country === 'Portugal' 
-                                  ? address.rua 
-                                  : address.street}
+                                {address.country === 'Portugal' ? address.rua : address.street}
                               </p>
-                              {address.porta_andar && (
-                                <p className="text-xs text-muted-foreground mt-0.5 break-words">
+                              {address.porta_andar && <p className="text-xs text-muted-foreground mt-0.5 break-words">
                                   {address.porta_andar}
-                                </p>
-                              )}
+                                </p>}
                               <p className="text-xs text-muted-foreground mt-1 break-words">
-                                {address.country === 'Portugal'
-                                  ? `${address.codigo_postal} ${address.localidade}, ${address.distrito}`
-                                  : `${address.city}, ${address.province} ${address.postal_code}`}
+                                {address.country === 'Portugal' ? `${address.codigo_postal} ${address.localidade}, ${address.distrito}` : `${address.city}, ${address.province} ${address.postal_code}`}
                               </p>
                               <p className="text-xs text-muted-foreground break-words">{address.country}</p>
                             </div>
                           </div>
                         </div>
 
-                        {address.cleaning_packages && (
-                          <div className="bg-gradient-to-br from-primary/5 to-accent/10 rounded-xl p-3 sm:p-4 border border-primary/20">
+                        {address.cleaning_packages && <div className="bg-gradient-to-br from-primary/5 to-accent/10 rounded-xl p-3 sm:p-4 border border-primary/20">
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-0 mb-3">
                               <div className="flex-1 min-w-0">
                                 <p className="font-semibold text-sm sm:text-base text-foreground break-words">
@@ -451,31 +384,34 @@ const Booking = () => {
                               <p className="text-xs font-medium text-muted-foreground mb-2">Included Services:</p>
                               <div className="grid grid-cols-3 gap-2">
                                 {address.cleaning_packages.areas_included?.map((area: string, idx: number) => {
-                                  const getServiceIcon = (service: string) => {
-                                    switch(service.toLowerCase()) {
-                                      case 'bathroom': return <Bath className="w-4 h-4" />;
-                                      case 'kitchen': return <ChefHat className="w-4 h-4" />;
-                                      case 'livingroom': return <Sofa className="w-4 h-4" />;
-                                      case 'floors': return <Layers className="w-4 h-4" />;
-                                      case 'dusting': return <Sparkles className="w-4 h-4" />;
-                                      case 'surfaces': return <Square className="w-4 h-4" />;
-                                      default: return <Square className="w-4 h-4" />;
-                                    }
-                                  };
-                                  
-                                  return (
-                                    <div key={idx} className="flex items-center gap-1.5 bg-background/80 rounded-lg px-2.5 py-2 border border-border/30 hover:border-primary/30 transition-colors">
+                        const getServiceIcon = (service: string) => {
+                          switch (service.toLowerCase()) {
+                            case 'bathroom':
+                              return <Bath className="w-4 h-4" />;
+                            case 'kitchen':
+                              return <ChefHat className="w-4 h-4" />;
+                            case 'livingroom':
+                              return <Sofa className="w-4 h-4" />;
+                            case 'floors':
+                              return <Layers className="w-4 h-4" />;
+                            case 'dusting':
+                              return <Sparkles className="w-4 h-4" />;
+                            case 'surfaces':
+                              return <Square className="w-4 h-4" />;
+                            default:
+                              return <Square className="w-4 h-4" />;
+                          }
+                        };
+                        return <div key={idx} className="flex items-center gap-1.5 bg-background/80 rounded-lg px-2.5 py-2 border border-border/30 hover:border-primary/30 transition-colors">
                                       <span className="text-primary flex-shrink-0">
                                         {getServiceIcon(area)}
                                       </span>
                                       <span className="text-xs font-medium capitalize truncate">{area}</span>
-                                    </div>
-                                  );
-                                })}
+                                    </div>;
+                      })}
                               </div>
                             </div>
-                          </div>
-                        )}
+                          </div>}
 
                         <div className="flex items-center gap-3 text-xs bg-muted/20 rounded-lg p-3 border border-border/30">
                           <div className="flex items-center gap-1.5 flex-1">
@@ -489,17 +425,13 @@ const Booking = () => {
                           </div>
                         </div>
                       </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
+                    </Card>;
+          })}
+              </div>}
+          </div>}
 
         {/* Step 2: When */}
-        {currentStep === 2 && (
-          <div className="space-y-6">
+        {currentStep === 2 && <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-bold mb-2">When do you need us?</h2>
               <p className="text-muted-foreground">Pick your preferred date and time</p>
@@ -509,88 +441,60 @@ const Booking = () => {
               <CardContent className="pt-6 space-y-6">
                 {/* Calendar */}
                 <div className="flex justify-center">
-                  <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                    className="rounded-md border-0"
-                    classNames={{
-                      months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-                      month: "space-y-4",
-                      caption: "flex justify-center pt-1 relative items-center mb-4",
-                      caption_label: "text-xl font-semibold",
-                      nav: "space-x-1 flex items-center",
-                      nav_button: "h-10 w-10 bg-transparent hover:bg-muted rounded-md flex items-center justify-center",
-                      nav_button_previous: "absolute left-1",
-                      nav_button_next: "absolute right-1",
-                      table: "w-full border-collapse space-y-1",
-                      head_row: "flex justify-between mb-2",
-                      head_cell: "text-muted-foreground rounded-md w-12 font-normal text-sm uppercase",
-                      row: "flex w-full mt-2 justify-between",
-                      cell: "relative p-0 text-center focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-transparent",
-                      day: "h-12 w-12 p-0 font-semibold text-lg hover:bg-muted rounded-full flex items-center justify-center",
-                      day_selected: "bg-gradient-to-br from-[#FF6B35] to-[#F7931E] text-white hover:bg-gradient-to-br hover:from-[#FF6B35] hover:to-[#F7931E]",
-                      day_today: "bg-accent text-accent-foreground",
-                      day_outside: "text-muted-foreground/40 opacity-50",
-                      day_disabled: "text-muted-foreground/30 line-through",
-                      day_hidden: "invisible"
-                    }}
-                  />
+                  <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} disabled={date => date < new Date(new Date().setHours(0, 0, 0, 0))} className="rounded-md border-0" classNames={{
+                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                month: "space-y-4",
+                caption: "flex justify-center pt-1 relative items-center mb-4",
+                caption_label: "text-xl font-semibold",
+                nav: "space-x-1 flex items-center",
+                nav_button: "h-10 w-10 bg-transparent hover:bg-muted rounded-md flex items-center justify-center",
+                nav_button_previous: "absolute left-1",
+                nav_button_next: "absolute right-1",
+                table: "w-full border-collapse space-y-1",
+                head_row: "flex justify-between mb-2",
+                head_cell: "text-muted-foreground rounded-md w-12 font-normal text-sm uppercase",
+                row: "flex w-full mt-2 justify-between",
+                cell: "relative p-0 text-center focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-transparent",
+                day: "h-12 w-12 p-0 font-semibold text-lg hover:bg-muted rounded-full flex items-center justify-center",
+                day_selected: "bg-gradient-to-br from-[#FF6B35] to-[#F7931E] text-white hover:bg-gradient-to-br hover:from-[#FF6B35] hover:to-[#F7931E]",
+                day_today: "bg-accent text-accent-foreground",
+                day_outside: "text-muted-foreground/40 opacity-50",
+                day_disabled: "text-muted-foreground/30 line-through",
+                day_hidden: "invisible"
+              }} />
                 </div>
 
                 {/* Time Slots */}
-                {selectedDate && (
-                  <div className="space-y-3">
+                {selectedDate && <div className="space-y-3">
                     <label className="text-sm font-medium block">Select Time</label>
                     <div className="relative">
                       <div className="overflow-x-auto pb-2 hide-scrollbar">
                         <div className="flex gap-3 min-w-max px-1">
-                          {generateTimeOptions().map((time) => (
-                            <button
-                              key={time.value}
-                              onClick={() => setSelectedTime(time.value)}
-                              className={`
+                          {generateTimeOptions().map(time => <button key={time.value} onClick={() => setSelectedTime(time.value)} className={`
                                 px-6 py-3 rounded-full font-medium text-base whitespace-nowrap transition-all
-                                ${selectedTime === time.value
-                                  ? 'bg-gradient-to-br from-[#FF6B35] to-[#F7931E] text-white shadow-lg scale-105'
-                                  : 'bg-muted/50 hover:bg-muted text-foreground'
-                                }
-                              `}
-                            >
+                                ${selectedTime === time.value ? 'bg-gradient-to-br from-[#FF6B35] to-[#F7931E] text-white shadow-lg scale-105' : 'bg-muted/50 hover:bg-muted text-foreground'}
+                              `}>
                               {time.display}
-                            </button>
-                          ))}
+                            </button>)}
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  </div>}
 
                 {/* Recurring Service */}
                 <div className="flex items-center gap-2 pt-2">
-                  <input
-                    type="checkbox"
-                    id="recurring"
-                    checked={recurringService}
-                    onChange={(e) => setRecurringService(e.target.checked)}
-                    className="w-4 h-4"
-                  />
+                  <input type="checkbox" id="recurring" checked={recurringService} onChange={e => setRecurringService(e.target.checked)} className="w-4 h-4" />
                   <label htmlFor="recurring" className="text-sm">
                     Make this a recurring service (save {selectedAddress?.currency === 'EUR' ? '€' : '$'}
-                    {selectedAddress?.cleaning_packages && 
-                      (parseFloat(selectedAddress.cleaning_packages.one_time_price) - 
-                       parseFloat(selectedAddress.cleaning_packages.recurring_price)).toFixed(0)})
+                    {selectedAddress?.cleaning_packages && (parseFloat(selectedAddress.cleaning_packages.one_time_price) - parseFloat(selectedAddress.cleaning_packages.recurring_price)).toFixed(0)})
                   </label>
                 </div>
               </CardContent>
             </Card>
-          </div>
-        )}
+          </div>}
 
         {/* Step 3: Who */}
-        {currentStep === 3 && (
-          <div className="space-y-4 sm:space-y-6">
+        {currentStep === 3 && <div className="space-y-4 sm:space-y-6">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold mb-2">Choose your provider</h2>
               <p className="text-sm sm:text-base text-muted-foreground">
@@ -598,8 +502,7 @@ const Booking = () => {
               </p>
             </div>
 
-            {availableProviders.length === 0 ? (
-              <Card className="border-0 shadow-sm">
+            {availableProviders.length === 0 ? <Card className="border-0 shadow-sm">
                 <CardContent className="pt-12 pb-12 text-center">
                   <User className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
                   <p className="text-sm sm:text-base text-muted-foreground mb-4">
@@ -609,72 +512,30 @@ const Booking = () => {
                     Choose Different Date
                   </Button>
                 </CardContent>
-              </Card>
-            ) : (
-              <div className="space-y-4">
-                {availableProviders.map((provider) => (
-                  <ProviderCard
-                    key={provider.id}
-                    providerId={provider.id}
-                    userId={provider.user_id}
-                    fullName={provider.full_name}
-                    photoUrl={provider.photo_url}
-                    verified={provider.verified}
-                    newProvider={provider.new_provider}
-                    ratingAvg={provider.rating_avg || 0}
-                    ratingCount={provider.rating_count || 0}
-                    serviceAreas={provider.service_areas || []}
-                    skills={provider.skills || []}
-                    bio={provider.bio}
-                    showActions={true}
-                    onSelect={() => setSelectedProvider(provider)}
-                    isSelected={selectedProvider?.id === provider.id}
-                  />
-                ))}
-              </div>
-            )}
+              </Card> : <div className="space-y-4">
+                {availableProviders.map(provider => <ProviderCard key={provider.id} providerId={provider.id} userId={provider.user_id} fullName={provider.full_name} photoUrl={provider.photo_url} verified={provider.verified} newProvider={provider.new_provider} ratingAvg={provider.rating_avg || 0} ratingCount={provider.rating_count || 0} serviceAreas={provider.service_areas || []} skills={provider.skills || []} bio={provider.bio} showActions={true} onSelect={() => setSelectedProvider(provider)} isSelected={selectedProvider?.id === provider.id} />)}
+              </div>}
 
-            {availableProviders.length > 0 && (
-              <div className="text-center pt-4">
-                <Button 
-                  variant="link" 
-                  onClick={() => navigate('/customer/find-providers')}
-                  className="text-primary"
-                >
+            {availableProviders.length > 0 && <div className="text-center pt-4">
+                <Button variant="link" onClick={() => navigate('/customer/find-providers')} className="text-primary">
                   View All Providers →
                 </Button>
-              </div>
-            )}
-          </div>
-        )}
+              </div>}
+          </div>}
 
         {/* Step 4: Add-ons */}
-        {currentStep === 4 && (
-          <div className="space-y-6">
+        {currentStep === 4 && <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-bold mb-2">Add extra services</h2>
               <p className="text-muted-foreground">Optional services to enhance your cleaning</p>
             </div>
 
             <div className="grid gap-4">
-              {addons.map((addon) => {
-                const isSelected = selectedAddons.includes(addon.id);
-                return (
-                  <Card
-                    key={addon.id}
-                    className={`cursor-pointer transition-all border-2 ${
-                      isSelected
-                        ? 'border-primary bg-primary/5'
-                        : 'border-transparent hover:border-primary/50'
-                    }`}
-                    onClick={() => {
-                      setSelectedAddons(prev =>
-                        prev.includes(addon.id)
-                          ? prev.filter(id => id !== addon.id)
-                          : [...prev, addon.id]
-                      );
-                    }}
-                  >
+              {addons.map(addon => {
+            const isSelected = selectedAddons.includes(addon.id);
+            return <Card key={addon.id} className={`cursor-pointer transition-all border-2 ${isSelected ? 'border-primary bg-primary/5' : 'border-transparent hover:border-primary/50'}`} onClick={() => {
+              setSelectedAddons(prev => prev.includes(addon.id) ? prev.filter(id => id !== addon.id) : [...prev, addon.id]);
+            }}>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -688,32 +549,23 @@ const Booking = () => {
                           <p className="font-semibold">
                             +{selectedAddress?.currency === 'EUR' ? '€' : '$'}{addon.price}
                           </p>
-                          {isSelected && (
-                            <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                          {isSelected && <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                               <Check className="w-4 h-4 text-primary-foreground" />
-                            </div>
-                          )}
+                            </div>}
                         </div>
                       </div>
                     </CardContent>
-                  </Card>
-                );
-              })}
+                  </Card>;
+          })}
             </div>
 
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={handleNext}
-            >
+            <Button variant="outline" className="w-full" onClick={handleNext}>
               Skip Add-ons
             </Button>
-          </div>
-        )}
+          </div>}
 
         {/* Step 5: Payment */}
-        {currentStep === 5 && (
-          <div className="space-y-6">
+        {currentStep === 5 && <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-bold mb-2">Payment Information</h2>
               <p className="text-muted-foreground">
@@ -734,12 +586,10 @@ const Booking = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
-        )}
+          </div>}
 
         {/* Step 6: Review */}
-        {currentStep === 6 && (
-          <div className="space-y-6">
+        {currentStep === 6 && <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-bold mb-2">Review Your Booking</h2>
               <p className="text-muted-foreground">Please confirm all details before submitting</p>
@@ -764,14 +614,12 @@ const Booking = () => {
                   <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
                   <p className="font-medium">
                     {new Date(selectedDate).toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      month: 'long',
-                      day: 'numeric'
-                    })} at {selectedTime}
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric'
+                })} at {selectedTime}
                   </p>
-                  {recurringService && (
-                    <div className="badge badge-secondary mt-1">Recurring Service</div>
-                  )}
+                  {recurringService && <div className="badge badge-secondary mt-1">Recurring Service</div>}
                 </div>
 
                 <Separator />
@@ -779,13 +627,7 @@ const Booking = () => {
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Provider</p>
                   <div className="flex items-center gap-3 mt-2">
-                    <ProviderAvatarBadge
-                      imageUrl={selectedProvider?.photo_url}
-                      isVerified={selectedProvider?.verified}
-                      createdAt={selectedProvider?.created_at}
-                      size={40}
-                      alt={selectedProvider?.full_name}
-                    />
+                    <ProviderAvatarBadge imageUrl={selectedProvider?.photo_url} isVerified={selectedProvider?.verified} createdAt={selectedProvider?.created_at} size={40} alt={selectedProvider?.full_name} />
                     <div>
                       <p className="font-medium">{selectedProvider?.full_name}</p>
                       <p className="text-sm text-muted-foreground">
@@ -804,22 +646,18 @@ const Booking = () => {
                       <span>{selectedAddress?.cleaning_packages?.package_name}</span>
                       <span>
                         {selectedAddress?.currency === 'EUR' ? '€' : '$'}
-                        {recurringService
-                          ? selectedAddress?.cleaning_packages?.recurring_price
-                          : selectedAddress?.cleaning_packages?.one_time_price}
+                        {recurringService ? selectedAddress?.cleaning_packages?.recurring_price : selectedAddress?.cleaning_packages?.one_time_price}
                       </span>
                     </div>
                     {selectedAddons.map(addonId => {
-                      const addon = addons.find(a => a.id === addonId);
-                      return (
-                        <div key={addonId} className="flex justify-between text-sm text-muted-foreground">
+                  const addon = addons.find(a => a.id === addonId);
+                  return <div key={addonId} className="flex justify-between text-sm text-muted-foreground">
                           <span>{addon?.name_en}</span>
                           <span>
                             +{selectedAddress?.currency === 'EUR' ? '€' : '$'}{addon?.price}
                           </span>
-                        </div>
-                      );
-                    })}
+                        </div>;
+                })}
                     <Separator />
                     <div className="flex justify-between font-semibold text-lg">
                       <span>Total</span>
@@ -839,37 +677,28 @@ const Booking = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
-        )}
+          </div>}
 
         {/* Navigation Buttons */}
         <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-8">
-          {currentStep > 1 && (
-            <Button variant="outline" onClick={handleBack} className="flex-1 h-12 sm:h-10">
+          {currentStep > 1 && <Button variant="outline" onClick={handleBack} className="flex-1 h-12 sm:h-10">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
-            </Button>
-          )}
+            </Button>}
           <Button onClick={handleNext} className="flex-1 h-12 sm:h-10">
-            {currentStep === 6 ? (
-              <>
+            {currentStep === 6 ? <>
                 <Check className="w-4 h-4 mr-2" />
                 <span className="hidden sm:inline">Confirm Booking</span>
                 <span className="sm:hidden">Confirm</span>
-              </>
-            ) : (
-              <>
+              </> : <>
                 Next
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </>
-            )}
+              </>}
           </Button>
         </div>
       </main>
       
       <MobileNav />
-    </div>
-  );
+    </div>;
 };
-
 export default Booking;
