@@ -376,13 +376,15 @@ const Booking = () => {
                                   {address.cleaning_packages.time_included} included
                                 </p>
                               </div>
-                              <div>
-                                <p className="text-2xl sm:text-3xl font-bold text-primary">
-                                  {address.currency === 'EUR' ? '€' : '$'}
-                                  {address.cleaning_packages.one_time_price}
-                                </p>
-                                <p className="text-[10px] sm:text-xs font-medium text-muted-foreground -mt-0.5">one-time</p>
-                                <div className="mt-2">
+                              <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                  <p className="text-2xl sm:text-3xl font-bold text-primary">
+                                    {address.currency === 'EUR' ? '€' : '$'}
+                                    {address.cleaning_packages.one_time_price}
+                                  </p>
+                                  <p className="text-[10px] sm:text-xs font-medium text-muted-foreground -mt-0.5">one-time</p>
+                                </div>
+                                <div>
                                   <p className="text-base sm:text-lg font-semibold text-muted-foreground">
                                     {address.currency === 'EUR' ? '€' : '$'}
                                     {address.cleaning_packages.recurring_price}
