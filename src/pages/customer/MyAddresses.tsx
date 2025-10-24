@@ -612,7 +612,7 @@ const MyAddresses = () => {
                       {/* Services Grid */}
                       <div className="pt-3 border-t border-border/50">
                         <p className="text-xs font-medium text-muted-foreground mb-2">SERVICES</p>
-                        <div className="grid grid-cols-3 gap-1.5">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                           {address.cleaning_packages.areas_included?.map((area: string, idx: number) => {
                             const getServiceIcon = (service: string) => {
                               switch(service.toLowerCase()) {
@@ -627,11 +627,11 @@ const MyAddresses = () => {
                             };
                             
                             return (
-                              <div key={idx} className="flex items-center gap-1.5 bg-background rounded-md p-1.5">
+                              <div key={idx} className="flex items-center gap-1.5 bg-background rounded-md p-2 min-w-0">
                                 <span className="text-primary flex-shrink-0">
                                   {getServiceIcon(area)}
                                 </span>
-                                <span className="text-xs capitalize truncate">{area}</span>
+                                <span className="text-xs capitalize leading-tight break-words">{area}</span>
                               </div>
                             );
                           })}
@@ -641,14 +641,14 @@ const MyAddresses = () => {
                   )}
 
                   {/* Contact Section */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-2.5 min-w-0">
                       <Phone className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                      <span className="text-xs truncate">{address.phone}</span>
+                      <span className="text-xs break-all leading-tight">{address.phone}</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-2">
+                    <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-2.5 min-w-0">
                       <Mail className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                      <span className="text-xs truncate">{address.email}</span>
+                      <span className="text-xs break-all leading-tight">{address.email}</span>
                     </div>
                   </div>
                 </CardContent>
