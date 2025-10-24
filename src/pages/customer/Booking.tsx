@@ -362,7 +362,7 @@ const Booking = () => {
                     >
                       <CardHeader className="space-y-4">
                         <div className="flex items-start justify-between gap-3">
-                          <div className="flex items-center gap-3 flex-1">
+                          <div className="flex items-start gap-3 flex-1">
                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground shadow-md flex-shrink-0">
                               {isHouse ? (
                                 <Home className="w-5 h-5" />
