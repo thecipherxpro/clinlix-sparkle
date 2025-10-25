@@ -453,31 +453,31 @@ const Booking = () => {
           </div>}
 
         {/* Step 2: When */}
-        {currentStep === 2 && <div className="space-y-6">
+        {currentStep === 2 && <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">When do you need us?</h2>
-              <p className="text-muted-foreground">Pick your preferred date and time</p>
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">When do you need us?</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">Pick your preferred date and time</p>
             </div>
 
             <Card className="border-0 shadow-sm bg-card/80 backdrop-blur-sm">
-              <CardContent className="pt-6 space-y-6">
+              <CardContent className="pt-4 sm:pt-6 space-y-4 sm:space-y-6">
                 {/* Calendar */}
-                <div className="flex justify-center">
-                  <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} disabled={date => date < new Date(new Date().setHours(0, 0, 0, 0))} className="rounded-md border-0" classNames={{
+                <div className="flex justify-center -mx-2 sm:mx-0">
+                  <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} disabled={date => date < new Date(new Date().setHours(0, 0, 0, 0))} className="rounded-md border-0 scale-90 sm:scale-100 origin-top" classNames={{
                 months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-                month: "space-y-4",
-                caption: "flex justify-center pt-1 relative items-center mb-4",
-                caption_label: "text-xl font-semibold",
+                month: "space-y-3 sm:space-y-4",
+                caption: "flex justify-center pt-1 relative items-center mb-3 sm:mb-4",
+                caption_label: "text-base sm:text-xl font-semibold",
                 nav: "space-x-1 flex items-center",
-                nav_button: "h-10 w-10 bg-transparent hover:bg-muted rounded-md flex items-center justify-center",
-                nav_button_previous: "absolute left-1",
-                nav_button_next: "absolute right-1",
+                nav_button: "h-8 w-8 sm:h-10 sm:w-10 bg-transparent hover:bg-muted rounded-md flex items-center justify-center touch-target",
+                nav_button_previous: "absolute left-0 sm:left-1",
+                nav_button_next: "absolute right-0 sm:right-1",
                 table: "w-full border-collapse space-y-1",
-                head_row: "flex justify-between mb-2",
-                head_cell: "text-muted-foreground rounded-md w-12 font-normal text-sm uppercase",
-                row: "flex w-full mt-2 justify-between",
+                head_row: "flex justify-between mb-1 sm:mb-2",
+                head_cell: "text-muted-foreground rounded-md w-9 sm:w-12 font-normal text-xs sm:text-sm uppercase",
+                row: "flex w-full mt-1 sm:mt-2 justify-between",
                 cell: "relative p-0 text-center focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-transparent",
-                day: "h-12 w-12 p-0 font-semibold text-lg hover:bg-muted rounded-full flex items-center justify-center",
+                day: "h-9 w-9 sm:h-12 sm:w-12 p-0 font-semibold text-sm sm:text-lg hover:bg-muted rounded-full flex items-center justify-center touch-target",
                 day_selected: "bg-gradient-to-br from-[#FF6B35] to-[#F7931E] text-white hover:bg-gradient-to-br hover:from-[#FF6B35] hover:to-[#F7931E]",
                 day_today: "bg-accent text-accent-foreground",
                 day_outside: "text-muted-foreground/40 opacity-50",
@@ -487,13 +487,13 @@ const Booking = () => {
                 </div>
 
                 {/* Time Slots */}
-                {selectedDate && <div className="space-y-3">
+                {selectedDate && <div className="space-y-2 sm:space-y-3">
                     <label className="text-sm font-medium block">Select Time</label>
                     <div className="relative">
-                      <div className="overflow-x-auto pb-2 hide-scrollbar">
-                        <div className="flex gap-3 min-w-max px-1">
+                      <div className="overflow-x-auto pb-2 hide-scrollbar -mx-2 px-2">
+                        <div className="flex gap-2 sm:gap-3 min-w-max">
                           {generateTimeOptions().map(time => <button key={time.value} onClick={() => setSelectedTime(time.value)} className={`
-                                px-6 py-3 rounded-full font-medium text-base whitespace-nowrap transition-all
+                                px-4 py-2.5 sm:px-6 sm:py-3 rounded-full font-medium text-sm sm:text-base whitespace-nowrap transition-all touch-target
                                 ${selectedTime === time.value ? 'bg-gradient-to-br from-[#FF6B35] to-[#F7931E] text-white shadow-lg scale-105' : 'bg-muted/50 hover:bg-muted text-foreground'}
                               `}>
                               {time.display}
