@@ -30,7 +30,7 @@ const spanVariants = {
   exit: { width: 0, opacity: 0 },
 };
 
-const transition = { delay: 0.1, type: 'spring' as const, bounce: 0, duration: 0.35 };
+const transition = { type: 'tween' as const, duration: 0.2 };
 
 interface TabProps {
   text: string;
@@ -91,8 +91,8 @@ const ProviderTabNav = () => {
   };
 
   return (
-    <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4 animate-fade-in">
-      <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-background/95 backdrop-blur-lg shadow-lg px-4 py-3">
+    <nav className="sticky bottom-0 left-0 right-0 z-50 w-full bg-background border-t border-border">
+      <div className="flex items-center justify-around max-w-screen-xl mx-auto px-2 py-2">
         {tabs.map((tab) => (
           <Tab
             key={tab.title}
@@ -104,7 +104,7 @@ const ProviderTabNav = () => {
           </Tab>
         ))}
       </div>
-    </div>
+    </nav>
   );
 };
 
