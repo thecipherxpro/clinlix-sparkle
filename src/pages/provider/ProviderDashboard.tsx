@@ -91,11 +91,6 @@ const ProviderDashboard = () => {
       </div>;
   }
   return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
-      {/* Notification Center - Fixed Position */}
-      <div className="fixed top-4 right-4 z-50">
-        <NotificationCenter />
-      </div>
-
       {/* Mobile-first header with auto-fit padding */}
       <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
         <DashboardWelcomeBanner user={{
