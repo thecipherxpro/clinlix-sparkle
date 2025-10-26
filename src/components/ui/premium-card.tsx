@@ -45,7 +45,7 @@ export const JobCard: React.FC<JobCardProps> = ({
           <img 
             src={illustration} 
             alt={title}
-            className="w-full h-full max-w-[55%] sm:max-w-[60%] max-h-full object-contain drop-shadow-sm"
+            className="w-full h-full object-contain drop-shadow-sm"
           />
         ) : icon ? (
           <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center text-foreground/90 drop-shadow-md">
