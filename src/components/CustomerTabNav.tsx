@@ -1,5 +1,4 @@
-import { useState, ReactNode, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { Home, Calendar, Sparkles, MapPin, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -11,65 +10,26 @@ const tabs = [
   { title: 'Profile', icon: <User />, path: '/customer/profile' },
 ];
 
-const buttonVariants = {
-  initial: {
-    gap: 0,
-    paddingLeft: '.5rem',
-    paddingRight: '.5rem',
-  },
-  animate: (selected: boolean) => ({
-    gap: selected ? '.5rem' : 0,
-    paddingLeft: selected ? '1rem' : '.5rem',
-    paddingRight: selected ? '1rem' : '.5rem',
-  }),
-};
-
-const spanVariants = {
-  initial: { width: 0, opacity: 0 },
-  animate: { width: 'auto', opacity: 1 },
-  exit: { width: 0, opacity: 0 },
-};
-
-const transition = { type: 'tween' as const, duration: 0.2 };
-
 interface TabProps {
   text: string;
   selected: boolean;
   onSelect: () => void;
-  children: ReactNode;
+  icon: React.ReactNode;
 }
 
-const Tab = ({ text, selected, onSelect, children }: TabProps) => {
+const Tab = ({ text, selected, onSelect, icon }: TabProps) => {
   return (
-    <motion.button
-      variants={buttonVariants}
-      initial="initial"
-      animate="animate"
-      custom={selected}
+    <button
       onClick={onSelect}
-      transition={transition}
-      className={`${
+      className={`flex flex-col items-center justify-center flex-1 min-w-0 py-2 px-1 transition-colors ${
         selected
-          ? 'bg-primary/15 text-primary'
-          : 'text-gray-500 hover:text-gray-900 dark:hover:text-gray-100'
-      } relative flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
+          ? 'text-primary'
+          : 'text-muted-foreground hover:text-foreground'
+      }`}
     >
-      {children}
-      <AnimatePresence>
-        {selected && (
-          <motion.span
-            variants={spanVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={transition}
-            className="overflow-hidden"
-          >
-            {text}
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </motion.button>
+      <span className="text-xl">{icon}</span>
+      <span className="text-xs mt-1 truncate w-full text-center">{text}</span>
+    </button>
   );
 };
 
@@ -91,17 +51,16 @@ const CustomerTabNav = () => {
   };
 
   return (
-    <nav className="sticky bottom-0 left-0 right-0 z-50 w-full bg-background border-t border-border">
-      <div className="flex items-center justify-around max-w-screen-xl mx-auto px-2 py-2">
+    <nav className="sticky bottom-0 left-0 right-0 z-50 w-full bg-background/95 backdrop-blur-sm border-t border-border safe-bottom">
+      <div className="flex items-stretch max-w-screen-xl mx-auto">
         {tabs.map((tab) => (
           <Tab
             key={tab.title}
             text={tab.title}
+            icon={tab.icon}
             selected={selected === tab}
             onSelect={() => handleTabSelect(tab)}
-          >
-            {tab.icon}
-          </Tab>
+          />
         ))}
       </div>
     </nav>
