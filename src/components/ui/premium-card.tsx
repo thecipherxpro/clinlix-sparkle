@@ -24,49 +24,47 @@ export const JobCard: React.FC<JobCardProps> = ({
     <article
       onClick={onClick}
       className={cn(
-        "w-full h-full bg-card rounded-xl p-1.5 text-foreground",
-        "transition-all duration-300 hover:shadow-lg",
-        "flex flex-col",
+        "relative w-full bg-card rounded-3xl p-6 sm:p-8",
+        "transition-all duration-300 hover:shadow-xl hover:scale-[1.02]",
+        "flex flex-col items-center",
         onClick && "cursor-pointer",
         className
       )}
+      style={{ backgroundColor: heroColor }}
     >
-      {/* Hero Section */}
-      <section 
-        className="rounded-lg rounded-b-none p-3 sm:p-4 text-xs flex-1 flex flex-col"
-        style={{ backgroundColor: heroColor }}
-      >
-        <header className="flex justify-between items-center flex-row gap-2 font-bold">
-          <span className="text-[10px] sm:text-xs">{value || '$150/hr'}</span>
-          <div className="card__icon">
-            <svg 
-              height={14} 
-              width={14} 
-              stroke="currentColor" 
-              strokeWidth="1.5" 
-              viewBox="0 0 24 24" 
-              fill="none"
-            >
-              <path 
-                d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" 
-                strokeLinejoin="round" 
-                strokeLinecap="round" 
-              />
-            </svg>
-          </div>
-        </header>
-        <p className="flex-1 flex items-center my-3 sm:my-4 text-base sm:text-lg md:text-xl font-semibold pr-2 sm:pr-4 leading-tight">
-          {title}
-        </p>
-      </section>
+      {/* Icon/Illustration */}
+      <div className="w-20 h-20 sm:w-24 sm:h-24 mb-4 flex items-center justify-center text-foreground/80">
+        {icon && <div className="scale-[2.5] sm:scale-[3]">{icon}</div>}
+      </div>
 
-      {/* Footer */}
-      <footer className="flex justify-center items-center p-2 sm:p-2.5">
-        <button className="w-full font-normal border-none cursor-pointer text-center py-1.5 px-3 sm:px-4 rounded-lg bg-foreground text-background text-[10px] sm:text-xs hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
-          {icon}
-          <span>view</span>
-        </button>
-      </footer>
+      {/* Category Badge */}
+      <div className="bg-white/70 backdrop-blur-sm rounded-full px-6 py-2 mb-4">
+        <span className="text-sm sm:text-base font-medium text-foreground/90">
+          {value || title}
+        </span>
+      </div>
+
+      {/* Main Title */}
+      <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2 text-center">
+        {description}
+      </h3>
+
+      {/* Arrow Navigation Button */}
+      <div className="absolute right-4 bottom-4 w-12 h-12 sm:w-14 sm:h-14 bg-foreground rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+        <svg 
+          width="24" 
+          height="24" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="2.5" 
+          strokeLinecap="round" 
+          strokeLinejoin="round"
+          className="text-background translate-x-0.5"
+        >
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </div>
     </article>
   );
 };
