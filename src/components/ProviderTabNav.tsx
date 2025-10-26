@@ -51,7 +51,7 @@ const Tab = ({ text, selected, onSelect, children }: TabProps) => {
       className={`${
         selected
           ? 'bg-primary/15 text-primary'
-          : 'text-muted-foreground hover:text-foreground'
+          : 'text-gray-500 hover:text-gray-900 dark:hover:text-gray-100'
       } relative flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
     >
       {children}
@@ -92,7 +92,7 @@ const ProviderTabNav = () => {
 
   return (
     <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4 animate-fade-in">
-      <div className="flex items-center gap-2 rounded-full bg-background/80 backdrop-blur-lg border border-border shadow-lg px-2 py-2">
+      <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-background/95 backdrop-blur-lg shadow-lg px-4 py-3">
         {tabs.map((tab) => (
           <Tab
             key={tab.title}
