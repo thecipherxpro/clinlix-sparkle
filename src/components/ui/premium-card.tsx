@@ -26,74 +26,61 @@ export const JobCard: React.FC<JobCardProps> = ({
     <article
       onClick={onClick}
       className={cn(
-        "relative w-full aspect-[1/1.15] sm:aspect-[1/1.2]",
-        "min-h-[180px] max-h-[240px] sm:max-h-[260px]",
-        "bg-card rounded-[20px] sm:rounded-[24px]",
-        "p-3 sm:p-4",
-        "shadow-[0_2px_12px_rgba(0,0,0,0.06)]",
+        "w-full max-w-xs bg-white rounded-2xl shadow-lg overflow-hidden",
         "transition-all duration-300",
-        "hover:shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:scale-[1.02]",
-        "flex flex-col items-center justify-between",
+        "hover:shadow-xl hover:scale-[1.02]",
         onClick && "cursor-pointer active:scale-[0.98]",
         className
       )}
-      style={{ backgroundColor: heroColor }}
     >
-      {/* Compact Illustration */}
-      <div className="w-full flex-1 flex items-center justify-center pt-2 sm:pt-3">
+      {/* Image Section */}
+      <div className="flex justify-center items-center py-8 px-6 bg-white">
         {illustration ? (
           <img 
             src={illustration} 
             alt={title}
-            className="w-full h-full object-contain drop-shadow-sm"
+            className="w-full max-w-[200px] object-contain -mb-4"
           />
         ) : icon ? (
-          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center text-foreground/90 drop-shadow-md">
-            <div className="scale-[2.5] sm:scale-[3]">{icon}</div>
+          <div className="w-full max-w-[200px] flex items-center justify-center -mb-4">
+            <div className="scale-[3]">{icon}</div>
           </div>
         ) : null}
       </div>
 
-      {/* Compact Content Section */}
-      <div className="w-full flex flex-col items-center gap-1.5 sm:gap-2 pb-1.5 sm:pb-2">
-        {/* Smaller Badge */}
-        <div className="bg-white/85 backdrop-blur-sm rounded-full px-3 sm:px-5 py-1 sm:py-1.5 shadow-sm">
-          <span className="text-[10px] sm:text-xs font-semibold text-foreground/95 whitespace-nowrap">
+      {/* Content Section */}
+      <div className="p-6">
+        <div className="flex justify-center mb-5">
+          <span className="py-2 px-5 bg-fuchsia-50 text-fuchsia-700 rounded-full font-semibold text-sm">
             {value || title}
           </span>
         </div>
-
-        {/* Compact Title */}
-        <h3 className="text-xs sm:text-sm font-bold text-foreground text-center leading-tight px-2 max-w-[95%] line-clamp-2">
-          {description}
-        </h3>
+        
+        <div className="flex justify-between items-end">
+          <h2 className="text-3xl font-bold text-black leading-tight">
+            {description}
+          </h2>
+          <button 
+            className="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
+            aria-label={`Navigate to ${title}`}
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              strokeWidth={3} 
+              stroke="currentColor" 
+              className="w-5 h-5"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                d="M8.25 4.5l7.5 7.5-7.5 7.5" 
+              />
+            </svg>
+          </button>
+        </div>
       </div>
-
-      {/* Smaller Arrow Button */}
-      <button 
-        className="absolute right-2 sm:right-3 bottom-2 sm:bottom-3
-                   w-8 h-8 sm:w-10 sm:h-10
-                   bg-foreground rounded-full 
-                   flex items-center justify-center 
-                   shadow-md hover:shadow-lg
-                   hover:scale-110 active:scale-95
-                   transition-all duration-200"
-        aria-label={`Navigate to ${title}`}
-      >
-        <svg 
-          width="14" 
-          height="14" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="3" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-          className="text-background translate-x-[0.5px] sm:w-4 sm:h-4"
-        >
-          <path d="M9 18l6-6-6-6" />
-        </svg>
-      </button>
     </article>
   );
 };
