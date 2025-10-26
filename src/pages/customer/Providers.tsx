@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Search, Star, Sparkles, Shield } from "lucide-react";
-import MobileNav from "@/components/MobileNav";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 
 const Providers = () => {
@@ -194,8 +193,6 @@ const Providers = () => {
           </div>
         )}
       </main>
-      
-      <MobileNav />
     </div>
   );
 };

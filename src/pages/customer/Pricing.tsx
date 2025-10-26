@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronLeft, Check, Plus, Home, Sparkles, Clock, Euro, Bath, Languages } from "lucide-react";
-import MobileNav from "@/components/MobileNav";
 import pricingHeroStatic from "@/assets/pricing-hero-static.png";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -363,8 +362,6 @@ const Pricing = () => {
           </CardContent>
         </Card>
       </main>
-
-      <MobileNav />
     </div>
   );
 };

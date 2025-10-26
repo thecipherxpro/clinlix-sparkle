@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Key } from "lucide-react";
 import { toast } from "sonner";
-import MobileNav from "@/components/MobileNav";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 const CustomerSettings = () => {
@@ -264,8 +263,6 @@ const CustomerSettings = () => {
           </CardContent>
         </Card>
       </main>
-      
-      <MobileNav />
     </div>
   );
 };

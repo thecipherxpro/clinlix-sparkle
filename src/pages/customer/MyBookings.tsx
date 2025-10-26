@@ -7,7 +7,6 @@ import { Tabs, Tab } from "@heroui/react";
 import { ArrowLeft, Calendar, MapPin, Clock, Star } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
-import MobileNav from "@/components/MobileNav";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import { StatusBadge } from "@/components/StatusBadge";
 
@@ -321,8 +320,6 @@ const MyBookings = () => {
           </div>
         )}
       </main>
-
-      <MobileNav />
     </div>
   );
 };

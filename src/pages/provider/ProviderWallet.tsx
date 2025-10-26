@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, Tab } from "@heroui/react";
 import { ArrowLeft, DollarSign, TrendingUp, Clock, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
-import ProviderMobileNav from "@/components/ProviderMobileNav";
 
 const ProviderWallet = () => {
   const navigate = useNavigate();
@@ -207,8 +206,6 @@ const ProviderWallet = () => {
           </CardContent>
         </Card>
       </main>
-
-      <ProviderMobileNav />
     </div>
   );
 };

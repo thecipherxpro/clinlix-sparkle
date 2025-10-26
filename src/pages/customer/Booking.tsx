@@ -9,7 +9,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
-import MobileNav from "@/components/MobileNav";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import ProviderCard from "@/components/ProviderCard";
 const STEPS = [{
@@ -719,8 +718,6 @@ const Booking = () => {
           </Button>
         </div>
       </main>
-      
-      <MobileNav />
     </div>;
 };
 export default Booking;

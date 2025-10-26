@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ArrowLeft, CreditCard, Plus } from "lucide-react";
 import { toast } from "sonner";
-import MobileNav from "@/components/MobileNav";
 
 const PaymentMethods = () => {
   const navigate = useNavigate();
@@ -136,8 +135,6 @@ const PaymentMethods = () => {
           </CardContent>
         </Card>
       </main>
-      
-      <MobileNav />
     </div>
   );
 };

@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Star, User } from "lucide-react";
 import { toast } from "sonner";
-import ProviderMobileNav from "@/components/ProviderMobileNav";
 
 const ProviderReviews = () => {
   const navigate = useNavigate();
@@ -171,8 +170,6 @@ const ProviderReviews = () => {
           )}
         </div>
       </main>
-
-      <ProviderMobileNav />
     </div>
   );
 };

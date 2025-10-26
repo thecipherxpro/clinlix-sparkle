@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card as UICard, CardContent, CardDescription, CardHeader as UICardHeader, CardTitle } from "@/components/ui/card";
 import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, DollarSign, Briefcase, User, Clock } from "lucide-react";
-import ProviderMobileNav from "@/components/ProviderMobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import ActionCard from "@/components/ActionCard";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
@@ -179,8 +178,6 @@ const ProviderDashboard = () => {
       </main>
 
       <NotificationPermissionPrompt />
-
-      <ProviderMobileNav />
     </div>;
 };
 export default ProviderDashboard;

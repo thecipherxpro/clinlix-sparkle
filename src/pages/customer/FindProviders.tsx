@@ -9,7 +9,6 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { ArrowLeft, Search, SlidersHorizontal, UserX } from "lucide-react";
 import { toast } from "sonner";
-import MobileNav from "@/components/MobileNav";
 import ProviderCard from "@/components/ProviderCard";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -344,8 +343,6 @@ const FindProviders = () => {
           )}
         </div>
       </main>
-
-      <MobileNav />
     </div>
   );
 };

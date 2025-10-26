@@ -4,7 +4,6 @@ import { Clock, CheckCircle, Flag } from "lucide-react";
 import JobRequestsList from "@/components/provider/jobs/JobRequestsList";
 import ConfirmedJobsList from "@/components/provider/jobs/ConfirmedJobsList";
 import CompletedJobsList from "@/components/provider/jobs/CompletedJobsList";
-import ProviderMobileNav from "@/components/ProviderMobileNav";
 
 const ProviderJobs = () => {
   const [activeTab, setActiveTab] = useState("requests");
@@ -72,8 +71,6 @@ const ProviderJobs = () => {
         {activeTab === 'confirmed' && <ConfirmedJobsList />}
         {activeTab === 'completed' && <CompletedJobsList />}
       </div>
-
-      <ProviderMobileNav />
     </div>
   );
 };

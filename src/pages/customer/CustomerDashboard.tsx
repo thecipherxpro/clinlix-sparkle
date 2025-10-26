@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
-import MobileNav from "@/components/MobileNav";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
@@ -195,8 +194,6 @@ const CustomerDashboard = () => {
       {profile && showUnreviewedModal && <UnreviewedJobsModal userId={profile.id} onClose={() => setShowUnreviewedModal(false)} />}
       
       <NotificationPermissionPrompt />
-      
-      <MobileNav />
     </div>;
 };
 export default CustomerDashboard;

@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MultiSelect } from "@/components/ui/multi-select";
 import { ArrowLeft, User, Star, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
-import ProviderMobileNav from "@/components/ProviderMobileNav";
 import AvatarUploader from "@/components/AvatarUploader";
 import SettingsDrawer from "@/components/SettingsDrawer";
 
@@ -333,8 +332,6 @@ const ProviderProfilePage = () => {
           </Button>
         </div>
       </main>
-
-      <ProviderMobileNav />
     </div>
   );
 };

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import MobileNav from "@/components/MobileNav";
 import step1Image from "@/assets/how-it-works/step-1-address.png";
 import step2Image from "@/assets/how-it-works/step-2-booking.png";
 import step3Image from "@/assets/how-it-works/step-3-pricing.png";
@@ -292,8 +291,6 @@ const HowItWorks = () => {
           ))}
         </div>
       </main>
-
-      <MobileNav />
     </div>
   );
 };

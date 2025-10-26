@@ -10,7 +10,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Building2, Edit, Mail, Phone, MoreVertical } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import MobileNav from "@/components/MobileNav";
 
 const MyAddresses = () => {
   const navigate = useNavigate();
@@ -657,8 +656,6 @@ const MyAddresses = () => {
           </div>
         )}
       </main>
-      
-      <MobileNav />
     </div>
   );
 };

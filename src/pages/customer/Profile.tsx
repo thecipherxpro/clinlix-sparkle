@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, User, LogOut, Save } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
-import MobileNav from "@/components/MobileNav";
 import AvatarUploader from "@/components/AvatarUploader";
 import SettingsDrawer from "@/components/SettingsDrawer";
 
@@ -292,8 +291,6 @@ const Profile = () => {
           </CardContent>
         </Card>
       </main>
-      
-      <MobileNav />
     </div>
   );
 };

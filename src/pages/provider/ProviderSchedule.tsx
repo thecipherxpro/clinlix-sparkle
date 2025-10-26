@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Plus, Calendar as CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
-import ProviderMobileNav from "@/components/ProviderMobileNav";
 import { DateScroller } from "@/components/provider/DateScroller";
 import { TimeSlotCard } from "@/components/provider/TimeSlotCard";
 import { AddAvailabilityDrawer } from "@/components/provider/AddAvailabilityDrawer";
@@ -278,8 +277,6 @@ const ProviderSchedule = () => {
         selectedDate={selectedDate}
         onAdd={handleAddSlot}
       />
-
-      <ProviderMobileNav />
     </div>
   );
 };
