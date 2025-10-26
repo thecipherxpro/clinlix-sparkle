@@ -9,6 +9,7 @@ import ActionCard from "@/components/ActionCard";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
+import cardIllustration from "@/assets/card-illustration.svg";
 const ProviderDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
@@ -166,13 +167,41 @@ const ProviderDashboard = () => {
         <div>
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
           <div className="grid grid-cols-1 xs:grid-cols-2 gap-[clamp(18px,3vw,18px)] auto-rows-fr">
-            <JobCard title="View Pending Jobs" description="Review new job requests" value={`${stats.pendingJobs} Pending`} icon={<Briefcase className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef4e2" onClick={() => navigate("/provider/jobs")} />
+            <JobCard 
+              title="View Pending Jobs" 
+              description="Review new job requests" 
+              value={`${stats.pendingJobs} Pending`} 
+              illustration={cardIllustration}
+              heroColor="#fef4e2" 
+              onClick={() => navigate("/provider/jobs")} 
+            />
             
-            <JobCard title="Manage Schedule" description="Set your availability" value="Available" icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#e0f2fe" onClick={() => navigate("/provider/schedule")} />
+            <JobCard 
+              title="Manage Schedule" 
+              description="Set your availability" 
+              value="Available" 
+              illustration={cardIllustration}
+              heroColor="#e0f2fe" 
+              onClick={() => navigate("/provider/schedule")} 
+            />
             
-            <JobCard title="Check Earnings" description="View payment history" value={`€${stats.monthlyEarnings.toFixed(0)}`} icon={<DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#dcfce7" onClick={() => navigate("/provider/wallet")} />
+            <JobCard 
+              title="Check Earnings" 
+              description="View payment history" 
+              value={`€${stats.monthlyEarnings.toFixed(0)}`} 
+              illustration={cardIllustration}
+              heroColor="#dcfce7" 
+              onClick={() => navigate("/provider/wallet")} 
+            />
             
-            <JobCard title="Update Profile" description="Edit your information" value="Profile" icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fae8ff" onClick={() => navigate("/provider/profile")} />
+            <JobCard 
+              title="Update Profile" 
+              description="Edit your information" 
+              value="Profile" 
+              illustration={cardIllustration}
+              heroColor="#fae8ff" 
+              onClick={() => navigate("/provider/profile")} 
+            />
           </div>
         </div>
       </main>

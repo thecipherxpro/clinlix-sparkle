@@ -12,6 +12,7 @@ import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 import { StatusBadge } from "@/components/StatusBadge";
+import cardIllustration from "@/assets/card-illustration.svg";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
@@ -87,13 +88,41 @@ const CustomerDashboard = () => {
             Quick Actions
           </h3>
           <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)] auto-rows-fr">
-            <JobCard title="Book Now" description="Schedule service" value="New Booking" icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef4e2" onClick={() => navigate('/customer/booking')} />
+            <JobCard 
+              title="Book Now" 
+              description="Schedule service" 
+              value="New Booking" 
+              illustration={cardIllustration}
+              heroColor="#fef4e2" 
+              onClick={() => navigate('/customer/booking')} 
+            />
             
-            <JobCard title="Addresses" description="Your locations" value="Manage" icon={<MapPin className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#e0f2fe" onClick={() => navigate('/customer/my-addresses')} />
+            <JobCard 
+              title="Addresses" 
+              description="Your locations" 
+              value="Manage" 
+              illustration={cardIllustration}
+              heroColor="#e0f2fe" 
+              onClick={() => navigate('/customer/my-addresses')} 
+            />
             
-            <JobCard title="Payment" description="Manage cards" value="Methods" icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#dcfce7" onClick={() => navigate('/customer/payment-methods')} />
+            <JobCard 
+              title="Payment" 
+              description="Manage cards" 
+              value="Methods" 
+              illustration={cardIllustration}
+              heroColor="#dcfce7" 
+              onClick={() => navigate('/customer/payment-methods')} 
+            />
             
-            <JobCard title="Profile" description="Update info" value="Settings" icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fae8ff" onClick={() => navigate('/customer/profile')} />
+            <JobCard 
+              title="Profile" 
+              description="Update info" 
+              value="Settings" 
+              illustration={cardIllustration}
+              heroColor="#fae8ff" 
+              onClick={() => navigate('/customer/profile')} 
+            />
           </div>
         </div>
 
@@ -184,10 +213,24 @@ const CustomerDashboard = () => {
         {/* CTA Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
           {/* How It Works CTA */}
-          <JobCard title="How It Works" description="Learn the booking process" value="8 Simple Steps" icon={<Search className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#f0f9ff" onClick={() => navigate('/customer/how-it-works')} />
+          <JobCard 
+            title="How It Works" 
+            description="Learn the booking process" 
+            value="8 Simple Steps" 
+            illustration={cardIllustration}
+            heroColor="#f0f9ff" 
+            onClick={() => navigate('/customer/how-it-works')} 
+          />
           
           {/* Pricing Model CTA */}
-          <JobCard title="Pricing Model" description="View our transparent pricing" value="Fixed Rates" icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef3c7" onClick={() => navigate('/customer/pricing')} />
+          <JobCard 
+            title="Pricing Model" 
+            description="View our transparent pricing" 
+            value="Fixed Rates" 
+            illustration={cardIllustration}
+            heroColor="#fef3c7" 
+            onClick={() => navigate('/customer/pricing')} 
+          />
         </div>
       </main>
       
