@@ -10,7 +10,7 @@ const dashboardConfig = {
         items: [
             {
                 title: "Ride",
-                imageLink: "https://i.imgur.com/rGfF8yU.png",
+                imageLink: "https://s6.imgcdn.dev/YyfItw.png",
                 isLarge: true, // Style as large
                 titleInsideCard: true
             },
