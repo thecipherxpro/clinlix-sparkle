@@ -85,12 +85,12 @@ const CustomerDashboard = () => {
       {/* Mobile-first main container with auto-fit max-width and responsive padding */}
       <main className="w-full max-w-[min(1280px,calc(100%-32px))] py-[clamp(16px,4vw,32px)] px-0 mx-[18px]">
 
-        {/* Quick Actions - Auto-fit grid with responsive gaps */}
+        {/* Quick Actions */}
         <div className="mb-[clamp(20px,5vw,32px)]">
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
             Quick Actions
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
+          <div className="flex flex-wrap gap-4 justify-start">
             <IconButtonCard 
               iconSrc={cardIllustration}
               text="Book Now" 
