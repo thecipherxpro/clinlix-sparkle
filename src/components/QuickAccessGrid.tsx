@@ -10,7 +10,7 @@ const dashboardConfig = {
     items: [
       {
         title: "Book Cleaning Service",
-        imageLink: "https://i.imghippo.com/files/eOY8892XHg.png",
+        imageLink: "https://i.postimg.cc/1t5YJ3HR/Gradient-Icon-Map-Navigation-App-Logo.png",
         isLarge: true,
         // Style as large
         titleInsideCard: true,
