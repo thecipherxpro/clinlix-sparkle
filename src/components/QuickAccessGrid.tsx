@@ -9,31 +9,26 @@ const dashboardConfig = {
         // The layout (empty space next to "Ride") will be handled by explicit grid placement in `QuickAccessGrid`.
         items: [
             {
-                title: "Ride",
-                imageLink: "https://i.imgur.com/rGfF8yU.png",
+                title: "Book Cleaning ",
+                imageLink: "https://s6.imgcdn.dev/YyfItw.png",
                 isLarge: true, // Style as large
-                titleInsideCard: true,
-                cardBgColor: "bg-gray-100" // Default color
+                titleInsideCard: true
             },
             {
                 title: "Reserve",
-                imageLink: "https://i.imgur.com/z1hX9tH.png",
-                cardBgColor: "bg-blue-100" // Example of a custom color
+                imageLink: "https://i.imgur.com/z1hX9tH.png"
             },
             {
                 title: "Hourly",
-                imageLink: "https://i.imgur.com/vH1y2gZ.png",
-                cardBgColor: "bg-gray-100"
+                imageLink: "https://i.imgur.com/vH1y2gZ.png"
             },
             {
                 title: "Transit",
-                imageLink: "https://i.imgur.com/k9bT69k.png",
-                cardBgColor: "bg-gray-100"
+                imageLink: "https://i.imgur.com/k9bT69k.png"
             },
             {
                 title: "Charter",
-                imageLink: "https://i.imgur.com/L12nO9Z.png",
-                cardBgColor: "bg-gray-100"
+                imageLink: "https://i.imgur.com/L12nO9Z.png"
             }
         ]
     }
@@ -45,12 +40,12 @@ const dashboardConfig = {
  * Component 1: QuickAccessItem
  * Renders a single item in the quick access grid.
  */
-function QuickAccessItem({ title, imageLink, isLarge = false, titleInsideCard = false, colSpan = 1, cardBgColor = "bg-gray-100" }) {
+function QuickAccessItem({ title, imageLink, isLarge = false, titleInsideCard = false, colSpan = 1 }) {
     
     const itemWrapperClasses = `col-span-${colSpan}`;
     
-    // Base card styling now uses the cardBgColor prop
-    let cardBaseClasses = `${cardBgColor} rounded-2xl w-full overflow-hidden transition-transform hover:scale-[1.02] active:scale-98 cursor-pointer`;
+    // Base card styling
+    let cardBaseClasses = "bg-gray-100 rounded-2xl w-full overflow-hidden transition-transform hover:scale-[1.02] active:scale-98 cursor-pointer";
     let cardContentClasses;
     let imageClasses;
 
@@ -68,7 +63,7 @@ function QuickAccessItem({ title, imageLink, isLarge = false, titleInsideCard = 
         <div 
             className={`flex flex-col items-center ${itemWrapperClasses}`}
         >
-            {/* The Card (styles updated) */}
+            {/* The Card (gray box) */}
             <div 
                 className={`${cardBaseClasses} ${cardContentClasses}`}
             >
@@ -81,10 +76,11 @@ function QuickAccessItem({ title, imageLink, isLarge = false, titleInsideCard = 
                     src={imageLink}
                     alt={title}
                     className={imageClasses}
-                onError={(e) => {
-                    e.currentTarget.onerror = null; 
-                    e.currentTarget.src = `https://placehold.co/120x120/f1f5f9/cbd5e1?text=img`; 
-                }}
+                    onError={(e) => { 
+                        const img = e.target as HTMLImageElement;
+                        img.onerror = null; 
+                        img.src = `https://placehold.co/120x120/f1f5f9/cbd5e1?text=img`; 
+                    }}
                 />
             </div>
 
@@ -115,7 +111,6 @@ export default function QuickAccessGrid() {
                 isLarge={items[0].isLarge}
                 titleInsideCard={items[0].titleInsideCard}
                 colSpan={1}
-                cardBgColor={items[0].cardBgColor} // Pass color prop
             />
             
             {/* 2-Column Grid for Remaining Cards */}
@@ -125,13 +120,11 @@ export default function QuickAccessGrid() {
                     title={items[1].title}
                     imageLink={items[1].imageLink}
                     colSpan={1}
-                    cardBgColor={items[1].cardBgColor} // Pass color prop
                 />
                 <QuickAccessItem
                     title={items[2].title}
                     imageLink={items[2].imageLink}
                     colSpan={1}
-                    cardBgColor={items[2].cardBgColor} // Pass color prop
                 />
                 
                 {/* Items 4 & 5: "Transit" & "Charter" */}
@@ -139,13 +132,11 @@ export default function QuickAccessGrid() {
                     title={items[3].title}
                     imageLink={items[3].imageLink}
                     colSpan={1}
-                    cardBgColor={items[3].cardBgColor} // Pass color prop
                 />
                 <QuickAccessItem
                     title={items[4].title}
                     imageLink={items[4].imageLink}
                     colSpan={1}
-                    cardBgColor={items[4].cardBgColor} // Pass color prop
                 />
             </div>
         </div>
