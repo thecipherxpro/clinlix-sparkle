@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { IconButtonCard } from "@/components/ui/icon-button-card";
 import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
+import QuickAccessGrid from "@/components/QuickAccessGrid";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
@@ -90,31 +90,7 @@ const CustomerDashboard = () => {
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
             Quick Actions
           </h3>
-          <div className="flex flex-wrap gap-4 justify-start">
-            <IconButtonCard 
-              iconSrc={cardIllustration}
-              text="Book Now" 
-              onClick={() => navigate('/customer/booking')} 
-            />
-            
-            <IconButtonCard 
-              iconSrc={locationIcon}
-              text="Addresses" 
-              onClick={() => navigate('/customer/my-addresses')} 
-            />
-            
-            <IconButtonCard 
-              iconSrc={walletIcon}
-              text="Payment" 
-              onClick={() => navigate('/customer/payment-methods')} 
-            />
-            
-            <IconButtonCard 
-              iconSrc={cardIllustration}
-              text="Profile" 
-              onClick={() => navigate('/customer/profile')} 
-            />
-          </div>
+          <QuickAccessGrid />
         </div>
 
         {/* Upcoming Bookings - Carousel */}
