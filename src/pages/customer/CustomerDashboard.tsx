@@ -87,7 +87,7 @@ const CustomerDashboard = () => {
 
         {/* Quick Actions */}
         <div className="mb-[clamp(20px,5vw,32px)]">
-          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
+          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)] text-center">
             Quick Actions
           </h3>
           <div className="flex flex-wrap gap-5 justify-start py-0 px-[30px] my-[13px] mx-0">
