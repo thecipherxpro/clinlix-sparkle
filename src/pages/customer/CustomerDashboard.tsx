@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { IconButtonCard } from "@/components/ui/icon-button-card";
+import { QuickAccessItem } from "@/components/QuickAccessItem";
 import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -86,18 +86,37 @@ const CustomerDashboard = () => {
       <main className="w-full max-w-[min(1280px,calc(100%-32px))] py-[clamp(16px,4vw,32px)] px-0 mx-[18px]">
 
         {/* Quick Actions */}
-        <div className="mb-[clamp(20px,5vw,32px)]">
-          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)] text-center">
-            Quick Actions
-          </h3>
-          <div className="flex flex-wrap gap-5 justify-start py-0 px-[30px] my-[13px] mx-0">
-            <IconButtonCard iconSrc={cardIllustration} text="Book Now" onClick={() => navigate('/customer/booking')} />
-            
-            <IconButtonCard iconSrc={locationIcon} text="Addresses" onClick={() => navigate('/customer/my-addresses')} />
-            
-            <IconButtonCard iconSrc={walletIcon} text="Payment" onClick={() => navigate('/customer/payment-methods')} />
-            
-            <IconButtonCard iconSrc={cardIllustration} text="Profile" onClick={() => navigate('/customer/profile')} />
+        <div className="mb-[clamp(20px,5vw,32px)] w-full max-w-md mx-auto">
+          <h2 className="text-2xl font-bold text-black mb-4">
+            Quick Access
+          </h2>
+          
+          {/* Grid layout */}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+            <QuickAccessItem 
+              title="Book Now" 
+              imageLink={cardIllustration}
+              isLarge={true}
+              titleInsideCard={true}
+              onClick={() => navigate('/customer/booking')}
+            />
+            <QuickAccessItem 
+              title="Addresses" 
+              imageLink={locationIcon}
+              isLarge={true}
+              titleInsideCard={true}
+              onClick={() => navigate('/customer/my-addresses')}
+            />
+            <QuickAccessItem 
+              title="Payment" 
+              imageLink={walletIcon}
+              onClick={() => navigate('/customer/payment-methods')}
+            />
+            <QuickAccessItem 
+              title="Profile" 
+              imageLink={cardIllustration}
+              onClick={() => navigate('/customer/profile')}
+            />
           </div>
         </div>
 
