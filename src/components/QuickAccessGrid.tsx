@@ -9,8 +9,8 @@ const dashboardConfig = {
         // The layout (empty space next to "Ride") will be handled by explicit grid placement in `QuickAccessGrid`.
         items: [
             {
-                title: "Book Cleaning ",
-                imageLink: "https://s6.imgcdn.dev/YyfItw.png",
+                title: "Ride",
+                imageLink: "https://i.imgur.com/rGfF8yU.png",
                 isLarge: true, // Style as large
                 titleInsideCard: true
             },
@@ -52,7 +52,7 @@ function QuickAccessItem({ title, imageLink, isLarge = false, titleInsideCard = 
     if (titleInsideCard && isLarge) {
         // For large cards with title inside (like "Ride")
         cardContentClasses = "flex flex-col justify-between items-start h-36 p-4";
-        imageClasses = "h-full max-h-[80px] w-auto object-contain self-end";
+        imageClasses = "h-20 w-20 object-contain self-end";
     } else {
         // For other cards (small cards with title underneath)
         cardContentClasses = "flex justify-center items-center h-32 p-4";
