@@ -81,11 +81,10 @@ function QuickAccessItem({ title, imageLink, isLarge = false, titleInsideCard = 
                     src={imageLink}
                     alt={title}
                     className={imageClasses}
-                    onError={(e) => {
-                        // Valid JS for image error handling
-                        e.target.onerror = null; 
-                        e.target.src = `https://placehold.co/120x120/f1f5f9/cbd5e1?text=img`; 
-                    }}
+                onError={(e) => {
+                    e.currentTarget.onerror = null; 
+                    e.currentTarget.src = `https://placehold.co/120x120/f1f5f9/cbd5e1?text=img`; 
+                }}
                 />
             </div>
 
