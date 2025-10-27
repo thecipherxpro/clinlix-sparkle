@@ -90,30 +90,14 @@ const CustomerDashboard = () => {
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
             Quick Actions
           </h3>
-          <div className="flex flex-wrap gap-4 justify-start">
-            <IconButtonCard 
-              iconSrc={cardIllustration}
-              text="Book Now" 
-              onClick={() => navigate('/customer/booking')} 
-            />
+          <div className="flex flex-wrap gap-5 justify-start py-0 px-[30px] my-[13px] mx-0">
+            <IconButtonCard iconSrc={cardIllustration} text="Book Now" onClick={() => navigate('/customer/booking')} />
             
-            <IconButtonCard 
-              iconSrc={locationIcon}
-              text="Addresses" 
-              onClick={() => navigate('/customer/my-addresses')} 
-            />
+            <IconButtonCard iconSrc={locationIcon} text="Addresses" onClick={() => navigate('/customer/my-addresses')} />
             
-            <IconButtonCard 
-              iconSrc={walletIcon}
-              text="Payment" 
-              onClick={() => navigate('/customer/payment-methods')} 
-            />
+            <IconButtonCard iconSrc={walletIcon} text="Payment" onClick={() => navigate('/customer/payment-methods')} />
             
-            <IconButtonCard 
-              iconSrc={cardIllustration}
-              text="Profile" 
-              onClick={() => navigate('/customer/profile')} 
-            />
+            <IconButtonCard iconSrc={cardIllustration} text="Profile" onClick={() => navigate('/customer/profile')} />
           </div>
         </div>
 
@@ -204,24 +188,10 @@ const CustomerDashboard = () => {
         {/* CTA Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
           {/* How It Works CTA */}
-          <JobCard 
-            title="How It Works" 
-            description="Learn the booking process" 
-            value="8 Simple Steps" 
-            illustration={cardIllustration}
-            heroColor="#f0f9ff" 
-            onClick={() => navigate('/customer/how-it-works')} 
-          />
+          <JobCard title="How It Works" description="Learn the booking process" value="8 Simple Steps" illustration={cardIllustration} heroColor="#f0f9ff" onClick={() => navigate('/customer/how-it-works')} />
           
           {/* Pricing Model CTA */}
-          <JobCard 
-            title="Pricing Model" 
-            description="View our transparent pricing" 
-            value="Fixed Rates" 
-            illustration={cardIllustration}
-            heroColor="#fef3c7" 
-            onClick={() => navigate('/customer/pricing')} 
-          />
+          <JobCard title="Pricing Model" description="View our transparent pricing" value="Fixed Rates" illustration={cardIllustration} heroColor="#fef3c7" onClick={() => navigate('/customer/pricing')} />
         </div>
       </main>
       
