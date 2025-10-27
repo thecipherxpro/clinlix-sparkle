@@ -103,19 +103,18 @@ export default function QuickAccessGrid() {
     const { items } = dashboardConfig.quickAccess;
 
     return (
-        <div className="w-full max-w-md">
-            {/* Explicitly defining grid for this specific layout */}
+        <div className="w-full max-w-md space-y-6">
+            {/* First Card: "Ride" - Full Width */}
+            <QuickAccessItem
+                title={items[0].title}
+                imageLink={items[0].imageLink}
+                isLarge={items[0].isLarge}
+                titleInsideCard={items[0].titleInsideCard}
+                colSpan={1}
+            />
+            
+            {/* 2-Column Grid for Remaining Cards */}
             <div className="grid grid-cols-2 gap-x-4 gap-y-6">
-                
-                {/* Item 1: "Ride" - full width, spans 2 columns */}
-                <QuickAccessItem
-                    title={items[0].title}
-                    imageLink={items[0].imageLink}
-                    isLarge={items[0].isLarge}
-                    titleInsideCard={items[0].titleInsideCard}
-                    colSpan={2} // Full width across both columns
-                />
-                
                 {/* Items 2 & 3: "Reserve" & "Hourly" */}
                 <QuickAccessItem
                     title={items[1].title}
