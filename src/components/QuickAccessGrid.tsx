@@ -63,7 +63,7 @@ function QuickAccessItem({
   if (titleInsideCard && isLarge) {
     // For large cards with title inside (like "Ride")
     cardContentClasses = "flex flex-col justify-between items-start h-36 p-4";
-    imageClasses = "h-full max-h-[150px] w-auto object-contain self-end";
+    imageClasses = "h-full max-h-[150px] w-[110px] object-contain self-end";
   } else {
     // For other cards (small cards with title underneath)
     cardContentClasses = "flex justify-center items-center h-32 p-4";
