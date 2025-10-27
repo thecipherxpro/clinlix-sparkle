@@ -13,6 +13,7 @@ import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 import { StatusBadge } from "@/components/StatusBadge";
 import cardIllustration from "@/assets/card-illustration.svg";
+import walletIcon from "@/assets/wallet-icon.png";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
@@ -110,7 +111,7 @@ const CustomerDashboard = () => {
               title="Payment" 
               description="Manage cards" 
               value="Methods" 
-              illustration={cardIllustration}
+              illustration={walletIcon}
               heroColor="#dcfce7" 
               onClick={() => navigate('/customer/payment-methods')} 
             />
