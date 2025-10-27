@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { QuickAccessItem } from "@/components/QuickAccessItem";
+import { IconButtonCard } from "@/components/ui/icon-button-card";
 import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -86,66 +86,33 @@ const CustomerDashboard = () => {
       <main className="w-full max-w-[min(1280px,calc(100%-32px))] py-[clamp(16px,4vw,32px)] px-0 mx-[18px]">
 
         {/* Quick Actions */}
-        <div className="mb-[clamp(20px,5vw,32px)] w-full max-w-md mx-auto">
-          <h2 className="text-2xl font-bold text-black mb-4">
-            Quick Access
-          </h2>
-          
-          {/* Grid layout */}
-          <div className="grid grid-cols-2 gap-x-4 gap-y-6">
-            <QuickAccessItem 
-              title="Ride" 
-              imageLink="https://i.imgur.com/rGfF8yU.png"
-              isLarge={true}
-              titleInsideCard={true}
-              onClick={() => navigate('/customer/booking')}
+        <div className="mb-[clamp(20px,5vw,32px)]">
+          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
+            Quick Actions
+          </h3>
+          <div className="flex flex-wrap gap-4 justify-start">
+            <IconButtonCard 
+              iconSrc={cardIllustration}
+              text="Book Now" 
+              onClick={() => navigate('/customer/booking')} 
             />
-            <QuickAccessItem 
-              title="Package" 
-              imageLink="https://i.imgur.com/XqR7m0K.png"
-              isLarge={true}
-              titleInsideCard={true}
-              onClick={() => navigate('/customer/my-addresses')}
+            
+            <IconButtonCard 
+              iconSrc={locationIcon}
+              text="Addresses" 
+              onClick={() => navigate('/customer/my-addresses')} 
             />
-            <QuickAccessItem 
-              title="Reserve" 
-              imageLink="https://i.imgur.com/z1hX9tH.png"
-              onClick={() => navigate('/customer/booking')}
+            
+            <IconButtonCard 
+              iconSrc={walletIcon}
+              text="Payment" 
+              onClick={() => navigate('/customer/payment-methods')} 
             />
-            <QuickAccessItem 
-              title="Hourly" 
-              imageLink="https://i.imgur.com/vH1y2gZ.png"
-              onClick={() => navigate('/customer/booking')}
-            />
-            <QuickAccessItem 
-              title="Rent" 
-              imageLink="https://i.imgur.com/Hn8q4X8.png"
-              onClick={() => navigate('/customer/booking')}
-            />
-            <QuickAccessItem 
-              title="2-Wheels" 
-              imageLink="https://i.imgur.com/S9sJ3iZ.png"
-              onClick={() => navigate('/customer/booking')}
-            />
-            <QuickAccessItem 
-              title="Transit" 
-              imageLink="https://i.imgur.com/k9bT69k.png"
-              onClick={() => navigate('/customer/booking')}
-            />
-            <QuickAccessItem 
-              title="Charter" 
-              imageLink="https://i.imgur.com/L12nO9Z.png"
-              onClick={() => navigate('/customer/booking')}
-            />
-            <QuickAccessItem 
-              title="Explore" 
-              imageLink="https://i.imgur.com/p1fP76I.png"
-              onClick={() => navigate('/customer/find-providers')}
-            />
-            <QuickAccessItem 
-              title="Travel" 
-              imageLink="https://i.imgur.com/z8pQ8mQ.png"
-              onClick={() => navigate('/customer/booking')}
+            
+            <IconButtonCard 
+              iconSrc={cardIllustration}
+              text="Profile" 
+              onClick={() => navigate('/customer/profile')} 
             />
           </div>
         </div>
@@ -237,10 +204,24 @@ const CustomerDashboard = () => {
         {/* CTA Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
           {/* How It Works CTA */}
-          <JobCard title="How It Works" description="Learn the booking process" value="8 Simple Steps" illustration={cardIllustration} heroColor="#f0f9ff" onClick={() => navigate('/customer/how-it-works')} />
+          <JobCard 
+            title="How It Works" 
+            description="Learn the booking process" 
+            value="8 Simple Steps" 
+            illustration={cardIllustration}
+            heroColor="#f0f9ff" 
+            onClick={() => navigate('/customer/how-it-works')} 
+          />
           
           {/* Pricing Model CTA */}
-          <JobCard title="Pricing Model" description="View our transparent pricing" value="Fixed Rates" illustration={cardIllustration} heroColor="#fef3c7" onClick={() => navigate('/customer/pricing')} />
+          <JobCard 
+            title="Pricing Model" 
+            description="View our transparent pricing" 
+            value="Fixed Rates" 
+            illustration={cardIllustration}
+            heroColor="#fef3c7" 
+            onClick={() => navigate('/customer/pricing')} 
+          />
         </div>
       </main>
       
