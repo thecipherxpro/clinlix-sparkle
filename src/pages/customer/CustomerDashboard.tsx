@@ -14,6 +14,7 @@ import { NotificationPermissionPrompt } from "@/components/NotificationPermissio
 import { StatusBadge } from "@/components/StatusBadge";
 import cardIllustration from "@/assets/card-illustration.svg";
 import walletIcon from "@/assets/wallet-icon.png";
+import locationIcon from "@/assets/location-icon.png";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
@@ -100,9 +101,9 @@ const CustomerDashboard = () => {
             
             <JobCard 
               title="Addresses" 
-              description="Your locations" 
+              description="Your Addresses" 
               value="Manage" 
-              illustration={cardIllustration}
+              illustration={locationIcon}
               heroColor="#e0f2fe" 
               onClick={() => navigate('/customer/my-addresses')} 
             />
