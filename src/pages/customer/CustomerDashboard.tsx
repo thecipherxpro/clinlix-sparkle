@@ -94,28 +94,58 @@ const CustomerDashboard = () => {
           {/* Grid layout */}
           <div className="grid grid-cols-2 gap-x-4 gap-y-6">
             <QuickAccessItem 
-              title="Book Now" 
-              imageLink={cardIllustration}
+              title="Ride" 
+              imageLink="https://i.imgur.com/rGfF8yU.png"
               isLarge={true}
               titleInsideCard={true}
               onClick={() => navigate('/customer/booking')}
             />
             <QuickAccessItem 
-              title="Addresses" 
-              imageLink={locationIcon}
+              title="Package" 
+              imageLink="https://i.imgur.com/XqR7m0K.png"
               isLarge={true}
               titleInsideCard={true}
               onClick={() => navigate('/customer/my-addresses')}
             />
             <QuickAccessItem 
-              title="Payment" 
-              imageLink={walletIcon}
-              onClick={() => navigate('/customer/payment-methods')}
+              title="Reserve" 
+              imageLink="https://i.imgur.com/z1hX9tH.png"
+              onClick={() => navigate('/customer/booking')}
             />
             <QuickAccessItem 
-              title="Profile" 
-              imageLink={cardIllustration}
-              onClick={() => navigate('/customer/profile')}
+              title="Hourly" 
+              imageLink="https://i.imgur.com/vH1y2gZ.png"
+              onClick={() => navigate('/customer/booking')}
+            />
+            <QuickAccessItem 
+              title="Rent" 
+              imageLink="https://i.imgur.com/Hn8q4X8.png"
+              onClick={() => navigate('/customer/booking')}
+            />
+            <QuickAccessItem 
+              title="2-Wheels" 
+              imageLink="https://i.imgur.com/S9sJ3iZ.png"
+              onClick={() => navigate('/customer/booking')}
+            />
+            <QuickAccessItem 
+              title="Transit" 
+              imageLink="https://i.imgur.com/k9bT69k.png"
+              onClick={() => navigate('/customer/booking')}
+            />
+            <QuickAccessItem 
+              title="Charter" 
+              imageLink="https://i.imgur.com/L12nO9Z.png"
+              onClick={() => navigate('/customer/booking')}
+            />
+            <QuickAccessItem 
+              title="Explore" 
+              imageLink="https://i.imgur.com/p1fP76I.png"
+              onClick={() => navigate('/customer/find-providers')}
+            />
+            <QuickAccessItem 
+              title="Travel" 
+              imageLink="https://i.imgur.com/z8pQ8mQ.png"
+              onClick={() => navigate('/customer/booking')}
             />
           </div>
         </div>
