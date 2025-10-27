@@ -80,8 +80,9 @@ function QuickAccessItem({
           alt={title}
           className={imageClasses}
           onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = `https://placehold.co/120x120/f1f5f9/cbd5e1?text=img`;
+            const target = e.currentTarget as HTMLImageElement;
+            target.onerror = null;
+            target.src = `https://placehold.co/120x120/f1f5f9/cbd5e1?text=img`;
           }}
         />
       </div>
