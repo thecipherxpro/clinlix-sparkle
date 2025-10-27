@@ -9,8 +9,8 @@ const dashboardConfig = {
     // The layout (empty space next to "Ride") will be handled by explicit grid placement in `QuickAccessGrid`.
     items: [
       {
-        title: "Book Cleaning Service",
-        imageLink: "https://i.postimg.cc/1t5YJ3HR/Gradient-Icon-Map-Navigation-App-Logo.png",
+        title: "Book Cleaning",
+        imageLink: "https://i.imghippo.com/files/eOY8892XHg.png",
         isLarge: true,
         // Style as large
         titleInsideCard: true,
