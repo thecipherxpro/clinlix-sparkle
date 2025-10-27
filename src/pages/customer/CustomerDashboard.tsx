@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { IconButtonCard } from "@/components/ui/icon-button-card";
 import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
@@ -89,40 +90,28 @@ const CustomerDashboard = () => {
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
             Quick Actions
           </h3>
-          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)] auto-rows-fr">
-            <JobCard 
-              title="Book Now" 
-              description="Schedule service" 
-              value="New Booking" 
-              illustration={cardIllustration}
-              heroColor="#fef4e2" 
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)]">
+            <IconButtonCard 
+              iconSrc={cardIllustration}
+              text="Book Now" 
               onClick={() => navigate('/customer/booking')} 
             />
             
-            <JobCard 
-              title="Addresses" 
-              description="Your Addresses" 
-              value="Manage" 
-              illustration={locationIcon}
-              heroColor="#e0f2fe" 
+            <IconButtonCard 
+              iconSrc={locationIcon}
+              text="Addresses" 
               onClick={() => navigate('/customer/my-addresses')} 
             />
             
-            <JobCard 
-              title="Payment" 
-              description="Manage cards" 
-              value="Methods" 
-              illustration={walletIcon}
-              heroColor="#dcfce7" 
+            <IconButtonCard 
+              iconSrc={walletIcon}
+              text="Payment" 
               onClick={() => navigate('/customer/payment-methods')} 
             />
             
-            <JobCard 
-              title="Profile" 
-              description="Update info" 
-              value="Settings" 
-              illustration={cardIllustration}
-              heroColor="#fae8ff" 
+            <IconButtonCard 
+              iconSrc={cardIllustration}
+              text="Profile" 
               onClick={() => navigate('/customer/profile')} 
             />
           </div>
