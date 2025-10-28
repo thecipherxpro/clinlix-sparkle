@@ -73,7 +73,7 @@ const DashboardWelcomeBanner = ({ user, onSearchClick, className }: DashboardWel
   return (
     <div className={cn("relative w-full bg-card rounded-[20px] shadow-lg border overflow-hidden", className)}>
       {/* Geometric Pattern Background */}
-      <div className="h-24 sm:h-32 md:h-40 w-full bg-from to bg-gradient-to-br from-[#9890a2] to-[#ffffff] overflow-hidden"></div>
+      <div className="h-24 sm:h-32 md:h-40 w-full bg-[#b0acb4] overflow-hidden"></div>
 
       {/* Notification Bell - Top Right */}
       <div className="absolute top-4 right-4 z-10">
