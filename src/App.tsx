@@ -52,7 +52,7 @@ const App = () => <QueryClientProvider client={queryClient}>
           
           {/* Customer routes with persistent navigation */}
           <Route element={<CustomerLayout />}>
-            <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+            <Route path="/customer/dashboard" element={<CustomerDashboard />} className="bg-white" />
             <Route path="/customer/providers" element={<Providers />} />
             <Route path="/customer/find-providers" element={<FindProviders />} />
             <Route path="/customer/my-addresses" element={<MyAddresses />} />
