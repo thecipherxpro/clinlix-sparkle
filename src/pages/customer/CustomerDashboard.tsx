@@ -74,7 +74,7 @@ const CustomerDashboard = () => {
   }
   return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       {/* Mobile-first header with auto-fit padding */}
-      <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
+      <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)] bg-white">
         <DashboardWelcomeBanner user={{
         name: profile?.first_name || 'User',
         role: 'CUSTOMER',
@@ -180,24 +180,10 @@ const CustomerDashboard = () => {
         {/* CTA Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
           {/* How It Works CTA */}
-          <JobCard 
-            title="How It Works" 
-            description="Learn the booking process" 
-            value="8 Simple Steps" 
-            illustration={cardIllustration}
-            heroColor="#f0f9ff" 
-            onClick={() => navigate('/customer/how-it-works')} 
-          />
+          <JobCard title="How It Works" description="Learn the booking process" value="8 Simple Steps" illustration={cardIllustration} heroColor="#f0f9ff" onClick={() => navigate('/customer/how-it-works')} />
           
           {/* Pricing Model CTA */}
-          <JobCard 
-            title="Pricing Model" 
-            description="View our transparent pricing" 
-            value="Fixed Rates" 
-            illustration={cardIllustration}
-            heroColor="#fef3c7" 
-            onClick={() => navigate('/customer/pricing')} 
-          />
+          <JobCard title="Pricing Model" description="View our transparent pricing" value="Fixed Rates" illustration={cardIllustration} heroColor="#fef3c7" onClick={() => navigate('/customer/pricing')} />
         </div>
       </main>
       
