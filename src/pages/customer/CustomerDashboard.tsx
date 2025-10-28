@@ -96,7 +96,7 @@ const CustomerDashboard = () => {
               title="Book Now"
               description="Schedule service"
               value="New Booking"
-              icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />}
+              image="https://i.postimg.cc/ZnT9Ytsd/Map-Navigation-App-Logo.png"
               heroColor="#ebe0eb"
               onClick={() => navigate("/customer/booking")}
             />
