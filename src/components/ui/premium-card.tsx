@@ -5,6 +5,7 @@ interface JobCardProps {
   description: string;
   value?: string;
   icon?: React.ReactNode;
+  image?: string;
   heroColor?: string;
   onClick?: () => void;
   className?: string;
@@ -14,6 +15,7 @@ export const JobCard: React.FC<JobCardProps> = ({
   description,
   value,
   icon,
+  image,
   heroColor = "#fef4e2",
   onClick,
   className,
@@ -32,9 +34,13 @@ export const JobCard: React.FC<JobCardProps> = ({
         backgroundColor: heroColor,
       }}
     >
-      {/* Icon */}
+      {/* Icon or Image */}
       <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-foreground/70">
-        {icon && <div className="scale-[2] sm:scale-[2.5]">{icon}</div>}
+        {image ? (
+          <img src={image} alt={title} className="w-full h-full object-contain" />
+        ) : icon ? (
+          <div className="scale-[2] sm:scale-[2.5]">{icon}</div>
+        ) : null}
       </div>
 
       {/* Text Content */}
