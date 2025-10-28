@@ -24,8 +24,8 @@ export const JobCard: React.FC<JobCardProps> = ({
     backgroundColor: heroColor
   }}>
       {/* Icon or Image */}
-      <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center text-foreground/70">
-        {image ? <img src={image} alt={title} className="w-16 h-16  object-cover rounded-lg" /> : icon ? <div className="scale-[2] sm:scale-[2.5]">{icon}</div> : null}
+      <div className="w-20 h-20 sm:w-25 sm:h-20 flex items-center justify-center text-foreground/70">
+        {image ? <img src={image} alt={title} className="w-20 h-20  object-cover rounded-lg" /> : icon ? <div className="scale-[2] sm:scale-[2.5]">{icon}</div> : null}
       </div>
 
       {/* Text Content */}
