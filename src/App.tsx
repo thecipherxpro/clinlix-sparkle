@@ -35,8 +35,11 @@ import JobDetail from "./pages/provider/JobDetail";
 import NotFound from "./pages/NotFound";
 import CustomerLayout from "./components/layouts/CustomerLayout";
 import ProviderLayout from "./components/layouts/ProviderLayout";
+
 const queryClient = new QueryClient();
-const App = () => <QueryClientProvider client={queryClient}>
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <TooltipProvider>
         <SplashScreen />
@@ -86,5 +89,7 @@ const App = () => <QueryClientProvider client={queryClient}>
         </Routes>
       </TooltipProvider>
     </BrowserRouter>
-  </QueryClientProvider>;
+  </QueryClientProvider>
+);
+
 export default App;

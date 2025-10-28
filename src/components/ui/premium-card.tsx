@@ -9,7 +9,6 @@ interface JobCardProps {
   heroColor?: string;
   onClick?: () => void;
   className?: string;
-  illustration?: string;
 }
 
 export const JobCard: React.FC<JobCardProps> = ({
@@ -20,66 +19,51 @@ export const JobCard: React.FC<JobCardProps> = ({
   heroColor = '#fef4e2',
   onClick,
   className,
-  illustration,
 }) => {
   return (
     <article
       onClick={onClick}
       className={cn(
-        "w-full bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden",
-        "transition-all duration-300",
-        "hover:shadow-xl hover:scale-[1.02]",
-        onClick && "cursor-pointer active:scale-[0.98]",
+        "relative w-full bg-card rounded-3xl p-6 sm:p-8",
+        "transition-all duration-300 hover:shadow-xl hover:scale-[1.02]",
+        "flex flex-col items-center",
+        onClick && "cursor-pointer",
         className
       )}
+      style={{ backgroundColor: heroColor }}
     >
-      {/* Image Section - Responsive padding and sizing */}
-      <div className="flex justify-center items-center py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6 bg-white">
-        {illustration ? (
-          <img 
-            src={illustration} 
-            alt={title}
-            className="w-full max-w-[120px] sm:max-w-[160px] md:max-w-[200px] object-contain -mb-2 sm:-mb-3 md:-mb-4"
-          />
-        ) : icon ? (
-          <div className="w-full max-w-[120px] sm:max-w-[160px] md:max-w-[200px] flex items-center justify-center -mb-2 sm:-mb-3 md:-mb-4">
-            <div className="scale-[2] sm:scale-[2.5] md:scale-[3]">{icon}</div>
-          </div>
-        ) : null}
+      {/* Icon/Illustration */}
+      <div className="w-20 h-20 sm:w-24 sm:h-24 mb-4 flex items-center justify-center text-foreground/80">
+        {icon && <div className="scale-[2.5] sm:scale-[3]">{icon}</div>}
       </div>
 
-      {/* Content Section - Responsive padding */}
-      <div className="p-3 sm:p-4 md:p-6">
-        <div className="flex justify-center mb-3 sm:mb-4 md:mb-5">
-          <span className="py-1.5 px-3 sm:py-2 sm:px-4 md:px-5 bg-fuchsia-50 text-fuchsia-700 rounded-full font-semibold text-xs sm:text-sm">
-            {value || title}
-          </span>
-        </div>
-        
-        <div className="flex justify-between items-end gap-2">
-          <h2 className="text-lg sm:text-2xl md:text-3xl font-bold text-black leading-tight">
-            {description}
-          </h2>
-          <button 
-            className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-black text-white rounded-full flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
-            aria-label={`Navigate to ${title}`}
-          >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              strokeWidth={3} 
-              stroke="currentColor" 
-              className="w-4 h-4 sm:w-5 sm:h-5"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                d="M8.25 4.5l7.5 7.5-7.5 7.5" 
-              />
-            </svg>
-          </button>
-        </div>
+      {/* Category Badge */}
+      <div className="bg-white/70 backdrop-blur-sm rounded-full px-6 py-2 mb-4">
+        <span className="text-sm sm:text-base font-medium text-foreground/90">
+          {value || title}
+        </span>
+      </div>
+
+      {/* Main Title */}
+      <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2 text-center">
+        {description}
+      </h3>
+
+      {/* Arrow Navigation Button */}
+      <div className="absolute right-4 bottom-4 w-12 h-12 sm:w-14 sm:h-14 bg-foreground rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+        <svg 
+          width="24" 
+          height="24" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="2.5" 
+          strokeLinecap="round" 
+          strokeLinejoin="round"
+          className="text-background translate-x-0.5"
+        >
+          <path d="M9 18l6-6-6-6" />
+        </svg>
       </div>
     </article>
   );

@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { JobCard } from "@/components/ui/premium-card";
 import { Calendar, MapPin, CreditCard, User, Search, Clock } from "lucide-react";
-import QuickAccessGrid from "@/components/QuickAccessGrid";
 import DashboardWelcomeBanner from "@/components/DashboardWelcomeBanner";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
@@ -13,9 +12,6 @@ import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 import { StatusBadge } from "@/components/StatusBadge";
-import cardIllustration from "@/assets/card-illustration.svg";
-import walletIcon from "@/assets/wallet-icon.png";
-import locationIcon from "@/assets/location-icon.png";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
@@ -72,9 +68,9 @@ const CustomerDashboard = () => {
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>;
   }
-  return <div className="min-h-screen bg-white pb-mobile-nav">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       {/* Mobile-first header with auto-fit padding */}
-      <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)] bg-white">
+      <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
         <DashboardWelcomeBanner user={{
         name: profile?.first_name || 'User',
         role: 'CUSTOMER',
@@ -85,12 +81,20 @@ const CustomerDashboard = () => {
       {/* Mobile-first main container with auto-fit max-width and responsive padding */}
       <main className="w-full max-w-[min(1280px,calc(100%-32px))] py-[clamp(16px,4vw,32px)] px-0 mx-[18px]">
 
-        {/* Quick Actions */}
+        {/* Quick Actions - Auto-fit grid with responsive gaps */}
         <div className="mb-[clamp(20px,5vw,32px)]">
-          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)] text-black text-center">
+          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
             Quick Actions
           </h3>
-          <QuickAccessGrid />
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)] auto-rows-fr">
+            <JobCard title="Book Now" description="Schedule service" value="New Booking" icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef4e2" onClick={() => navigate('/customer/booking')} />
+            
+            <JobCard title="Addresses" description="Your locations" value="Manage" icon={<MapPin className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#e0f2fe" onClick={() => navigate('/customer/my-addresses')} />
+            
+            <JobCard title="Payment" description="Manage cards" value="Methods" icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#dcfce7" onClick={() => navigate('/customer/payment-methods')} />
+            
+            <JobCard title="Profile" description="Update info" value="Settings" icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fae8ff" onClick={() => navigate('/customer/profile')} />
+          </div>
         </div>
 
         {/* Upcoming Bookings - Carousel */}
@@ -180,10 +184,10 @@ const CustomerDashboard = () => {
         {/* CTA Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
           {/* How It Works CTA */}
-          <JobCard title="How It Works" description="Learn the booking process" value="8 Simple Steps" illustration={cardIllustration} heroColor="#f0f9ff" onClick={() => navigate('/customer/how-it-works')} />
+          <JobCard title="How It Works" description="Learn the booking process" value="8 Simple Steps" icon={<Search className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#f0f9ff" onClick={() => navigate('/customer/how-it-works')} />
           
           {/* Pricing Model CTA */}
-          <JobCard title="Pricing Model" description="View our transparent pricing" value="Fixed Rates" illustration={cardIllustration} heroColor="#fef3c7" onClick={() => navigate('/customer/pricing')} />
+          <JobCard title="Pricing Model" description="View our transparent pricing" value="Fixed Rates" icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef3c7" onClick={() => navigate('/customer/pricing')} />
         </div>
       </main>
       
