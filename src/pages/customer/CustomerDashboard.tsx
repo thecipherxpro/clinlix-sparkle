@@ -86,7 +86,7 @@ const CustomerDashboard = () => {
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">
             Quick Actions
           </h3>
-          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-[clamp(12px,3vw,16px)] auto-rows-fr">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <JobCard title="Book Now" description="Schedule service" value="New Booking" icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef4e2" onClick={() => navigate('/customer/booking')} />
             
             <JobCard title="Addresses" description="Your locations" value="Manage" icon={<MapPin className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#e0f2fe" onClick={() => navigate('/customer/my-addresses')} />
