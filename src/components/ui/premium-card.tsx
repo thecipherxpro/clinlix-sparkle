@@ -44,7 +44,7 @@ export const JobCard: React.FC<JobCardProps> = ({
       </div>
 
       {/* Arrow Button */}
-      <div className="absolute right-2 bottom-2 w-4 h-4 sm:w-5 sm:h-5 bg-foreground rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform">
+      <div className="absolute right-2 bottom-2 w-10 h-10 sm:w-5 sm:h-5 bg-foreground rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform">
         <svg
           width="6"
           height="6"
