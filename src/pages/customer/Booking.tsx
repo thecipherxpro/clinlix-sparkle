@@ -309,31 +309,21 @@ const Booking = () => {
                         <div className="flex items-start gap-3 flex-1 min-w-0">
                           <div className="relative flex-shrink-0">
                             <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                              {address.property_type === 'House' ? (
-                                <Home className="w-6 h-6 text-primary" />
-                              ) : (
-                                <Building2 className="w-6 h-6 text-primary" />
-                              )}
+                              {address.property_type === 'House' ? <Home className="w-6 h-6 text-primary" /> : <Building2 className="w-6 h-6 text-primary" />}
                             </div>
-                            {address.is_primary && (
-                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
+                            {address.is_primary && <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
                                 <Star className="w-2.5 h-2.5 text-yellow-900 fill-yellow-900" />
-                              </div>
-                            )}
+                              </div>}
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1 flex-wrap">
                               <CardTitle className="text-base font-semibold truncate">{address.label}</CardTitle>
-                              {address.is_primary && (
-                                <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+                              {address.is_primary && <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
                                   Primary
-                                </span>
-                              )}
-                              {selectedAddress?.id === address.id && (
-                                <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md">
+                                </span>}
+                              {selectedAddress?.id === address.id && <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md">
                                   <Check className="w-4 h-4 text-primary-foreground" />
-                                </div>
-                              )}
+                                </div>}
                             </div>
                             <p className="text-sm text-muted-foreground truncate">
                               {address.first_name} {address.last_name}
@@ -406,31 +396,31 @@ const Booking = () => {
                               <p className="text-xs font-medium text-muted-foreground mb-2">SERVICES</p>
                               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                 {address.cleaning_packages.areas_included?.map((area: string, idx: number) => {
-                        const getServiceIcon = (service: string) => {
-                          switch (service.toLowerCase()) {
-                            case 'bathroom':
-                              return <Bath className="w-3.5 h-3.5" />;
-                            case 'kitchen':
-                              return <ChefHat className="w-3.5 h-3.5" />;
-                            case 'livingroom':
-                              return <Sofa className="w-3.5 h-3.5" />;
-                            case 'floors':
-                              return <Layers className="w-3.5 h-3.5" />;
-                            case 'dusting':
-                              return <Sparkles className="w-3.5 h-3.5" />;
-                            case 'surfaces':
-                              return <Square className="w-3.5 h-3.5" />;
-                            default:
-                              return <Square className="w-3.5 h-3.5" />;
-                          }
-                        };
-                        return <div key={idx} className="flex items-center gap-1.5 bg-background rounded-md p-2 min-w-0">
+                      const getServiceIcon = (service: string) => {
+                        switch (service.toLowerCase()) {
+                          case 'bathroom':
+                            return <Bath className="w-3.5 h-3.5" />;
+                          case 'kitchen':
+                            return <ChefHat className="w-3.5 h-3.5" />;
+                          case 'livingroom':
+                            return <Sofa className="w-3.5 h-3.5" />;
+                          case 'floors':
+                            return <Layers className="w-3.5 h-3.5" />;
+                          case 'dusting':
+                            return <Sparkles className="w-3.5 h-3.5" />;
+                          case 'surfaces':
+                            return <Square className="w-3.5 h-3.5" />;
+                          default:
+                            return <Square className="w-3.5 h-3.5" />;
+                        }
+                      };
+                      return <div key={idx} className="flex items-center gap-1.5 bg-background rounded-md p-2 min-w-0">
                                       <span className="text-primary flex-shrink-0">
                                         {getServiceIcon(area)}
                                       </span>
                                       <span className="text-xs capitalize leading-tight break-words">{area}</span>
                                     </div>;
-                      })}
+                    })}
                               </div>
                             </div>
                           </div>}
@@ -489,8 +479,8 @@ const Booking = () => {
                 {selectedDate && <div className="space-y-2 sm:space-y-3">
                     <label className="text-sm font-medium block">Select Time</label>
                     <div className="relative">
-                      <div className="overflow-x-auto pb-2 hide-scrollbar -mx-2 px-2">
-                        <div className="flex gap-2 sm:gap-3 min-w-max">
+                      <div className="overflow-x-auto pb-2 hide-scrollbar mx-0 my-0 px-0 py-0">
+                        <div className="flex gap-2 sm:gap-3 min-w-max mx-0 my-[12px]">
                           {generateTimeOptions().map(time => <button key={time.value} onClick={() => setSelectedTime(time.value)} className={`
                                 px-4 py-2.5 sm:px-6 sm:py-3 rounded-full font-medium text-sm sm:text-base whitespace-nowrap transition-all touch-target
                                 ${selectedTime === time.value ? 'bg-gradient-to-br from-[#FF6B35] to-[#F7931E] text-white shadow-lg scale-105' : 'bg-muted/50 hover:bg-muted text-foreground'}
