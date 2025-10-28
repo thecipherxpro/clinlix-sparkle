@@ -124,7 +124,7 @@ const CustomerDashboard = () => {
               description="Update info"
               value="Settings"
               icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />}
-              heroColor="#fae8ff"
+              heroColor="#D2C4D6"
               onClick={() => navigate("/customer/profile")}
             />
           </div>
