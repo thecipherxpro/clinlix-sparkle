@@ -35,11 +35,8 @@ import JobDetail from "./pages/provider/JobDetail";
 import NotFound from "./pages/NotFound";
 import CustomerLayout from "./components/layouts/CustomerLayout";
 import ProviderLayout from "./components/layouts/ProviderLayout";
-
 const queryClient = new QueryClient();
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+const App = () => <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <TooltipProvider>
         <SplashScreen />
@@ -55,7 +52,7 @@ const App = () => (
           
           {/* Customer routes with persistent navigation */}
           <Route element={<CustomerLayout />}>
-            <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+            <Route path="/customer/dashboard" element={<CustomerDashboard />} className="bg-white" />
             <Route path="/customer/providers" element={<Providers />} />
             <Route path="/customer/find-providers" element={<FindProviders />} />
             <Route path="/customer/my-addresses" element={<MyAddresses />} />
@@ -89,7 +86,5 @@ const App = () => (
         </Routes>
       </TooltipProvider>
     </BrowserRouter>
-  </QueryClientProvider>
-);
-
+  </QueryClientProvider>;
 export default App;
