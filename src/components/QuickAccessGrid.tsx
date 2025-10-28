@@ -14,17 +14,17 @@ const dashboardConfig = {
         isLarge: true,
         // Style as large
         titleInsideCard: true,
-        cardBgColor: "bg-gray-150", // Default color
+        cardBgColor: "bg-gray-300", // Default color
       },
       {
         title: "Wallet ",
         imageLink: "https://i.postimg.cc/brL6bcbN/Gradion-App.png",
-        cardBgColor: "bg-gray-150", // Example of a custom color
+        cardBgColor: "bg-gray-300", // Example of a custom color
       },
       {
         title: "Addresses",
         imageLink: "https://i.postimg.cc/cCd9r4Kx/sssss.png",
-        cardBgColor: "bg-gray-150",
+        cardBgColor: "bg-gray-300",
       },
       {
         title: "Transit",
