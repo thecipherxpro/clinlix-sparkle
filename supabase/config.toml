@@ -8,3 +8,9 @@ verify_jwt = false
 
 [functions.verify-reset-token]
 verify_jwt = false
+
+[functions.create-booking]
+verify_jwt = true
+
+[functions.update-job-status]
+verify_jwt = true

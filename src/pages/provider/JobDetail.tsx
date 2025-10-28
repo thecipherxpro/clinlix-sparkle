@@ -238,19 +238,13 @@ const JobDetail = () => {
 
   const updateJobStatus = async (newStatus: string) => {
     try {
-      const updates: any = { job_status: newStatus };
-
-      if (newStatus === "started") {
-        updates.started_at = new Date().toISOString();
-      } else if (newStatus === "completed") {
-        updates.completed_at = new Date().toISOString();
-        updates.total_final = job?.total_estimate;
-      }
-
-      const { error } = await supabase
-        .from("bookings")
-        .update(updates)
-        .eq("id", id);
+      // Call secure edge function for job status update
+      const { error } = await supabase.functions.invoke('update-job-status', {
+        body: {
+          bookingId: id,
+          newStatus: newStatus
+        }
+      });
 
       if (error) throw error;
 

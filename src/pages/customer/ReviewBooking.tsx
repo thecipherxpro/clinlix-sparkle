@@ -79,6 +79,12 @@ const ReviewBooking = () => {
       return;
     }
 
+    // Validate review comment length
+    if (reviewText.length > 1000) {
+      toast.error('Review comment must be 1000 characters or less');
+      return;
+    }
+
     setSubmitting(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -206,14 +212,20 @@ const ReviewBooking = () => {
 
           {/* Review Text */}
           <div className="mt-4 space-y-2">
-            <label className="text-sm font-medium text-foreground">
-              Write your experience... (Optional)
-            </label>
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-medium text-foreground">
+                Write your experience... (Optional)
+              </label>
+              <span className={`text-xs ${reviewText.length > 1000 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                {reviewText.length}/1000
+              </span>
+            </div>
             <Textarea
               placeholder="Share details about your cleaning experience..."
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
               rows={4}
+              maxLength={1000}
               className="resize-none w-full border rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:outline-none"
             />
           </div>

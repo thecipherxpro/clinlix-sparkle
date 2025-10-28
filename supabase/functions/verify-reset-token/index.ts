@@ -25,6 +25,35 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Server-side password validation
+    if (newPassword.length < 8) {
+      return new Response(
+        JSON.stringify({ error: 'Password must be at least 8 characters long' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (newPassword.length > 128) {
+      return new Response(
+        JSON.stringify({ error: 'Password must not exceed 128 characters' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Check for complexity requirements
+    const hasUppercase = /[A-Z]/.test(newPassword);
+    const hasLowercase = /[a-z]/.test(newPassword);
+    const hasNumber = /[0-9]/.test(newPassword);
+
+    if (!hasUppercase || !hasLowercase || !hasNumber) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Password must contain at least one uppercase letter, one lowercase letter, and one number' 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     console.log('Verifying reset token');
 
     // Find valid token

@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import ProviderCard from "@/components/ProviderCard";
+import { checkUserRole } from "@/lib/roleUtils";
 const STEPS = [{
   id: 1,
   name: "Where",
@@ -72,10 +73,10 @@ const Booking = () => {
         navigate('/auth');
         return;
       }
-      const {
-        data: profileData
-      } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-      if (profileData?.role !== 'customer') {
+      
+      // Use secure role check from user_roles table
+      const isCustomer = await checkUserRole(user.id, 'customer');
+      if (!isCustomer) {
         navigate('/provider/dashboard');
         return;
       }
@@ -152,25 +153,35 @@ const Booking = () => {
       const {
         data: {
           user
-        }
+        },
+        error: userError
       } = await supabase.auth.getUser();
+      
+      if (userError || !user) {
+        toast.error('Please log in to continue');
+        navigate('/auth');
+        return;
+      }
+
       const dateString = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '';
-      const {
-        data: bookingData,
-        error
-      } = await supabase.from('bookings').insert([{
-        customer_id: user!.id,
-        provider_id: selectedProvider.id,
-        address_id: selectedAddress.id,
-        package_id: selectedAddress.cleaning_packages.id,
-        addon_ids: selectedAddons,
-        requested_date: dateString,
-        requested_time: selectedTime,
-        total_estimate: calculateTotal(),
-        status: 'pending',
-        payment_status: 'pending'
-      }]).select().single();
+
+      // Call secure edge function for booking creation
+      const { data, error } = await supabase.functions.invoke('create-booking', {
+        body: {
+          customerId: user.id,
+          providerId: selectedProvider.id,
+          addressId: selectedAddress.id,
+          packageId: selectedAddress.cleaning_packages.id,
+          addonIds: selectedAddons,
+          requestedDate: dateString,
+          requestedTime: selectedTime,
+          recurringService: recurringService
+        }
+      });
+
       if (error) throw error;
+      
+      const bookingData = data.booking;
 
       // Get customer profile data
       const {
