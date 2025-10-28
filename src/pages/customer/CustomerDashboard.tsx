@@ -97,7 +97,7 @@ const CustomerDashboard = () => {
               description="Schedule service"
               value="New Booking"
               icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />}
-              heroColor="#fef4e2"
+              heroColor="#b3a3ba"
               onClick={() => navigate("/customer/booking")}
             />
 
@@ -106,7 +106,7 @@ const CustomerDashboard = () => {
               description="Your locations"
               value="Manage"
               icon={<MapPin className="w-4 h-4 sm:w-5 sm:h-5" />}
-              heroColor="#e0f2fe"
+              heroColor="#e1ccde"
               onClick={() => navigate("/customer/my-addresses")}
             />
 
