@@ -96,7 +96,7 @@ const CustomerDashboard = () => {
               title="Book Now"
               description="Schedule service"
               value="New Booking"
-              image="https://i.postimg.cc/ZnT9Ytsd/Map-Navigation-App-Logo.png"
+              image="https://i.postimg.cc/hjB2bstd/calanderr.png"
               heroColor="#ebe0eb"
               onClick={() => navigate("/customer/booking")}
             />
@@ -105,7 +105,7 @@ const CustomerDashboard = () => {
               title="Addresses"
               description="Your locations"
               value="Manage"
-              image="https://i.postimg.cc/ZnT9Ytsd/Map-Navigation-App-Logo.png"
+              image="https://i.postimg.cc/hjB2bst8/map.png"
               heroColor="#ebe0eb"
               onClick={() => navigate("/customer/my-addresses")}
             />
@@ -114,7 +114,7 @@ const CustomerDashboard = () => {
               title="Payment"
               description="Manage cards"
               value="Methods"
-              image="https://i.postimg.cc/m2ccLsTQ/wallet.png"
+              image="https://i.postimg.cc/9MhLtbQp/walletss.png"
               heroColor="#ebe0eb"
               onClick={() => navigate("/customer/payment-methods")}
             />
@@ -123,7 +123,7 @@ const CustomerDashboard = () => {
               title="Profile"
               description="Update info"
               value="Settings"
-              image="https://i.postimg.cc/ZnT9Ytsd/Map-Navigation-App-Logo.png"
+              image="https://i.postimg.cc/zBrxS7GF/settingr.png"
               heroColor="#ebe0eb"
               onClick={() => navigate("/customer/profile")}
             />
