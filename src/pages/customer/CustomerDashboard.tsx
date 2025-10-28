@@ -90,7 +90,7 @@ const CustomerDashboard = () => {
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)] text-black text-center">
             Quick Actions
           </h3>
-          <QuickAccessGrid className="bg-white" />
+          <QuickAccessGrid />
         </div>
 
         {/* Upcoming Bookings - Carousel */}

@@ -92,8 +92,8 @@ export default function QuickAccessGrid() {
       <QuickAccessItem title={items[0].title} imageLink={items[0].imageLink} isLarge={items[0].isLarge} titleInsideCard={items[0].titleInsideCard} colSpan={1} cardBgColor={items[0].cardBgColor} // Pass color prop
     />
 
-      {/* 2-Column Grid for Remaining Cards */}
-      <div className="grid grid-cols-2 gap-x-4 gap-y-6 bg-white">
+      {/* 4-Column Grid for Remaining Cards */}
+      <div className="grid grid-cols-4 gap-x-4 gap-y-6 bg-white">
         {/* Items 2 & 3: "Reserve" & "Hourly" */}
         <QuickAccessItem title={items[1].title} imageLink={items[1].imageLink} colSpan={1} cardBgColor={items[1].cardBgColor} // Pass color prop
       />
