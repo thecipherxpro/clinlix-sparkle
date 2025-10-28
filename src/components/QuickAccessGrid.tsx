@@ -9,22 +9,22 @@ const dashboardConfig = {
     // The layout (empty space next to "Ride") will be handled by explicit grid placement in `QuickAccessGrid`.
     items: [
       {
-        title: "Book Cleaning",
+        title: "Book Cleaning Service",
         imageLink: "https://i.imghippo.com/files/eOY8892XHg.png",
         isLarge: true,
         // Style as large
         titleInsideCard: true,
-        cardBgColor: "bg-gray-100", // Default color
+        cardBgColor: "bg-gray-150", // Default color
       },
       {
         title: "Wallet ",
-        imageLink: "https://i.imgur.com/z1hX9tH.png",
-        cardBgColor: "bg-blue-100", // Example of a custom color
+        imageLink: "https://i.postimg.cc/brL6bcbN/Gradion-App.png",
+        cardBgColor: "bg-gray-150", // Example of a custom color
       },
       {
-        title: "Hourly",
-        imageLink: "https://i.imgur.com/vH1y2gZ.png",
-        cardBgColor: "bg-gray-100",
+        title: "Addresses",
+        imageLink: "https://i.postimg.cc/cCd9r4Kx/sssss.png",
+        cardBgColor: "bg-gray-150",
       },
       {
         title: "Transit",
