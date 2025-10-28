@@ -96,7 +96,7 @@ const CustomerDashboard = () => {
               title="Book Now"
               description="Schedule service"
               value="New Booking"
-              image="https://i.postimg.cc/hjB2bstd/calanderr.png"
+              image="https://i.postimg.cc/LXSMYzdW/calnder24.png"
               heroColor="#ebe0eb"
               onClick={() => navigate("/customer/booking")}
             />
@@ -123,7 +123,7 @@ const CustomerDashboard = () => {
               title="Profile"
               description="Update info"
               value="Settings"
-              image="https://i.postimg.cc/zBrxS7GF/settingr.png"
+              image="image=https://i.postimg.cc/qRrdh8Vf/Profiles.png"
               heroColor="#ebe0eb"
               onClick={() => navigate("/customer/profile")}
             />
