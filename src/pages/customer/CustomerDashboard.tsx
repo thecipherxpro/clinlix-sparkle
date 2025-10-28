@@ -106,7 +106,7 @@ const CustomerDashboard = () => {
               description="Your locations"
               value="Manage"
               icon={<MapPin className="w-4 h-4 sm:w-5 sm:h-5" />}
-              heroColor="#e1ccde"
+              heroColor="#ebe0eb"
               onClick={() => navigate("/customer/my-addresses")}
             />
 
@@ -115,7 +115,7 @@ const CustomerDashboard = () => {
               description="Manage cards"
               value="Methods"
               icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />}
-              heroColor="#8ea48b"
+              heroColor="#ebe0eb"
               onClick={() => navigate("/customer/payment-methods")}
             />
 
@@ -124,7 +124,7 @@ const CustomerDashboard = () => {
               description="Update info"
               value="Settings"
               icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />}
-              heroColor="#D2C4D6"
+              heroColor="#ebe0eb"
               onClick={() => navigate("/customer/profile")}
             />
           </div>
