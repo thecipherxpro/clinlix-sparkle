@@ -123,7 +123,7 @@ const CustomerDashboard = () => {
               title="Profile"
               description="Update info"
               value="Settings"
-              image="image=https://i.postimg.cc/qRrdh8Vf/Profiles.png"
+              image="https://i.postimg.cc/qRrdh8Vf/Profiles.png"
               heroColor="#ebe0eb"
               onClick={() => navigate("/customer/profile")}
             />
