@@ -35,9 +35,9 @@ export const JobCard: React.FC<JobCardProps> = ({
       }}
     >
       {/* Icon or Image */}
-      <div className="w-13 h-13 sm:w-13 sm:h-13 flex items-center justify-center text-foreground/70">
+      <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center text-foreground/70">
         {image ? (
-          <img src={image} alt={title} className="w-13 h-13 object-cover" />
+          <img src={image} alt={title} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg" />
         ) : icon ? (
           <div className="scale-[2] sm:scale-[2.5]">{icon}</div>
         ) : null}
