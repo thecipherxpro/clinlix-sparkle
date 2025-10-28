@@ -143,28 +143,29 @@ const HowItWorks = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       {/* Header */}
-      <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)] pb-4">
+      <div className="w-full px-4 sm:px-6 pt-4 sm:pt-6 pb-3">
         <Button
           variant="ghost"
           onClick={() => navigate('/customer/dashboard')}
-          className="mb-4"
+          className="mb-3 sm:mb-4 text-sm"
+          size="sm"
         >
-          <ChevronLeft className="w-4 h-4 mr-2" />
-          Back to Dashboard
+          <ChevronLeft className="w-4 h-4 mr-1" />
+          Back
         </Button>
-        <h1 className="text-[clamp(24px,6vw,36px)] font-bold mb-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">
           How It Works
         </h1>
-        <p className="text-muted-foreground text-[clamp(14px,3.5vw,16px)]">
+        <p className="text-muted-foreground text-sm sm:text-base">
           Book professional cleaning in {steps.length} simple steps
         </p>
       </div>
 
       {/* Main Content */}
-      <main className="w-full max-w-[min(900px,calc(100%-32px))] mx-auto px-[clamp(16px,4vw,32px)] py-[clamp(20px,5vw,32px)]">
+      <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         
-        {/* Progress Indicator */}
-        <div className="flex justify-between items-center mb-12">
+        {/* Progress Indicator - Hidden on mobile */}
+        <div className="hidden md:flex justify-between items-center mb-8 lg:mb-12">
           {steps.map((s, idx) => (
             <div key={s.id} className="flex flex-col items-center flex-1">
               <div className="flex items-center w-full">
@@ -174,23 +175,30 @@ const HowItWorks = () => {
                     scale: idx === currentStep ? 1.1 : 1,
                     opacity: idx <= currentStep ? 1 : 0.4
                   }}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
+                  className={`w-8 h-8 lg:w-10 lg:h-10 rounded-full flex items-center justify-center font-bold text-sm lg:text-base text-white ${
                     idx <= currentStep ? 'bg-gradient-to-br ' + s.color : 'bg-muted'
                   }`}
                 >
                   {idx + 1}
                 </motion.div>
                 {idx < steps.length - 1 && (
-                  <div className={`flex-1 h-1 mx-2 rounded-full transition-all duration-500 ${
+                  <div className={`flex-1 h-1 mx-1 lg:mx-2 rounded-full transition-all duration-500 ${
                     idx < currentStep ? 'bg-gradient-to-r ' + s.color : 'bg-muted'
                   }`} />
                 )}
               </div>
-              <p className="text-xs mt-2 text-center hidden sm:block">
+              <p className="text-xs mt-2 text-center">
                 {s.title.split(' ')[0]}
               </p>
             </div>
           ))}
+        </div>
+        
+        {/* Mobile Step Counter */}
+        <div className="md:hidden text-center mb-4">
+          <span className="text-sm font-medium text-muted-foreground">
+            Step {currentStep + 1} of {steps.length}
+          </span>
         </div>
 
         {/* Step Card */}
@@ -202,9 +210,9 @@ const HowItWorks = () => {
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.4 }}
           >
-            <Card className="border-0 shadow-2xl overflow-hidden">
+            <Card className="border-0 shadow-lg sm:shadow-2xl overflow-hidden">
               {/* Image Section */}
-              <div className="relative h-64 sm:h-80 overflow-hidden">
+              <div className="relative h-48 sm:h-64 lg:h-80 overflow-hidden">
                 <img 
                   src={step.image} 
                   alt={step.title}
@@ -214,28 +222,28 @@ const HowItWorks = () => {
               </div>
 
               {/* Content Section */}
-              <div className="p-6 sm:p-8">
-                <h2 className="text-[clamp(24px,6vw,32px)] font-bold mb-4">
+              <div className="p-4 sm:p-6 lg:p-8">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4">
                   Step {step.id}: {step.title}
                 </h2>
-                <p className="text-muted-foreground text-[clamp(14px,3.5vw,18px)] mb-6">
+                <p className="text-muted-foreground text-sm sm:text-base lg:text-lg mb-4 sm:mb-6">
                   {step.description}
                 </p>
                 
                 {/* Details List */}
-                <ul className="space-y-3">
+                <ul className="space-y-2 sm:space-y-3">
                   {step.details.map((detail, idx) => (
                     <motion.li
                       key={idx}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: idx * 0.1 + 0.2 }}
-                      className="flex items-start gap-3"
+                      className="flex items-start gap-2 sm:gap-3"
                     >
-                      <div className={`w-6 h-6 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center flex-shrink-0 mt-0.5`}>
-                        <CheckCircle className="w-4 h-4 text-white" />
+                      <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                       </div>
-                      <span className="text-[clamp(13px,3.2vw,16px)]">{detail}</span>
+                      <span className="text-xs sm:text-sm lg:text-base leading-relaxed">{detail}</span>
                     </motion.li>
                   ))}
                 </ul>
@@ -245,47 +253,50 @@ const HowItWorks = () => {
         </AnimatePresence>
 
         {/* Navigation Buttons */}
-        <div className="flex justify-between items-center mt-8 gap-4">
+        <div className="flex justify-between items-center mt-6 sm:mt-8 gap-3 sm:gap-4">
           <Button
             variant="outline"
-            size="lg"
+            size="default"
             onClick={handlePrev}
             disabled={currentStep === 0}
-            className="flex-1 max-w-[200px]"
+            className="flex-1 sm:flex-initial sm:min-w-[140px] text-sm sm:text-base"
           >
-            <ChevronLeft className="w-4 h-4 mr-2" />
-            Previous
+            <ChevronLeft className="w-4 h-4 mr-1 sm:mr-2" />
+            <span className="hidden xs:inline">Previous</span>
+            <span className="xs:hidden">Prev</span>
           </Button>
 
           {currentStep < steps.length - 1 ? (
             <Button
-              size="lg"
+              size="default"
               onClick={handleNext}
-              className="flex-1 max-w-[200px] bg-gradient-to-r from-primary to-primary/80"
+              className="flex-1 sm:flex-initial sm:min-w-[140px] bg-gradient-to-r from-primary to-primary/80 text-sm sm:text-base"
             >
               Next
-              <ChevronRight className="w-4 h-4 ml-2" />
+              <ChevronRight className="w-4 h-4 ml-1 sm:ml-2" />
             </Button>
           ) : (
             <Button
-              size="lg"
+              size="default"
               onClick={handleGetStarted}
-              className="flex-1 max-w-[200px] bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
+              className="flex-1 sm:flex-initial sm:min-w-[140px] bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-sm sm:text-base"
             >
-              Get Started
-              <CheckCircle className="w-4 h-4 ml-2" />
+              <span className="hidden xs:inline">Get Started</span>
+              <span className="xs:hidden">Start</span>
+              <CheckCircle className="w-4 h-4 ml-1 sm:ml-2" />
             </Button>
           )}
         </div>
 
         {/* Step Dots for Mobile */}
-        <div className="flex justify-center gap-2 mt-8 sm:hidden">
+        <div className="flex justify-center gap-2 mt-6 sm:mt-8 md:hidden">
           {steps.map((s, idx) => (
             <button
               key={s.id}
               onClick={() => setCurrentStep(idx)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                idx === currentStep ? 'w-8 bg-primary' : 'bg-muted'
+              aria-label={`Go to step ${idx + 1}`}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                idx === currentStep ? 'w-8 bg-primary' : 'w-2 bg-muted'
               }`}
             />
           ))}
