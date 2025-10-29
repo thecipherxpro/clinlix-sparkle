@@ -97,7 +97,7 @@ const CustomerDashboard = () => {
               description="Schedule service"
               value="New Booking"
               image="https://i.postimg.cc/LXSMYzdW/calnder24.png"
-              heroColor="#cfcfcf"
+              heroColor="#ebe0eb"
               onClick={() => navigate("/customer/booking")}
             />
 
@@ -124,7 +124,7 @@ const CustomerDashboard = () => {
               description="Update info"
               value="Settings"
               image="https://i.postimg.cc/qRrdh8Vf/Profiles.png"
-              heroColor="#ebe0eb"
+              heroColor="#d9d9d9"
               onClick={() => navigate("/customer/profile")}
             />
           </div>
