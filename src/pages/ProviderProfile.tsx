@@ -9,7 +9,9 @@ import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import { Tabs, Tab } from "@heroui/react";
 const ProviderProfile = () => {
-  const { providerId } = useParams();
+  const {
+    providerId
+  } = useParams();
   const navigate = useNavigate();
   const [provider, setProvider] = useState<any>(null);
   const [reviews, setReviews] = useState<any[]>([]);
@@ -22,26 +24,24 @@ const ProviderProfile = () => {
   const fetchProviderData = async () => {
     try {
       const {
-        data: { user },
+        data: {
+          user
+        }
       } = await supabase.auth.getUser();
-      const { data: providerData } = await supabase.from("provider_profiles").select("*").eq("id", providerId).single();
+      const {
+        data: providerData
+      } = await supabase.from("provider_profiles").select("*").eq("id", providerId).single();
       setProvider(providerData);
-      const { data: reviewsData } = await supabase
-        .from("provider_reviews")
-        .select("*, profiles(first_name, last_name)")
-        .eq("provider_id", providerId)
-        .order("created_at", {
-          ascending: false,
-        });
+      const {
+        data: reviewsData
+      } = await supabase.from("provider_reviews").select("*, profiles(first_name, last_name)").eq("provider_id", providerId).order("created_at", {
+        ascending: false
+      });
       setReviews(reviewsData || []);
       if (user) {
-        const { data: bookingData } = await supabase
-          .from("bookings")
-          .select("id")
-          .eq("customer_id", user.id)
-          .eq("provider_id", providerId)
-          .in("status", ["confirmed", "on_the_way", "arrived", "started", "completed"])
-          .limit(1);
+        const {
+          data: bookingData
+        } = await supabase.from("bookings").select("id").eq("customer_id", user.id).eq("provider_id", providerId).in("status", ["confirmed", "on_the_way", "arrived", "started", "completed"]).limit(1);
         setHasConfirmedBooking(!!bookingData && bookingData.length > 0);
       }
     } catch (error) {
@@ -54,21 +54,16 @@ const ProviderProfile = () => {
     navigate("/customer/booking");
   };
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+    return <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
+      </div>;
   }
   if (!provider) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+    return <div className="min-h-screen flex items-center justify-center">
         <p className="text-muted-foreground">Provider not found</p>
-      </div>
-    );
+      </div>;
   }
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-24 md:pb-8">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-24 md:pb-8">
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
         <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
           <HeroButton isIconOnly variant="light" onPress={() => navigate(-1)} className="touch-target">
@@ -85,31 +80,21 @@ const ProviderProfile = () => {
         <div className="relative mb-6 sm:mb-8">
           <div className="h-32 sm:h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl" />
           <div className="absolute -bottom-12 sm:-bottom-16 left-4 sm:left-8">
-            <ProviderAvatarBadge
-              imageUrl={provider.photo_url}
-              isVerified={provider.verified}
-              createdAt={provider.created_at}
-              size={window.innerWidth >= 640 ? 128 : 96}
-              alt={provider.full_name}
-            />
+            <ProviderAvatarBadge imageUrl={provider.photo_url} isVerified={provider.verified} createdAt={provider.created_at} size={window.innerWidth >= 640 ? 128 : 96} alt={provider.full_name} />
           </div>
         </div>
 
         <div className="mt-16 sm:mt-20">
           {/* Header Info */}
           <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
-            {provider.new_provider && (
-              <div className="badge badge-soft badge-secondary gap-1 px-[12px] py-0 mx-0 my-0">
+            {provider.new_provider && <div className="badge badge-soft badge-secondary gap-1 px-[12px] py-0 mx-0 my-0">
                 <Sparkles className="w-5 h-3" />
                 NEW
-              </div>
-            )}
-            {provider.verified && (
-              <div className="badge badge-primary gap-1">
+              </div>}
+            {provider.verified && <div className="badge badge-primary gap-1">
                 <Shield className="w-3 h-3" />
                 VERIFIED
-              </div>
-            )}
+              </div>}
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 mb-2">
@@ -125,63 +110,41 @@ const ProviderProfile = () => {
 
           {/* Tabs */}
           <div className="w-full">
-            <Tabs 
-              selectedKey={activeTab}
-              onSelectionChange={(key) => setActiveTab(key as "about" | "reviews")}
-              classNames={{
-                tabList: "w-full bg-muted p-1 rounded-lg mb-6",
-                cursor: "bg-background shadow-sm",
-              }}
-            >
-              <Tab 
-                key="about" 
-                title={
-                  <div className="flex items-center gap-2">
+            <Tabs selectedKey={activeTab} onSelectionChange={key => setActiveTab(key as "about" | "reviews")} classNames={{
+            tabList: "w-full bg-muted p-1 rounded-lg mb-6",
+            cursor: "bg-background shadow-sm"
+          }} className="px-[12px]">
+              <Tab key="about" title={<div className="flex items-center gap-2">
                     <Info className="w-4 h-4" />
                     About
-                  </div>
-                } 
-              />
-              <Tab 
-                key="reviews" 
-                title={
-                  <div className="flex items-center gap-2">
+                  </div>} />
+              <Tab key="reviews" title={<div className="flex items-center gap-2">
                     <MessageCircle className="w-4 h-4" />
                     Reviews ({provider.rating_count})
-                  </div>
-                } 
-              />
+                  </div>} />
             </Tabs>
 
             {/* Tab Content */}
-            {activeTab === "about" && (
-              <div className="space-y-4 sm:space-y-6 animate-in fade-in-50 duration-300">
-              {provider.skills && provider.skills.length > 0 && (
-                <Card className="border-0 shadow-sm">
+            {activeTab === "about" && <div className="space-y-4 sm:space-y-6 animate-in fade-in-50 duration-300">
+              {provider.skills && provider.skills.length > 0 && <Card className="border-0 shadow-sm">
                   <CardContent className="pt-6">
                     <h3 className="font-semibold mb-3">Skills</h3>
                     <div className="flex flex-wrap gap-2">
-                      {provider.skills.map((skill: string, idx: number) => (
-                        <div key={idx} className="badge badge-outline">
+                      {provider.skills.map((skill: string, idx: number) => <div key={idx} className="badge badge-outline">
                           {skill}
-                        </div>
-                      ))}
+                        </div>)}
                     </div>
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
 
-              {provider.bio && (
-                <Card className="border-0 shadow-sm">
+              {provider.bio && <Card className="border-0 shadow-sm">
                   <CardContent className="pt-6">
                     <h3 className="font-semibold mb-3">About</h3>
                     <p className="text-muted-foreground whitespace-pre-wrap">{provider.bio}</p>
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
 
-              {provider.experience_years > 0 && (
-                <Card className="border-0 shadow-sm">
+              {provider.experience_years > 0 && <Card className="border-0 shadow-sm">
                   <CardContent className="pt-6">
                     <h3 className="font-semibold mb-3">Experience</h3>
                     <p className="text-black text-medium">
@@ -189,47 +152,34 @@ const ProviderProfile = () => {
                       cleaning experience
                     </p>
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
 
-              {provider.service_areas && provider.service_areas.length > 0 && (
-                <Card className="border-0 shadow-sm">
+              {provider.service_areas && provider.service_areas.length > 0 && <Card className="border-0 shadow-sm">
                   <CardContent className="pt-6">
                     <h3 className="font-semibold mb-3">Service Areas</h3>
                     <div className="flex flex-wrap gap-2">
-                      {provider.service_areas.map((area: string, idx: number) => (
-                        <div key={idx} className="badge badge-accent font-black-800 font-medium px-[17px]">
+                      {provider.service_areas.map((area: string, idx: number) => <div key={idx} className="badge badge-accent font-black-800 font-medium px-[17px]">
                           {area}
-                        </div>
-                      ))}
+                        </div>)}
                     </div>
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
 
-              {provider.languages && provider.languages.length > 0 && (
-                <Card className="border-0 shadow-sm">
+              {provider.languages && provider.languages.length > 0 && <Card className="border-0 shadow-sm">
                   <CardContent className="pt-6">
                     <h3 className="font-semibold mb-3">Languages</h3>
                     <p className="text-muted-foreground">{provider.languages.join(", ")}</p>
                   </CardContent>
-                </Card>
-              )}
-              </div>
-            )}
+                </Card>}
+              </div>}
 
-            {activeTab === "reviews" && (
-              <div className="space-y-4 animate-in fade-in-50 duration-300">
-              {reviews.length === 0 ? (
-                <Card className="border-0 shadow-sm">
+            {activeTab === "reviews" && <div className="space-y-4 animate-in fade-in-50 duration-300">
+              {reviews.length === 0 ? <Card className="border-0 shadow-sm">
                   <CardContent className="pt-12 pb-12 text-center">
                     <Star className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
                     <p className="text-muted-foreground">No reviews yet</p>
                   </CardContent>
-                </Card>
-              ) : (
-                reviews.map((review) => (
-                  <Card key={review.id} className="border-0 shadow-sm">
+                </Card> : reviews.map(review => <Card key={review.id} className="border-0 shadow-sm">
                     <CardContent className="pt-6">
                       <div className="flex items-start justify-between mb-3">
                         <div>
@@ -237,12 +187,7 @@ const ProviderProfile = () => {
                             {review.profiles?.first_name} {review.profiles?.last_name}
                           </p>
                           <div className="flex items-center gap-1 mt-1">
-                            {[...Array(5)].map((_, idx) => (
-                              <Star
-                                key={idx}
-                                className={`w-4 h-4 ${idx < review.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`}
-                              />
-                            ))}
+                            {[...Array(5)].map((_, idx) => <Star key={idx} className={`w-4 h-4 ${idx < review.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`} />)}
                           </div>
                         </div>
                         <p className="text-sm text-muted-foreground">
@@ -251,11 +196,8 @@ const ProviderProfile = () => {
                       </div>
                       {review.comment && <p className="text-muted-foreground">{review.comment}</p>}
                     </CardContent>
-                  </Card>
-                ))
-              )}
-              </div>
-            )}
+                  </Card>)}
+              </div>}
           </div>
         </div>
       </main>
@@ -263,8 +205,7 @@ const ProviderProfile = () => {
       {/* Sticky Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-card border-t shadow-lg z-50 safe-bottom">
         <div className="mobile-container py-3 sm:py-4 max-w-4xl">
-          {hasConfirmedBooking ? (
-            <div className="grid grid-cols-3 gap-2">
+          {hasConfirmedBooking ? <div className="grid grid-cols-3 gap-2">
               <Button variant="secondary" size="sm" className="h-12 sm:h-10">
                 <MessageSquare className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Message</span>
@@ -277,15 +218,11 @@ const ProviderProfile = () => {
                 <Mail className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Email</span>
               </Button>
-            </div>
-          ) : (
-            <Button variant="default" className="w-full h-12 sm:h-11 text-base" onClick={handleBookNow}>
+            </div> : <Button variant="default" className="w-full h-12 sm:h-11 text-base" onClick={handleBookNow}>
               Book Now
-            </Button>
-          )}
+            </Button>}
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
 export default ProviderProfile;
