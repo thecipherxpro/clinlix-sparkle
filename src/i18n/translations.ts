@@ -1,6 +1,11 @@
 export type Language = 'en' | 'pt';
 
 interface TranslationStructure {
+  // App branding
+  app: {
+    name: string;
+    tagline: string;
+  };
   auth: {
     welcomeBack: string;
     createAccount: string;
@@ -58,6 +63,8 @@ interface TranslationStructure {
     notifications: string;
     security: string;
     account: string;
+    continue: string;
+    welcome: string;
   };
   dashboard: {
     welcome: string;
@@ -70,6 +77,7 @@ interface TranslationStructure {
     upcomingBookings: string;
     noBookings: string;
     startBooking: string;
+    bookCleaning: string;
   };
   settings: {
     title: string;
@@ -128,6 +136,14 @@ interface TranslationStructure {
     schedule: string;
     wallet: string;
     reviews: string;
+    available: string;
+    offline: string;
+    earnings: string;
+    pending: string;
+    paid: string;
+    totalEarned: string;
+    platformFee: string;
+    payoutDue: string;
   };
   booking: {
     title: string;
@@ -149,6 +165,65 @@ interface TranslationStructure {
     rejected: string;
     completed: string;
     cancelled: string;
+    addAddress: string;
+    selectAddress: string;
+    selectPackage: string;
+    selectDate: string;
+    selectTime: string;
+    selectProvider: string;
+  };
+  reviews: {
+    title: string;
+    rateYourCleaning: string;
+    yourFeedback: string;
+    rating: string;
+    comment: string;
+    submitReview: string;
+    noReviews: string;
+    viewAll: string;
+  };
+  pricing: {
+    title: string;
+    subtitle: string;
+    oneTime: string;
+    recurring: string;
+    perCleaning: string;
+    perMonth: string;
+    bedroom: string;
+    bedrooms: string;
+    includes: string;
+    viewDetails: string;
+    selectPackage: string;
+  };
+  howItWorks: {
+    title: string;
+    subtitle: string;
+    step: string;
+    step1Title: string;
+    step1Desc: string;
+    step2Title: string;
+    step2Desc: string;
+    step3Title: string;
+    step3Desc: string;
+    step4Title: string;
+    step4Desc: string;
+    step5Title: string;
+    step5Desc: string;
+    step6Title: string;
+    step6Desc: string;
+    step7Title: string;
+    step7Desc: string;
+    step8Title: string;
+    step8Desc: string;
+  };
+  notifications: {
+    bookingConfirmed: string;
+    bookingCancelled: string;
+    providerAssigned: string;
+    jobStarted: string;
+    jobCompleted: string;
+    newJobRequest: string;
+    paymentReceived: string;
   };
   errors: {
     generic: string;
@@ -162,6 +237,10 @@ interface TranslationStructure {
 
 export const translations: Record<Language, TranslationStructure> = {
   en: {
+    app: {
+      name: 'Clinlix',
+      tagline: 'Trusted Cleaning, Every Single Time',
+    },
     // Auth Page
     auth: {
       welcomeBack: 'Welcome Back',
@@ -221,6 +300,8 @@ export const translations: Record<Language, TranslationStructure> = {
       notifications: 'Notifications',
       security: 'Security',
       account: 'Account',
+      continue: 'Continue',
+      welcome: 'Welcome',
     },
     // Dashboard
     dashboard: {
@@ -234,6 +315,7 @@ export const translations: Record<Language, TranslationStructure> = {
       upcomingBookings: 'Upcoming Bookings',
       noBookings: 'No bookings yet',
       startBooking: 'Start Booking',
+      bookCleaning: 'Book a Cleaning',
     },
     // Settings
     settings: {
@@ -294,6 +376,14 @@ export const translations: Record<Language, TranslationStructure> = {
       schedule: 'Schedule',
       wallet: 'Wallet',
       reviews: 'Reviews',
+      available: 'Available',
+      offline: 'Offline',
+      earnings: 'Earnings',
+      pending: 'Pending',
+      paid: 'Paid',
+      totalEarned: 'Total Earned',
+      platformFee: 'Platform Fee',
+      payoutDue: 'Payout Due',
     },
     // Bookings
     booking: {
@@ -316,6 +406,69 @@ export const translations: Record<Language, TranslationStructure> = {
       rejected: 'Rejected',
       completed: 'Completed',
       cancelled: 'Cancelled',
+      addAddress: 'Add Address',
+      selectAddress: 'Select Address',
+      selectPackage: 'Select Package',
+      selectDate: 'Select Date',
+      selectTime: 'Select Time',
+      selectProvider: 'Select Provider',
+    },
+    // Reviews
+    reviews: {
+      title: 'Reviews',
+      rateYourCleaning: 'Rate Your Cleaning',
+      yourFeedback: 'Your feedback helps us improve our service',
+      rating: 'Rating',
+      comment: 'Comment',
+      submitReview: 'Submit Review',
+      noReviews: 'No reviews yet',
+      viewAll: 'View All Reviews',
+    },
+    // Pricing
+    pricing: {
+      title: 'Our Pricing',
+      subtitle: 'Transparent pricing for quality cleaning services',
+      oneTime: 'One-Time',
+      recurring: 'Recurring',
+      perCleaning: 'per cleaning',
+      perMonth: 'per month',
+      bedroom: 'Bedroom',
+      bedrooms: 'Bedrooms',
+      includes: 'Includes',
+      viewDetails: 'View Details',
+      selectPackage: 'Select Package',
+    },
+    // How It Works
+    howItWorks: {
+      title: 'How It Works',
+      subtitle: 'Simple steps to book your cleaning service',
+      step: 'Step',
+      step1Title: 'Enter Your Address',
+      step1Desc: 'Tell us where you need cleaning services',
+      step2Title: 'Choose Your Package',
+      step2Desc: 'Select a cleaning package that fits your needs',
+      step3Title: 'View Pricing',
+      step3Desc: 'See transparent pricing for your selected package',
+      step4Title: 'Pick Date & Time',
+      step4Desc: 'Choose when you want the cleaning to happen',
+      step5Title: 'Select Provider',
+      step5Desc: 'Choose from available verified cleaning providers',
+      step6Title: 'Add Extras',
+      step6Desc: 'Customize with additional services',
+      step7Title: 'Confirm & Pay',
+      step7Desc: 'Review and confirm your booking',
+      step8Title: 'Get Confirmation',
+      step8Desc: 'Receive booking confirmation and details',
+    },
+    // Notifications
+    notifications: {
+      bookingConfirmed: 'Your booking has been confirmed',
+      bookingCancelled: 'Your booking has been cancelled',
+      providerAssigned: 'A provider has been assigned to your booking',
+      jobStarted: 'Your cleaning has started',
+      jobCompleted: 'Your cleaning has been completed',
+      newJobRequest: 'New job request received',
+      paymentReceived: 'Payment received',
     },
     // Errors
     errors: {
@@ -328,6 +481,10 @@ export const translations: Record<Language, TranslationStructure> = {
     },
   },
   pt: {
+    app: {
+      name: 'Clinlix',
+      tagline: 'Limpeza de confiança, todas as vezes',
+    },
     // Auth Page
     auth: {
       welcomeBack: 'Bem-vindo de Volta',
@@ -387,6 +544,8 @@ export const translations: Record<Language, TranslationStructure> = {
       notifications: 'Notificações',
       security: 'Segurança',
       account: 'Conta',
+      continue: 'Continuar',
+      welcome: 'Bem-vindo',
     },
     // Dashboard
     dashboard: {
@@ -400,6 +559,7 @@ export const translations: Record<Language, TranslationStructure> = {
       upcomingBookings: 'Reservas Futuras',
       noBookings: 'Ainda não tem reservas',
       startBooking: 'Iniciar Reserva',
+      bookCleaning: 'Agendar Limpeza',
     },
     // Settings
     settings: {
@@ -460,6 +620,14 @@ export const translations: Record<Language, TranslationStructure> = {
       schedule: 'Horário',
       wallet: 'Carteira',
       reviews: 'Avaliações',
+      available: 'Disponível',
+      offline: 'Offline',
+      earnings: 'Ganhos',
+      pending: 'Pendente',
+      paid: 'Pago',
+      totalEarned: 'Total Ganho',
+      platformFee: 'Taxa da Plataforma',
+      payoutDue: 'Pagamento Devido',
     },
     // Bookings
     booking: {
@@ -482,6 +650,69 @@ export const translations: Record<Language, TranslationStructure> = {
       rejected: 'Rejeitado',
       completed: 'Concluído',
       cancelled: 'Cancelado',
+      addAddress: 'Adicionar Morada',
+      selectAddress: 'Selecionar Morada',
+      selectPackage: 'Selecionar Pacote',
+      selectDate: 'Selecionar Data',
+      selectTime: 'Selecionar Hora',
+      selectProvider: 'Selecionar Profissional',
+    },
+    // Reviews
+    reviews: {
+      title: 'Avaliações',
+      rateYourCleaning: 'Avalie a sua limpeza',
+      yourFeedback: 'O seu feedback ajuda-nos a melhorar o serviço',
+      rating: 'Avaliação',
+      comment: 'Comentário',
+      submitReview: 'Enviar Avaliação',
+      noReviews: 'Ainda sem avaliações',
+      viewAll: 'Ver Todas as Avaliações',
+    },
+    // Pricing
+    pricing: {
+      title: 'Os Nossos Preços',
+      subtitle: 'Preços transparentes para serviços de limpeza de qualidade',
+      oneTime: 'Uma Vez',
+      recurring: 'Recorrente',
+      perCleaning: 'por limpeza',
+      perMonth: 'por mês',
+      bedroom: 'Quarto',
+      bedrooms: 'Quartos',
+      includes: 'Inclui',
+      viewDetails: 'Ver Detalhes',
+      selectPackage: 'Selecionar Pacote',
+    },
+    // How It Works
+    howItWorks: {
+      title: 'Como Funciona',
+      subtitle: 'Passos simples para agendar o seu serviço de limpeza',
+      step: 'Passo',
+      step1Title: 'Insira a Sua Morada',
+      step1Desc: 'Diga-nos onde precisa de serviços de limpeza',
+      step2Title: 'Escolha o Seu Pacote',
+      step2Desc: 'Selecione um pacote de limpeza adequado às suas necessidades',
+      step3Title: 'Ver Preços',
+      step3Desc: 'Veja preços transparentes para o seu pacote selecionado',
+      step4Title: 'Escolha Data e Hora',
+      step4Desc: 'Escolha quando quer que a limpeza aconteça',
+      step5Title: 'Selecionar Profissional',
+      step5Desc: 'Escolha entre profissionais de limpeza verificados disponíveis',
+      step6Title: 'Adicionar Extras',
+      step6Desc: 'Personalize com serviços adicionais',
+      step7Title: 'Confirmar e Pagar',
+      step7Desc: 'Reveja e confirme a sua reserva',
+      step8Title: 'Obter Confirmação',
+      step8Desc: 'Receba confirmação e detalhes da reserva',
+    },
+    // Notifications
+    notifications: {
+      bookingConfirmed: 'A sua reserva foi confirmada',
+      bookingCancelled: 'A sua reserva foi cancelada',
+      providerAssigned: 'Um profissional foi atribuído à sua reserva',
+      jobStarted: 'A sua limpeza foi iniciada',
+      jobCompleted: 'A sua limpeza foi concluída',
+      newJobRequest: 'Novo pedido de trabalho recebido',
+      paymentReceived: 'Pagamento recebido',
     },
     // Errors
     errors: {
