@@ -9,9 +9,11 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import { StatusBadge } from "@/components/StatusBadge";
+import { useI18n } from "@/contexts/I18nContext";
 
 const MyBookings = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("active");
@@ -253,7 +255,7 @@ const MyBookings = () => {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            My Bookings
+            {t.dashboard.myBookings}
           </h1>
         </div>
       </header>
@@ -278,9 +280,9 @@ const MyBookings = () => {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm sm:text-base text-muted-foreground mb-4">No upcoming bookings</p>
+                  <p className="text-sm sm:text-base text-muted-foreground mb-4">{t.dashboard.noBookings}</p>
                   <Button onClick={() => navigate("/customer/booking")} className="w-full sm:w-auto">
-                    Book a Cleaning Service
+                    {t.dashboard.bookCleaning}
                   </Button>
                 </CardContent>
               </Card>

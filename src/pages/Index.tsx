@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
 import clinlixLogoText from "@/assets/clinlix-logo-text.png";
+import { useI18n } from "@/contexts/I18nContext";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
@@ -74,7 +76,7 @@ const Index = () => {
             fontFamily: "Inter, Manrope, sans-serif",
           }}
         >
-          Trusted Cleaning,Every Single Time
+          {t.app.tagline}
         </h1>
 
         {/* Continue Button */}
@@ -92,7 +94,7 @@ const Index = () => {
               animationIterationCount: "infinite",
             }}
           >
-            Continue
+            {t.common.continue}
             <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#FFD43B] flex items-center justify-center shadow-md">
               <ChevronRight className="w-6 h-6 text-[#8A63FF]" strokeWidth={3} />
             </div>

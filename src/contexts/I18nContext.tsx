@@ -22,6 +22,13 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loadUserLanguage = async () => {
     try {
+      // First, try to load from localStorage for instant UI
+      const cachedLang = localStorage.getItem('app-language');
+      if (cachedLang === 'en' || cachedLang === 'pt') {
+        setLanguageState(cachedLang);
+      }
+
+      // Then fetch from database to sync
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
@@ -33,6 +40,7 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (profile?.language && (profile.language === 'en' || profile.language === 'pt')) {
           setLanguageState(profile.language);
+          localStorage.setItem('app-language', profile.language);
         }
       }
     } catch (error) {

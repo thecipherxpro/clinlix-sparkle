@@ -12,8 +12,10 @@ import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 import { StatusBadge } from "@/components/StatusBadge";
+import { useI18n } from "@/contexts/I18nContext";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [profile, setProfile] = useState<any>(null);
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -84,22 +86,22 @@ const CustomerDashboard = () => {
         <div className="mb-[clamp(20px,5vw,32px)]">
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <JobCard title="Book Now" description="Schedule service" value="New Booking" image="https://i.postimg.cc/LXSMYzdW/calnder24.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/booking")} />
+            <JobCard title={t.dashboard.bookCleaning} description="Schedule service" value="New Booking" image="https://i.postimg.cc/LXSMYzdW/calnder24.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/booking")} />
 
-            <JobCard title="Addresses" description="Your locations" value="Manage" image="https://i.postimg.cc/hjB2bst8/map.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/my-addresses")} />
+            <JobCard title={t.dashboard.myAddresses} description="Your locations" value="Manage" image="https://i.postimg.cc/hjB2bst8/map.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/my-addresses")} />
 
-            <JobCard title="Payment" description="Manage cards" value="Methods" image="https://i.postimg.cc/9MhLtbQp/walletss.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/payment-methods")} />
+            <JobCard title={t.dashboard.paymentMethods} description="Manage cards" value="Methods" image="https://i.postimg.cc/9MhLtbQp/walletss.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/payment-methods")} />
 
-            <JobCard title="Profile" description="Update info" value="Settings" image="https://i.postimg.cc/qRrdh8Vf/Profiles.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/profile")} />
+            <JobCard title={t.common.profile} description="Update info" value={t.common.settings} image="https://i.postimg.cc/qRrdh8Vf/Profiles.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/profile")} />
           </div>
         </div>
 
         {/* Upcoming Bookings - Carousel */}
         <div className="mb-[clamp(20px,5vw,32px)]">
           <div className="flex items-center justify-between mb-[clamp(12px,3vw,16px)]">
-            <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold">Upcoming Bookings</h3>
+            <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold">{t.dashboard.upcomingBookings}</h3>
             <Button variant="link" className="text-[clamp(12px,3vw,14px)]" onClick={() => navigate("/customer/bookings")}>
-              View All
+              {t.reviews.viewAll}
             </Button>
           </div>
 
@@ -110,11 +112,11 @@ const CustomerDashboard = () => {
                                      mx-auto mb-[clamp(16px,4vw,20px)] text-muted-foreground" />
                   <p className="text-[clamp(13px,3.2vw,16px)] text-muted-foreground 
                                mb-[clamp(16px,4vw,20px)]">
-                    You haven't booked yet
+                    {t.dashboard.noBookings}
                   </p>
                   <Button onClick={() => navigate("/customer/booking")} className="w-full sm:w-auto px-[clamp(24px,6vw,32px)] 
                              py-[clamp(12px,3vw,16px)] text-[clamp(14px,3.5vw,16px)]">
-                    Book Now
+                    {t.dashboard.startBooking}
                   </Button>
                 </div>
               </CardContent>
@@ -179,10 +181,10 @@ const CustomerDashboard = () => {
         {/* CTA Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
           {/* How It Works CTA */}
-          <JobCard title="How It Works" description="Learn the booking process" value="8 Simple Steps" icon={<Search className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#f0f9ff" onClick={() => navigate("/customer/how-it-works")} />
+          <JobCard title={t.howItWorks.title} description={t.howItWorks.subtitle} value="8 Simple Steps" icon={<Search className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#f0f9ff" onClick={() => navigate("/customer/how-it-works")} />
 
           {/* Pricing Model CTA */}
-          <JobCard title="Pricing Model" description="View our transparent pricing" value="Fixed Rates" icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef3c7" onClick={() => navigate("/customer/pricing")} />
+          <JobCard title={t.pricing.title} description={t.pricing.subtitle} value="Fixed Rates" icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef3c7" onClick={() => navigate("/customer/pricing")} />
         </div>
       </main>
 

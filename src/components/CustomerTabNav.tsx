@@ -2,14 +2,22 @@ import { useState, ReactNode, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Home, Calendar, Sparkles, MapPin, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useI18n } from '@/contexts/I18nContext';
 
-const tabs = [
-  { title: 'Home', icon: <Home />, path: '/customer/dashboard' },
-  { title: 'Book', icon: <Calendar />, path: '/customer/booking' },
-  { title: 'Bookings', icon: <Sparkles />, path: '/customer/my-bookings' },
-  { title: 'Addresses', icon: <MapPin />, path: '/customer/my-addresses' },
-  { title: 'Profile', icon: <User />, path: '/customer/profile' },
-];
+const CustomerTabNav = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { t } = useI18n();
+  
+  const tabs = [
+    { title: t.dashboard.welcome, icon: <Home />, path: '/customer/dashboard' },
+    { title: t.dashboard.bookCleaning, icon: <Calendar />, path: '/customer/booking' },
+    { title: t.dashboard.myBookings, icon: <Sparkles />, path: '/customer/my-bookings' },
+    { title: t.dashboard.myAddresses, icon: <MapPin />, path: '/customer/my-addresses' },
+    { title: t.common.profile, icon: <User />, path: '/customer/profile' },
+  ];
+  
+  const [selected, setSelected] = useState(tabs[0]);
 
 const buttonVariants = {
   initial: {
@@ -71,17 +79,12 @@ const Tab = ({ text, selected, onSelect, children }: TabProps) => {
   );
 };
 
-const CustomerTabNav = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [selected, setSelected] = useState(tabs[0]);
-
   useEffect(() => {
     const currentTab = tabs.find(tab => tab.path === location.pathname);
     if (currentTab) {
       setSelected(currentTab);
     }
-  }, [location.pathname]);
+  }, [location.pathname, t]);
 
   const handleTabSelect = (tab: typeof tabs[0]) => {
     setSelected(tab);
