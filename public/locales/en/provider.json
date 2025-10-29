@@ -1,0 +1,24 @@
+{
+  "dashboard": {
+    "title": "Provider Dashboard",
+    "welcome": "Welcome back",
+    "stats": {
+      "totalJobs": "Total Jobs",
+      "activeJobs": "Active Jobs",
+      "earnings": "Total Earnings",
+      "rating": "Rating"
+    }
+  },
+  "jobs": {
+    "title": "Jobs",
+    "requests": "Job Requests",
+    "confirmed": "Confirmed Jobs",
+    "completed": "Completed Jobs",
+    "noJobs": "No jobs found"
+  },
+  "schedule": {
+    "title": "Schedule",
+    "availability": "Availability",
+    "addSlot": "Add Time Slot"
+  }
+}

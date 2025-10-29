@@ -1,0 +1,33 @@
+{
+  "title": "Book a Service",
+  "myBookings": "My Bookings",
+  "bookingDetails": "Booking Details",
+  "address": "Address",
+  "dateTime": "Date & Time",
+  "service": "Service",
+  "provider": "Provider",
+  "package": "Package",
+  "addOns": "Add-ons",
+  "pricing": {
+    "title": "Pricing",
+    "package": "Package Price",
+    "addOns": "Add-ons Total",
+    "subtotal": "Subtotal",
+    "overtime": "Overtime",
+    "total": "Total",
+    "payment": "Payment"
+  },
+  "status": {
+    "pending": "Pending Confirmation",
+    "confirmed": "Confirmed",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "actions": {
+    "book": "Book Now",
+    "cancel": "Cancel Booking",
+    "reschedule": "Reschedule",
+    "review": "Leave Review"
+  }
+}

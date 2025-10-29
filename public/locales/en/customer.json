@@ -1,0 +1,16 @@
+{
+  "dashboard": {
+    "title": "Customer Dashboard",
+    "welcome": "Welcome back",
+    "quickActions": "Quick Actions",
+    "bookService": "Book a Service",
+    "viewBookings": "View My Bookings",
+    "findProviders": "Find Providers"
+  },
+  "profile": {
+    "title": "Profile",
+    "personalInfo": "Personal Information",
+    "contactInfo": "Contact Information",
+    "preferences": "Preferences"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "general": {
+    "unknown": "An unknown error occurred",
+    "network": "Network error. Please check your connection",
+    "timeout": "Request timeout. Please try again"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "invalidPhone": "Invalid phone number",
+    "minLength": "Minimum length is {{count}} characters",
+    "maxLength": "Maximum length is {{count}} characters"
+  },
+  "booking": {
+    "createFailed": "Failed to create booking",
+    "updateFailed": "Failed to update booking",
+    "notFound": "Booking not found"
+  }
+}
