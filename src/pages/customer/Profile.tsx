@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +15,6 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation('customer');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState<any>(null);
@@ -35,13 +33,6 @@ const Profile = () => {
   useEffect(() => {
     checkAuthAndFetchProfile();
   }, []);
-
-  // Sync language from database to i18n
-  useEffect(() => {
-    if (profile?.language && profile.language !== i18n.language) {
-      i18n.changeLanguage(profile.language);
-    }
-  }, [profile?.language, i18n]);
 
   const checkAuthAndFetchProfile = async () => {
     try {
@@ -142,7 +133,7 @@ const Profile = () => {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              {t('profile.title')}
+              My Profile
             </h1>
           </div>
           <SettingsDrawer role="customer" />
@@ -166,7 +157,7 @@ const Profile = () => {
                 </h2>
                 <p className="text-muted-foreground">{formData.email}</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {t('profile.customerAccount')}
+                  Customer Account
                 </p>
               </div>
             </div>
@@ -176,13 +167,13 @@ const Profile = () => {
         {/* Edit Profile Form */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>{t('profile.accountInfo')}</CardTitle>
+            <CardTitle>Account Information</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label>{t('profile.firstName')} *</Label>
+                  <Label>First Name *</Label>
                   <Input
                     value={formData.first_name}
                     onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
@@ -191,7 +182,7 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <Label>{t('profile.lastName')} *</Label>
+                  <Label>Last Name *</Label>
                   <Input
                     value={formData.last_name}
                     onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
@@ -202,7 +193,7 @@ const Profile = () => {
               </div>
 
               <div>
-                <Label>{t('profile.email')}</Label>
+                <Label>Email</Label>
                 <Input
                   value={formData.email}
                   type="email"
@@ -210,12 +201,12 @@ const Profile = () => {
                   className="bg-muted h-11 text-base"
                 />
                 <p className="text-xs text-muted-foreground mt-1">
-                  {t('profile.emailNote')}
+                  Email cannot be changed
                 </p>
               </div>
 
               <div>
-                <Label>{t('profile.phone')}</Label>
+                <Label>Phone Number</Label>
                 <Input
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -228,7 +219,7 @@ const Profile = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="country">{t('profile.country')} *</Label>
+                  <Label htmlFor="country">Country *</Label>
                   <Select
                     value={formData.country}
                     onValueChange={(value) => setFormData({
@@ -247,7 +238,7 @@ const Profile = () => {
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="currency">{t('profile.currency')}</Label>
+                  <Label htmlFor="currency">Currency</Label>
                   <Input
                     id="currency"
                     value={formData.currency}
@@ -258,7 +249,7 @@ const Profile = () => {
               </div>
 
               <div>
-                <Label htmlFor="language">{t('profile.language')} *</Label>
+                <Label htmlFor="language">Language *</Label>
                 <LanguageSwitcher />
               </div>
 
@@ -267,7 +258,7 @@ const Profile = () => {
 
               <Button type="submit" className="w-full h-12 sm:h-10" disabled={saving}>
                 <Save className="w-4 h-4 mr-2" />
-                {saving ? t('profile.saving') : t('profile.saveChanges')}
+                {saving ? 'Saving...' : 'Save Changes'}
               </Button>
             </form>
           </CardContent>
@@ -276,7 +267,7 @@ const Profile = () => {
         {/* Danger Zone */}
         <Card className="border-0 shadow-sm mt-6 border-destructive/20">
           <CardHeader>
-            <CardTitle className="text-destructive">{t('profile.dangerZone')}</CardTitle>
+            <CardTitle className="text-destructive">Danger Zone</CardTitle>
           </CardHeader>
           <CardContent>
             <Button
@@ -285,7 +276,7 @@ const Profile = () => {
               className="w-full h-12 sm:h-10"
             >
               <LogOut className="w-4 h-4 mr-2" />
-              {t('profile.logout')}
+              Logout
             </Button>
           </CardContent>
         </Card>
