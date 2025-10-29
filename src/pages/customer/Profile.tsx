@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import AvatarUploader from "@/components/AvatarUploader";
 import SettingsDrawer from "@/components/SettingsDrawer";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -249,18 +250,7 @@ const Profile = () => {
 
               <div>
                 <Label htmlFor="language">Language *</Label>
-                <Select
-                  value={formData.language}
-                  onValueChange={(value) => setFormData({ ...formData, language: value })}
-                >
-                  <SelectTrigger className="h-11 text-base">
-                    <SelectValue placeholder="Select language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="en">🇬🇧 English</SelectItem>
-                    <SelectItem value="pt">🇵🇹 Portuguese</SelectItem>
-                  </SelectContent>
-                </Select>
+                <LanguageSwitcher />
               </div>
 
               <Separator />

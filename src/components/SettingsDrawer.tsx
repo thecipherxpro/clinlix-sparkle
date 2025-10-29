@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/drawer";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 interface SettingsDrawerProps {
   role: 'customer' | 'provider';
@@ -300,18 +301,7 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                   <CardDescription>Choose your preferred language</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Select
-                    value={profile?.language || 'en'}
-                    onValueChange={(value) => updateSetting('language', value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en">🇬🇧 English</SelectItem>
-                      <SelectItem value="pt">🇵🇹 Portuguese</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <LanguageSwitcher />
                 </CardContent>
               </Card>
 

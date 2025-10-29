@@ -7,6 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const languages = [
   { code: 'en', name: 'English', flag: '🇬🇧' },
@@ -21,8 +23,26 @@ export const LanguageSwitcher = () => {
   
   const currentLanguage = languages.find((lang) => lang.code === i18n.language) || languages[0];
   
-  const changeLanguage = (langCode: string) => {
-    i18n.changeLanguage(langCode);
+  const changeLanguage = async (langCode: string) => {
+    try {
+      // Update i18n
+      await i18n.changeLanguage(langCode);
+      
+      // Update database
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { error } = await supabase
+          .from('profiles')
+          .update({ language: langCode })
+          .eq('id', user.id);
+        
+        if (error) throw error;
+        toast.success('Language updated');
+      }
+    } catch (error) {
+      console.error('Error updating language:', error);
+      toast.error('Failed to update language');
+    }
   };
   
   return (
