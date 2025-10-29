@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Shield, ArrowLeft, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa";
 import logoImage from "@/assets/logo-clinlix.png";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 type Role = "customer" | "provider";
 const Auth = () => {
   const navigate = useNavigate();
@@ -168,6 +169,10 @@ const Auth = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
+
+          <div className="absolute top-6 right-6">
+            <LanguageSwitcher />
+          </div>
 
           <img src={logoImage} alt="Clinlix Logo" className="mx-auto w-16 h-16 mb-2" />
           <CardTitle className="text-3xl font-bold text-center">Clinlix</CardTitle>
