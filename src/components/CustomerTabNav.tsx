@@ -48,11 +48,9 @@ const Tab = ({ text, selected, onSelect, children }: TabProps) => {
       custom={selected}
       onClick={onSelect}
       transition={transition}
-      className={`${
-        selected
-          ? 'bg-primary/15 text-primary'
-          : 'text-gray-500 hover:text-gray-900 dark:hover:text-gray-100'
-      } relative flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
+      className={`relative flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 
+      ${selected ? 'bg-black text-white' : 'text-gray-600 hover:text-black'} 
+      focus:outline-none`}
     >
       {children}
       <AnimatePresence>
@@ -63,7 +61,7 @@ const Tab = ({ text, selected, onSelect, children }: TabProps) => {
             animate="animate"
             exit="exit"
             transition={transition}
-            className="overflow-hidden"
+            className="overflow-hidden pl-1"
           >
             {text}
           </motion.span>
@@ -91,7 +89,7 @@ const CustomerTabNav = () => {
   };
 
   return (
-    <nav className="sticky bottom-0 left-0 right-0 z-50 w-full bg-background border-t border-border">
+    <nav className="sticky bottom-0 left-0 right-0 z-50 w-full bg-white border-t border-gray-200">
       <div className="flex items-center justify-around max-w-screen-xl mx-auto px-2 py-2">
         {tabs.map((tab) => (
           <Tab
