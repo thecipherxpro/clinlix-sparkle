@@ -1,0 +1,38 @@
+{
+  "profile": {
+    "title": "ملفي الشخصي",
+    "accountInfo": "معلومات الحساب",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "emailNote": "لا يمكن تغيير البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "country": "البلد",
+    "currency": "العملة",
+    "language": "اللغة",
+    "saveChanges": "حفظ التغييرات",
+    "saving": "جاري الحفظ...",
+    "dangerZone": "منطقة الخطر",
+    "logout": "تسجيل الخروج",
+    "customerAccount": "حساب العميل"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "description": "إدارة إعدادات وتفضيلات حسابك",
+    "notifications": "الإشعارات",
+    "notificationsDesc": "إدارة كيفية تلقي التحديثات",
+    "emailNotifications": "إشعارات البريد الإلكتروني",
+    "emailNotificationsDesc": "تلقي تحديثات الحجز عبر البريد الإلكتروني",
+    "smsNotifications": "إشعارات الرسائل النصية",
+    "smsNotificationsDesc": "تلقي تحديثات الحجز عبر الرسائل النصية",
+    "languageRegion": "اللغة والمنطقة",
+    "languageRegionDesc": "اختر لغتك المفضلة",
+    "security": "الأمان",
+    "securityDesc": "إدارة أمان حسابك",
+    "changePassword": "تغيير كلمة المرور",
+    "changePasswordNote": "سنرسل لك بريداً إلكترونياً يحتوي على تعليمات لإعادة تعيين كلمة المرور",
+    "currencyPreference": "تفضيل العملة",
+    "currencyPreferenceDesc": "بناءً على اختيار بلدك",
+    "currencyNote": "يتم تعيين العملة تلقائياً بناءً على بلدك"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "profile": {
+    "title": "Mi Perfil",
+    "accountInfo": "Información de la Cuenta",
+    "firstName": "Nombre",
+    "lastName": "Apellidos",
+    "email": "Correo Electrónico",
+    "emailNote": "El correo electrónico no se puede cambiar",
+    "phone": "Número de Teléfono",
+    "country": "País",
+    "currency": "Moneda",
+    "language": "Idioma",
+    "saveChanges": "Guardar Cambios",
+    "saving": "Guardando...",
+    "dangerZone": "Zona de Peligro",
+    "logout": "Cerrar Sesión",
+    "customerAccount": "Cuenta de Cliente"
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Gestiona la configuración y preferencias de tu cuenta",
+    "notifications": "Notificaciones",
+    "notificationsDesc": "Gestiona cómo recibes actualizaciones",
+    "emailNotifications": "Notificaciones por Correo",
+    "emailNotificationsDesc": "Recibir actualizaciones de reservas por correo",
+    "smsNotifications": "Notificaciones por SMS",
+    "smsNotificationsDesc": "Recibir actualizaciones de reservas por SMS",
+    "languageRegion": "Idioma y Región",
+    "languageRegionDesc": "Elige tu idioma preferido",
+    "security": "Seguridad",
+    "securityDesc": "Gestiona la seguridad de tu cuenta",
+    "changePassword": "Cambiar Contraseña",
+    "changePasswordNote": "Te enviaremos un correo con instrucciones para restablecer tu contraseña",
+    "currencyPreference": "Preferencia de Moneda",
+    "currencyPreferenceDesc": "Basado en la selección de tu país",
+    "currencyNote": "La moneda se establece automáticamente según tu país"
+  }
+}

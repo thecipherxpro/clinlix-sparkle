@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Settings, LogOut, Key, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,12 +31,20 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation('customer');
 
   useEffect(() => {
     if (open) {
       loadProfile();
     }
   }, [open]);
+
+  // Sync language from database to i18n
+  useEffect(() => {
+    if (profile?.language && profile.language !== i18n.language) {
+      i18n.changeLanguage(profile.language);
+    }
+  }, [profile?.language, i18n]);
 
   const loadProfile = async () => {
     try {
@@ -120,9 +129,9 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
       
       <DrawerContent className="max-h-[85vh] flex flex-col">
         <DrawerHeader className="border-b shrink-0">
-          <DrawerTitle>Settings</DrawerTitle>
+          <DrawerTitle>{t('settings.title')}</DrawerTitle>
           <DrawerDescription>
-            Manage your account settings and preferences
+            {t('settings.description')}
           </DrawerDescription>
         </DrawerHeader>
 
@@ -136,13 +145,13 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
               {/* Account Info */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Account Information</CardTitle>
-                  <CardDescription>Your basic account details</CardDescription>
+                  <CardTitle>{t('settings.accountInfo')}</CardTitle>
+                  <CardDescription>{t('settings.accountInfoDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>First Name</Label>
+                      <Label>{t('settings.firstName')}</Label>
                       <Input
                         value={profile?.first_name || ''}
                         onChange={(e) => setProfile({ ...profile, first_name: e.target.value })}
@@ -150,7 +159,7 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Last Name</Label>
+                      <Label>{t('settings.lastName')}</Label>
                       <Input
                         value={profile?.last_name || ''}
                         onChange={(e) => setProfile({ ...profile, last_name: e.target.value })}
@@ -159,7 +168,7 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Phone Number</Label>
+                    <Label>{t('settings.phone')}</Label>
                     <Input
                       value={profile?.phone || ''}
                       onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
@@ -168,13 +177,13 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Email Address</Label>
+                    <Label>{t('settings.email')}</Label>
                     <Input
                       value={profile?.email || ''}
                       disabled
                       className="bg-muted"
                     />
-                    <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.emailNote')}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -244,8 +253,8 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
               {role === 'customer' && (
                 <Card>
                   <CardHeader>
-                    <CardTitle>Currency Preference</CardTitle>
-                    <CardDescription>Based on your country selection</CardDescription>
+                    <CardTitle>{t('settings.currencyPreference')}</CardTitle>
+                    <CardDescription>{t('settings.currencyPreferenceDesc')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Input
@@ -254,7 +263,7 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                       className="bg-muted"
                     />
                     <p className="text-xs text-muted-foreground mt-2">
-                      Currency is automatically set based on your country
+                      {t('settings.currencyNote')}
                     </p>
                   </CardContent>
                 </Card>
@@ -263,15 +272,15 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
               {/* Notifications */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Notifications</CardTitle>
-                  <CardDescription>Manage how you receive updates</CardDescription>
+                  <CardTitle>{t('settings.notifications')}</CardTitle>
+                  <CardDescription>{t('settings.notificationsDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Email Notifications</Label>
+                      <Label>{t('settings.emailNotifications')}</Label>
                       <p className="text-sm text-muted-foreground">
-                        Receive {role === 'provider' ? 'job' : 'booking'} updates via email
+                        {t('settings.emailNotificationsDesc')}
                       </p>
                     </div>
                   <Switch
@@ -281,9 +290,9 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>SMS Notifications</Label>
+                      <Label>{t('settings.smsNotifications')}</Label>
                       <p className="text-sm text-muted-foreground">
-                        Receive {role === 'provider' ? 'job' : 'booking'} updates via SMS
+                        {t('settings.smsNotificationsDesc')}
                       </p>
                     </div>
                   <Switch
@@ -297,8 +306,8 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
               {/* Language */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Language & Region</CardTitle>
-                  <CardDescription>Choose your preferred language</CardDescription>
+                  <CardTitle>{t('settings.languageRegion')}</CardTitle>
+                  <CardDescription>{t('settings.languageRegionDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <LanguageSwitcher />
@@ -308,8 +317,8 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
               {/* Security */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Security</CardTitle>
-                  <CardDescription>Manage your account security</CardDescription>
+                  <CardTitle>{t('settings.security')}</CardTitle>
+                  <CardDescription>{t('settings.securityDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button
@@ -318,10 +327,10 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                     className="w-full"
                   >
                     <Key className="w-4 h-4 mr-2" />
-                    Change Password
+                    {t('settings.changePassword')}
                   </Button>
                   <p className="text-xs text-muted-foreground">
-                    We'll send you an email with instructions to reset your password
+                    {t('settings.changePasswordNote')}
                   </p>
                 </CardContent>
               </Card>
@@ -335,7 +344,7 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                     className="w-full border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
                   >
                     <LogOut className="w-4 h-4 mr-2" />
-                    Logout
+                    {t('profile.logout')}
                   </Button>
                 </CardContent>
               </Card>
