@@ -110,45 +110,29 @@ const ProviderProfile = () => {
 
           {/* Tabs */}
           <div className="w-full">
-            <div className="mb-6 flex flex-wrap items-center gap-2 border-b border-border">
-              <button
-                onClick={() => setActiveTab("about")}
-                className={`${
-                  activeTab === "about"
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground'
-                } relative rounded-md px-2 py-1 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
-              >
+            <div className="mb-6 flex flex-wrap items-center gap-8 border-b border-border">
+              <button onClick={() => setActiveTab("about")} className={`${activeTab === "about" ? 'text-primary' : 'text-muted-foreground hover:text-foreground'} relative rounded-md px-2 py-1 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}>
                 <span className="relative z-10">About</span>
-                {activeTab === "about" && (
-                  <motion.div
-                    className="absolute left-0 top-0 flex size-full h-full w-full items-end justify-center"
-                    layoutId="provider-profile-linetab"
-                    transition={{ type: 'spring', duration: 0.4, bounce: 0, delay: 0.1 }}
-                  >
+                {activeTab === "about" && <motion.div className="absolute left-0 top-0 flex size-full h-full w-full items-end justify-center" layoutId="provider-profile-linetab" transition={{
+                type: 'spring',
+                duration: 0.4,
+                bounce: 0,
+                delay: 0.1
+              }}>
                     <span className="z-0 h-[3px] w-[60%] rounded-t-full bg-primary"></span>
-                  </motion.div>
-                )}
+                  </motion.div>}
               </button>
 
-              <button
-                onClick={() => setActiveTab("reviews")}
-                className={`${
-                  activeTab === "reviews"
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground'
-                } relative rounded-md px-2 py-1 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
-              >
+              <button onClick={() => setActiveTab("reviews")} className={`${activeTab === "reviews" ? 'text-primary' : 'text-muted-foreground hover:text-foreground'} relative rounded-md px-2 py-1 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}>
                 <span className="relative z-10">Reviews ({provider.rating_count})</span>
-                {activeTab === "reviews" && (
-                  <motion.div
-                    className="absolute left-0 top-0 flex size-full h-full w-full items-end justify-center"
-                    layoutId="provider-profile-linetab"
-                    transition={{ type: 'spring', duration: 0.4, bounce: 0, delay: 0.1 }}
-                  >
+                {activeTab === "reviews" && <motion.div className="absolute left-0 top-0 flex size-full h-full w-full items-end justify-center" layoutId="provider-profile-linetab" transition={{
+                type: 'spring',
+                duration: 0.4,
+                bounce: 0,
+                delay: 0.1
+              }}>
                     <span className="z-0 h-[3px] w-[60%] rounded-t-full bg-primary"></span>
-                  </motion.div>
-                )}
+                  </motion.div>}
               </button>
             </div>
 
