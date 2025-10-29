@@ -97,7 +97,7 @@ const CustomerDashboard = () => {
               description="Schedule service"
               value="New Booking"
               image="https://i.postimg.cc/LXSMYzdW/calnder24.png"
-              heroColor="#ebe0eb"
+              heroColor="#cfcfcf"
               onClick={() => navigate("/customer/booking")}
             />
 
