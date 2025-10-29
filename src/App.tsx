@@ -35,60 +35,63 @@ import JobDetail from "./pages/provider/JobDetail";
 import NotFound from "./pages/NotFound";
 import CustomerLayout from "./components/layouts/CustomerLayout";
 import ProviderLayout from "./components/layouts/ProviderLayout";
+import { I18nLayout } from "./components/layouts/I18nLayout";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <TooltipProvider>
-        <SplashScreen />
-        <InstallPromptCard />
-        <Toaster />
-        <Sonner />
-        <Routes>
-          <Route path="/" element={<Splash />} />
-          <Route path="/home" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-          <Route path="/auth/reset-password" element={<ResetPassword />} />
-          
-          {/* Customer routes with persistent navigation */}
-          <Route element={<CustomerLayout />}>
-            <Route path="/customer/dashboard" element={<CustomerDashboard />} />
-            <Route path="/customer/providers" element={<Providers />} />
-            <Route path="/customer/find-providers" element={<FindProviders />} />
-            <Route path="/customer/my-addresses" element={<MyAddresses />} />
-            <Route path="/customer/booking" element={<Booking />} />
-            <Route path="/customer/bookings" element={<MyBookings />} />
-            <Route path="/customer/bookings/:id" element={<BookingDetails />} />
-            <Route path="/customer/bookings/:id/review" element={<ReviewBooking />} />
-            <Route path="/customer/profile" element={<Profile />} />
-            <Route path="/customer/settings" element={<CustomerSettings />} />
-            <Route path="/customer/payment-methods" element={<PaymentMethods />} />
-            <Route path="/customer/how-it-works" element={<HowItWorks />} />
-            <Route path="/customer/pricing" element={<Pricing />} />
-          </Route>
-          
-          <Route path="/providers/profile/:providerId" element={<ProviderProfile />} />
-          
-          {/* Provider routes with persistent navigation */}
-          <Route element={<ProviderLayout />}>
-            <Route path="/provider/dashboard" element={<ProviderDashboard />} />
-            <Route path="/provider/jobs" element={<ProviderJobs />} />
-            <Route path="/provider/jobs/:id" element={<JobDetail />} />
-            <Route path="/provider/jobs/:id/summary" element={<JobDetail />} />
-            <Route path="/provider/schedule" element={<ProviderSchedule />} />
-            <Route path="/provider/wallet" element={<ProviderWallet />} />
-            <Route path="/provider/profile" element={<ProviderProfilePage />} />
-            <Route path="/provider/settings" element={<ProviderSettings />} />
-            <Route path="/provider/reviews" element={<ProviderReviews />} />
-          </Route>
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </TooltipProvider>
-    </BrowserRouter>
+    <I18nLayout>
+      <BrowserRouter>
+        <TooltipProvider>
+          <SplashScreen />
+          <InstallPromptCard />
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<Splash />} />
+            <Route path="/home" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+            <Route path="/auth/reset-password" element={<ResetPassword />} />
+            
+            {/* Customer routes with persistent navigation */}
+            <Route element={<CustomerLayout />}>
+              <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+              <Route path="/customer/providers" element={<Providers />} />
+              <Route path="/customer/find-providers" element={<FindProviders />} />
+              <Route path="/customer/my-addresses" element={<MyAddresses />} />
+              <Route path="/customer/booking" element={<Booking />} />
+              <Route path="/customer/bookings" element={<MyBookings />} />
+              <Route path="/customer/bookings/:id" element={<BookingDetails />} />
+              <Route path="/customer/bookings/:id/review" element={<ReviewBooking />} />
+              <Route path="/customer/profile" element={<Profile />} />
+              <Route path="/customer/settings" element={<CustomerSettings />} />
+              <Route path="/customer/payment-methods" element={<PaymentMethods />} />
+              <Route path="/customer/how-it-works" element={<HowItWorks />} />
+              <Route path="/customer/pricing" element={<Pricing />} />
+            </Route>
+            
+            <Route path="/providers/profile/:providerId" element={<ProviderProfile />} />
+            
+            {/* Provider routes with persistent navigation */}
+            <Route element={<ProviderLayout />}>
+              <Route path="/provider/dashboard" element={<ProviderDashboard />} />
+              <Route path="/provider/jobs" element={<ProviderJobs />} />
+              <Route path="/provider/jobs/:id" element={<JobDetail />} />
+              <Route path="/provider/jobs/:id/summary" element={<JobDetail />} />
+              <Route path="/provider/schedule" element={<ProviderSchedule />} />
+              <Route path="/provider/wallet" element={<ProviderWallet />} />
+              <Route path="/provider/profile" element={<ProviderProfilePage />} />
+              <Route path="/provider/settings" element={<ProviderSettings />} />
+              <Route path="/provider/reviews" element={<ProviderReviews />} />
+            </Route>
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </TooltipProvider>
+      </BrowserRouter>
+    </I18nLayout>
   </QueryClientProvider>
 );
 
