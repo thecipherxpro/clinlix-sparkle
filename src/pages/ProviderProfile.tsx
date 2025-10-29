@@ -8,6 +8,7 @@ import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare } from "l
 import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import { motion } from "framer-motion";
+import { Badge } from "@/components/base/badges/badges";
 const ProviderProfile = () => {
   const {
     providerId
@@ -87,14 +88,14 @@ const ProviderProfile = () => {
         <div className="mt-16 sm:mt-20">
           {/* Header Info */}
           <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
-            {provider.new_provider && <div className="badge badge-soft badge-secondary gap-1 px-[12px] py-0 mx-0 my-0">
-                <Sparkles className="w-5 h-3" />
+            {provider.new_provider && <Badge type="pill-color" color="secondary" size="sm">
+                <Sparkles className="w-3 h-3" />
                 NEW
-              </div>}
-            {provider.verified && <div className="badge badge-primary gap-1">
+              </Badge>}
+            {provider.verified && <Badge type="pill-color" color="brand" size="sm">
                 <Shield className="w-3 h-3" />
                 VERIFIED
-              </div>}
+              </Badge>}
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 mb-2">
