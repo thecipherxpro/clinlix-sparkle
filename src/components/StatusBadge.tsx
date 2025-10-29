@@ -9,14 +9,15 @@ const STATUS_LABELS = {
 };
 
 const STATUS_COLORS = {
-  pending: "badge-warning text-white",
-  confirmed: "badge-info text-white",
-  on_the_way: "#000000",
-  arrived: "badge-primary text-white",
-  started: "badge-success text-white",
-  completed: "black",
-  cancelled: "badge-error text-white"
-};
+  pending: "bg-black text-white",
+  confirmed: "bg-black text-white",
+  on_the_way: "bg-black text-white",
+  arrived: "bg-black text-white",
+  started: "bg-black text-white",
+  completed: "bg-black text-white",
+  cancelled: "bg-black text-white",
+} as const;
+
 
 interface StatusBadgeProps {
   status: keyof typeof STATUS_LABELS;
