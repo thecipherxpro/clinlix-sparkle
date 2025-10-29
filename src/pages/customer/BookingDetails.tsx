@@ -5,6 +5,7 @@ import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowLeft, Calendar, Clock, MapPin, Phone, Mail, Star, Package, DollarSign, User, Home, Building2, MessageCircle, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
@@ -245,85 +246,91 @@ const BookingDetails = () => {
           </Card>}
 
         {/* Package & Pricing Card */}
-        <Card className="border-0 shadow-sm rounded-xl">
-          <CardHeader className="flex flex-row items-center gap-3 p-4 sm:p-6 pb-3">
-            <div className="p-2 rounded-lg bg-accent/10 shrink-0">
-              <Package className="w-5 h-5 text-accent" />
-            </div>
-            <h3 className="text-base font-semibold text-gray-900 text-left">Package Details</h3>
-          </CardHeader>
-          <CardContent className="space-y-4 p-4 sm:p-6 pt-3">
-            <div>
-              <p className="text-xs sm:text-sm text-muted-foreground mb-1.5 text-left">Selected Package</p>
-              <p className="font-semibold text-base sm:text-lg text-left">{packageInfo?.package_name}</p>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 text-left">
-                {packageInfo?.time_included} • {packageInfo?.bedroom_count} Bedrooms
-              </p>
-            </div>
+        <Card className="border-2 shadow-sm rounded-xl overflow-hidden">
+          <CardContent className="p-0">
+            <Table className="border-collapse">
+              <TableHeader>
+                <TableRow className="bg-accent/5 border-b-2">
+                  <TableHead className="text-left font-bold text-base border-r-2 border-border" colSpan={1}>
+                    <div className="flex items-center gap-2 p-2">
+                      <Package className="w-5 h-5 text-accent" />
+                      Package Details
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-right font-bold" colSpan={1}></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {/* Package Info Row */}
+                <TableRow className="bg-muted/20 border-b">
+                  <TableCell className="font-semibold border-r-2 border-border">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Selected Package</p>
+                      <p className="text-base font-bold">{packageInfo?.package_name}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {packageInfo?.time_included} • {packageInfo?.bedroom_count} Bedrooms
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right align-middle">
+                    <span className="text-lg font-bold text-primary">
+                      {address?.currency === 'EUR' ? '€' : '$'}{packageInfo?.one_time_price}
+                    </span>
+                  </TableCell>
+                </TableRow>
 
-            {addons.length > 0 && <>
-                <Separator />
-                <div>
-                  <p className="text-xs sm:text-sm text-muted-foreground mb-2.5 text-left">Add-ons</p>
-                  <div className="space-y-2.5">
-                    {addons.map(addon => <div key={addon.id} className="flex justify-between items-center text-xs sm:text-sm">
-                        <span className="text-foreground text-left">{addon.name_en}</span>
-                        <span className="font-medium text-foreground text-right">
-                          {address?.currency === 'EUR' ? '€' : '$'}{Number(addon.price).toFixed(2)}
-                        </span>
-                      </div>)}
-                  </div>
-                </div>
-              </>}
+                {/* Add-ons */}
+                {addons.map(addon => (
+                  <TableRow key={addon.id} className="border-b">
+                    <TableCell className="font-medium border-r-2 border-border">{addon.name_en}</TableCell>
+                    <TableCell className="text-right">
+                      {address?.currency === 'EUR' ? '€' : '$'}{Number(addon.price).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                ))}
 
-            <Separator />
+                {/* Subtotal */}
+                <TableRow className="border-b-2 bg-muted/10">
+                  <TableCell className="font-semibold border-r-2 border-border">Subtotal</TableCell>
+                  <TableCell className="text-right font-semibold">
+                    {address?.currency === 'EUR' ? '€' : '$'}{booking.total_estimate}
+                  </TableCell>
+                </TableRow>
 
-            <div className="space-y-2.5">
-              <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span className="text-muted-foreground text-left">Package Price</span>
-                <span className="font-medium text-foreground text-right">
-                  {address?.currency === 'EUR' ? '€' : '$'}{packageInfo?.one_time_price}
-                </span>
-              </div>
-              {addons.length > 0 && <div className="flex justify-between items-center text-xs sm:text-sm">
-                  <span className="text-muted-foreground text-left">Add-ons Total</span>
-                  <span className="font-medium text-foreground text-right">
-                    {address?.currency === 'EUR' ? '€' : '$'}
-                    {addons.reduce((sum, addon) => sum + Number(addon.price), 0).toFixed(2)}
-                  </span>
-                </div>}
-              <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span className="text-muted-foreground text-left">Subtotal</span>
-                <span className="font-medium text-foreground text-right">
-                  {address?.currency === 'EUR' ? '€' : '$'}{booking.total_estimate}
-                </span>
-              </div>
-              {booking.overtime_minutes > 0 && <div className="flex justify-between items-center text-xs sm:text-sm">
-                  <span className="text-muted-foreground text-left">Overtime ({booking.overtime_minutes} min)</span>
-                  <span className="font-medium text-foreground text-right">
-                    {address?.currency === 'EUR' ? '€' : '$'}
-                    {((booking.total_final || booking.total_estimate) - booking.total_estimate).toFixed(2)}
-                  </span>
-                </div>}
-              <Separator className="my-3" />
-              <div className="flex justify-between items-center pt-1">
-                <span className="font-semibold text-base sm:text-lg flex items-center gap-2 text-left">
-                  <DollarSign className="w-5 h-5 text-primary" />
-                  Final Total
-                </span>
-                <span className="font-bold text-xl sm:text-2xl text-primary text-right">
-                  {address?.currency === 'EUR' ? '€' : '$'}{booking.total_final || booking.total_estimate}
-                </span>
-              </div>
-            </div>
+                {/* Overtime if applicable */}
+                {booking.overtime_minutes > 0 && (
+                  <TableRow className="border-b">
+                    <TableCell className="font-medium border-r-2 border-border">Overtime ({booking.overtime_minutes} min)</TableCell>
+                    <TableCell className="text-right">
+                      {address?.currency === 'EUR' ? '€' : '$'}
+                      {((booking.total_final || booking.total_estimate) - booking.total_estimate).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                )}
 
-            <Separator />
+                {/* Final Total */}
+                <TableRow className="border-b-2 bg-primary/5">
+                  <TableCell className="font-bold text-base sm:text-lg border-r-2 border-border">
+                    <div className="flex items-center gap-2">
+                      <DollarSign className="w-5 h-5 text-primary" />
+                      Final Total
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right font-bold text-xl sm:text-2xl text-primary">
+                    {address?.currency === 'EUR' ? '€' : '$'}{booking.total_final || booking.total_estimate}
+                  </TableCell>
+                </TableRow>
 
-            <div className="flex justify-center sm:justify-start">
-              <div className={`badge ${booking.payment_status === 'paid' ? 'badge-success text-white' : 'badge-warning text-white'} border-0 shadow-md px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold`}>
-                Payment: {booking.payment_status.toUpperCase()}
-              </div>
-            </div>
+                {/* Payment Status */}
+                <TableRow className="bg-muted/5">
+                  <TableCell colSpan={2} className="text-center py-4">
+                    <div className={`inline-block badge ${booking.payment_status === 'paid' ? 'badge-success text-white' : 'badge-warning text-white'} border-0 shadow-md px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold`}>
+                      Payment: {booking.payment_status.toUpperCase()}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
 
