@@ -5,6 +5,7 @@ import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowLeft, Calendar, Clock, MapPin, Phone, Mail, Star, Package, DollarSign, User, Home, Building2, MessageCircle, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
@@ -252,8 +253,9 @@ const BookingDetails = () => {
             </div>
             <h3 className="text-base font-semibold text-gray-900 text-left">Package Details</h3>
           </CardHeader>
-          <CardContent className="space-y-4 p-4 sm:p-6 pt-3">
-            <div>
+          <CardContent className="p-4 sm:p-6 pt-3">
+            {/* Package Info Header */}
+            <div className="mb-4 pb-3 border-b">
               <p className="text-xs sm:text-sm text-muted-foreground mb-1.5 text-left">Selected Package</p>
               <p className="font-semibold text-base sm:text-lg text-left">{packageInfo?.package_name}</p>
               <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 text-left">
@@ -261,65 +263,69 @@ const BookingDetails = () => {
               </p>
             </div>
 
-            {addons.length > 0 && <>
-                <Separator />
-                <div>
-                  <p className="text-xs sm:text-sm text-muted-foreground mb-2.5 text-left">Add-ons</p>
-                  <div className="space-y-2.5">
-                    {addons.map(addon => <div key={addon.id} className="flex justify-between items-center text-xs sm:text-sm">
-                        <span className="text-foreground text-left">{addon.name_en}</span>
-                        <span className="font-medium text-foreground text-right">
-                          {address?.currency === 'EUR' ? '€' : '$'}{Number(addon.price).toFixed(2)}
-                        </span>
-                      </div>)}
-                  </div>
-                </div>
-              </>}
+            {/* Pricing Table */}
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-left">Item</TableHead>
+                  <TableHead className="text-right">Price</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {/* Package Price */}
+                <TableRow>
+                  <TableCell className="font-medium">Package Price</TableCell>
+                  <TableCell className="text-right">
+                    {address?.currency === 'EUR' ? '€' : '$'}{packageInfo?.one_time_price}
+                  </TableCell>
+                </TableRow>
 
-            <Separator />
+                {/* Add-ons */}
+                {addons.map(addon => (
+                  <TableRow key={addon.id}>
+                    <TableCell className="font-medium">{addon.name_en}</TableCell>
+                    <TableCell className="text-right">
+                      {address?.currency === 'EUR' ? '€' : '$'}{Number(addon.price).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                ))}
 
-            <div className="space-y-2.5">
-              <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span className="text-muted-foreground text-left">Package Price</span>
-                <span className="font-medium text-foreground text-right">
-                  {address?.currency === 'EUR' ? '€' : '$'}{packageInfo?.one_time_price}
-                </span>
-              </div>
-              {addons.length > 0 && <div className="flex justify-between items-center text-xs sm:text-sm">
-                  <span className="text-muted-foreground text-left">Add-ons Total</span>
-                  <span className="font-medium text-foreground text-right">
-                    {address?.currency === 'EUR' ? '€' : '$'}
-                    {addons.reduce((sum, addon) => sum + Number(addon.price), 0).toFixed(2)}
-                  </span>
-                </div>}
-              <div className="flex justify-between items-center text-xs sm:text-sm">
-                <span className="text-muted-foreground text-left">Subtotal</span>
-                <span className="font-medium text-foreground text-right">
-                  {address?.currency === 'EUR' ? '€' : '$'}{booking.total_estimate}
-                </span>
-              </div>
-              {booking.overtime_minutes > 0 && <div className="flex justify-between items-center text-xs sm:text-sm">
-                  <span className="text-muted-foreground text-left">Overtime ({booking.overtime_minutes} min)</span>
-                  <span className="font-medium text-foreground text-right">
-                    {address?.currency === 'EUR' ? '€' : '$'}
-                    {((booking.total_final || booking.total_estimate) - booking.total_estimate).toFixed(2)}
-                  </span>
-                </div>}
-              <Separator className="my-3" />
-              <div className="flex justify-between items-center pt-1">
-                <span className="font-semibold text-base sm:text-lg flex items-center gap-2 text-left">
-                  <DollarSign className="w-5 h-5 text-primary" />
-                  Final Total
-                </span>
-                <span className="font-bold text-xl sm:text-2xl text-primary text-right">
-                  {address?.currency === 'EUR' ? '€' : '$'}{booking.total_final || booking.total_estimate}
-                </span>
-              </div>
-            </div>
+                {/* Subtotal */}
+                <TableRow className="border-t-2">
+                  <TableCell className="font-semibold">Subtotal</TableCell>
+                  <TableCell className="text-right font-semibold">
+                    {address?.currency === 'EUR' ? '€' : '$'}{booking.total_estimate}
+                  </TableCell>
+                </TableRow>
 
-            <Separator />
+                {/* Overtime if applicable */}
+                {booking.overtime_minutes > 0 && (
+                  <TableRow>
+                    <TableCell className="font-medium">Overtime ({booking.overtime_minutes} min)</TableCell>
+                    <TableCell className="text-right">
+                      {address?.currency === 'EUR' ? '€' : '$'}
+                      {((booking.total_final || booking.total_estimate) - booking.total_estimate).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                )}
 
-            <div className="flex justify-center sm:justify-start">
+                {/* Final Total */}
+                <TableRow className="border-t-2 bg-muted/30">
+                  <TableCell className="font-bold text-base sm:text-lg">
+                    <div className="flex items-center gap-2">
+                      <DollarSign className="w-5 h-5 text-primary" />
+                      Final Total
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right font-bold text-xl sm:text-2xl text-primary">
+                    {address?.currency === 'EUR' ? '€' : '$'}{booking.total_final || booking.total_estimate}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+
+            {/* Payment Status */}
+            <div className="flex justify-center sm:justify-start mt-4 pt-3 border-t">
               <div className={`badge ${booking.payment_status === 'paid' ? 'badge-success text-white' : 'badge-warning text-white'} border-0 shadow-md px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold`}>
                 Payment: {booking.payment_status.toUpperCase()}
               </div>
