@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare, Info, MessageCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
-import { Tabs, Tab } from "@heroui/react";
+import { AnimatePresence, motion } from "framer-motion";
 const ProviderProfile = () => {
   const {
     providerId
@@ -110,19 +110,89 @@ const ProviderProfile = () => {
 
           {/* Tabs */}
           <div className="w-full">
-            <Tabs selectedKey={activeTab} onSelectionChange={key => setActiveTab(key as "about" | "reviews")} classNames={{
-            tabList: "w-full bg-muted p-1 rounded-lg mb-6",
-            cursor: "bg-background shadow-sm"
-          }} className="px-[12px]">
-              <Tab key="about" title={<div className="flex items-center gap-2">
-                    <Info className="w-4 h-4" />
-                    About
-                  </div>} />
-              <Tab key="reviews" title={<div className="flex items-center gap-2">
-                    <MessageCircle className="w-4 h-4" />
-                    Reviews ({provider.rating_count})
-                  </div>} />
-            </Tabs>
+            <div className="mb-6 flex flex-wrap items-center gap-2 border-b border-border pb-2">
+              <motion.button
+                variants={{
+                  initial: { gap: 0, paddingLeft: '.5rem', paddingRight: '.5rem' },
+                  animate: (selected: boolean) => ({
+                    gap: selected ? '.5rem' : 0,
+                    paddingLeft: selected ? '1rem' : '.5rem',
+                    paddingRight: selected ? '1rem' : '.5rem',
+                  }),
+                }}
+                initial="initial"
+                animate="animate"
+                custom={activeTab === "about"}
+                onClick={() => setActiveTab("about")}
+                transition={{ delay: 0.1, type: 'spring', bounce: 0, duration: 0.35 }}
+                className={`${
+                  activeTab === "about"
+                    ? 'bg-primary/15 text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
+                } relative flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
+              >
+                <Info className="w-4 h-4" />
+                <AnimatePresence>
+                  {activeTab === "about" && (
+                    <motion.span
+                      variants={{
+                        initial: { width: 0, opacity: 0 },
+                        animate: { width: 'auto', opacity: 1 },
+                        exit: { width: 0, opacity: 0 },
+                      }}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      transition={{ delay: 0.1, type: 'spring', bounce: 0, duration: 0.35 }}
+                      className="overflow-hidden"
+                    >
+                      About
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+
+              <motion.button
+                variants={{
+                  initial: { gap: 0, paddingLeft: '.5rem', paddingRight: '.5rem' },
+                  animate: (selected: boolean) => ({
+                    gap: selected ? '.5rem' : 0,
+                    paddingLeft: selected ? '1rem' : '.5rem',
+                    paddingRight: selected ? '1rem' : '.5rem',
+                  }),
+                }}
+                initial="initial"
+                animate="animate"
+                custom={activeTab === "reviews"}
+                onClick={() => setActiveTab("reviews")}
+                transition={{ delay: 0.1, type: 'spring', bounce: 0, duration: 0.35 }}
+                className={`${
+                  activeTab === "reviews"
+                    ? 'bg-primary/15 text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
+                } relative flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
+              >
+                <MessageCircle className="w-4 h-4" />
+                <AnimatePresence>
+                  {activeTab === "reviews" && (
+                    <motion.span
+                      variants={{
+                        initial: { width: 0, opacity: 0 },
+                        animate: { width: 'auto', opacity: 1 },
+                        exit: { width: 0, opacity: 0 },
+                      }}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      transition={{ delay: 0.1, type: 'spring', bounce: 0, duration: 0.35 }}
+                      className="overflow-hidden"
+                    >
+                      Reviews ({provider.rating_count})
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            </div>
 
             {/* Tab Content */}
             {activeTab === "about" && <div className="space-y-4 sm:space-y-6 animate-in fade-in-50 duration-300">
