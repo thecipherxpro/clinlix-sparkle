@@ -309,38 +309,16 @@ const Auth = () => {
                 </div>
               </div>
 
-              <div className="flex justify-center gap-4" role="group" aria-label="Social login options">
-                <Button
-                  type="button"
-                  onClick={() => handleSocialLogin("facebook")}
-                  disabled={loading}
-                  size="icon"
-                  className="rounded-full bg-[#1877F2] hover:bg-[#1877F2]/90 text-white shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 touch-target"
-                  aria-label="Sign in with Facebook"
-                >
-                  <FaFacebook className="w-5 h-5" />
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => handleSocialLogin("google")}
-                  disabled={loading}
-                  size="icon"
-                  className="rounded-full bg-white hover:bg-white/90 shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 border border-border touch-target"
-                  aria-label="Sign in with Google"
-                >
-                  <FaGoogle className="w-5 h-5 text-[#DB4437]" />
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => handleSocialLogin("apple")}
-                  disabled={loading}
-                  size="icon"
-                  className="rounded-full bg-black hover:bg-black/90 text-white shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 touch-target"
-                  aria-label="Sign in with Apple"
-                >
-                  <FaApple className="w-5 h-5" />
-                </Button>
-              </div>
+              <Button
+                type="button"
+                onClick={() => handleSocialLogin("google")}
+                disabled={loading}
+                className="w-full h-12 rounded-[20px] bg-white hover:bg-white/90 border border-border shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3"
+                aria-label="Sign in with Google"
+              >
+                <FaGoogle className="w-5 h-5 text-[#DB4437]" />
+                <span className="font-medium text-foreground">Continue with Google</span>
+              </Button>
             </div>
           )}
 
@@ -542,38 +520,16 @@ const Auth = () => {
                 </div>
               </div>
 
-              <div className="flex justify-center gap-4" role="group" aria-label="Social login options">
-                <Button
-                  type="button"
-                  onClick={() => handleSocialLogin("facebook")}
-                  disabled={loading}
-                  size="icon"
-                  className="rounded-full bg-[#1877F2] hover:bg-[#1877F2]/90 text-white shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 touch-target"
-                  aria-label="Sign in with Facebook"
-                >
-                  <FaFacebook className="w-5 h-5" />
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => handleSocialLogin("google")}
-                  disabled={loading}
-                  size="icon"
-                  className="rounded-full bg-white hover:bg-white/90 shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 border border-border touch-target"
-                  aria-label="Sign in with Google"
-                >
-                  <FaGoogle className="w-5 h-5 text-[#DB4437]" />
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => handleSocialLogin("apple")}
-                  disabled={loading}
-                  size="icon"
-                  className="rounded-full bg-black hover:bg-black/90 text-white shadow-md hover:shadow-lg transition-all hover:scale-110 disabled:opacity-50 touch-target"
-                  aria-label="Sign in with Apple"
-                >
-                  <FaApple className="w-5 h-5" />
-                </Button>
-              </div>
+              <Button
+                type="button"
+                onClick={() => handleSocialLogin("google")}
+                disabled={loading}
+                className="w-full h-12 rounded-[20px] bg-white hover:bg-white/90 border border-border shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3"
+                aria-label="Sign in with Google"
+              >
+                <FaGoogle className="w-5 h-5 text-[#DB4437]" />
+                <span className="font-medium text-foreground">Continue with Google</span>
+              </Button>
               </div>
             )}
         </CardContent>
