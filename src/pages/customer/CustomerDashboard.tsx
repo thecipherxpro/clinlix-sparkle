@@ -106,7 +106,7 @@ const CustomerDashboard = () => {
               description="Your locations"
               value="Manage"
               image="https://i.postimg.cc/hjB2bst8/map.png"
-              heroColor="#d9d9d9"
+              heroColor="#e1e2e4"
               onClick={() => navigate("/customer/my-addresses")}
             />
 
@@ -115,7 +115,7 @@ const CustomerDashboard = () => {
               description="Manage cards"
               value="Methods"
               image="https://i.postimg.cc/9MhLtbQp/walletss.png"
-              heroColor="#dedde9"
+              heroColor="#e1e2e4"
               onClick={() => navigate("/customer/payment-methods")}
             />
 
@@ -124,7 +124,7 @@ const CustomerDashboard = () => {
               description="Update info"
               value="Settings"
               image="https://i.postimg.cc/qRrdh8Vf/Profiles.png"
-              heroColor="#ebe0eb"
+              heroColor="#e1e2e4"
               onClick={() => navigate("/customer/profile")}
             />
           </div>
