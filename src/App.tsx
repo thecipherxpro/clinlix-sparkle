@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { I18nProvider } from "@/contexts/I18nContext";
 import SplashScreen from "./components/SplashScreen";
 import InstallPromptCard from "./components/InstallPromptCard";
 import Splash from "./pages/Splash";
@@ -40,13 +41,14 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <TooltipProvider>
-        <SplashScreen />
-        <InstallPromptCard />
-        <Toaster />
-        <Sonner />
-        <Routes>
+    <I18nProvider>
+      <BrowserRouter>
+        <TooltipProvider>
+          <SplashScreen />
+          <InstallPromptCard />
+          <Toaster />
+          <Sonner />
+          <Routes>
           <Route path="/" element={<Splash />} />
           <Route path="/home" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
@@ -87,8 +89,9 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </TooltipProvider>
-    </BrowserRouter>
+        </TooltipProvider>
+      </BrowserRouter>
+    </I18nProvider>
   </QueryClientProvider>
 );
 
