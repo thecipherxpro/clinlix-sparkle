@@ -4,10 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare, Info, MessageCircle } from "lucide-react";
+import { ArrowLeft, Star, Shield, Sparkles, Mail, Phone, MessageSquare } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 const ProviderProfile = () => {
   const {
     providerId
@@ -110,88 +110,46 @@ const ProviderProfile = () => {
 
           {/* Tabs */}
           <div className="w-full">
-            <div className="mb-6 flex flex-wrap items-center gap-2 border-b border-border pb-2">
-              <motion.button
-                variants={{
-                  initial: { gap: 0, paddingLeft: '.5rem', paddingRight: '.5rem' },
-                  animate: (selected: boolean) => ({
-                    gap: selected ? '.5rem' : 0,
-                    paddingLeft: selected ? '1rem' : '.5rem',
-                    paddingRight: selected ? '1rem' : '.5rem',
-                  }),
-                }}
-                initial="initial"
-                animate="animate"
-                custom={activeTab === "about"}
+            <div className="mb-6 flex flex-wrap items-center gap-2 border-b border-border">
+              <button
                 onClick={() => setActiveTab("about")}
-                transition={{ delay: 0.1, type: 'spring', bounce: 0, duration: 0.35 }}
                 className={`${
                   activeTab === "about"
-                    ? 'bg-primary/15 text-primary'
+                    ? 'text-primary'
                     : 'text-muted-foreground hover:text-foreground'
-                } relative flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
+                } relative rounded-md px-2 py-1 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
               >
-                <Info className="w-4 h-4" />
-                <AnimatePresence>
-                  {activeTab === "about" && (
-                    <motion.span
-                      variants={{
-                        initial: { width: 0, opacity: 0 },
-                        animate: { width: 'auto', opacity: 1 },
-                        exit: { width: 0, opacity: 0 },
-                      }}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      transition={{ delay: 0.1, type: 'spring', bounce: 0, duration: 0.35 }}
-                      className="overflow-hidden"
-                    >
-                      About
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </motion.button>
+                <span className="relative z-10">About</span>
+                {activeTab === "about" && (
+                  <motion.div
+                    className="absolute left-0 top-0 flex size-full h-full w-full items-end justify-center"
+                    layoutId="provider-profile-linetab"
+                    transition={{ type: 'spring', duration: 0.4, bounce: 0, delay: 0.1 }}
+                  >
+                    <span className="z-0 h-[3px] w-[60%] rounded-t-full bg-primary"></span>
+                  </motion.div>
+                )}
+              </button>
 
-              <motion.button
-                variants={{
-                  initial: { gap: 0, paddingLeft: '.5rem', paddingRight: '.5rem' },
-                  animate: (selected: boolean) => ({
-                    gap: selected ? '.5rem' : 0,
-                    paddingLeft: selected ? '1rem' : '.5rem',
-                    paddingRight: selected ? '1rem' : '.5rem',
-                  }),
-                }}
-                initial="initial"
-                animate="animate"
-                custom={activeTab === "reviews"}
+              <button
                 onClick={() => setActiveTab("reviews")}
-                transition={{ delay: 0.1, type: 'spring', bounce: 0, duration: 0.35 }}
                 className={`${
                   activeTab === "reviews"
-                    ? 'bg-primary/15 text-primary'
+                    ? 'text-primary'
                     : 'text-muted-foreground hover:text-foreground'
-                } relative flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
+                } relative rounded-md px-2 py-1 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
               >
-                <MessageCircle className="w-4 h-4" />
-                <AnimatePresence>
-                  {activeTab === "reviews" && (
-                    <motion.span
-                      variants={{
-                        initial: { width: 0, opacity: 0 },
-                        animate: { width: 'auto', opacity: 1 },
-                        exit: { width: 0, opacity: 0 },
-                      }}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      transition={{ delay: 0.1, type: 'spring', bounce: 0, duration: 0.35 }}
-                      className="overflow-hidden"
-                    >
-                      Reviews ({provider.rating_count})
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </motion.button>
+                <span className="relative z-10">Reviews ({provider.rating_count})</span>
+                {activeTab === "reviews" && (
+                  <motion.div
+                    className="absolute left-0 top-0 flex size-full h-full w-full items-end justify-center"
+                    layoutId="provider-profile-linetab"
+                    transition={{ type: 'spring', duration: 0.4, bounce: 0, delay: 0.1 }}
+                  >
+                    <span className="z-0 h-[3px] w-[60%] rounded-t-full bg-primary"></span>
+                  </motion.div>
+                )}
+              </button>
             </div>
 
             {/* Tab Content */}
