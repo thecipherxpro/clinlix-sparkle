@@ -84,13 +84,13 @@ const CustomerDashboard = () => {
         <div className="mb-[clamp(20px,5vw,32px)]">
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <JobCard title="Book Now" description="Schedule service" value="New Booking" image="https://i.postimg.cc/LXSMYzdW/calnder24.png" heroColor="#ebe0eb" onClick={() => navigate("/customer/booking")} />
+            <JobCard title="Book Now" description="Schedule service" value="New Booking" image="https://i.postimg.cc/LXSMYzdW/calnder24.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/booking")} />
 
-            <JobCard title="Addresses" description="Your locations" value="Manage" image="https://i.postimg.cc/hjB2bst8/map.png" heroColor="#ebe0eb" onClick={() => navigate("/customer/my-addresses")} />
+            <JobCard title="Addresses" description="Your locations" value="Manage" image="https://i.postimg.cc/hjB2bst8/map.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/my-addresses")} />
 
-            <JobCard title="Payment" description="Manage cards" value="Methods" image="https://i.postimg.cc/9MhLtbQp/walletss.png" heroColor="#ebe0eb" onClick={() => navigate("/customer/payment-methods")} />
+            <JobCard title="Payment" description="Manage cards" value="Methods" image="https://i.postimg.cc/9MhLtbQp/walletss.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/payment-methods")} />
 
-            <JobCard title="Profile" description="Update info" value="Settings" image="https://i.postimg.cc/qRrdh8Vf/Profiles.png" heroColor="#ebe0eb" onClick={() => navigate("/customer/profile")} />
+            <JobCard title="Profile" description="Update info" value="Settings" image="https://i.postimg.cc/qRrdh8Vf/Profiles.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/profile")} />
           </div>
         </div>
 
