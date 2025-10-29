@@ -10,9 +10,11 @@ import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Key } from "lucide-react";
 import { toast } from "sonner";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
+import { useI18n } from "@/contexts/I18nContext";
 
 const CustomerSettings = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
   const { isSubscribed, subscribe, unsubscribe, isLoading: pushLoading } = usePushNotifications();
@@ -63,10 +65,10 @@ const CustomerSettings = () => {
       if (error) throw error;
 
       setProfile({ ...profile, [field]: value });
-      toast.success('✅ Changes saved');
+      toast.success(t.settings.changesSaved);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Failed to save changes');
+      toast.error(t.settings.failedToSave);
     }
   };
 
@@ -77,10 +79,10 @@ const CustomerSettings = () => {
       });
 
       if (error) throw error;
-      toast.success('Password reset email sent! Check your inbox.');
+      toast.success(t.settings.passwordResetSent);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Failed to send reset email');
+      toast.error(t.settings.failedToSendReset);
     }
   };
 
@@ -99,7 +101,7 @@ const CustomerSettings = () => {
           <Button variant="ghost" size="icon" onClick={() => navigate('/customer/profile')} className="touch-target">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-xl sm:text-2xl font-bold">Customer Settings</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">{t.settings.customerSettings}</h1>
         </div>
       </header>
 
@@ -107,13 +109,13 @@ const CustomerSettings = () => {
         {/* Account Info */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Account Information</CardTitle>
-            <CardDescription>Your basic account details</CardDescription>
+            <CardTitle>{t.settings.accountInfo}</CardTitle>
+            <CardDescription>{t.settings.accountDetails}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>First Name</Label>
+                <Label>{t.settings.firstName}</Label>
                 <Input
                   value={profile?.first_name || ''}
                   onChange={(e) => setProfile({ ...profile, first_name: e.target.value })}
@@ -121,7 +123,7 @@ const CustomerSettings = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Last Name</Label>
+                <Label>{t.settings.lastName}</Label>
                 <Input
                   value={profile?.last_name || ''}
                   onChange={(e) => setProfile({ ...profile, last_name: e.target.value })}
@@ -130,7 +132,7 @@ const CustomerSettings = () => {
               </div>
             </div>
             <div className="space-y-2">
-              <Label>Phone Number</Label>
+              <Label>{t.settings.phoneNumber}</Label>
               <Input
                 value={profile?.phone || ''}
                 onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
@@ -139,13 +141,13 @@ const CustomerSettings = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label>Email Address</Label>
+              <Label>{t.settings.emailAddress}</Label>
               <Input
                 value={profile?.email || ''}
                 disabled
                 className="bg-muted"
               />
-              <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+              <p className="text-xs text-muted-foreground">{t.settings.emailCannotChange}</p>
             </div>
           </CardContent>
         </Card>
@@ -153,24 +155,24 @@ const CustomerSettings = () => {
         {/* Notifications */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Notifications</CardTitle>
-            <CardDescription>Manage how you receive updates</CardDescription>
+            <CardTitle>{t.settings.notifications}</CardTitle>
+            <CardDescription>{t.settings.notificationsDesc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
               <div className="space-y-0.5 flex-1">
-                <Label className="text-base">Push Notifications</Label>
-                <p className="text-sm text-muted-foreground">Receive real-time updates in your browser or app</p>
+                <Label className="text-base">{t.settings.pushNotifications}</Label>
+                <p className="text-sm text-muted-foreground">{t.settings.pushNotificationsDesc}</p>
               </div>
             <Switch
               checked={isSubscribed}
               onCheckedChange={async (checked) => {
                 if (checked) {
                   const success = await subscribe();
-                  if (success) toast.success('✅ Push notifications enabled');
+                  if (success) toast.success(t.settings.pushEnabled);
                 } else {
                   await unsubscribe();
-                  toast.success('Push notifications disabled');
+                  toast.success(t.settings.pushDisabled);
                 }
               }}
               disabled={pushLoading}
@@ -179,8 +181,8 @@ const CustomerSettings = () => {
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
               <div className="space-y-0.5 flex-1">
-                <Label className="text-base">Email Notifications</Label>
-                <p className="text-sm text-muted-foreground">Receive booking updates via email</p>
+                <Label className="text-base">{t.settings.emailNotifications}</Label>
+                <p className="text-sm text-muted-foreground">{t.settings.emailNotificationsDesc}</p>
               </div>
             <Switch
               checked={profile?.notifications_enabled ?? true}
@@ -190,8 +192,8 @@ const CustomerSettings = () => {
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
               <div className="space-y-0.5 flex-1">
-                <Label className="text-base">SMS Notifications</Label>
-                <p className="text-sm text-muted-foreground">Receive booking updates via SMS</p>
+                <Label className="text-base">{t.settings.smsNotifications}</Label>
+                <p className="text-sm text-muted-foreground">{t.settings.smsNotificationsDesc}</p>
               </div>
             <Switch
               checked={profile?.sms_notifications ?? true}
@@ -205,8 +207,8 @@ const CustomerSettings = () => {
         {/* Language */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Language</CardTitle>
-            <CardDescription>Choose your preferred language</CardDescription>
+            <CardTitle>{t.settings.language}</CardTitle>
+            <CardDescription>{t.settings.languageDesc}</CardDescription>
           </CardHeader>
           <CardContent>
             <Select
@@ -214,7 +216,7 @@ const CustomerSettings = () => {
               onValueChange={(value) => updateSetting('language', value)}
             >
               <SelectTrigger className="h-11 text-base">
-                <SelectValue placeholder="Select language" />
+                <SelectValue placeholder={t.settings.selectLanguage} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="en">🇬🇧 English</SelectItem>
@@ -227,8 +229,8 @@ const CustomerSettings = () => {
         {/* Currency Preference */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Currency Preference</CardTitle>
-            <CardDescription>Based on your country selection</CardDescription>
+            <CardTitle>{t.settings.currencyPreference}</CardTitle>
+            <CardDescription>{t.settings.currencyDesc}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
@@ -237,7 +239,7 @@ const CustomerSettings = () => {
               className="bg-muted"
             />
             <p className="text-xs text-muted-foreground mt-2">
-              Currency is automatically set based on your country
+              {t.settings.currencyAuto}
             </p>
           </CardContent>
         </Card>
@@ -245,8 +247,8 @@ const CustomerSettings = () => {
         {/* Security */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Security</CardTitle>
-            <CardDescription>Manage your account security</CardDescription>
+            <CardTitle>{t.settings.security}</CardTitle>
+            <CardDescription>{t.settings.securityDesc}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -255,10 +257,10 @@ const CustomerSettings = () => {
               className="w-full"
             >
               <Key className="w-4 h-4 mr-2" />
-              Change Password
+              {t.settings.changePassword}
             </Button>
             <p className="text-xs text-muted-foreground mt-2">
-              We'll send you an email with instructions to reset your password
+              {t.settings.passwordResetInfo}
             </p>
           </CardContent>
         </Card>

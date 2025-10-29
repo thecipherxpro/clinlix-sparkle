@@ -10,9 +10,11 @@ import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Key, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
+import { useI18n } from "@/contexts/I18nContext";
 
 const ProviderSettings = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
   const { isSubscribed, subscribe, unsubscribe, isLoading: pushLoading } = usePushNotifications();
@@ -63,10 +65,10 @@ const ProviderSettings = () => {
       if (error) throw error;
 
       setProfile({ ...profile, [field]: value });
-      toast.success('✅ Changes saved');
+      toast.success(t.settings.changesSaved);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Failed to save changes');
+      toast.error(t.settings.failedToSave);
     }
   };
 
@@ -77,10 +79,10 @@ const ProviderSettings = () => {
       });
 
       if (error) throw error;
-      toast.success('Password reset email sent! Check your inbox.');
+      toast.success(t.settings.passwordResetSent);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Failed to send reset email');
+      toast.error(t.settings.failedToSendReset);
     }
   };
 
@@ -99,7 +101,7 @@ const ProviderSettings = () => {
           <Button variant="ghost" size="icon" onClick={() => navigate('/provider/profile')} className="touch-target">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-xl sm:text-2xl font-bold">Provider Settings</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">{t.settings.providerSettings}</h1>
         </div>
       </header>
 
@@ -107,8 +109,8 @@ const ProviderSettings = () => {
         {/* Account Info */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Account Information</CardTitle>
-            <CardDescription>Your basic account details</CardDescription>
+            <CardTitle>{t.settings.accountInfo}</CardTitle>
+            <CardDescription>{t.settings.accountDetails}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -153,14 +155,14 @@ const ProviderSettings = () => {
         {/* Availability Preferences */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Availability Preferences</CardTitle>
-            <CardDescription>Manage your work preferences</CardDescription>
+            <CardTitle>{t.provider.availabilityPreferences}</CardTitle>
+            <CardDescription>{t.provider.availabilityDesc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
               <div className="space-y-0.5 flex-1">
-                <Label className="text-base">Accept Recurring Clients</Label>
-                <p className="text-sm text-muted-foreground">Allow customers to book you regularly</p>
+                <Label className="text-base">{t.provider.acceptRecurring}</Label>
+                <p className="text-sm text-muted-foreground">{t.provider.acceptRecurringDesc}</p>
               </div>
             <Switch
               checked={profile?.accept_recurring ?? false}
@@ -170,8 +172,8 @@ const ProviderSettings = () => {
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
               <div className="space-y-0.5 flex-1">
-                <Label className="text-base">Currently Available</Label>
-                <p className="text-sm text-muted-foreground">Show as available for new bookings</p>
+                <Label className="text-base">{t.provider.currentlyAvailable}</Label>
+                <p className="text-sm text-muted-foreground">{t.provider.currentlyAvailableDesc}</p>
               </div>
             <Switch
               checked={profile?.available_status ?? true}
@@ -185,8 +187,8 @@ const ProviderSettings = () => {
         {/* Notifications */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Notifications</CardTitle>
-            <CardDescription>Manage how you receive updates</CardDescription>
+            <CardTitle>{t.settings.notifications}</CardTitle>
+            <CardDescription>{t.settings.notificationsDesc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
@@ -199,10 +201,10 @@ const ProviderSettings = () => {
               onCheckedChange={async (checked) => {
                 if (checked) {
                   const success = await subscribe();
-                  if (success) toast.success('✅ Push notifications enabled');
+                  if (success) toast.success(t.settings.pushEnabled);
                 } else {
                   await unsubscribe();
-                  toast.success('Push notifications disabled');
+                  toast.success(t.settings.pushDisabled);
                 }
               }}
               disabled={pushLoading}
@@ -239,9 +241,9 @@ const ProviderSettings = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-primary" />
-              Verification
+              {t.provider.verification}
             </CardTitle>
-            <CardDescription>Boost your profile credibility</CardDescription>
+            <CardDescription>{t.provider.verificationDesc}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -249,10 +251,10 @@ const ProviderSettings = () => {
               className="w-full bg-gradient-to-r from-primary to-accent"
               onClick={() => navigate('/provider/verify')}
             >
-              Become Verified
+              {t.provider.becomeVerified}
             </Button>
             <p className="text-xs text-muted-foreground mt-2">
-              Verified providers get more bookings and customer trust
+              {t.provider.verifiedInfo}
             </p>
           </CardContent>
         </Card>
@@ -260,8 +262,8 @@ const ProviderSettings = () => {
         {/* Language & Region */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Language & Region</CardTitle>
-            <CardDescription>Choose your preferred language</CardDescription>
+            <CardTitle>{t.provider.languageRegion}</CardTitle>
+            <CardDescription>{t.settings.languageDesc}</CardDescription>
           </CardHeader>
           <CardContent>
             <Select
@@ -282,8 +284,8 @@ const ProviderSettings = () => {
         {/* Security */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Security</CardTitle>
-            <CardDescription>Manage your account security</CardDescription>
+            <CardTitle>{t.settings.security}</CardTitle>
+            <CardDescription>{t.settings.securityDesc}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -292,10 +294,10 @@ const ProviderSettings = () => {
               className="w-full"
             >
               <Key className="w-4 h-4 mr-2" />
-              Change Password
+              {t.settings.changePassword}
             </Button>
             <p className="text-xs text-muted-foreground mt-2">
-              We'll send you an email with instructions to reset your password
+              {t.settings.passwordResetInfo}
             </p>
           </CardContent>
         </Card>

@@ -11,9 +11,11 @@ import { toast } from "sonner";
 import { Shield, ArrowLeft, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa";
 import logoImage from "@/assets/logo-clinlix.png";
+import { useI18n } from "@/contexts/I18nContext";
 type Role = "customer" | "provider";
 const Auth = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
   const [selectedRole, setSelectedRole] = useState<Role>("customer");
@@ -68,7 +70,7 @@ const Auth = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginForm.email || !loginForm.password) {
-      toast.error("Fill in all fields to continue");
+      toast.error(t.auth.allFieldsRequired);
       return;
     }
     if (!validateEmail(loginForm.email)) return;
@@ -82,11 +84,11 @@ const Auth = () => {
       if (data.user) {
         const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.user.id).single();
         const redirectPath = profile?.role === "provider" ? "/provider/dashboard" : "/customer/dashboard";
-        toast.success("Welcome back!");
+        toast.success(t.auth.signInSuccess);
         navigate(redirectPath);
       }
     } catch (error: any) {
-      toast.error(error.message || "Failed to login");
+      toast.error(error.message || t.auth.signInError);
     } finally {
       setLoading(false);
     }
@@ -110,7 +112,7 @@ const Auth = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!registerForm.firstName || !registerForm.lastName || !registerForm.email || !registerForm.password) {
-      toast.error("Fill in all fields to continue");
+      toast.error(t.auth.allFieldsRequired);
       return;
     }
     if (!validateEmail(registerForm.email)) return;
@@ -142,7 +144,7 @@ const Auth = () => {
       });
       if (error) throw error;
       if (data.user) {
-        toast.success("Welcome! Your account is ready.");
+        toast.success(t.auth.accountCreated);
         const redirectPath = selectedRole === "provider" ? "/provider/dashboard" : "/customer/dashboard";
         navigate(redirectPath);
       }
@@ -183,8 +185,8 @@ const Auth = () => {
               cursor: "bg-background shadow-sm",
             }}
           >
-            <Tab key="login" title="Log in" />
-            <Tab key="register" title="Sign Up" />
+            <Tab key="login" title={t.auth.signIn} />
+            <Tab key="register" title={t.auth.signUp} />
           </Tabs>
           
           {activeTab === 'login' && (
@@ -198,7 +200,7 @@ const Auth = () => {
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="login-email" className="text-sm font-medium">
-                    Email
+                    {t.auth.email}
                   </Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -222,7 +224,7 @@ const Auth = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="login-password" className="text-sm font-medium">
-                    Password
+                    {t.auth.password}
                   </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -267,7 +269,7 @@ const Auth = () => {
                       htmlFor="remember"
                       className="text-sm font-medium  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      Remember me
+                      {t.common.yes}
                     </label>
                   </div>
                   <Button
@@ -276,7 +278,7 @@ const Auth = () => {
                     onClick={handleForgotPassword}
                     className="h-auto p-0 text-sm font-medium"
                   >
-                    Forgot Password?
+                    {t.auth.forgotPassword}
                   </Button>
                 </div>
 
@@ -285,18 +287,18 @@ const Auth = () => {
                   className="w-full h-[50px] rounded-[30px] bg-gradient-to-r from-primary to-accent text-base font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
                   disabled={loading}
                 >
-                  {loading ? "Signing in..." : "Login"}
+                  {loading ? t.common.loading : t.auth.signIn}
                 </Button>
               </form>
 
               <div className="text-center text-sm">
-                <span className="text-muted-foreground">Don't have an account? </span>
+                <span className="text-muted-foreground">{t.auth.dontHaveAccount} </span>
                 <Button
                   variant="link"
                   onClick={() => setActiveTab("register")}
                   className="h-auto p-0 font-semibold text-sm"
                 >
-                  Sign Up here
+                  {t.auth.signUp}
                 </Button>
               </div>
 
@@ -305,7 +307,7 @@ const Auth = () => {
                   <span className="w-full border-t border-border" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Or Continue With</span>
+                  <span className="bg-card px-2 text-muted-foreground">{t.auth.or}</span>
                 </div>
               </div>
 
@@ -317,7 +319,7 @@ const Auth = () => {
                 aria-label="Sign in with Google"
               >
                 <FaGoogle className="w-5 h-5 text-[#DB4437]" />
-                <span className="font-medium text-foreground">Continue with Google</span>
+                <span className="font-medium text-foreground">{t.auth.continueWithGoogle}</span>
               </Button>
             </div>
           )}
@@ -357,7 +359,7 @@ const Auth = () => {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-2">
                     <Label htmlFor="first-name" className="text-sm font-medium">
-                      First Name
+                      {t.auth.firstName}
                     </Label>
                     <Input
                       id="first-name"
@@ -375,7 +377,7 @@ const Auth = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="last-name" className="text-sm font-medium">
-                      Last Name
+                      {t.auth.lastName}
                     </Label>
                     <Input
                       id="last-name"
@@ -395,7 +397,7 @@ const Auth = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="register-email" className="text-sm font-medium">
-                    Email
+                    {t.auth.email}
                   </Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -419,7 +421,7 @@ const Auth = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="register-password" className="text-sm font-medium">
-                    Password
+                    {t.auth.password}
                   </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
