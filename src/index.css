@@ -279,6 +279,12 @@ All colors MUST be HSL.
     --shadow-hover: 0 8px 24px rgba(108, 99, 255, 0.15);
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Utility colors */
+    --utility-blue-500: 217 91% 60%;
+    
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
   }
 
   .dark {

@@ -1,19 +1,21 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
+import { cx } from "@/utils/cx";
+import { VerifiedTick } from "./VerifiedTick";
 
 const avatarVariants = cva(
-  "relative inline-block flex-shrink-0",
+  "relative inline-block flex-shrink-0 overflow-hidden bg-muted",
   {
     variants: {
       size: {
-        xs: "h-6 w-6",
-        sm: "h-8 w-8",
-        md: "h-10 w-10",
-        lg: "h-12 w-12",
-        xl: "h-14 w-14",
-        "2xl": "h-16 w-16",
+        xs: "size-6",
+        sm: "size-8",
+        md: "size-10",
+        lg: "size-12",
+        xl: "size-14",
+        "2xl": "size-16",
+        "3xl": "size-20",
+        "4xl": "size-24",
       },
       shape: {
         circle: "rounded-full",
@@ -28,7 +30,7 @@ const avatarVariants = cva(
 );
 
 const avatarImageVariants = cva(
-  "object-cover",
+  "h-full w-full object-cover",
   {
     variants: {
       shape: {
@@ -42,26 +44,23 @@ const avatarImageVariants = cva(
   }
 );
 
-const badgeVariants = cva(
-  "absolute flex items-center justify-center ring-2 ring-background",
+const verifiedBadgeVariants = cva(
+  "absolute",
   {
     variants: {
       size: {
-        xs: "h-2 w-2 -bottom-0 -right-0",
-        sm: "h-2.5 w-2.5 -bottom-0 -right-0",
-        md: "h-3 w-3 -bottom-0.5 -right-0.5",
-        lg: "h-3.5 w-3.5 -bottom-0.5 -right-0.5",
-        xl: "h-4 w-4 -bottom-1 -right-1",
-        "2xl": "h-5 w-5 -bottom-1 -right-1",
-      },
-      shape: {
-        circle: "rounded-full",
-        rounded: "rounded-md",
+        xs: "bottom-0 right-0",
+        sm: "bottom-0 right-0",
+        md: "bottom-0 right-0",
+        lg: "bottom-0 right-0",
+        xl: "bottom-0 right-0",
+        "2xl": "bottom-0 right-0",
+        "3xl": "bottom-0 right-0",
+        "4xl": "bottom-0 right-0",
       },
     },
     defaultVariants: {
       size: "md",
-      shape: "circle",
     },
   }
 );
@@ -78,8 +77,8 @@ export interface AvatarProps
 
 export function Avatar({
   className,
-  size,
-  shape,
+  size = "md",
+  shape = "circle",
   src,
   alt = "Avatar",
   verified = false,
@@ -109,49 +108,43 @@ export function Avatar({
       case "away":
         return "bg-warning";
       case "offline":
-        return "bg-muted";
+        return "bg-muted-foreground";
       default:
         return "";
     }
   };
 
   return (
-    <div className={cn(avatarVariants({ size, shape }), className)} {...props}>
-      <div className={cn("h-full w-full overflow-hidden", shape === "circle" ? "rounded-full" : "rounded-lg")}>
-        {src && !imageError ? (
-          <img
-            src={src}
-            alt={alt}
-            className={cn(avatarImageVariants({ shape }), "h-full w-full")}
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground font-medium text-sm">
-            {getFallbackText()}
-          </div>
-        )}
-      </div>
+    <div className={cx(avatarVariants({ size, shape }), className)} {...props}>
+      {src && !imageError ? (
+        <img
+          src={src}
+          alt={alt}
+          className={cx(avatarImageVariants({ shape }))}
+          onError={() => setImageError(true)}
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground font-medium text-sm">
+          {getFallbackText()}
+        </div>
+      )}
 
       {/* Verified Badge */}
       {verified && (
         <div
-          className={cn(
-            badgeVariants({ size, shape }),
-            "bg-primary text-primary-foreground"
-          )}
+          className={cx(verifiedBadgeVariants({ size }))}
           aria-label="Verified"
         >
-          {size !== "xs" && size !== "sm" && (
-            <Check className="h-full w-full p-0.5" strokeWidth={3} />
-          )}
+          <VerifiedTick size={size || "md"} />
         </div>
       )}
 
       {/* Online Status Indicator */}
       {onlineStatus && !verified && (
         <div
-          className={cn(
-            badgeVariants({ size, shape }),
+          className={cx(
+            "absolute bottom-0 right-0 rounded-full ring-2 ring-background",
+            size === "xs" || size === "sm" ? "size-2" : "size-3",
             getStatusColor()
           )}
           aria-label={`Status: ${onlineStatus}`}
