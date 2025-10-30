@@ -92,7 +92,7 @@ const Splash = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-6">
       <div className="flex flex-col items-center gap-6 w-full max-w-md">
         <img 
-          src="/images/splash-animation.gif" 
+          src="/images/clinlix-splash.png" 
           alt="Clinlix Loading" 
           className="w-full h-auto"
         />

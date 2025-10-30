@@ -22,7 +22,7 @@ export default function SplashScreen() {
           className="fixed inset-0 flex items-center justify-center bg-white z-[100]"
         >
           <motion.img
-            src="/images/splash-animation.gif"
+            src="/images/clinlix-splash.png"
             alt="Clinlix Loading"
             className="w-full max-w-md h-auto"
             initial={{ scale: 0.9, opacity: 0 }}
