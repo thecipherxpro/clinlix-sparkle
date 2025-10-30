@@ -2,14 +2,14 @@
 import { cx } from "@/utils/cx";
 
 const sizes = {
-  xs: { root: "size-2.5", tick: "size-[4.38px]" },
-  sm: { root: "size-3", tick: "size-[5.25px]" },
-  md: { root: "size-3.5", tick: "size-[6.13px]" },
-  lg: { root: "size-4", tick: "size-[7px]" },
-  xl: { root: "size-4.5", tick: "size-[7.88px]" },
-  "2xl": { root: "size-5", tick: "size-[8.75px]" },
-  "3xl": { root: "size-6", tick: "size-[10.5px]" },
-  "4xl": { root: "size-8", tick: "size-[14px]" },
+  xs: { root: "w-2.5 h-2.5", tick: "w-[4.38px] h-[4.38px]" },
+  sm: { root: "w-3 h-3", tick: "w-[5.25px] h-[5.25px]" },
+  md: { root: "w-3.5 h-3.5", tick: "w-[6.13px] h-[6.13px]" },
+  lg: { root: "w-4 h-4", tick: "w-[7px] h-[7px]" },
+  xl: { root: "w-[18px] h-[18px]", tick: "w-[7.88px] h-[7.88px]" },
+  "2xl": { root: "w-5 h-5", tick: "w-[8.75px] h-[8.75px]" },
+  "3xl": { root: "w-6 h-6", tick: "w-[10.5px] h-[10.5px]" },
+  "4xl": { root: "w-8 h-8", tick: "w-[14px] h-[14px]" },
 };
 
 interface VerifiedTickProps {

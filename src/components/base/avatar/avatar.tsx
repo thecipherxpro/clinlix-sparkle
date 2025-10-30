@@ -8,14 +8,14 @@ const avatarVariants = cva(
   {
     variants: {
       size: {
-        xs: "size-6",
-        sm: "size-8",
-        md: "size-10",
-        lg: "size-12",
-        xl: "size-14",
-        "2xl": "size-16",
-        "3xl": "size-20",
-        "4xl": "size-24",
+        xs: "w-6 h-6",
+        sm: "w-8 h-8",
+        md: "w-10 h-10",
+        lg: "w-12 h-12",
+        xl: "w-14 h-14",
+        "2xl": "w-16 h-16",
+        "3xl": "w-20 h-20",
+        "4xl": "w-24 h-24",
       },
       shape: {
         circle: "rounded-full",
@@ -45,18 +45,18 @@ const avatarImageVariants = cva(
 );
 
 const verifiedBadgeVariants = cva(
-  "absolute",
+  "absolute -bottom-0.5 -right-0.5",
   {
     variants: {
       size: {
-        xs: "bottom-0 right-0",
-        sm: "bottom-0 right-0",
-        md: "bottom-0 right-0",
-        lg: "bottom-0 right-0",
-        xl: "bottom-0 right-0",
-        "2xl": "bottom-0 right-0",
-        "3xl": "bottom-0 right-0",
-        "4xl": "bottom-0 right-0",
+        xs: "",
+        sm: "",
+        md: "",
+        lg: "",
+        xl: "",
+        "2xl": "",
+        "3xl": "",
+        "4xl": "",
       },
     },
     defaultVariants: {
@@ -144,7 +144,7 @@ export function Avatar({
         <div
           className={cx(
             "absolute bottom-0 right-0 rounded-full ring-2 ring-background",
-            size === "xs" || size === "sm" ? "size-2" : "size-3",
+            size === "xs" || size === "sm" ? "w-2 h-2" : "w-3 h-3",
             getStatusColor()
           )}
           aria-label={`Status: ${onlineStatus}`}
