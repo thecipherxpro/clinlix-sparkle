@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 import step1Image from "@/assets/how-it-works/step-1-address.png";
 import step2Image from "@/assets/how-it-works/step-2-booking.png";
 import step3Image from "@/assets/how-it-works/step-3-pricing.png";
@@ -201,7 +202,15 @@ const HowItWorks = () => {
 
         {/* Step Dots for Mobile */}
         <div className="flex justify-center gap-2 mt-6 sm:mt-8 md:hidden">
-          {steps.map((s, idx) => {})}
+          {steps.map((s, idx) => (
+            <div
+              key={idx}
+              className={cn(
+                "w-2 h-2 rounded-full transition-colors",
+                idx === currentStep ? "bg-primary" : "bg-muted"
+              )}
+            />
+          ))}
         </div>
       </main>
     </div>;

@@ -1,36 +1,28 @@
 import * as React from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import { Check, ChevronDown } from "lucide-react";
+import { Dropdown } from "flowbite-react";
+import type { DropdownProps } from "flowbite-react";
 
 import { cn } from "@/lib/utils";
 
-interface SelectProps extends Omit<React.ComponentProps<typeof Listbox>, 'value' | 'onChange'> {
+interface SelectProps {
   value?: any;
   onValueChange?: (value: any) => void;
-  onChange?: (value: any) => void;
+  children?: React.ReactNode;
+  className?: string;
 }
 
 const Select = React.forwardRef<HTMLDivElement, SelectProps>(
-  ({ value, onValueChange, onChange, className, ...props }, ref) => {
-    const handleChange = (val: any) => {
-      onChange?.(val);
-      onValueChange?.(val);
-    };
-
+  ({ value, onValueChange, children, className }, ref) => {
     return (
-      <Listbox 
-        as="div" 
-        value={value} 
-        onChange={handleChange} 
-        className={cn("relative", className)}
-        {...props} 
-      />
+      <div ref={ref} className={cn("relative inline-block", className)}>
+        {children}
+      </div>
     );
   }
 );
 Select.displayName = "Select";
 
-const SelectGroup = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+const SelectGroup = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 
 interface SelectValueProps {
   children?: React.ReactNode;
@@ -38,48 +30,30 @@ interface SelectValueProps {
 }
 
 const SelectValue = ({ children, placeholder }: SelectValueProps) => {
-  // This component is used inside SelectTrigger which is inside a Listbox
-  // The actual selected value rendering is handled by SelectTrigger
   return <>{children || placeholder}</>;
 };
 
-const SelectTrigger = React.forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, children, ...props }, ref) => {
-  // Extract placeholder from SelectValue child if present
-  let placeholder = "Select...";
-  React.Children.forEach(children, (child) => {
-    if (React.isValidElement(child) && typeof child.type !== 'string') {
-      const childProps = child.props as any;
-      if (childProps.placeholder) {
-        placeholder = childProps.placeholder;
-      }
-    }
-  });
+interface SelectTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children?: React.ReactNode;
+}
 
-  return (
-    <Listbox.Button
-      ref={ref}
-      className={cn(
-        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        className,
-      )}
-      {...props}
-    >
-      {({ value, open }: { value: any, open: boolean }) => {
-        // Find the display value from context - will be set by Select parent
-        const displayValue = (window as any).__selectDisplayValues?.[value] || placeholder;
-        return (
-          <>
-            <span className={!value ? "text-muted-foreground" : ""}>{displayValue}</span>
-            <ChevronDown className="h-4 w-4 opacity-50" />
-          </>
-        );
-      }}
-    </Listbox.Button>
-  );
-});
+const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        type="button"
+        className={cn(
+          "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  }
+);
 SelectTrigger.displayName = "SelectTrigger";
 
 const SelectScrollUpButton = () => null;
@@ -92,23 +66,16 @@ const SelectContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => (
-  <Transition
-    as={React.Fragment}
-    leave="transition ease-in duration-100"
-    leaveFrom="opacity-100"
-    leaveTo="opacity-0"
+  <div
+    ref={ref}
+    className={cn(
+      "absolute z-50 mt-1 max-h-96 min-w-[8rem] overflow-auto rounded-md border bg-popover text-popover-foreground shadow-md p-1",
+      className
+    )}
+    {...props}
   >
-    <Listbox.Options
-      ref={ref}
-      className={cn(
-        "absolute z-50 mt-1 max-h-96 min-w-[8rem] overflow-auto rounded-md border bg-popover text-popover-foreground shadow-md focus:outline-none p-1",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </Listbox.Options>
-  </Transition>
+    {children}
+  </div>
 ));
 SelectContent.displayName = "SelectContent";
 
@@ -116,51 +83,31 @@ const SelectLabel = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("py-1.5 pl-8 pr-2 text-sm font-semibold", className)} {...props} />
+  <div ref={ref} className={cn("py-1.5 pl-2 pr-2 text-sm font-semibold", className)} {...props} />
 ));
 SelectLabel.displayName = "SelectLabel";
 
-const SelectItem = React.forwardRef<
-  HTMLLIElement,
-  React.ComponentProps<typeof Listbox.Option> & {
-    children?: React.ReactNode;
-    value: string;
-  }
->(({ className, children, value, ...props }, ref) => {
-  // Store display value for SelectTrigger to use
-  React.useEffect(() => {
-    if (!(window as any).__selectDisplayValues) {
-      (window as any).__selectDisplayValues = {};
-    }
-    const displayText = typeof children === 'string' ? children : value;
-    (window as any).__selectDisplayValues[value] = displayText;
-  }, [value, children]);
+interface SelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: string;
+  children?: React.ReactNode;
+}
 
-  return (
-    <Listbox.Option
-      ref={ref}
-      value={value}
-      className={({ active }: { active: boolean }) => cn(
-        "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none disabled:pointer-events-none disabled:opacity-50",
-        active && "bg-accent text-accent-foreground",
-        className,
-      )}
-      {...props}
-    >
-      {(renderProps) => {
-        const content = typeof children === 'function' ? (children as any)(renderProps) : children;
-        return (
-          <>
-            <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-              {renderProps.selected && <Check className="h-4 w-4" />}
-            </span>
-            <span>{content}</span>
-          </>
-        );
-      }}
-    </Listbox.Option>
-  );
-});
+const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
+  ({ className, children, value, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 px-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
 SelectItem.displayName = "SelectItem";
 
 const SelectSeparator = React.forwardRef<
