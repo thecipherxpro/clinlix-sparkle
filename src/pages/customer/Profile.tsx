@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, LogOut, Save } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, LogOut, Save, User, Settings, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
-import AvatarUploader from "@/components/AvatarUploader";
-import SettingsDrawer from "@/components/SettingsDrawer";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { Avatar } from "@/components/base/avatar/avatar";
 import { useI18n } from "@/contexts/I18nContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -117,158 +117,194 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
-        <div className="mobile-container py-3 sm:py-4 flex items-center justify-between gap-3 sm:gap-4">
+    <div className="min-h-screen bg-background pb-24">
+      {/* Header */}
+      <header className="border-b bg-card sticky top-0 z-10">
+        <div className="container max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button 
               variant="ghost"
               size="icon"
               onClick={() => navigate('/customer/dashboard')} 
-              className="touch-target md:hidden"
-              aria-label="Go back"
+              className="lg:hidden"
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
-            <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              {t.common.profile}
-            </h1>
+            <h1 className="text-2xl font-bold">{t.common.profile}</h1>
           </div>
-          <SettingsDrawer role="customer" />
         </div>
       </header>
 
-      <main className="mobile-container py-4 sm:py-8 max-w-2xl">
-        {/* Profile Header */}
-        <Card className="border-0 shadow-sm mb-6">
+      <main className="container max-w-5xl mx-auto px-4 py-8">
+        {/* Profile Header Card */}
+        <Card className="mb-8">
           <CardContent className="pt-6">
-            <div className="flex items-center gap-6">
-              <AvatarUploader 
-                size={80}
-                editable={true}
-                role="customer"
-                onUploadSuccess={() => checkAuthAndFetchProfile()}
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+              <Avatar
+                src={formData.avatar_url}
+                alt={`${formData.first_name} ${formData.last_name}`}
+                size="4xl"
+                fallback={`${formData.first_name?.[0] || ''}${formData.last_name?.[0] || ''}`}
               />
-              <div className="flex-1">
-                <h2 className="text-2xl font-bold">
+              <div className="flex-1 text-center sm:text-left">
+                <h2 className="text-3xl font-bold mb-1">
                   {formData.first_name} {formData.last_name}
                 </h2>
-                <p className="text-muted-foreground">{formData.email}</p>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-muted-foreground text-lg mb-2">{formData.email}</p>
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                  <User className="w-4 h-4" />
                   {t.common.customer}
-                </p>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Edit Profile Form */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle>{t.settings.accountInfo}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label>{t.common.firstName} *</Label>
-                  <Input
-                    value={formData.first_name}
-                    onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                    required
-                    className="h-11 text-base"
-                  />
+        {/* Tabbed Content */}
+        <Tabs defaultValue="personal" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 lg:w-auto lg:inline-grid mb-8">
+            <TabsTrigger value="personal" className="gap-2">
+              <User className="w-4 h-4" />
+              <span className="hidden sm:inline">Personal Info</span>
+              <span className="sm:hidden">Personal</span>
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="gap-2">
+              <Settings className="w-4 h-4" />
+              Settings
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Personal Information Tab */}
+          <TabsContent value="personal" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Personal Information</CardTitle>
+                <CardDescription>Update your personal details and contact information</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="first_name">{t.common.firstName}</Label>
+                      <Input
+                        id="first_name"
+                        value={formData.first_name}
+                        onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                        required
+                        className="h-11"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="last_name">{t.common.lastName}</Label>
+                      <Input
+                        id="last_name"
+                        value={formData.last_name}
+                        onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                        required
+                        className="h-11"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email">{t.common.email}</Label>
+                    <Input
+                      id="email"
+                      value={formData.email}
+                      type="email"
+                      disabled
+                      className="h-11"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      {t.settings.emailCannotChange}
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">{t.common.phone}</Label>
+                    <Input
+                      id="phone"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="+351 XXX XXX XXX"
+                      className="h-11"
+                    />
+                  </div>
+
+                  <div className="flex justify-end pt-4">
+                    <Button type="submit" size="lg" disabled={saving}>
+                      <Save className="w-4 h-4 mr-2" />
+                      {saving ? t.common.saving : t.common.saveChanges}
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Settings Tab */}
+          <TabsContent value="settings" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Regional Settings</CardTitle>
+                <CardDescription>Manage your location and currency preferences</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="country">{t.common.country}</Label>
+                    <Input
+                      id="country"
+                      value={formData.country}
+                      disabled
+                      className="h-11"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      {t.settings.countryCannotChange}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="currency">{t.common.currency}</Label>
+                    <Input
+                      id="currency"
+                      value={formData.currency}
+                      disabled
+                      className="h-11"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <Label>{t.common.lastName} *</Label>
-                  <Input
-                    value={formData.last_name}
-                    onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                    required
-                    className="h-11 text-base"
-                  />
+
+                <Separator />
+
+                <div className="space-y-2">
+                  <Label>{t.settings.language}</Label>
+                  <LanguageSwitcher />
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              <div>
-                <Label>{t.common.email}</Label>
-                <Input
-                  value={formData.email}
-                  type="email"
-                  disabled
-                  className="bg-muted h-11 text-base"
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  {t.settings.emailCannotChange}
-                </p>
-              </div>
-
-              <div>
-                <Label>{t.common.phone}</Label>
-                <Input
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+351 XXX XXX XXX"
-                  className="h-11 text-base"
-                />
-              </div>
-
-              <Separator />
-
-              <div>
-                <Label htmlFor="country">{t.common.country} *</Label>
-                <Input
-                  id="country"
-                  value={formData.country}
-                  disabled
-                  className="bg-muted h-11 text-base"
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  {t.settings.countryCannotChange}
-                </p>
-              </div>
-
-              <div>
-                <Label htmlFor="currency">{t.common.currency}</Label>
-                <Input
-                  id="currency"
-                  value={formData.currency}
-                  disabled
-                  className="bg-muted h-11 text-base"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="language">{t.settings.language} *</Label>
-                <LanguageSwitcher />
-              </div>
-
-              <Separator />
-
-              <Button type="submit" className="w-full h-12 sm:h-10" disabled={saving}>
-                <Save className="w-4 h-4 mr-2" />
-                {saving ? t.common.saving : t.common.saveChanges}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-
-        {/* Danger Zone */}
-        <Card className="border-0 shadow-sm mt-6 border-destructive/20">
-          <CardHeader>
-            <CardTitle className="text-destructive">{t.settings.dangerZone}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Button
-              variant="destructive"
-              onClick={handleLogout}
-              className="w-full h-12 sm:h-10"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              {t.common.logout}
-            </Button>
-          </CardContent>
-        </Card>
+            <Card className="border-destructive/50">
+              <CardHeader>
+                <CardTitle className="text-destructive flex items-center gap-2">
+                  <Shield className="w-5 h-5" />
+                  Account Actions
+                </CardTitle>
+                <CardDescription>Manage your account security and session</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button
+                  variant="destructive"
+                  onClick={handleLogout}
+                  className="w-full"
+                  size="lg"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  {t.common.logout}
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
