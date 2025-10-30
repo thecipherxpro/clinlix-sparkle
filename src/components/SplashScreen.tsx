@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import AnimatedSplashLogo from "./AnimatedSplashLogo";
 
 export default function SplashScreen() {
   const [loading, setLoading] = useState(true);
@@ -21,14 +22,14 @@ export default function SplashScreen() {
           transition={{ duration: 0.5 }}
           className="fixed inset-0 flex items-center justify-center bg-white z-[100]"
         >
-          <motion.img
-            src="/images/clinlix-splash.png"
-            alt="Clinlix Loading"
-            className="w-full max-w-md h-auto"
+          <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.3 }}
-          />
+            className="w-full max-w-md px-6"
+          >
+            <AnimatedSplashLogo />
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
