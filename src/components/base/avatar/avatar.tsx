@@ -3,8 +3,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cx } from "@/utils/cx";
 import { VerifiedTick } from "./VerifiedTick";
 
-const avatarVariants = cva(
-  "relative inline-block flex-shrink-0 overflow-hidden bg-muted",
+const avatarContainerVariants = cva(
+  "relative inline-block flex-shrink-0",
   {
     variants: {
       size: {
@@ -17,13 +17,23 @@ const avatarVariants = cva(
         "3xl": "w-20 h-20",
         "4xl": "w-24 h-24",
       },
+    },
+    defaultVariants: {
+      size: "md",
+    },
+  }
+);
+
+const avatarImageContainerVariants = cva(
+  "overflow-hidden bg-muted w-full h-full",
+  {
+    variants: {
       shape: {
         circle: "rounded-full",
         rounded: "rounded-lg",
       },
     },
     defaultVariants: {
-      size: "md",
       shape: "circle",
     },
   }
@@ -67,7 +77,8 @@ const verifiedBadgeVariants = cva(
 
 export interface AvatarProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "color">,
-    VariantProps<typeof avatarVariants> {
+    VariantProps<typeof avatarContainerVariants>,
+    VariantProps<typeof avatarImageContainerVariants> {
   src?: string;
   alt?: string;
   verified?: boolean;
@@ -115,19 +126,21 @@ export function Avatar({
   };
 
   return (
-    <div className={cx(avatarVariants({ size, shape }), className)} {...props}>
-      {src && !imageError ? (
-        <img
-          src={src}
-          alt={alt}
-          className={cx(avatarImageVariants({ shape }))}
-          onError={() => setImageError(true)}
-        />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground font-medium text-sm">
-          {getFallbackText()}
-        </div>
-      )}
+    <div className={cx(avatarContainerVariants({ size }), className)} {...props}>
+      <div className={cx(avatarImageContainerVariants({ shape }))}>
+        {src && !imageError ? (
+          <img
+            src={src}
+            alt={alt}
+            className={cx(avatarImageVariants({ shape }))}
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground font-medium text-sm">
+            {getFallbackText()}
+          </div>
+        )}
+      </div>
 
       {/* Verified Badge */}
       {verified && (
@@ -143,7 +156,7 @@ export function Avatar({
       {onlineStatus && !verified && (
         <div
           className={cx(
-            "absolute bottom-0 right-0 rounded-full ring-2 ring-background",
+            "absolute -bottom-0.5 -right-0.5 rounded-full ring-2 ring-background",
             size === "xs" || size === "sm" ? "w-2 h-2" : "w-3 h-3",
             getStatusColor()
           )}
