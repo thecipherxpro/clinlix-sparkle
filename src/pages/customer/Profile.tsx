@@ -5,15 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, User, LogOut, Save } from "lucide-react";
+import { ArrowLeft, LogOut, Save } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import AvatarUploader from "@/components/AvatarUploader";
 import SettingsDrawer from "@/components/SettingsDrawer";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useI18n } from "@/contexts/I18nContext";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { t, language } = useI18n();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState<any>(null);
@@ -25,7 +27,6 @@ const Profile = () => {
     phone: "",
     country: "Portugal",
     currency: "EUR",
-    language: "en",
     avatar_url: ""
   });
 
@@ -61,7 +62,6 @@ const Profile = () => {
         phone: profileData.phone || "",
         country: profileData.country || "Portugal",
         currency: profileData.currency || "EUR",
-        language: profileData.language || "en",
         avatar_url: profileData.avatar_url || ""
       });
     } catch (error) {
@@ -87,17 +87,16 @@ const Profile = () => {
           phone: formData.phone,
           country: formData.country,
           currency: formData.currency,
-          language: formData.language,
           avatar_url: formData.avatar_url
         })
         .eq('id', user!.id);
 
       if (error) throw error;
 
-      toast.success('Profile updated successfully');
+      toast.success(t.settings.changesSaved);
       checkAuthAndFetchProfile();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to update profile');
+      toast.error(error.message || t.errors.updateFailed);
     } finally {
       setSaving(false);
     }
@@ -105,7 +104,7 @@ const Profile = () => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    toast.success("Logged out successfully");
+    toast.success(t.common.logoutSuccess);
     navigate('/auth');
   };
 
@@ -132,7 +131,7 @@ const Profile = () => {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              My Profile
+              {t.common.profile}
             </h1>
           </div>
           <SettingsDrawer role="customer" />
@@ -156,7 +155,7 @@ const Profile = () => {
                 </h2>
                 <p className="text-muted-foreground">{formData.email}</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Customer Account
+                  {t.common.customer}
                 </p>
               </div>
             </div>
@@ -166,13 +165,13 @@ const Profile = () => {
         {/* Edit Profile Form */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle>Account Information</CardTitle>
+            <CardTitle>{t.settings.accountInfo}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label>First Name *</Label>
+                  <Label>{t.common.firstName} *</Label>
                   <Input
                     value={formData.first_name}
                     onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
@@ -181,7 +180,7 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <Label>Last Name *</Label>
+                  <Label>{t.common.lastName} *</Label>
                   <Input
                     value={formData.last_name}
                     onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
@@ -192,7 +191,7 @@ const Profile = () => {
               </div>
 
               <div>
-                <Label>Email</Label>
+                <Label>{t.common.email}</Label>
                 <Input
                   value={formData.email}
                   type="email"
@@ -200,12 +199,12 @@ const Profile = () => {
                   className="bg-muted h-11 text-base"
                 />
                 <p className="text-xs text-muted-foreground mt-1">
-                  Email cannot be changed
+                  {t.settings.emailCannotChange}
                 </p>
               </div>
 
               <div>
-                <Label>Phone Number</Label>
+                <Label>{t.common.phone}</Label>
                 <Input
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -216,59 +215,39 @@ const Profile = () => {
 
               <Separator />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="country">Country *</Label>
-                  <Select
-                    value={formData.country}
-                    onValueChange={(value) => setFormData({
-                      ...formData,
-                      country: value,
-                      currency: value === 'Portugal' ? 'EUR' : 'CAD'
-                    })}
-                  >
-                    <SelectTrigger className="h-11 text-base">
-                      <SelectValue placeholder="Select country" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Portugal">🇵🇹 Portugal</SelectItem>
-                      <SelectItem value="Canada">🇨🇦 Canada</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="currency">Currency</Label>
-                  <Input
-                    id="currency"
-                    value={formData.currency}
-                    disabled
-                    className="bg-muted h-11 text-base"
-                  />
-                </div>
+              <div>
+                <Label htmlFor="country">{t.common.country} *</Label>
+                <Input
+                  id="country"
+                  value={formData.country}
+                  disabled
+                  className="bg-muted h-11 text-base"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {t.settings.countryCannotChange}
+                </p>
               </div>
 
               <div>
-                <Label htmlFor="language">Language *</Label>
-                <Select
-                  value={formData.language}
-                  onValueChange={(value) => setFormData({ ...formData, language: value })}
-                >
-                  <SelectTrigger className="h-11 text-base">
-                    <SelectValue placeholder="Select language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="en">🇬🇧 English</SelectItem>
-                    <SelectItem value="pt">🇵🇹 Portuguese</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="currency">{t.common.currency}</Label>
+                <Input
+                  id="currency"
+                  value={formData.currency}
+                  disabled
+                  className="bg-muted h-11 text-base"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="language">{t.settings.language} *</Label>
+                <LanguageSwitcher />
               </div>
 
               <Separator />
 
-
               <Button type="submit" className="w-full h-12 sm:h-10" disabled={saving}>
                 <Save className="w-4 h-4 mr-2" />
-                {saving ? 'Saving...' : 'Save Changes'}
+                {saving ? t.common.saving : t.common.saveChanges}
               </Button>
             </form>
           </CardContent>
@@ -277,7 +256,7 @@ const Profile = () => {
         {/* Danger Zone */}
         <Card className="border-0 shadow-sm mt-6 border-destructive/20">
           <CardHeader>
-            <CardTitle className="text-destructive">Danger Zone</CardTitle>
+            <CardTitle className="text-destructive">{t.settings.dangerZone}</CardTitle>
           </CardHeader>
           <CardContent>
             <Button
@@ -286,7 +265,7 @@ const Profile = () => {
               className="w-full h-12 sm:h-10"
             >
               <LogOut className="w-4 h-4 mr-2" />
-              Logout
+              {t.common.logout}
             </Button>
           </CardContent>
         </Card>

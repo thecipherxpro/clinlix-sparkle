@@ -65,6 +65,15 @@ interface TranslationStructure {
     account: string;
     continue: string;
     welcome: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    country: string;
+    customer: string;
+    saving: string;
+    saveChanges: string;
+    logoutSuccess: string;
   };
   dashboard: {
     welcome: string;
@@ -115,6 +124,8 @@ interface TranslationStructure {
     failedToSendReset: string;
     pushEnabled: string;
     pushDisabled: string;
+    countryCannotChange: string;
+    dangerZone: string;
   };
   provider: {
     availabilityPreferences: string;
@@ -232,6 +243,7 @@ interface TranslationStructure {
     notFound: string;
     validationError: string;
     serverError: string;
+    updateFailed: string;
   };
 }
 
@@ -302,6 +314,15 @@ export const translations: Record<Language, TranslationStructure> = {
       account: 'Account',
       continue: 'Continue',
       welcome: 'Welcome',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      email: 'Email',
+      phone: 'Phone',
+      country: 'Country',
+      customer: 'Customer Account',
+      saving: 'Saving...',
+      saveChanges: 'Save Changes',
+      logoutSuccess: 'Logged out successfully',
     },
     // Dashboard
     dashboard: {
@@ -354,6 +375,8 @@ export const translations: Record<Language, TranslationStructure> = {
       failedToSendReset: 'Failed to send reset email',
       pushEnabled: '✅ Push notifications enabled',
       pushDisabled: 'Push notifications disabled',
+      countryCannotChange: 'Country cannot be changed',
+      dangerZone: 'Danger Zone',
     },
     // Provider specific
     provider: {
@@ -478,6 +501,7 @@ export const translations: Record<Language, TranslationStructure> = {
       notFound: 'Resource not found',
       validationError: 'Please check your input',
       serverError: 'Server error. Please try again later.',
+      updateFailed: 'Failed to update profile',
     },
   },
   pt: {
@@ -546,6 +570,15 @@ export const translations: Record<Language, TranslationStructure> = {
       account: 'Conta',
       continue: 'Continuar',
       welcome: 'Bem-vindo',
+      firstName: 'Primeiro Nome',
+      lastName: 'Último Nome',
+      email: 'Email',
+      phone: 'Telefone',
+      country: 'País',
+      customer: 'Conta de Cliente',
+      saving: 'A guardar...',
+      saveChanges: 'Guardar Alterações',
+      logoutSuccess: 'Sessão encerrada com sucesso',
     },
     // Dashboard
     dashboard: {
@@ -598,6 +631,8 @@ export const translations: Record<Language, TranslationStructure> = {
       failedToSendReset: 'Falha ao enviar email de redefinição',
       pushEnabled: '✅ Notificações push ativadas',
       pushDisabled: 'Notificações push desativadas',
+      countryCannotChange: 'O país não pode ser alterado',
+      dangerZone: 'Zona de Perigo',
     },
     // Provider specific
     provider: {
@@ -722,6 +757,7 @@ export const translations: Record<Language, TranslationStructure> = {
       notFound: 'Recurso não encontrado',
       validationError: 'Por favor, verifique os seus dados',
       serverError: 'Erro do servidor. Tente novamente mais tarde.',
+      updateFailed: 'Falha ao atualizar perfil',
     },
   },
 };
