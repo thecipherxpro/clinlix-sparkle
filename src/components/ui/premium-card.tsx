@@ -30,7 +30,7 @@ export const JobCard: React.FC<JobCardProps> = ({
 
       {/* Text Content */}
       <div className="flex-1 flex flex-col justify-center my-2">
-        <h3 className="text-base sm:text-lg font-bold text-foreground mb-0.5 line-clamp-1">{title}</h3>
+        <h3 className="sm:text-lg font-bold text-foreground mb-0.5 line-clamp-1 text-sm">{title}</h3>
         <p className="text-xs sm:text-sm text-foreground/60 line-clamp-1">{description}</p>
       </div>
 
