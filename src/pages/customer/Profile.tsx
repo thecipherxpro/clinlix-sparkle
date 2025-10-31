@@ -6,7 +6,7 @@ import * as z from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { UntitledInput } from "@/components/ui/untitled-input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, LogOut, Save, User, Settings, Shield, Phone, Mail } from "lucide-react";
 import { toast } from "sonner";
@@ -203,14 +203,15 @@ const Profile = () => {
                       <FormField
                         control={form.control}
                         name="first_name"
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                           <FormItem>
                             <FormLabel className="text-sm font-medium">{t.common.firstName}</FormLabel>
                             <FormControl>
-                              <Input 
+                              <UntitledInput 
                                 {...field} 
-                                className="h-12 border-border/60 focus-visible:ring-1"
+                                size="md"
                                 placeholder="Enter your first name"
+                                error={!!fieldState.error}
                               />
                             </FormControl>
                             <FormMessage />
@@ -220,14 +221,15 @@ const Profile = () => {
                       <FormField
                         control={form.control}
                         name="last_name"
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                           <FormItem>
                             <FormLabel className="text-sm font-medium">{t.common.lastName}</FormLabel>
                             <FormControl>
-                              <Input 
+                              <UntitledInput 
                                 {...field} 
-                                className="h-12 border-border/60 focus-visible:ring-1"
+                                size="md"
                                 placeholder="Enter your last name"
+                                error={!!fieldState.error}
                               />
                             </FormControl>
                             <FormMessage />
@@ -243,15 +245,13 @@ const Profile = () => {
                         <FormItem>
                           <FormLabel className="text-sm font-medium">{t.common.email}</FormLabel>
                           <FormControl>
-                            <div className="relative">
-                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                              <Input 
-                                {...field} 
-                                type="email"
-                                disabled
-                                className="h-12 pl-11 border-border/60 bg-muted/30"
-                              />
-                            </div>
+                            <UntitledInput 
+                              {...field} 
+                              type="email"
+                              size="md"
+                              disabled
+                              icon={Mail}
+                            />
                           </FormControl>
                           <FormDescription className="text-xs">
                             {t.settings.emailCannotChange}
@@ -263,18 +263,17 @@ const Profile = () => {
                     <FormField
                       control={form.control}
                       name="phone"
-                      render={({ field }) => (
+                      render={({ field, fieldState }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">{t.common.phone}</FormLabel>
                           <FormControl>
-                            <div className="relative">
-                              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                              <Input 
-                                {...field} 
-                                placeholder="+351 XXX XXX XXX"
-                                className="h-12 pl-11 border-border/60 focus-visible:ring-1"
-                              />
-                            </div>
+                            <UntitledInput 
+                              {...field} 
+                              size="md"
+                              placeholder="+351 XXX XXX XXX"
+                              icon={Phone}
+                              error={!!fieldState.error}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -315,10 +314,10 @@ const Profile = () => {
                       <FormItem>
                         <FormLabel className="text-sm font-medium">{t.common.country}</FormLabel>
                         <FormControl>
-                          <Input
+                          <UntitledInput
                             {...field}
+                            size="md"
                             disabled
-                            className="h-12 border-border/60 bg-muted/30"
                           />
                         </FormControl>
                         <FormDescription className="text-xs">
@@ -334,10 +333,10 @@ const Profile = () => {
                       <FormItem>
                         <FormLabel className="text-sm font-medium">{t.common.currency}</FormLabel>
                         <FormControl>
-                          <Input
+                          <UntitledInput
                             {...field}
+                            size="md"
                             disabled
-                            className="h-12 border-border/60 bg-muted/30"
                           />
                         </FormControl>
                       </FormItem>
