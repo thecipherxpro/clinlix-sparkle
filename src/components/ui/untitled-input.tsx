@@ -2,9 +2,9 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { InfoCircle } from "@untitledui/icons";
 
-export interface UntitledInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface UntitledInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   size?: "sm" | "md";
-  icon?: React.ComponentType<React.HTMLAttributes<HTMLOrSVGElement>>;
+  icon?: React.ComponentType<{ className?: string }>;
   error?: boolean;
 }
 
