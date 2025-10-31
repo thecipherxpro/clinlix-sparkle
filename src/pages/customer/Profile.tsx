@@ -176,28 +176,28 @@ const Profile = () => {
         </Card>
 
         {/* Tabbed Content */}
-        <Tabs defaultValue="personal" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 lg:w-auto lg:inline-grid h-11 bg-muted/50">
-            <TabsTrigger value="personal" className="gap-2 data-[state=active]:bg-background">
-              <User className="w-4 h-4" />
-              <span className="hidden sm:inline">Personal Info</span>
-              <span className="sm:hidden">Personal</span>
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="gap-2 data-[state=active]:bg-background">
-              <Settings className="w-4 h-4" />
-              Settings
-            </TabsTrigger>
-          </TabsList>
+        <Form {...form}>
+          <Tabs defaultValue="personal" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 lg:w-auto lg:inline-grid h-11 bg-muted/50">
+              <TabsTrigger value="personal" className="gap-2 data-[state=active]:bg-background">
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline">Personal Info</span>
+                <span className="sm:hidden">Personal</span>
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="gap-2 data-[state=active]:bg-background">
+                <Settings className="w-4 h-4" />
+                Settings
+              </TabsTrigger>
+            </TabsList>
 
-          {/* Personal Information Tab */}
-          <TabsContent value="personal" className="space-y-6 mt-6">
-            <Card className="border-none shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-xl">Personal Information</CardTitle>
-                <CardDescription>Update your personal details and contact information</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Form {...form}>
+            {/* Personal Information Tab */}
+            <TabsContent value="personal" className="space-y-6 mt-6">
+              <Card className="border-none shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-xl">Personal Information</CardTitle>
+                  <CardDescription>Update your personal details and contact information</CardDescription>
+                </CardHeader>
+                <CardContent>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
@@ -295,10 +295,9 @@ const Profile = () => {
                       </Button>
                     </div>
                   </form>
-                </Form>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
           {/* Settings Tab */}
           <TabsContent value="settings" className="space-y-6 mt-6">
@@ -377,6 +376,7 @@ const Profile = () => {
             </Card>
           </TabsContent>
         </Tabs>
+        </Form>
       </main>
     </div>
   );
