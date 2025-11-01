@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import AnimatedSplashLogo from "@/components/AnimatedSplashLogo";
 
 const Splash = () => {
   const navigate = useNavigate();
@@ -92,7 +91,11 @@ const Splash = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-6">
       <div className="flex flex-col items-center gap-6 w-full max-w-md">
-        <AnimatedSplashLogo />
+        <img 
+          src="/images/clinlix-splash-new.gif" 
+          alt="Clinlix Loading" 
+          className="w-full h-auto max-w-[400px]"
+        />
         <p className="text-foreground text-sm font-medium text-center animate-fade-in mt-6" style={{ fontFamily: "Inter, Manrope, sans-serif" }}>
           {isOffline ? "You're offline. Clinlix will load as soon as you reconnect." : statusText}
         </p>
