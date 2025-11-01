@@ -162,17 +162,41 @@ const ProviderDashboard = () => {
           </div>
         </div>
 
-        {/* Quick Actions - Job Cards */}
-        <div>
+        {/* Quick Actions */}
+        <div className="mb-[clamp(20px,5vw,32px)]">
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
-          <div className="grid grid-cols-1 xs:grid-cols-2 gap-[clamp(18px,3vw,18px)] auto-rows-fr">
-            <JobCard title="View Pending Jobs" description="Review new job requests" value={`${stats.pendingJobs} Pending`} icon={<Briefcase className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef4e2" onClick={() => navigate("/provider/jobs")} />
-            
-            <JobCard title="Manage Schedule" description="Set your availability" value="Available" icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#e0f2fe" onClick={() => navigate("/provider/schedule")} />
-            
-            <JobCard title="Check Earnings" description="View payment history" value={`€${stats.monthlyEarnings.toFixed(0)}`} icon={<DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#dcfce7" onClick={() => navigate("/provider/wallet")} />
-            
-            <JobCard title="Update Profile" description="Edit your information" value="Profile" icon={<User className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fae8ff" onClick={() => navigate("/provider/profile")} />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <JobCard
+              title="Jobs"
+              description="View all jobs"
+              image="https://i.postimg.cc/LXSMYzdW/calnder24.png"
+              heroColor="#e2e2e4"
+              onClick={() => navigate("/provider/jobs")}
+            />
+
+            <JobCard
+              title="Schedule"
+              description="Manage availability"
+              image="https://i.postimg.cc/hjB2bst8/map.png"
+              heroColor="#e2e2e4"
+              onClick={() => navigate("/provider/schedule")}
+            />
+
+            <JobCard
+              title="Wallet"
+              description="View earnings"
+              image="https://i.postimg.cc/9MhLtbQp/walletss.png"
+              heroColor="#e2e2e4"
+              onClick={() => navigate("/provider/wallet")}
+            />
+
+            <JobCard
+              title="Profile"
+              description="Edit profile"
+              image="https://i.postimg.cc/qRrdh8Vf/Profiles.png"
+              heroColor="#e2e2e4"
+              onClick={() => navigate("/provider/profile")}
+            />
           </div>
         </div>
       </main>
