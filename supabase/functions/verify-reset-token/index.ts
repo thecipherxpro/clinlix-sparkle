@@ -25,15 +25,24 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Server-side password validation
-    if (newPassword.length < 8) {
+    // Comprehensive server-side password validation
+    if (typeof newPassword !== 'string') {
+      return new Response(
+        JSON.stringify({ error: 'Invalid password format' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const trimmedPassword = newPassword.trim();
+
+    if (trimmedPassword.length < 8) {
       return new Response(
         JSON.stringify({ error: 'Password must be at least 8 characters long' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    if (newPassword.length > 128) {
+    if (trimmedPassword.length > 128) {
       return new Response(
         JSON.stringify({ error: 'Password must not exceed 128 characters' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -41,15 +50,24 @@ Deno.serve(async (req) => {
     }
 
     // Check for complexity requirements
-    const hasUppercase = /[A-Z]/.test(newPassword);
-    const hasLowercase = /[a-z]/.test(newPassword);
-    const hasNumber = /[0-9]/.test(newPassword);
+    const hasUppercase = /[A-Z]/.test(trimmedPassword);
+    const hasLowercase = /[a-z]/.test(trimmedPassword);
+    const hasNumber = /[0-9]/.test(trimmedPassword);
 
     if (!hasUppercase || !hasLowercase || !hasNumber) {
       return new Response(
         JSON.stringify({ 
           error: 'Password must contain at least one uppercase letter, one lowercase letter, and one number' 
         }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Reject common weak passwords
+    const commonPasswords = ['password', '12345678', 'qwerty', 'abc123', 'password123'];
+    if (commonPasswords.some(weak => trimmedPassword.toLowerCase().includes(weak))) {
+      return new Response(
+        JSON.stringify({ error: 'Password is too common. Please choose a stronger password' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -78,7 +96,7 @@ Deno.serve(async (req) => {
     // Update user password using admin API
     const { error: updateError } = await supabase.auth.admin.updateUserById(
       resetToken.user_id,
-      { password: newPassword }
+      { password: trimmedPassword }
     );
 
     if (updateError) {

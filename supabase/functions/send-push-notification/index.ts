@@ -43,6 +43,46 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
+    // Extract JWT token from Authorization header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized - missing authorization header' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+      );
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    
+    // Verify the JWT and get user
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
+    
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized - invalid token' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+      );
+    }
+
+    // Check if user has admin or system role
+    const { data: userRole, error: roleError } = await supabaseClient
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .single();
+
+    // Only allow system administrators to send notifications
+    // Regular users cannot send push notifications to other users
+    const isAdmin = userRole && userRole.role === 'admin';
+    
+    if (!isAdmin) {
+      console.warn(`Unauthorized notification attempt by user: ${user.id}`);
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized - insufficient permissions. Only administrators can send push notifications.' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 403 }
+      );
+    }
+
     const payload: NotificationPayload = await req.json();
     console.log('📬 Sending push notification:', payload);
 
