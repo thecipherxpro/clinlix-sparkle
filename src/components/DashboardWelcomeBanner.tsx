@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Upload, Search } from "lucide-react";
 import { toast } from "sonner";
 import { NotificationCenter } from "@/components/NotificationCenter";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { cn } from "@/lib/utils";
 interface DashboardWelcomeBannerProps {
   user: {
@@ -81,6 +82,11 @@ const DashboardWelcomeBanner = ({
   return <div className={cn("relative w-full bg-card rounded-[20px] shadow-lg border overflow-hidden", className)}>
       {/* Geometric Pattern Background */}
       <div className="h-24 sm:h-32 md:h-40 w-full overflow-hidden bg-[#d8d8d9]"></div>
+
+      {/* Language Toggle - Top Left */}
+      <div className="absolute top-4 left-4 z-10">
+        <LanguageToggle />
+      </div>
 
       {/* Notification Bell - Top Right */}
       <div className="absolute top-4 right-4 z-10">
