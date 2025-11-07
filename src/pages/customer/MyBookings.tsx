@@ -55,24 +55,24 @@ const MyBookings = () => {
       setBookings(bookingsData || []);
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Failed to load bookings");
+      toast.error(t.bookings.failedToLoad);
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancelBooking = async (bookingId: string) => {
-    if (!confirm("Are you sure you want to cancel this booking?")) return;
+    if (!confirm(t.bookings.confirmCancel)) return;
 
     try {
       const { error } = await supabase.from("bookings").update({ job_status: "cancelled" }).eq("id", bookingId);
 
       if (error) throw error;
 
-      toast.success("Booking cancelled");
+      toast.success(t.bookings.bookingCancelled);
       checkAuthAndFetchBookings();
     } catch (error: any) {
-      toast.error(error.message || "Failed to cancel booking");
+      toast.error(error.message || t.bookings.failedToCancel);
     }
   };
 
@@ -95,18 +95,18 @@ const MyBookings = () => {
               <div className="flex items-center gap-2 mb-2">
                 <StatusBadge status={booking.job_status} className="w-auto" />
                 {booking.payment_status === "paid" && (
-                  <div className="badge badge-success text-white border-0 shadow-md px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold">
-                    Paid
+                  <div className="badge badge-success text-white border-0 shadow-md px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold">
+                    {t.bookings.paid}
                   </div>
                 )}
               </div>
-              <CardTitle className="text-lg">{booking.customer_addresses?.label}</CardTitle>
-              <p className="text-sm text-muted-foreground">
+              <CardTitle className="text-base sm:text-lg">{booking.customer_addresses?.label}</CardTitle>
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {booking.customer_addresses?.property_type} • {booking.customer_addresses?.layout_type}
               </p>
             </div>
-            <Button variant="ghost" size="sm" onClick={() => navigate(`/customer/bookings/${booking.id}`)}>
-              View Details
+            <Button variant="ghost" size="sm" onClick={() => navigate(`/customer/bookings/${booking.id}`)} className="text-xs">
+              {t.bookings.viewDetails}
             </Button>
           </div>
         </CardHeader>
@@ -189,12 +189,12 @@ const MyBookings = () => {
             {/* Package & Total */}
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Package</p>
-                <p className="font-medium">{booking.customer_addresses?.cleaning_packages?.package_name}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{t.bookings.package}</p>
+                <p className="font-medium text-sm sm:text-base">{booking.customer_addresses?.cleaning_packages?.package_name}</p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-muted-foreground">Total</p>
-                <p className="font-semibold text-lg">
+                <p className="text-xs sm:text-sm text-muted-foreground">{t.bookings.total}</p>
+                <p className="font-semibold text-base sm:text-lg">
                   {booking.customer_addresses?.currency === "EUR" ? "€" : "$"}
                   {booking.total_final || booking.total_estimate}
                 </p>
@@ -207,10 +207,10 @@ const MyBookings = () => {
                 <Button
                   variant="destructive"
                   size="sm"
-                  className="w-full"
+                  className="w-full text-xs"
                   onClick={() => handleCancelBooking(booking.id)}
                 >
-                  Cancel Booking
+                  {t.bookings.cancelBooking}
                 </Button>
               </div>
             )}
@@ -220,11 +220,11 @@ const MyBookings = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full"
+                  className="w-full text-xs"
                   onClick={() => navigate(`/customer/bookings/${booking.id}/review`)}
                 >
-                  <Star className="w-4 h-4 mr-2" />
-                  Leave a Review
+                  <Star className="w-3.5 h-3.5 mr-2" />
+                  {t.bookings.leaveReview}
                 </Button>
               </div>
             )}
@@ -254,7 +254,7 @@ const MyBookings = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             {t.dashboard.myBookings}
           </h1>
         </div>
@@ -269,9 +269,9 @@ const MyBookings = () => {
             cursor: "bg-background shadow-sm",
           }}
         >
-          <Tab key="active" title={`Active (${activeBookings.length})`} />
-          <Tab key="completed" title={`Completed (${completedBookings.length})`} />
-          <Tab key="cancelled" title={`Cancelled (${cancelledBookings.length})`} />
+          <Tab key="active" title={`${t.bookings.active} (${activeBookings.length})`} />
+          <Tab key="completed" title={`${t.bookings.completed} (${completedBookings.length})`} />
+          <Tab key="cancelled" title={`${t.bookings.cancelled} (${cancelledBookings.length})`} />
         </Tabs>
         
         {activeTab === 'active' && (
@@ -298,7 +298,7 @@ const MyBookings = () => {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm sm:text-base text-muted-foreground">No completed bookings</p>
+                  <p className="text-sm sm:text-base text-muted-foreground">{t.bookings.noCompleted}</p>
                 </CardContent>
               </Card>
             ) : (
@@ -313,7 +313,7 @@ const MyBookings = () => {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
                   <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm sm:text-base text-muted-foreground">No cancelled bookings</p>
+                  <p className="text-sm sm:text-base text-muted-foreground">{t.bookings.noCancelled}</p>
                 </CardContent>
               </Card>
             ) : (

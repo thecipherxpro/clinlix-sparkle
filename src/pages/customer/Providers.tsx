@@ -6,9 +6,11 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Search, Star, Sparkles, Shield } from "lucide-react";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
+import { useI18n } from "@/contexts/I18nContext";
 
 const Providers = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [providers, setProviders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -80,8 +82,8 @@ const Providers = () => {
           <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Find Providers
+          <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            {t.providers.findProviders}
           </h1>
         </div>
       </header>
@@ -93,8 +95,8 @@ const Providers = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 sm:w-5 sm:h-5" />
             <Input
               type="text"
-              placeholder="Search providers..."
-              className="pl-10 sm:pl-12 h-12 text-base"
+              placeholder={t.providers.searchProviders}
+              className="pl-10 sm:pl-12 h-12 text-sm"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -106,10 +108,10 @@ const Providers = () => {
           <Card className="border-0 shadow-sm">
             <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
               <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                No providers found yet
+                {t.providers.noProvidersFound}
               </p>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Check back soon as we onboard more cleaning professionals
+                {t.providers.checkBackSoon}
               </p>
             </CardContent>
           </Card>
@@ -118,51 +120,51 @@ const Providers = () => {
             {filteredProviders.map((provider) => (
               <Card key={provider.id} className="border-0 shadow-sm hover:shadow-lg transition-all">
                 <CardHeader className="pb-4">
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3 sm:gap-4">
                     <ProviderAvatarBadge
                       imageUrl={provider.photo_url}
                       isVerified={provider.verified}
                       createdAt={provider.created_at}
-                      size={64}
+                      size={60}
                       alt={provider.full_name}
                       className="flex-shrink-0"
                     />
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h3 className="font-semibold text-lg">{provider.full_name}</h3>
-                          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between mb-2 gap-2">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="font-semibold text-base sm:text-lg truncate">{provider.full_name}</h3>
+                          <div className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground">
+                            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 flex-shrink-0" />
                             <span className="font-medium text-foreground">
                               {provider.rating_avg.toFixed(1)}
                             </span>
                             <span>({provider.rating_count})</span>
                           </div>
                         </div>
-                        <div className="flex gap-1">
+                        <div className="flex gap-1 flex-shrink-0">
                           {provider.new_provider && (
-                            <div className="badge badge-secondary gap-1">
-                              <Sparkles className="w-3 h-3" />
-                              NEW
+                            <div className="badge badge-secondary gap-1 text-[10px] px-1.5 py-0.5">
+                              <Sparkles className="w-2.5 h-2.5" />
+                              {t.providers.newBadge}
                             </div>
                           )}
                           {provider.verified && (
-                            <div className="badge badge-primary gap-1">
-                              <Shield className="w-3 h-3" />
-                              VERIFIED
+                            <div className="badge badge-primary gap-1 text-[10px] px-1.5 py-0.5">
+                              <Shield className="w-2.5 h-2.5" />
+                              {t.providers.verifiedBadge}
                             </div>
                           )}
                         </div>
                       </div>
                       {provider.bio && (
-                        <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-3">
                           {provider.bio}
                         </p>
                       )}
                       {provider.skills && provider.skills.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-3">
                           {provider.skills.slice(0, 3).map((skill: string, idx: number) => (
-                            <div key={idx} className="badge badge-outline text-xs">
+                            <div key={idx} className="badge badge-outline text-[10px] px-1.5 py-0.5">
                               {skill}
                             </div>
                           ))}
@@ -171,18 +173,18 @@ const Providers = () => {
                       <div className="flex gap-2">
                         <Button 
                           size="sm" 
-                          className="flex-1"
+                          className="flex-1 text-xs h-8"
                           onClick={() => navigate(`/providers/profile/${provider.id}`)}
                         >
-                          View Profile
+                          {t.providers.viewProfile}
                         </Button>
                         <Button 
                           size="sm" 
                           variant="outline" 
-                          className="flex-1"
+                          className="flex-1 text-xs h-8"
                           onClick={() => navigate('/customer/booking')}
                         >
-                          Book Now
+                          {t.providers.bookNow}
                         </Button>
                       </div>
                     </div>

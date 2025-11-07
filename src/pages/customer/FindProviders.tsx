@@ -11,9 +11,11 @@ import { ArrowLeft, Search, SlidersHorizontal, UserX } from "lucide-react";
 import { toast } from "sonner";
 import ProviderCard from "@/components/ProviderCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useI18n } from "@/contexts/I18nContext";
 
 const FindProviders = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(true);
   const [providers, setProviders] = useState<any[]>([]);
   const [filteredProviders, setFilteredProviders] = useState<any[]>([]);
@@ -56,7 +58,7 @@ const FindProviders = () => {
       await fetchProviders();
     } catch (error) {
       console.error('Error:', error);
-      toast.error("Failed to load providers");
+      toast.error(t.bookings.failedToLoad);
     } finally {
       setLoading(false);
     }
@@ -73,7 +75,7 @@ const FindProviders = () => {
 
     if (error) {
       console.error('Error fetching providers:', error);
-      toast.error("Failed to fetch providers");
+      toast.error(t.bookings.failedToLoad);
       return;
     }
 
@@ -137,8 +139,10 @@ const FindProviders = () => {
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
-                <h1 className="text-lg md:text-xl font-bold">Find Providers</h1>
-                <p className="text-xs md:text-sm text-muted-foreground">Loading...</p>
+                <h1 className="text-base md:text-lg font-bold">{t.providers.findProviders}</h1>
+                <p className="text-xs md:text-sm text-muted-foreground">
+                  {t.common.loading}
+                </p>
               </div>
             </div>
           </div>
@@ -171,9 +175,9 @@ const FindProviders = () => {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-lg md:text-xl font-bold">Find Providers</h1>
+              <h1 className="text-base md:text-lg font-bold">{t.providers.findProviders}</h1>
               <p className="text-xs md:text-sm text-muted-foreground">
-                {filteredProviders.length} provider{filteredProviders.length !== 1 ? 's' : ''} available
+                {filteredProviders.length} {filteredProviders.length === 1 ? t.providers.provider : t.providers.providersAvailable}
               </p>
             </div>
           </div>
@@ -188,10 +192,10 @@ const FindProviders = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
                 type="text"
-                placeholder="Find providers near you..."
+                placeholder={t.providers.findNearYou}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 touch-target"
+                className="pl-10 touch-target text-sm"
               />
             </div>
             
@@ -204,9 +208,9 @@ const FindProviders = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:max-w-md">
                 <SheetHeader>
-                  <SheetTitle>Filter Providers</SheetTitle>
-                  <SheetDescription>
-                    Narrow your search
+                  <SheetTitle className="text-base">{t.providers.filterProviders}</SheetTitle>
+                  <SheetDescription className="text-xs">
+                    {t.providers.narrowSearch}
                   </SheetDescription>
                 </SheetHeader>
                 
@@ -214,8 +218,8 @@ const FindProviders = () => {
                   {/* Verified Only */}
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label htmlFor="verified">Verified Only</Label>
-                      <p className="text-xs text-muted-foreground">Show only verified providers</p>
+                      <Label htmlFor="verified" className="text-sm">{t.providers.verifiedOnly}</Label>
+                      <p className="text-xs text-muted-foreground">{t.providers.showVerifiedOnly}</p>
                     </div>
                   <Switch
                     id="verified"
@@ -227,7 +231,7 @@ const FindProviders = () => {
                   {/* Min Rating */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <Label>Minimum Rating</Label>
+                      <Label className="text-sm">{t.providers.minimumRating}</Label>
                       <span className="text-sm font-medium">{minRating[0]}.0+</span>
                     </div>
                     <Slider
@@ -241,29 +245,29 @@ const FindProviders = () => {
 
                   {/* Service Area */}
                   <div className="space-y-2">
-                    <Label htmlFor="area">Where do you need service?</Label>
+                    <Label htmlFor="area" className="text-sm">{t.providers.whereNeedService}</Label>
                     <Input
                       id="area"
-                      placeholder="Enter your city"
+                      placeholder={t.providers.enterCity}
                       value={serviceAreaFilter}
                       onChange={(e) => setServiceAreaFilter(e.target.value)}
-                      className="touch-target"
+                      className="touch-target text-sm"
                     />
                   </div>
 
                   {/* Availability Date */}
                   <div className="space-y-2">
-                    <Label htmlFor="date">Check Availability</Label>
+                    <Label htmlFor="date" className="text-sm">{t.providers.checkAvailability}</Label>
                     <Input
                       id="date"
                       type="date"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
                       min={new Date().toISOString().split('T')[0]}
-                      className="touch-target"
+                      className="touch-target text-sm"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Filter by availability on a specific date
+                      {t.providers.filterByDate}
                     </p>
                   </div>
 
@@ -271,9 +275,9 @@ const FindProviders = () => {
                   <Button
                     variant="outline"
                     onClick={clearFilters}
-                    className="w-full touch-target"
+                    className="w-full touch-target text-sm"
                   >
-                    Reset Filters
+                    {t.providers.resetFilters}
                   </Button>
                 </div>
               </SheetContent>
@@ -283,25 +287,25 @@ const FindProviders = () => {
           {/* Active Filter Indicators */}
           {(verifiedOnly || minRating[0] > 0 || serviceAreaFilter || selectedDate) && (
             <div className="flex flex-wrap gap-2 items-center text-xs">
-              <span className="text-muted-foreground">Active filters:</span>
+              <span className="text-muted-foreground">{t.providers.activeFilters}</span>
               {verifiedOnly && (
                 <span className="bg-primary/10 text-primary px-2 py-1 rounded-full">
-                  Verified
+                  {t.providers.verified}
                 </span>
               )}
               {minRating[0] > 0 && (
                 <span className="bg-primary/10 text-primary px-2 py-1 rounded-full">
-                  {minRating[0]}+ stars
+                  {minRating[0]}+ {t.providers.stars}
                 </span>
               )}
               {serviceAreaFilter && (
                 <span className="bg-primary/10 text-primary px-2 py-1 rounded-full">
-                  Area: {serviceAreaFilter}
+                  {t.providers.area} {serviceAreaFilter}
                 </span>
               )}
               {selectedDate && (
                 <span className="bg-primary/10 text-primary px-2 py-1 rounded-full">
-                  Date: {new Date(selectedDate).toLocaleDateString()}
+                  {t.providers.date} {new Date(selectedDate).toLocaleDateString()}
                 </span>
               )}
             </div>
@@ -313,12 +317,12 @@ const FindProviders = () => {
           {filteredProviders.length === 0 ? (
             <div className="text-center py-16">
               <UserX className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <h3 className="text-lg font-semibold mb-2">No matches yet</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Try different filters or expand your search area
+              <h3 className="text-base font-semibold mb-2">{t.providers.noMatches}</h3>
+              <p className="text-xs text-muted-foreground mb-4">
+                {t.providers.tryDifferentFilters}
               </p>
-              <Button onClick={clearFilters} variant="outline">
-                Reset Filters
+              <Button onClick={clearFilters} variant="outline" className="text-sm">
+                {t.providers.resetFilters}
               </Button>
             </div>
           ) : (

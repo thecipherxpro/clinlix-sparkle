@@ -10,9 +10,11 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Building2, Edit, Mail, Phone, MoreVertical } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/contexts/I18nContext";
 
 const MyAddresses = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [addresses, setAddresses] = useState<any[]>([]);
   const [packages, setPackages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -92,7 +94,7 @@ const MyAddresses = () => {
       setPackages(packagesData || []);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Failed to load addresses');
+      toast.error(t.addresses.failedToLoad);
     } finally {
       setLoading(false);
     }
@@ -102,7 +104,7 @@ const MyAddresses = () => {
     e.preventDefault();
     
     if (addresses.length >= 5 && !editingAddress) {
-      toast.error('Maximum 5 addresses allowed');
+      toast.error(t.addresses.maxAddresses);
       return;
     }
 
@@ -123,26 +125,26 @@ const MyAddresses = () => {
           .eq('id', editingAddress.id);
 
         if (error) throw error;
-        toast.success('Address updated successfully');
+        toast.success(t.addresses.addressUpdated);
       } else {
         const { error } = await supabase
           .from('customer_addresses')
           .insert([{ ...formData, customer_id: user!.id }]);
 
         if (error) throw error;
-        toast.success('Address added successfully');
+        toast.success(t.addresses.addressAdded);
       }
 
       setIsOpen(false);
       setEditingAddress(null);
       checkAuthAndFetchData();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save address');
+      toast.error(error.message || t.addresses.failedToSave);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this address?')) return;
+    if (!confirm(t.addresses.confirmDelete)) return;
 
     try {
       const { error } = await supabase
@@ -151,10 +153,10 @@ const MyAddresses = () => {
         .eq('id', id);
 
       if (error) throw error;
-      toast.success('Address deleted');
+      toast.success(t.addresses.addressDeleted);
       checkAuthAndFetchData();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to delete address');
+      toast.error(error.message || t.addresses.failedToDelete);
     }
   };
 
@@ -207,8 +209,8 @@ const MyAddresses = () => {
           <Button variant="ghost" size="icon" onClick={() => navigate('/customer/dashboard')} className="touch-target md:hidden">
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            My Addresses
+          <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            {t.addresses.myAddresses}
           </h1>
         </div>
       </header>

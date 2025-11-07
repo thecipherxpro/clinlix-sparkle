@@ -206,6 +206,102 @@ interface TranslationStructure {
     viewDetails: string;
     selectPackage: string;
   };
+  providers: {
+    findProviders: string;
+    searchProviders: string;
+    noProvidersFound: string;
+    checkBackSoon: string;
+    viewProfile: string;
+    bookNow: string;
+    newBadge: string;
+    verifiedBadge: string;
+    findNearYou: string;
+    filterProviders: string;
+    narrowSearch: string;
+    verifiedOnly: string;
+    showVerifiedOnly: string;
+    minimumRating: string;
+    whereNeedService: string;
+    enterCity: string;
+    checkAvailability: string;
+    filterByDate: string;
+    resetFilters: string;
+    activeFilters: string;
+    verified: string;
+    stars: string;
+    area: string;
+    date: string;
+    noMatches: string;
+    tryDifferentFilters: string;
+    providersAvailable: string;
+    provider: string;
+  };
+  addresses: {
+    myAddresses: string;
+    manageAddresses: string;
+    addAddress: string;
+    editAddress: string;
+    addNewAddress: string;
+    addressLabel: string;
+    labelPlaceholder: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+    country: string;
+    propertyType: string;
+    apartment: string;
+    house: string;
+    layoutType: string;
+    studio: string;
+    oneBedroom: string;
+    twoBedrooms: string;
+    threeBedrooms: string;
+    fourBedrooms: string;
+    rua: string;
+    codigoPostal: string;
+    portaAndar: string;
+    localidade: string;
+    distrito: string;
+    streetAddress: string;
+    aptUnit: string;
+    postalCode: string;
+    city: string;
+    province: string;
+    setPrimary: string;
+    updateAddress: string;
+    saveAddress: string;
+    noAddresses: string;
+    addFirstAddress: string;
+    primary: string;
+    deleteAddress: string;
+    maxAddresses: string;
+    addressAdded: string;
+    addressUpdated: string;
+    addressDeleted: string;
+    failedToLoad: string;
+    failedToSave: string;
+    failedToDelete: string;
+    confirmDelete: string;
+  };
+  bookings: {
+    myBookings: string;
+    active: string;
+    completed: string;
+    cancelled: string;
+    viewDetails: string;
+    paid: string;
+    package: string;
+    total: string;
+    cancelBooking: string;
+    leaveReview: string;
+    noCompleted: string;
+    noCancelled: string;
+    confirmCancel: string;
+    bookingCancelled: string;
+    failedToCancel: string;
+    failedToLoad: string;
+  };
   howItWorks: {
     title: string;
     subtitle: string;
@@ -460,6 +556,105 @@ export const translations: Record<Language, TranslationStructure> = {
       includes: 'Includes',
       viewDetails: 'View Details',
       selectPackage: 'Select Package',
+    },
+    // Providers
+    providers: {
+      findProviders: 'Find Providers',
+      searchProviders: 'Search providers...',
+      noProvidersFound: 'No providers found yet',
+      checkBackSoon: 'Check back soon as we onboard more cleaning professionals',
+      viewProfile: 'View Profile',
+      bookNow: 'Book Now',
+      newBadge: 'NEW',
+      verifiedBadge: 'VERIFIED',
+      findNearYou: 'Find providers near you...',
+      filterProviders: 'Filter Providers',
+      narrowSearch: 'Narrow your search',
+      verifiedOnly: 'Verified Only',
+      showVerifiedOnly: 'Show only verified providers',
+      minimumRating: 'Minimum Rating',
+      whereNeedService: 'Where do you need service?',
+      enterCity: 'Enter your city',
+      checkAvailability: 'Check Availability',
+      filterByDate: 'Filter by availability on a specific date',
+      resetFilters: 'Reset Filters',
+      activeFilters: 'Active filters:',
+      verified: 'Verified',
+      stars: 'stars',
+      area: 'Area:',
+      date: 'Date:',
+      noMatches: 'No matches yet',
+      tryDifferentFilters: 'Try different filters or expand your search area',
+      providersAvailable: 'providers available',
+      provider: 'provider',
+    },
+    // Addresses
+    addresses: {
+      myAddresses: 'My Addresses',
+      manageAddresses: 'Manage up to 5 addresses',
+      addAddress: 'Add Address',
+      editAddress: 'Edit Address',
+      addNewAddress: 'Add New Address',
+      addressLabel: 'Address Label',
+      labelPlaceholder: 'Home, Office, etc.',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      phone: 'Phone',
+      email: 'Email',
+      country: 'Country',
+      propertyType: 'Property Type',
+      apartment: 'Apartment',
+      house: 'House',
+      layoutType: 'Layout Type',
+      studio: 'Studio',
+      oneBedroom: '1 Bedroom',
+      twoBedrooms: '2 Bedrooms',
+      threeBedrooms: '3 Bedrooms',
+      fourBedrooms: '4 Bedrooms',
+      rua: 'Rua',
+      codigoPostal: 'Código Postal',
+      portaAndar: 'Porta/Andar',
+      localidade: 'Localidade',
+      distrito: 'Distrito',
+      streetAddress: 'Street Address',
+      aptUnit: 'Apt/Unit',
+      postalCode: 'Postal Code',
+      city: 'City',
+      province: 'Province',
+      setPrimary: 'Set as primary address',
+      updateAddress: 'Update Address',
+      saveAddress: 'Save Address',
+      noAddresses: 'No addresses saved yet',
+      addFirstAddress: 'Add Your First Address',
+      primary: 'Primary',
+      deleteAddress: 'Delete',
+      maxAddresses: 'Maximum 5 addresses allowed',
+      addressAdded: 'Address added successfully',
+      addressUpdated: 'Address updated successfully',
+      addressDeleted: 'Address deleted',
+      failedToLoad: 'Failed to load addresses',
+      failedToSave: 'Failed to save address',
+      failedToDelete: 'Failed to delete address',
+      confirmDelete: 'Are you sure you want to delete this address?',
+    },
+    // Bookings
+    bookings: {
+      myBookings: 'My Bookings',
+      active: 'Active',
+      completed: 'Completed',
+      cancelled: 'Cancelled',
+      viewDetails: 'View Details',
+      paid: 'Paid',
+      package: 'Package',
+      total: 'Total',
+      cancelBooking: 'Cancel Booking',
+      leaveReview: 'Leave a Review',
+      noCompleted: 'No completed bookings',
+      noCancelled: 'No cancelled bookings',
+      confirmCancel: 'Are you sure you want to cancel this booking?',
+      bookingCancelled: 'Booking cancelled',
+      failedToCancel: 'Failed to cancel booking',
+      failedToLoad: 'Failed to load bookings',
     },
     // How It Works
     howItWorks: {
@@ -716,6 +911,105 @@ export const translations: Record<Language, TranslationStructure> = {
       includes: 'Inclui',
       viewDetails: 'Ver Detalhes',
       selectPackage: 'Selecionar Pacote',
+    },
+    // Providers
+    providers: {
+      findProviders: 'Encontrar Prestadores',
+      searchProviders: 'Procurar prestadores...',
+      noProvidersFound: 'Ainda não há prestadores',
+      checkBackSoon: 'Volte em breve enquanto integramos mais profissionais',
+      viewProfile: 'Ver Perfil',
+      bookNow: 'Reservar',
+      newBadge: 'NOVO',
+      verifiedBadge: 'VERIFICADO',
+      findNearYou: 'Encontrar prestadores perto...',
+      filterProviders: 'Filtrar Prestadores',
+      narrowSearch: 'Refinar a pesquisa',
+      verifiedOnly: 'Apenas Verificados',
+      showVerifiedOnly: 'Mostrar apenas prestadores verificados',
+      minimumRating: 'Classificação Mínima',
+      whereNeedService: 'Onde precisa do serviço?',
+      enterCity: 'Insira a sua cidade',
+      checkAvailability: 'Verificar Disponibilidade',
+      filterByDate: 'Filtrar por disponibilidade numa data',
+      resetFilters: 'Limpar Filtros',
+      activeFilters: 'Filtros ativos:',
+      verified: 'Verificado',
+      stars: 'estrelas',
+      area: 'Área:',
+      date: 'Data:',
+      noMatches: 'Sem resultados',
+      tryDifferentFilters: 'Tente filtros diferentes ou expanda a área',
+      providersAvailable: 'prestadores disponíveis',
+      provider: 'prestador',
+    },
+    // Addresses
+    addresses: {
+      myAddresses: 'As Minhas Moradas',
+      manageAddresses: 'Gerir até 5 moradas',
+      addAddress: 'Adicionar Morada',
+      editAddress: 'Editar Morada',
+      addNewAddress: 'Nova Morada',
+      addressLabel: 'Nome da Morada',
+      labelPlaceholder: 'Casa, Escritório, etc.',
+      firstName: 'Primeiro Nome',
+      lastName: 'Último Nome',
+      phone: 'Telefone',
+      email: 'Email',
+      country: 'País',
+      propertyType: 'Tipo de Propriedade',
+      apartment: 'Apartamento',
+      house: 'Moradia',
+      layoutType: 'Tipologia',
+      studio: 'Estúdio',
+      oneBedroom: 'T1',
+      twoBedrooms: 'T2',
+      threeBedrooms: 'T3',
+      fourBedrooms: 'T4',
+      rua: 'Rua',
+      codigoPostal: 'Código Postal',
+      portaAndar: 'Porta/Andar',
+      localidade: 'Localidade',
+      distrito: 'Distrito',
+      streetAddress: 'Morada',
+      aptUnit: 'Apt/Unidade',
+      postalCode: 'Código Postal',
+      city: 'Cidade',
+      province: 'Província',
+      setPrimary: 'Definir como morada principal',
+      updateAddress: 'Atualizar Morada',
+      saveAddress: 'Guardar Morada',
+      noAddresses: 'Ainda não tem moradas',
+      addFirstAddress: 'Adicionar a 1ª Morada',
+      primary: 'Principal',
+      deleteAddress: 'Eliminar',
+      maxAddresses: 'Máximo de 5 moradas permitido',
+      addressAdded: 'Morada adicionada com sucesso',
+      addressUpdated: 'Morada atualizada',
+      addressDeleted: 'Morada eliminada',
+      failedToLoad: 'Falha ao carregar moradas',
+      failedToSave: 'Falha ao guardar morada',
+      failedToDelete: 'Falha ao eliminar morada',
+      confirmDelete: 'Tem a certeza que quer eliminar esta morada?',
+    },
+    // Bookings
+    bookings: {
+      myBookings: 'As Minhas Reservas',
+      active: 'Ativas',
+      completed: 'Concluídas',
+      cancelled: 'Canceladas',
+      viewDetails: 'Ver Detalhes',
+      paid: 'Pago',
+      package: 'Pacote',
+      total: 'Total',
+      cancelBooking: 'Cancelar Reserva',
+      leaveReview: 'Deixar Avaliação',
+      noCompleted: 'Sem reservas concluídas',
+      noCancelled: 'Sem reservas canceladas',
+      confirmCancel: 'Tem a certeza que quer cancelar?',
+      bookingCancelled: 'Reserva cancelada',
+      failedToCancel: 'Falha ao cancelar',
+      failedToLoad: 'Falha ao carregar reservas',
     },
     // How It Works
     howItWorks: {
