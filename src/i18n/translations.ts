@@ -141,6 +141,7 @@ interface TranslationStructure {
     languageRegion: string;
     myJobs: string;
     jobRequests: string;
+    requests: string;
     confirmed: string;
     completed: string;
     dashboard: string;
@@ -155,6 +156,78 @@ interface TranslationStructure {
     totalEarned: string;
     platformFee: string;
     payoutDue: string;
+    pendingJobs: string;
+    availableJobs: string;
+    earnedThisMonth: string;
+    quickActions: string;
+    jobs: string;
+    viewAllJobs: string;
+    manageAvailability: string;
+    viewEarnings: string;
+    profile: string;
+    editProfile: string;
+    noPendingJobs: string;
+    noConfirmedJobs: string;
+    noCompletedJobs: string;
+    completeJobsToEarn: string;
+    basePrice: string;
+    addons: string;
+    estimatedEarnings: string;
+    viewJobDetails: string;
+    viewJob: string;
+    earned: string;
+    viewSummary: string;
+    mySchedule: string;
+    addEditSlots: string;
+    add: string;
+    next30Days: string;
+    selectDateToManage: string;
+    noAvailabilitySet: string;
+    addAvailableSlots: string;
+    addAvailability: string;
+    slotAvailable: string;
+    slotsAvailable: string;
+    trackEarnings: string;
+    pendingPayout: string;
+    earningsHistory: string;
+    viewAllTransactions: string;
+    all: string;
+    noEarningsYet: string;
+    base: string;
+    fee: string;
+    overtime: string;
+    customerFeedback: string;
+    basedOn: string;
+    review: string;
+    allReviews: string;
+    noReviewsYet: string;
+    completeJobsForReviews: string;
+    providerSettings: string;
+    myProfile: string;
+    manageYourInfo: string;
+    personalInformation: string;
+    updateBasicDetails: string;
+    providerInformation: string;
+    detailsAboutService: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+    country: string;
+    bio: string;
+    tellCustomers: string;
+    yearsOfExperience: string;
+    skills: string;
+    selectSkills: string;
+    serviceAreas: string;
+    selectAreas: string;
+    languages: string;
+    selectLanguages: string;
+    saveChanges: string;
+    saving: string;
+    previewPublicProfile: string;
+    call: string;
+    jobDetails: string;
   };
   booking: {
     title: string;
@@ -489,9 +562,10 @@ export const translations: Record<Language, TranslationStructure> = {
       languageRegion: 'Language & Region',
       myJobs: 'My Jobs',
       jobRequests: 'Job Requests',
+      requests: 'Requests',
       confirmed: 'Confirmed',
       completed: 'Completed',
-      dashboard: 'Provider Dashboard',
+      dashboard: 'Dashboard',
       schedule: 'Schedule',
       wallet: 'Wallet',
       reviews: 'Reviews',
@@ -503,6 +577,78 @@ export const translations: Record<Language, TranslationStructure> = {
       totalEarned: 'Total Earned',
       platformFee: 'Platform Fee',
       payoutDue: 'Payout Due',
+      pendingJobs: 'Pending Jobs',
+      availableJobs: 'Available Jobs',
+      earnedThisMonth: 'Earned This Month',
+      quickActions: 'Quick Actions',
+      jobs: 'Jobs',
+      viewAllJobs: 'View all jobs',
+      manageAvailability: 'Manage availability',
+      viewEarnings: 'View earnings',
+      profile: 'Profile',
+      editProfile: 'Edit profile',
+      noPendingJobs: 'No pending job requests',
+      noConfirmedJobs: 'No confirmed jobs',
+      noCompletedJobs: 'No completed jobs yet',
+      completeJobsToEarn: 'Complete jobs to start earning',
+      basePrice: 'Base Price',
+      addons: 'Add-ons',
+      estimatedEarnings: 'Estimated Earnings',
+      viewJobDetails: 'View Job Details',
+      viewJob: 'View Job',
+      earned: 'earned',
+      viewSummary: 'View Summary',
+      mySchedule: 'My Schedule',
+      addEditSlots: 'Add or edit your available time slots',
+      add: 'Add',
+      next30Days: 'Next 30 Days',
+      selectDateToManage: 'Select a date to manage availability',
+      noAvailabilitySet: 'No availability set for this day',
+      addAvailableSlots: 'Add your available time slots to receive bookings',
+      addAvailability: 'Add Availability',
+      slotAvailable: 'slot available',
+      slotsAvailable: 'slots available',
+      trackEarnings: 'Track your earnings',
+      pendingPayout: 'Pending Payout',
+      earningsHistory: 'Earnings History',
+      viewAllTransactions: 'View all your transactions',
+      all: 'All',
+      noEarningsYet: 'No earnings yet',
+      base: 'Base',
+      fee: 'Fee',
+      overtime: 'Overtime',
+      customerFeedback: 'Customer feedback',
+      basedOn: 'Based on',
+      review: 'review',
+      allReviews: 'All Reviews',
+      noReviewsYet: 'No reviews yet',
+      completeJobsForReviews: 'Complete jobs to receive customer reviews',
+      providerSettings: 'Provider Settings',
+      myProfile: 'My Profile',
+      manageYourInfo: 'Manage your information',
+      personalInformation: 'Personal Information',
+      updateBasicDetails: 'Update your basic details',
+      providerInformation: 'Provider Information',
+      detailsAboutService: 'Details about your service',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      phone: 'Phone',
+      email: 'Email',
+      country: 'Country',
+      bio: 'Bio',
+      tellCustomers: 'Tell customers about yourself...',
+      yearsOfExperience: 'Years of Experience',
+      skills: 'Skills',
+      selectSkills: 'Select skills...',
+      serviceAreas: 'Service Areas',
+      selectAreas: 'Select service areas...',
+      languages: 'Languages',
+      selectLanguages: 'Select languages...',
+      saveChanges: 'Save Changes',
+      saving: 'Saving...',
+      previewPublicProfile: 'Preview Public Profile',
+      call: 'Call',
+      jobDetails: 'Job Details',
     },
     // Bookings
     booking: {
@@ -832,22 +978,23 @@ export const translations: Record<Language, TranslationStructure> = {
     // Provider specific
     provider: {
       availabilityPreferences: 'Preferências de Disponibilidade',
-      availabilityDesc: 'Gerir as suas preferências de trabalho',
-      acceptRecurring: 'Aceitar Clientes Recorrentes',
-      acceptRecurringDesc: 'Permitir que clientes o reservem regularmente',
-      currentlyAvailable: 'Atualmente Disponível',
-      currentlyAvailableDesc: 'Mostrar como disponível para novas reservas',
+      availabilityDesc: 'Gerir preferências de trabalho',
+      acceptRecurring: 'Aceitar Reservas Recorrentes',
+      acceptRecurringDesc: 'Receber pedidos de trabalhos recorrentes',
+      currentlyAvailable: 'Disponível Agora',
+      currentlyAvailableDesc: 'Mostrar perfil aos clientes',
       verification: 'Verificação',
-      verificationDesc: 'Aumentar a credibilidade do seu perfil',
-      becomeVerified: 'Tornar-se Verificado',
-      verifiedInfo: 'Prestadores verificados obtêm mais reservas e confiança dos clientes',
+      verificationDesc: 'Aumente confiança e obtenha mais reservas',
+      becomeVerified: 'Tornar-se Prestador Verificado',
+      verifiedInfo: 'Prestadores verificados obtêm 3x mais reservas',
       languageRegion: 'Idioma e Região',
-      myJobs: 'Os Meus Trabalhos',
+      myJobs: 'Meus Trabalhos',
       jobRequests: 'Pedidos de Trabalho',
-      confirmed: 'Confirmado',
-      completed: 'Concluído',
-      dashboard: 'Painel do Prestador',
-      schedule: 'Horário',
+      requests: 'Pedidos',
+      confirmed: 'Confirmados',
+      completed: 'Concluídos',
+      dashboard: 'Painel',
+      schedule: 'Agenda',
       wallet: 'Carteira',
       reviews: 'Avaliações',
       available: 'Disponível',
@@ -858,6 +1005,78 @@ export const translations: Record<Language, TranslationStructure> = {
       totalEarned: 'Total Ganho',
       platformFee: 'Taxa da Plataforma',
       payoutDue: 'Pagamento Devido',
+      pendingJobs: 'Trabalhos Pendentes',
+      availableJobs: 'Trabalhos Disponíveis',
+      earnedThisMonth: 'Ganho Este Mês',
+      quickActions: 'Ações Rápidas',
+      jobs: 'Trabalhos',
+      viewAllJobs: 'Ver todos',
+      manageAvailability: 'Gerir disponibilidade',
+      viewEarnings: 'Ver ganhos',
+      profile: 'Perfil',
+      editProfile: 'Editar perfil',
+      noPendingJobs: 'Sem pedidos pendentes',
+      noConfirmedJobs: 'Sem trabalhos confirmados',
+      noCompletedJobs: 'Ainda sem trabalhos concluídos',
+      completeJobsToEarn: 'Complete trabalhos para começar a ganhar',
+      basePrice: 'Preço Base',
+      addons: 'Extras',
+      estimatedEarnings: 'Ganho Estimado',
+      viewJobDetails: 'Ver Detalhes',
+      viewJob: 'Ver Trabalho',
+      earned: 'ganho',
+      viewSummary: 'Ver Resumo',
+      mySchedule: 'Minha Agenda',
+      addEditSlots: 'Adicione ou edite horários disponíveis',
+      add: 'Adicionar',
+      next30Days: 'Próximos 30 Dias',
+      selectDateToManage: 'Selecione data para gerir disponibilidade',
+      noAvailabilitySet: 'Sem disponibilidade para este dia',
+      addAvailableSlots: 'Adicione horários para receber reservas',
+      addAvailability: 'Adicionar Disponibilidade',
+      slotAvailable: 'horário disponível',
+      slotsAvailable: 'horários disponíveis',
+      trackEarnings: 'Acompanhe seus ganhos',
+      pendingPayout: 'Pagamento Pendente',
+      earningsHistory: 'Histórico de Ganhos',
+      viewAllTransactions: 'Ver todas as transações',
+      all: 'Todos',
+      noEarningsYet: 'Ainda sem ganhos',
+      base: 'Base',
+      fee: 'Taxa',
+      overtime: 'Extra',
+      customerFeedback: 'Feedback dos clientes',
+      basedOn: 'Baseado em',
+      review: 'avaliação',
+      allReviews: 'Todas as Avaliações',
+      noReviewsYet: 'Ainda sem avaliações',
+      completeJobsForReviews: 'Complete trabalhos para receber avaliações',
+      providerSettings: 'Configurações',
+      myProfile: 'Meu Perfil',
+      manageYourInfo: 'Gerir informações',
+      personalInformation: 'Informação Pessoal',
+      updateBasicDetails: 'Atualize seus dados básicos',
+      providerInformation: 'Info do Prestador',
+      detailsAboutService: 'Detalhes sobre serviço',
+      firstName: 'Nome',
+      lastName: 'Sobrenome',
+      phone: 'Telefone',
+      email: 'Email',
+      country: 'País',
+      bio: 'Biografia',
+      tellCustomers: 'Conte aos clientes sobre você...',
+      yearsOfExperience: 'Anos de Experiência',
+      skills: 'Habilidades',
+      selectSkills: 'Selecione habilidades...',
+      serviceAreas: 'Áreas de Serviço',
+      selectAreas: 'Selecione áreas...',
+      languages: 'Idiomas',
+      selectLanguages: 'Selecione idiomas...',
+      saveChanges: 'Guardar Alterações',
+      saving: 'A guardar...',
+      previewPublicProfile: 'Pré-visualizar Perfil Público',
+      call: 'Ligar',
+      jobDetails: 'Detalhes do Trabalho',
     },
     // Bookings
     booking: {

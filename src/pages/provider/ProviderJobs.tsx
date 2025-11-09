@@ -4,17 +4,19 @@ import { Clock, CheckCircle, Flag } from "lucide-react";
 import JobRequestsList from "@/components/provider/jobs/JobRequestsList";
 import ConfirmedJobsList from "@/components/provider/jobs/ConfirmedJobsList";
 import CompletedJobsList from "@/components/provider/jobs/CompletedJobsList";
+import { useI18n } from "@/contexts/I18nContext";
 
 const ProviderJobs = () => {
   const [activeTab, setActiveTab] = useState("requests");
+  const { t } = useI18n();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-card/50 backdrop-blur-sm border-b safe-top">
         <div className="mobile-container py-3 sm:py-4">
-          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            My Jobs
+          <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            {t.provider.myJobs}
           </h1>
         </div>
       </header>
@@ -39,8 +41,8 @@ const ProviderJobs = () => {
               title={
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <span className="hidden sm:inline">Job Requests</span>
-                  <span className="sm:hidden">Requests</span>
+                  <span className="hidden sm:inline">{t.provider.jobRequests}</span>
+                  <span className="sm:hidden">{t.provider.requests}</span>
                 </div>
               } 
             />
@@ -49,7 +51,7 @@ const ProviderJobs = () => {
               title={
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <CheckCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <span>Confirmed</span>
+                  <span>{t.provider.confirmed}</span>
                 </div>
               } 
             />
@@ -58,7 +60,7 @@ const ProviderJobs = () => {
               title={
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <Flag className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <span>Completed</span>
+                  <span>{t.provider.completed}</span>
                 </div>
               } 
             />

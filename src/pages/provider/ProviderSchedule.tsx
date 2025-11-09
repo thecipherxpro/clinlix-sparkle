@@ -8,9 +8,11 @@ import { toast } from "sonner";
 import { DateScroller } from "@/components/provider/DateScroller";
 import { TimeSlotCard } from "@/components/provider/TimeSlotCard";
 import { AddAvailabilityDrawer } from "@/components/provider/AddAvailabilityDrawer";
+import { useI18n } from "@/contexts/I18nContext";
 
 const ProviderSchedule = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [availability, setAvailability] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -184,9 +186,9 @@ const ProviderSchedule = () => {
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
-                <h1 className="text-lg sm:text-xl font-bold">My Schedule</h1>
+                <h1 className="text-base sm:text-lg font-bold">{t.provider.mySchedule}</h1>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  Add or edit your available time slots
+                  {t.provider.addEditSlots}
                 </p>
               </div>
             </div>
@@ -196,7 +198,7 @@ const ProviderSchedule = () => {
               className="touch-target"
             >
               <Plus className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Add</span>
+              <span className="hidden sm:inline">{t.provider.add}</span>
             </Button>
           </div>
         </div>
@@ -206,12 +208,12 @@ const ProviderSchedule = () => {
         {/* Date Scroller */}
         <Card className="border-0 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <CalendarIcon className="h-4 w-4" />
-              Next 30 Days
+              {t.provider.next30Days}
             </CardTitle>
             <CardDescription className="text-xs">
-              Select a date to manage availability
+              {t.provider.selectDateToManage}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -235,7 +237,7 @@ const ProviderSchedule = () => {
               })}
             </CardTitle>
             <CardDescription className="text-xs">
-              {slotsForSelectedDate.length} slot{slotsForSelectedDate.length !== 1 ? 's' : ''} available
+              {slotsForSelectedDate.length} {slotsForSelectedDate.length !== 1 ? t.provider.slotsAvailable : t.provider.slotAvailable}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -245,14 +247,14 @@ const ProviderSchedule = () => {
                   <CalendarIcon className="w-8 h-8 text-muted-foreground" />
                 </div>
                 <p className="text-muted-foreground font-medium mb-1">
-                  No availability set for this day
+                  {t.provider.noAvailabilitySet}
                 </p>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Add your available time slots to receive bookings
+                  {t.provider.addAvailableSlots}
                 </p>
                 <Button onClick={() => setIsAddDrawerOpen(true)}>
                   <Plus className="w-4 h-4 mr-2" />
-                  Add Availability
+                  {t.provider.addAvailability}
                 </Button>
               </div>
             ) : (

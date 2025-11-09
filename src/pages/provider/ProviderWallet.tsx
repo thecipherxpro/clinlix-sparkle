@@ -6,9 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, Tab } from "@heroui/react";
 import { ArrowLeft, DollarSign, TrendingUp, Clock, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useI18n } from "@/contexts/I18nContext";
 
 const ProviderWallet = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [wallet, setWallet] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [providerProfile, setProviderProfile] = useState<any>(null);
@@ -91,8 +93,8 @@ const ProviderWallet = () => {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-lg md:text-xl font-bold">Wallet</h1>
-              <p className="text-xs md:text-sm text-muted-foreground">Track your earnings</p>
+              <h1 className="text-base md:text-lg font-bold">{t.provider.wallet}</h1>
+              <p className="text-xs md:text-sm text-muted-foreground">{t.provider.trackEarnings}</p>
             </div>
           </div>
         </div>
@@ -103,7 +105,7 @@ const ProviderWallet = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Card className="border-0 shadow-sm bg-gradient-to-br from-primary/5 to-accent/5">
             <CardHeader className="pb-3">
-              <CardDescription>Total Earned</CardDescription>
+              <CardDescription className="text-xs">{t.provider.totalEarned}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-3">
@@ -117,7 +119,7 @@ const ProviderWallet = () => {
 
           <Card className="border-0 shadow-sm bg-gradient-to-br from-accent/5 to-primary/5">
             <CardHeader className="pb-3">
-              <CardDescription>Pending Payout</CardDescription>
+              <CardDescription className="text-xs">{t.provider.pendingPayout}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-3">
@@ -133,8 +135,8 @@ const ProviderWallet = () => {
         {/* Earnings History */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle className="text-lg">Earnings History</CardTitle>
-            <CardDescription>View all your transactions</CardDescription>
+            <CardTitle className="text-base">{t.provider.earningsHistory}</CardTitle>
+            <CardDescription className="text-xs">{t.provider.viewAllTransactions}</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs 
@@ -145,53 +147,53 @@ const ProviderWallet = () => {
                 cursor: "bg-background shadow-sm",
               }}
             >
-              <Tab key="all" title="All" />
-              <Tab key="pending" title="Pending" />
-              <Tab key="paid" title="Paid" />
+              <Tab key="all" title={t.provider.all} />
+              <Tab key="pending" title={t.provider.pending} />
+              <Tab key="paid" title={t.provider.paid} />
             </Tabs>
             
             <div className="space-y-3">
             {wallet.length === 0 ? (
                   <div className="py-12 text-center">
                     <DollarSign className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                    <p className="text-muted-foreground">No earnings yet</p>
+                    <p className="text-muted-foreground">{t.provider.noEarningsYet}</p>
                     <p className="text-sm text-muted-foreground mt-2">
-                      Complete jobs to start earning
+                      {t.provider.completeJobsToEarn}
                     </p>
                   </div>
                 ) : (
                   wallet.map((entry) => (
                     <div key={entry.id} className="flex items-start justify-between p-4 border rounded-lg">
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium mb-1">
+                        <div className="font-medium mb-1 text-sm">
                           {entry.booking?.package?.package_name || "Cleaning Service"}
                         </div>
-                        <div className="text-sm text-muted-foreground">
+                        <div className="text-xs text-muted-foreground">
                           {new Date(entry.created_at).toLocaleDateString()}
                         </div>
-                        <div className="flex flex-wrap items-center gap-3 mt-2 text-sm">
-                          <span>Base: €{Number(entry.base_amount).toFixed(2)}</span>
+                        <div className="flex flex-wrap items-center gap-2 mt-2 text-xs">
+                          <span>{t.provider.base}: €{Number(entry.base_amount).toFixed(2)}</span>
                           {entry.addon_amount > 0 && (
                             <span className="text-primary">
-                              +Add-ons: €{Number(entry.addon_amount).toFixed(2)}
+                              +{t.provider.addons}: €{Number(entry.addon_amount).toFixed(2)}
                             </span>
                           )}
                           {entry.overtime_amount > 0 && (
                             <span className="text-accent">
-                              +Overtime: €{Number(entry.overtime_amount).toFixed(2)}
+                              +{t.provider.overtime}: €{Number(entry.overtime_amount).toFixed(2)}
                             </span>
                           )}
                           <span className="text-muted-foreground">
-                            -Fee: €{Number(entry.platform_fee).toFixed(2)}
+                            -{t.provider.fee}: €{Number(entry.platform_fee).toFixed(2)}
                           </span>
                         </div>
                       </div>
                       <div className="text-right ml-4">
-                        <div className="text-lg font-semibold mb-2">
+                        <div className="text-base font-semibold mb-2">
                           €{Number(entry.payout_due).toFixed(2)}
                         </div>
                         <div 
-                          className={`badge badge-outline ${entry.status === 'paid' 
+                          className={`badge badge-outline text-[10px] ${entry.status === 'paid' 
                             ? 'bg-green-500/10 text-green-600 border-green-500/20' 
                             : 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20'
                           }`}

@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Star, User } from "lucide-react";
 import { toast } from "sonner";
+import { useI18n } from "@/contexts/I18nContext";
 
 const ProviderReviews = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [providerProfile, setProviderProfile] = useState<any>(null);
@@ -98,8 +100,8 @@ const ProviderReviews = () => {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-lg md:text-xl font-bold">Reviews</h1>
-              <p className="text-xs md:text-sm text-muted-foreground">Customer feedback</p>
+              <h1 className="text-base md:text-lg font-bold">{t.provider.reviews}</h1>
+              <p className="text-xs md:text-sm text-muted-foreground">{t.provider.customerFeedback}</p>
             </div>
           </div>
         </div>
@@ -115,7 +117,7 @@ const ProviderReviews = () => {
                 {renderStars(Math.round(averageRating))}
               </div>
               <div className="text-sm text-muted-foreground">
-                Based on {totalReviews} {totalReviews === 1 ? 'review' : 'reviews'}
+                {t.provider.basedOn} {totalReviews} {totalReviews === 1 ? t.provider.review : t.provider.reviews}
               </div>
             </div>
           </CardContent>
@@ -123,15 +125,15 @@ const ProviderReviews = () => {
 
         {/* Reviews List */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold">All Reviews</h2>
+          <h2 className="text-base font-semibold">{t.provider.allReviews}</h2>
           
           {reviews.length === 0 ? (
             <Card className="border-dashed">
               <CardContent className="py-12 text-center">
                 <Star className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                <p className="text-muted-foreground">No reviews yet</p>
+                <p className="text-muted-foreground">{t.provider.noReviewsYet}</p>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Complete jobs to receive customer reviews
+                  {t.provider.completeJobsForReviews}
                 </p>
               </CardContent>
             </Card>

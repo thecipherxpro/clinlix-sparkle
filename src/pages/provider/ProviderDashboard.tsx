@@ -9,8 +9,10 @@ import ActionCard from "@/components/ActionCard";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
+import { useI18n } from "@/contexts/I18nContext";
 const ProviderDashboard = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [profile, setProfile] = useState<any>(null);
   const [providerProfile, setProviderProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -120,7 +122,7 @@ const ProviderDashboard = () => {
 
             {/* Left Side - Main Stat */}
             <div className="flex flex-col justify-around h-full z-10 pl-[18px]">
-              <div className="text-base font-medium">Pending Jobs</div>
+              <div className="text-sm font-medium">{t.provider.pendingJobs}</div>
               <div className="text-[34pt] font-medium leading-[1.2]">{stats.pendingJobs}</div>
             </div>
 
@@ -134,7 +136,7 @@ const ProviderDashboard = () => {
                   hour12: false
                 })}
                 </div>
-                <div className="text-[15px]">
+                <div className="text-[13px]">
                   {new Date().toLocaleDateString('en-US', {
                   weekday: 'short',
                   month: '2-digit',
@@ -142,7 +144,7 @@ const ProviderDashboard = () => {
                 }).toUpperCase()}
                 </div>
               </div>
-              <div className="text-base font-medium">Dashboard</div>
+              <div className="text-sm font-medium">{t.provider.dashboard}</div>
             </div>
           </div>
 
@@ -151,48 +153,48 @@ const ProviderDashboard = () => {
             <button onClick={() => navigate("/provider/jobs")} className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
                          cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]">
               <span className="text-[14pt] font-bold text-white">{stats.pendingJobs}</span>
-              <span className="text-[8pt] font-medium text-white opacity-70">Available Jobs</span>
+              <span className="text-[7pt] font-medium text-white opacity-70">{t.provider.availableJobs}</span>
             </button>
             
             <button onClick={() => navigate("/provider/wallet")} className="flex flex-col items-center justify-center h-full w-full bg-[#a75265] shadow-[inset_0px_2px_5px_#974859] 
                          cursor-pointer transition-all duration-100 hover:scale-90 hover:rounded-[10px]">
               <span className="text-[14pt] font-bold text-white">€{stats.monthlyEarnings.toFixed(0)}</span>
-              <span className="text-[8pt] font-medium text-white opacity-70">Earned This Month</span>
+              <span className="text-[7pt] font-medium text-white opacity-70">{t.provider.earnedThisMonth}</span>
             </button>
           </div>
         </div>
 
         {/* Quick Actions */}
         <div className="mb-[clamp(20px,5vw,32px)]">
-          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
+          <h3 className="text-[clamp(16px,4vw,22px)] font-semibold mb-[clamp(12px,3vw,16px)]">{t.provider.quickActions}</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <JobCard
-              title="Jobs"
-              description="View all jobs"
+              title={t.provider.jobs}
+              description={t.provider.viewAllJobs}
               image="https://i.postimg.cc/LXSMYzdW/calnder24.png"
               heroColor="#e2e2e4"
               onClick={() => navigate("/provider/jobs")}
             />
 
             <JobCard
-              title="Schedule"
-              description="Manage availability"
+              title={t.provider.schedule}
+              description={t.provider.manageAvailability}
               image="https://i.postimg.cc/hjB2bst8/map.png"
               heroColor="#e2e2e4"
               onClick={() => navigate("/provider/schedule")}
             />
 
             <JobCard
-              title="Wallet"
-              description="View earnings"
+              title={t.provider.wallet}
+              description={t.provider.viewEarnings}
               image="https://i.postimg.cc/9MhLtbQp/walletss.png"
               heroColor="#e2e2e4"
               onClick={() => navigate("/provider/wallet")}
             />
 
             <JobCard
-              title="Profile"
-              description="Edit profile"
+              title={t.provider.profile}
+              description={t.provider.editProfile}
               image="https://i.postimg.cc/qRrdh8Vf/Profiles.png"
               heroColor="#e2e2e4"
               onClick={() => navigate("/provider/profile")}
