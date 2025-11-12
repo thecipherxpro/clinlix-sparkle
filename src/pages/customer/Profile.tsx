@@ -12,7 +12,7 @@ import { ArrowLeft, LogOut, Save, User, Settings, Shield, Phone, Mail } from "lu
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import { Avatar } from "@/components/base/avatar/avatar";
-import { useI18n } from "@/contexts/I18nContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 

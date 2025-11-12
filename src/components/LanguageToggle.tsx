@@ -1,9 +1,9 @@
-import { useI18n } from '@/contexts/I18nContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Languages } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const LanguageToggle = () => {
-  const { language, setLanguage } = useI18n();
+  const { language, setLanguage } = useLanguage();
 
   const handleToggle = async () => {
     const newLang = language === 'en' ? 'pt' : 'en';

@@ -1,13 +1,13 @@
-import { useI18n } from '@/contexts/I18nContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 
 export const LanguageSwitcher = () => {
-  const { language, setLanguage, t } = useI18n();
+  const { language, setLanguage, t } = useLanguage();
 
   const handleLanguageChange = async (newLang: 'en' | 'pt') => {
     await setLanguage(newLang);
-    toast.success(t.settings.changesSaved);
+    toast.success(t('settings.changesSaved'));
   };
 
   return (

@@ -12,10 +12,10 @@ import UnreviewedJobsModal from "@/components/UnreviewedJobsModal";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 import { StatusBadge } from "@/components/StatusBadge";
-import { useI18n } from "@/contexts/I18nContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t } = useLanguage();
   const [profile, setProfile] = useState<any>(null);
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

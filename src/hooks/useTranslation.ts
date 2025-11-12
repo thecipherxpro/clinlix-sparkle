@@ -1,2 +1,2 @@
-// Re-export useI18n as useTranslation for convenience
-export { useI18n as useTranslation } from '@/contexts/I18nContext';
+// Re-export useLanguage as useTranslation for convenience
+export { useLanguage as useTranslation } from '@/contexts/LanguageContext';
