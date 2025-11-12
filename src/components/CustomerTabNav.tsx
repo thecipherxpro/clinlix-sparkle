@@ -2,19 +2,19 @@ import { useState, ReactNode, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Home, Calendar, Sparkles, MapPin, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useI18n } from '@/contexts/I18nContext';
 
 const CustomerTabNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   
   const tabs = [
-    { title: t('dashboard.welcome'), icon: <Home />, path: '/customer/dashboard' },
-    { title: t('dashboard.bookCleaning'), icon: <Calendar />, path: '/customer/booking' },
-    { title: t('dashboard.myBookings'), icon: <Sparkles />, path: '/customer/my-bookings' },
-    { title: t('dashboard.myAddresses'), icon: <MapPin />, path: '/customer/my-addresses' },
-    { title: t('common.profile'), icon: <User />, path: '/customer/profile' },
+    { title: t.dashboard.welcome, icon: <Home />, path: '/customer/dashboard' },
+    { title: t.dashboard.bookCleaning, icon: <Calendar />, path: '/customer/booking' },
+    { title: t.dashboard.myBookings, icon: <Sparkles />, path: '/customer/my-bookings' },
+    { title: t.dashboard.myAddresses, icon: <MapPin />, path: '/customer/my-addresses' },
+    { title: t.common.profile, icon: <User />, path: '/customer/profile' },
   ];
   
   const [selected, setSelected] = useState(tabs[0]);

@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LanguageProvider } from "@/contexts/LanguageContext";
+import { I18nProvider } from "@/contexts/I18nContext";
 import SplashScreen from "./components/SplashScreen";
 import InstallPromptCard from "./components/InstallPromptCard";
 import Splash from "./pages/Splash";
@@ -41,7 +41,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <LanguageProvider>
+    <I18nProvider>
       <BrowserRouter>
         <TooltipProvider>
           <SplashScreen />
@@ -91,7 +91,7 @@ const App = () => (
         </Routes>
         </TooltipProvider>
       </BrowserRouter>
-    </LanguageProvider>
+    </I18nProvider>
   </QueryClientProvider>
 );
 

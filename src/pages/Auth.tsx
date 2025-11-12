@@ -11,11 +11,11 @@ import { toast } from "sonner";
 import { Shield, ArrowLeft, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa";
 import logoImage from "@/assets/logo-clinlix.png";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useI18n } from "@/contexts/I18nContext";
 type Role = "customer" | "provider";
 const Auth = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
   const [selectedRole, setSelectedRole] = useState<Role>("customer");

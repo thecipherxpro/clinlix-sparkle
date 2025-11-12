@@ -9,10 +9,10 @@ import ActionCard from "@/components/ActionCard";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useI18n } from "@/contexts/I18nContext";
 const ProviderDashboard = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const [profile, setProfile] = useState<any>(null);
   const [providerProfile, setProviderProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);

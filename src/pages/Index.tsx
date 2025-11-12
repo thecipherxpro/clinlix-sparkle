@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import cleaningLadyImage from "@/assets/cleaning-lady.png";
 import clinlixLogoText from "@/assets/clinlix-logo-text.png";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useI18n } from "@/contexts/I18nContext";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
