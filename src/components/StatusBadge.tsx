@@ -1,12 +1,4 @@
-const STATUS_LABELS = {
-  pending: "Pending",
-  confirmed: "Confirmed",
-  on_the_way: "On the Way",
-  arrived: "Arrived",
-  started: "In Progress",
-  completed: "Completed",
-  cancelled: "Cancelled"
-};
+import { useI18n } from "@/contexts/I18nContext";
 
 const STATUS_COLORS = {
   pending: "bg-black text-white",
@@ -18,14 +10,25 @@ const STATUS_COLORS = {
   cancelled: "bg-black text-white",
 } as const;
 
+const STATUS_MAP = {
+  pending: 'pending',
+  confirmed: 'confirmed',
+  on_the_way: 'onTheWay',
+  arrived: 'arrived',
+  started: 'started',
+  completed: 'completed',
+  cancelled: 'cancelled',
+} as const;
 
 interface StatusBadgeProps {
-  status: keyof typeof STATUS_LABELS;
+  status: keyof typeof STATUS_COLORS;
   className?: string;
 }
 
 export const StatusBadge = ({ status, className = "" }: StatusBadgeProps) => {
-  const label = STATUS_LABELS[status] || "Unknown";
+  const { t } = useI18n();
+  const statusKey = STATUS_MAP[status] as keyof typeof t.status;
+  const label = t.status[statusKey] || status;
   const bgColor = STATUS_COLORS[status] || "badge-ghost";
 
   return (

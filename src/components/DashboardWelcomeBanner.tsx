@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/contexts/I18nContext";
 interface DashboardWelcomeBannerProps {
   user: {
     name: string;
@@ -19,6 +20,7 @@ const DashboardWelcomeBanner = ({
   onSearchClick,
   className
 }: DashboardWelcomeBannerProps) => {
+  const { t } = useI18n();
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -126,13 +128,13 @@ const DashboardWelcomeBanner = ({
 
         {/* Role Badge */}
         <div className="badge badge-soft badge-accent mt-2 text-xs sm:text-sm uppercase tracking-wide font-semibold px-3 sm:px-4">
-          {user.role} Portal
+          {user.role} {t.ui.portal}
         </div>
 
         {/* Search Field */}
         {onSearchClick && <div className="w-full max-w-md mt-3 relative">
             <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <input type="text" placeholder="Find a provider" className="w-full pl-9 pr-3 py-2.5 sm:py-2 rounded-lg border bg-background 
+            <input type="text" placeholder={t.ui.findProvider} className="w-full pl-9 pr-3 py-2.5 sm:py-2 rounded-lg border bg-background 
                        focus:ring-2 focus:ring-primary focus:border-transparent 
                        outline-none transition-all text-sm min-h-[44px] touch-target cursor-pointer" onClick={onSearchClick} readOnly />
           </div>}

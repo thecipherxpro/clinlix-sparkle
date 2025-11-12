@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import ProviderCard from "@/components/ProviderCard";
 import { checkUserRole } from "@/lib/roleUtils";
+import { useI18n } from "@/contexts/I18nContext";
 const STEPS = [{
   id: 1,
   name: "Where",
@@ -39,6 +40,7 @@ const STEPS = [{
 }];
 const Booking = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -564,7 +566,7 @@ const Booking = () => {
                           <h3 className="font-medium">{addon.name_en}</h3>
                           <p className="text-sm text-muted-foreground">{addon.name_pt}</p>
                           <div className="badge badge-outline mt-2">
-                            {addon.type === 'flat' ? 'Fixed price' : 'Per room'}
+                            {addon.type === 'flat' ? t.ui.flatPrice : t.ui.perRoom}
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
@@ -641,7 +643,7 @@ const Booking = () => {
                   day: 'numeric'
                 })} at {selectedTime}
                   </p>
-                  {recurringService && <div className="badge badge-secondary mt-1">Recurring Service</div>}
+                  {recurringService && <div className="badge badge-secondary mt-1">{t.ui.recurringService}</div>}
                 </div>
 
                 <Separator />

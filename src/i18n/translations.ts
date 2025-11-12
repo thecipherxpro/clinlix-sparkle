@@ -414,6 +414,33 @@ interface TranslationStructure {
     serverError: string;
     updateFailed: string;
   };
+  status: {
+    pending: string;
+    confirmed: string;
+    onTheWay: string;
+    arrived: string;
+    started: string;
+    completed: string;
+    cancelled: string;
+  };
+  ui: {
+    portal: string;
+    findProvider: string;
+    total: string;
+    scheduleService: string;
+    yourLocations: string;
+    manage: string;
+    manageMethods: string;
+    updateInfo: string;
+    quickActions: string;
+    newBooking: string;
+    methods: string;
+    simpleSteps: string;
+    fixedRates: string;
+    flatPrice: string;
+    perRoom: string;
+    recurringService: string;
+  };
 }
 
 export type TranslationKeys = TranslationStructure;
@@ -832,6 +859,33 @@ export const translations: Record<Language, TranslationStructure> = {
       serverError: 'Server error. Please try again later.',
       updateFailed: 'Failed to update profile',
     },
+    status: {
+      pending: 'Pending',
+      confirmed: 'Confirmed',
+      onTheWay: 'On the Way',
+      arrived: 'Arrived',
+      started: 'In Progress',
+      completed: 'Completed',
+      cancelled: 'Cancelled',
+    },
+    ui: {
+      portal: 'Portal',
+      findProvider: 'Find a provider',
+      total: 'Total',
+      scheduleService: 'Schedule service',
+      yourLocations: 'Your locations',
+      manage: 'Manage',
+      manageMethods: 'Manage cards',
+      updateInfo: 'Update info',
+      quickActions: 'Quick Actions',
+      newBooking: 'New Booking',
+      methods: 'Methods',
+      simpleSteps: 'Simple Steps',
+      fixedRates: 'Fixed Rates',
+      flatPrice: 'Fixed price',
+      perRoom: 'Per room',
+      recurringService: 'Recurring Service',
+    },
   },
   pt: {
     app: {
@@ -1245,6 +1299,33 @@ export const translations: Record<Language, TranslationStructure> = {
       validationError: 'Verifique os seus dados',
       serverError: 'Erro do servidor. Tente novamente mais tarde.',
       updateFailed: 'Falha ao atualizar perfil',
+    },
+    status: {
+      pending: 'Pendente',
+      confirmed: 'Confirmado',
+      onTheWay: 'A Caminho',
+      arrived: 'Chegou',
+      started: 'Em Progresso',
+      completed: 'Concluído',
+      cancelled: 'Cancelado',
+    },
+    ui: {
+      portal: 'Portal',
+      findProvider: 'Encontrar um prestador',
+      total: 'Total',
+      scheduleService: 'Agendar serviço',
+      yourLocations: 'As suas localizações',
+      manage: 'Gerir',
+      manageMethods: 'Gerir cartões',
+      updateInfo: 'Atualizar informação',
+      quickActions: 'Ações Rápidas',
+      newBooking: 'Nova Reserva',
+      methods: 'Métodos',
+      simpleSteps: 'Passos Simples',
+      fixedRates: 'Tarifas Fixas',
+      flatPrice: 'Preço fixo',
+      perRoom: 'Por divisão',
+      recurringService: 'Serviço Recorrente',
     },
   },
 };

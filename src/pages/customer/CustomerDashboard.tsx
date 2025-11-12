@@ -84,15 +84,15 @@ const CustomerDashboard = () => {
       <main className="w-full max-w-[min(1280px,calc(100%-32px))] py-[clamp(16px,4vw,32px)] px-0 mx-[18px]">
         {/* Quick Actions - Auto-fit grid with responsive gaps */}
         <div className="mb-[clamp(20px,5vw,32px)]">
-          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">Quick Actions</h3>
+          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">{t.ui.quickActions}</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <JobCard title={t.dashboard.bookCleaning} description="Schedule service" value="New Booking" image="https://i.postimg.cc/LXSMYzdW/calnder24.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/booking")} />
+            <JobCard title={t.dashboard.bookCleaning} description={t.ui.scheduleService} value={t.ui.newBooking} image="https://i.postimg.cc/LXSMYzdW/calnder24.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/booking")} />
 
-            <JobCard title={t.dashboard.myAddresses} description="Your locations" value="Manage" image="https://i.postimg.cc/hjB2bst8/map.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/my-addresses")} />
+            <JobCard title={t.dashboard.myAddresses} description={t.ui.yourLocations} value={t.ui.manage} image="https://i.postimg.cc/hjB2bst8/map.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/my-addresses")} />
 
-            <JobCard title={t.dashboard.paymentMethods} description="Manage cards" value="Methods" image="https://i.postimg.cc/9MhLtbQp/walletss.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/payment-methods")} />
+            <JobCard title={t.dashboard.paymentMethods} description={t.ui.manageMethods} value={t.ui.methods} image="https://i.postimg.cc/9MhLtbQp/walletss.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/payment-methods")} />
 
-            <JobCard title={t.common.profile} description="Update info" value={t.common.settings} image="https://i.postimg.cc/qRrdh8Vf/Profiles.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/profile")} />
+            <JobCard title={t.common.profile} description={t.ui.updateInfo} value={t.common.settings} image="https://i.postimg.cc/qRrdh8Vf/Profiles.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/profile")} />
           </div>
         </div>
 
@@ -163,7 +163,7 @@ const CustomerDashboard = () => {
 
                         {/* Price */}
                         <div className="flex items-center justify-between pt-2 border-t">
-                          <span className="text-xs text-muted-foreground">Total</span>
+                          <span className="text-xs text-muted-foreground">{t.ui.total}</span>
                           <span className="font-bold text-slate-950">
                             {booking.customer_addresses?.currency === "EUR" ? "€" : "$"}
                             {booking.total_final || booking.total_estimate}
@@ -181,10 +181,10 @@ const CustomerDashboard = () => {
         {/* CTA Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(12px,3vw,16px)]">
           {/* How It Works CTA */}
-          <JobCard title={t.howItWorks.title} description={t.howItWorks.subtitle} value="8 Simple Steps" icon={<Search className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#f0f9ff" onClick={() => navigate("/customer/how-it-works")} />
+          <JobCard title={t.howItWorks.title} description={t.howItWorks.subtitle} value={`8 ${t.ui.simpleSteps}`} icon={<Search className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#f0f9ff" onClick={() => navigate("/customer/how-it-works")} />
 
           {/* Pricing Model CTA */}
-          <JobCard title={t.pricing.title} description={t.pricing.subtitle} value="Fixed Rates" icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef3c7" onClick={() => navigate("/customer/pricing")} />
+          <JobCard title={t.pricing.title} description={t.pricing.subtitle} value={t.ui.fixedRates} icon={<CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />} heroColor="#fef3c7" onClick={() => navigate("/customer/pricing")} />
         </div>
       </main>
 
