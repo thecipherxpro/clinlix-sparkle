@@ -13,6 +13,7 @@ import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useI18n } from "@/contexts/I18nContext";
+import { DashboardHeader } from "@/components/DashboardHeader";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
@@ -20,6 +21,8 @@ const CustomerDashboard = () => {
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showUnreviewedModal, setShowUnreviewedModal] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
   useEffect(() => {
     checkUser();
   }, []);
@@ -71,6 +74,13 @@ const CustomerDashboard = () => {
       </div>;
   }
   return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+      <DashboardHeader 
+        firstName={profile?.first_name || "User"}
+        lastName={profile?.last_name || ""}
+        notificationCount={notificationCount}
+        onNotificationClick={() => setShowNotifications(true)}
+      />
+      
       {/* Mobile-first header with auto-fit padding */}
       <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
         <DashboardWelcomeBanner user={{
@@ -188,9 +198,19 @@ const CustomerDashboard = () => {
         </div>
       </main>
 
-      {profile && showUnreviewedModal && <UnreviewedJobsModal userId={profile.id} onClose={() => setShowUnreviewedModal(false)} />}
+      {/* Notification Center */}
+      {showNotifications && (
+        <NotificationCenter 
+          onClose={() => setShowNotifications(false)}
+          onUnreadCountChange={setNotificationCount}
+        />
+      )}
 
+      {/* Notification Permission Prompt */}
       <NotificationPermissionPrompt />
+
+      {/* Unreviewed Jobs Modal */}
+      {profile && showUnreviewedModal && <UnreviewedJobsModal userId={profile.id} onClose={() => setShowUnreviewedModal(false)} />}
     </div>;
 };
 export default CustomerDashboard;
