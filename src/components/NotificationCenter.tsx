@@ -13,11 +13,16 @@ interface Notification {
   read_status: boolean;
   created_at: string;
 }
-export const NotificationCenter = () => {
+interface NotificationCenterProps {
+  onClose?: () => void;
+  onUnreadCountChange?: (count: number) => void;
+}
+
+export const NotificationCenter = ({ onClose, onUnreadCountChange }: NotificationCenterProps) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
     loadNotifications();
@@ -40,7 +45,9 @@ export const NotificationCenter = () => {
       }).limit(20);
       if (error) throw error;
       setNotifications(data as unknown as Notification[] || []);
-      setUnreadCount((data as unknown as Notification[])?.filter(n => !n.read_status).length || 0);
+      const count = (data as unknown as Notification[])?.filter(n => !n.read_status).length || 0;
+      setUnreadCount(count);
+      onUnreadCountChange?.(count);
     } catch (error) {
       console.error('Error loading notifications:', error);
     } finally {
@@ -59,7 +66,11 @@ export const NotificationCenter = () => {
         filter: `user_id=eq.${data.user.id}`
       }, payload => {
         setNotifications(prev => [payload.new as Notification, ...prev]);
-        setUnreadCount(prev => prev + 1);
+        setUnreadCount(prev => {
+          const newCount = prev + 1;
+          onUnreadCountChange?.(newCount);
+          return newCount;
+        });
       }).subscribe();
     });
   };
@@ -75,7 +86,11 @@ export const NotificationCenter = () => {
         ...n,
         read_status: true
       } : n));
-      setUnreadCount(prev => Math.max(0, prev - 1));
+      setUnreadCount(prev => {
+        const newCount = Math.max(0, prev - 1);
+        onUnreadCountChange?.(newCount);
+        return newCount;
+      });
     } catch (error) {
       console.error('Error marking notification as read:', error);
     }
@@ -84,7 +99,15 @@ export const NotificationCenter = () => {
     markAsRead(notification.id);
     if (notification.target_url) {
       setOpen(false);
+      onClose?.();
       navigate(notification.target_url);
+    }
+  };
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+    if (!newOpen) {
+      onClose?.();
     }
   };
   const formatDate = (dateString: string) => {
@@ -100,15 +123,7 @@ export const NotificationCenter = () => {
     if (diffDays < 7) return `${diffDays}d ago`;
     return date.toLocaleDateString();
   };
-  return <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative bg-violet-50 font-medium text-violet-800">
-          <Bell className="w-5 h-5" />
-          {unreadCount > 0 && <div className="badge badge-error absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
-              {unreadCount > 9 ? '9+' : unreadCount}
-            </div>}
-        </Button>
-      </SheetTrigger>
+  return <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent side="right" className="w-full sm:max-w-md">
         <SheetHeader>
           <SheetTitle>Notifications</SheetTitle>
