@@ -46,7 +46,7 @@ export const DashboardHeader = ({
             alt={`${firstName} ${lastName}`}
             fallback={`${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()}
             size="md"
-            className="ring-2 ring-border/50"
+            className="rounded-full ring-2 ring-border/50"
           />
         </div>
       </div>
