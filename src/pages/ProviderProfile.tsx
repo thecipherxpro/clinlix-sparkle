@@ -2,25 +2,27 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, MapPin, Car, Clock } from "lucide-react";
+import { ArrowLeft, MessageSquare, Phone, Clock, Star } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 const ProviderProfile = () => {
-  const {
-    providerId
-  } = useParams();
+  const { providerId } = useParams();
   const navigate = useNavigate();
   const [provider, setProvider] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [showAllSpecializations, setShowAllSpecializations] = useState(false);
+  const [activeTab, setActiveTab] = useState<"about" | "reviews">("about");
+
   useEffect(() => {
     fetchProviderData();
   }, [providerId]);
+
   const fetchProviderData = async () => {
     try {
-      const {
-        data: providerData
-      } = await supabase.from("provider_profiles").select("*").eq("id", providerId).single();
+      const { data: providerData } = await supabase
+        .from("provider_profiles")
+        .select("*")
+        .eq("id", providerId)
+        .single();
       setProvider(providerData);
     } catch (error) {
       console.error("Error:", error);
@@ -28,179 +30,208 @@ const ProviderProfile = () => {
       setLoading(false);
     }
   };
+
   const handleBookNow = () => {
     navigate("/customer/booking");
   };
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>;
+      </div>
+    );
   }
+
   if (!provider) {
-    return <div className="min-h-screen flex items-center justify-center">
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <p className="text-muted-foreground">Provider not found</p>
-      </div>;
+      </div>
+    );
   }
-  const displayedSpecializations = showAllSpecializations 
-    ? provider.skills 
-    : provider.skills?.slice(0, 3);
 
-  return <div className="min-h-screen bg-background pb-24">
-      {/* Header */}
-      <header className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 hover:bg-gray-100 rounded-full">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <h1 className="text-lg font-semibold">Provider Profile</h1>
-        </div>
-      </header>
+  const primarySkill = provider.skills?.[0] || "House Cleaning";
+  const experienceText = provider.experience_years 
+    ? `${provider.experience_years} years exp` 
+    : "5 years exp";
 
-      <main className="max-w-2xl mx-auto px-4 py-6 space-y-4">
-        {/* Profile Header */}
-        <div className="flex gap-4">
-          <Avatar className="h-16 w-16 rounded-xl">
+  return (
+    <div className="min-h-screen bg-background pb-24">
+      {/* Back Button */}
+      <div className="max-w-2xl mx-auto px-4 py-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="p-2 hover:bg-muted rounded-full transition-colors"
+        >
+          <ArrowLeft className="w-6 h-6 text-foreground" />
+        </button>
+      </div>
+
+      <main className="max-w-2xl mx-auto px-4">
+        {/* Avatar Section */}
+        <div className="flex flex-col items-center mb-6">
+          <Avatar className="h-32 w-32 rounded-full mb-4">
             <AvatarImage src={provider.photo_url} alt={provider.full_name} />
-            <AvatarFallback className="rounded-xl bg-gray-200 text-gray-600 text-lg font-semibold">
+            <AvatarFallback className="bg-muted text-muted-foreground text-3xl font-semibold">
               {provider.full_name?.split(' ').map((n: string) => n[0]).join('') || 'P'}
             </AvatarFallback>
           </Avatar>
-          <div className="flex-1">
-            <h2 className="text-xl font-bold text-gray-900">{provider.full_name}</h2>
-            <p className="text-sm text-gray-500">License #{provider.id?.slice(0, 6) || '123456'}</p>
-            <div className="flex gap-2 mt-2">
-              {provider.verified && (
-                <span className="px-3 py-1 bg-orange-500 text-white text-xs font-medium rounded-md">
-                  Verified
-                </span>
-              )}
-              {provider.skills && provider.skills[0] && (
-                <span className="px-3 py-1 bg-gray-200 text-gray-700 text-xs font-medium rounded-md">
-                  {provider.skills[0]}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
 
-        {/* Availability & Experience */}
-        <div className="grid grid-cols-2 gap-4">
-          <Card className="bg-gray-50 border-gray-200">
-            <CardContent className="p-4">
-              <p className="text-sm font-semibold text-gray-900 mb-1">Available Today</p>
-              <p className="text-sm text-gray-600 mb-2">9:00 AM - 5:00 PM</p>
-              <span className="inline-block px-3 py-1 bg-teal-500 text-white text-xs font-medium rounded-md">
-                ALL TIMING
-              </span>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-50 border-gray-200">
-            <CardContent className="p-4">
-              <p className="text-sm font-semibold text-gray-900 mb-1">Experience</p>
-              <p className="text-2xl font-bold text-gray-900">{provider.experience_years || 1} yrs</p>
-              <p className="text-sm text-gray-600">Professional</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Map Section */}
-        <Card className="bg-gradient-to-br from-teal-50 to-blue-50 border-gray-200 overflow-hidden">
-          <CardContent className="p-0 h-32 flex items-center justify-center relative">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <MapPin className="w-16 h-16 text-teal-300/50" />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Service Area */}
-        <Card className="border-gray-200">
-          <CardContent className="p-4">
-            <div className="flex gap-3">
-              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <MapPin className="w-5 h-5 text-gray-600" />
+          {/* Name with Verified Badge */}
+          <div className="flex items-center gap-2 mb-1">
+            <h1 className="text-2xl font-bold text-foreground">{provider.full_name}</h1>
+            {provider.verified && (
+              <div className="flex items-center justify-center w-6 h-6 bg-primary rounded-full">
+                <svg
+                  className="w-4 h-4 text-primary-foreground"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
               </div>
-              <div className="flex-1">
-                <h3 className="text-base font-bold text-gray-900 mb-1">
-                  {provider.service_areas?.[0] || 'Greater Toronto Area'}
-                </h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {provider.service_areas?.join(', ') || 'North York, Scarborough, Brampton, Vaughan, Toronto, Mississauga, Richmond Hill, Markham'}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Commute */}
-        <div>
-          <h3 className="text-base font-bold text-gray-900 mb-3">Commute</h3>
-          <Card className="bg-gray-50 border-gray-200">
-            <CardContent className="p-4">
-              <div className="flex gap-3">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Car className="w-5 h-5 text-blue-600" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-gray-900">Car</h4>
-                  <p className="text-sm text-gray-600">Owns a car</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Specializations */}
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-base font-bold text-gray-900">Specializations</h3>
-            {provider.skills && provider.skills.length > 3 && (
-              <button 
-                onClick={() => setShowAllSpecializations(!showAllSpecializations)}
-                className="text-sm text-blue-600 font-medium"
-              >
-                {showAllSpecializations ? 'SHOW LESS' : 'SEE ALL'}
-              </button>
             )}
           </div>
-          <Card className="border-gray-200">
-            <CardContent className="p-4">
-              <ul className="space-y-2">
-                {displayedSpecializations?.map((skill: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
-                    <span className="text-red-500 mt-1">•</span>
-                    <span>{skill}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+
+          {/* Subtitle */}
+          <p className="text-sm text-muted-foreground mb-2">
+            {primarySkill} • {experienceText}
+          </p>
+
+          {/* Rating */}
+          <div className="flex items-center gap-1 mb-2">
+            <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+            <span className="text-foreground font-semibold">
+              {provider.rating_avg?.toFixed(1) || "4.9"}
+            </span>
+            <span className="text-muted-foreground text-sm">
+              ({provider.rating_count || 156} reviews)
+            </span>
+          </div>
+
+          {/* Availability Status */}
+          <div className="flex items-center gap-2 text-sm text-primary mb-4">
+            <Clock className="w-4 h-4" />
+            <span>Available today</span>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 mb-6">
+            <button className="p-3 border border-border rounded-full hover:bg-muted transition-colors">
+              <MessageSquare className="w-5 h-5 text-foreground" />
+            </button>
+            <button className="p-3 border border-border rounded-full hover:bg-muted transition-colors">
+              <Phone className="w-5 h-5 text-foreground" />
+            </button>
+          </div>
         </div>
 
-        {/* Bio */}
-        {provider.bio && (
-          <div>
-            <h3 className="text-base font-bold text-gray-900 mb-3">About</h3>
-            <Card className="border-gray-200">
-              <CardContent className="p-4">
-                <p className="text-sm text-gray-600 leading-relaxed">{provider.bio}</p>
-              </CardContent>
-            </Card>
+        {/* Tabs */}
+        <div className="flex border-b border-border mb-6">
+          <button
+            onClick={() => setActiveTab("about")}
+            className={`flex-1 py-3 text-sm font-medium transition-colors relative ${
+              activeTab === "about"
+                ? "text-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            About
+            {activeTab === "about" && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab("reviews")}
+            className={`flex-1 py-3 text-sm font-medium transition-colors relative ${
+              activeTab === "reviews"
+                ? "text-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Reviews
+            {activeTab === "reviews" && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+            )}
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === "about" ? (
+          <div className="space-y-6">
+            {/* Bio */}
+            {provider.bio && (
+              <p className="text-foreground text-sm leading-relaxed">
+                {provider.bio}
+              </p>
+            )}
+
+            {/* Services Offered */}
+            {provider.skills && provider.skills.length > 0 && (
+              <div>
+                <h3 className="font-bold text-foreground mb-3">Services Offered</h3>
+                <ul className="space-y-2">
+                  {provider.skills.map((skill: string, index: number) => (
+                    <li key={index} className="flex items-start gap-2 text-sm text-foreground">
+                      <span className="text-muted-foreground mt-1">•</span>
+                      <span>{skill}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Service Areas */}
+            {provider.service_areas && provider.service_areas.length > 0 && (
+              <div>
+                <h3 className="font-bold text-foreground mb-3">Service Areas</h3>
+                <div className="flex flex-wrap gap-2">
+                  {provider.service_areas.map((area: string, index: number) => (
+                    <Badge key={index} variant="secondary">
+                      {area}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Languages */}
+            {provider.languages && provider.languages.length > 0 && (
+              <div>
+                <h3 className="font-bold text-foreground mb-3">Languages</h3>
+                <div className="flex flex-wrap gap-2">
+                  {provider.languages.map((language: string, index: number) => (
+                    <Badge key={index} variant="outline">
+                      {language}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="text-center py-8 text-muted-foreground">
+            <p>Reviews will be displayed here</p>
           </div>
         )}
       </main>
 
-      {/* Sticky Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50">
-        <div className="max-w-2xl mx-auto px-4 py-3">
-          <Button 
-            className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg"
+      {/* Sticky CTA Button */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4 shadow-lg">
+        <div className="max-w-2xl mx-auto">
+          <Button
             onClick={handleBookNow}
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-6 rounded-xl text-base"
           >
             Book Now
           </Button>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default ProviderProfile;
