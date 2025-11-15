@@ -132,53 +132,53 @@ const HowItWorks = () => {
 
         {/* Step Card */}
         <AnimatePresence mode="wait">
-          <motion.div key={currentStep} initial={{
-          opacity: 0,
-          x: 50
-        }} animate={{
-          opacity: 1,
-          x: 0
-        }} exit={{
-          opacity: 0,
-          x: -50
-        }} transition={{
-          duration: 0.4
-        }}>
-            <Card className="border-0 shadow-lg sm:shadow-2xl overflow-hidden">
-              {/* Image Section */}
-              <div className="relative h-48 sm:h-64 lg:h-80 overflow-hidden">
-                <img src={step.image} alt={step.title} className="w-full h-full object-cover" />
-                <div className={`absolute inset-0 bg-gradient-to-t ${step.color} opacity-20`} />
+          <motion.div
+            key={currentStep}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Modern Image Background Card */}
+            <div className="relative overflow-hidden rounded-2xl shadow-2xl h-[600px] group">
+              {/* Background Image with Overlay */}
+              <div className="absolute inset-0">
+                <img 
+                  src={step.image} 
+                  alt={step.title} 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                />
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
               </div>
 
               {/* Content Section */}
-              <div className="p-4 sm:p-6 lg:p-8">
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4">
-                  Step {step.id}: {step.title}
-                </h2>
-                <p className="text-muted-foreground text-sm sm:text-base lg:text-lg mb-4 sm:mb-6">
+              <div className="relative h-full flex flex-col justify-end p-6 sm:p-8 text-white">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={cn(
+                    "w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg bg-gradient-to-br shadow-lg",
+                    step.color
+                  )}>
+                    {step.id}
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl font-bold">{step.title}</h2>
+                </div>
+                
+                <p className="text-base sm:text-lg text-white/90 mb-6 max-w-2xl">
                   {step.description}
                 </p>
-                
+
                 {/* Details List */}
-                <ul className="space-y-2 sm:space-y-3">
-                  {step.details.map((detail, idx) => <motion.li key={idx} initial={{
-                  opacity: 0,
-                  x: -20
-                }} animate={{
-                  opacity: 1,
-                  x: 0
-                }} transition={{
-                  delay: idx * 0.1 + 0.2
-                }} className="flex items-start gap-2 sm:gap-3">
-                      <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center flex-shrink-0 mt-0.5`}>
-                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-                      </div>
-                      <span className="text-xs sm:text-sm lg:text-base leading-relaxed">{detail}</span>
-                    </motion.li>)}
-                </ul>
+                <div className="space-y-3 backdrop-blur-sm bg-black/20 rounded-xl p-4">
+                  {step.details.map((detail, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/95">{detail}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </Card>
+            </div>
           </motion.div>
         </AnimatePresence>
 

@@ -205,80 +205,69 @@ const Pricing = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {packages.map((pkg) => (
-              <Card key={pkg.id} className="border-2 hover:border-primary transition-all hover:shadow-lg overflow-hidden">
-                <div className={`h-3 ${
-                  pkg.bedroom_count === 0 ? 'bg-purple-500' : 
-                  pkg.bedroom_count === 1 ? 'bg-blue-500' : 
-                  pkg.bedroom_count === 2 ? 'bg-green-500' : 
-                  pkg.bedroom_count === 3 ? 'bg-orange-500' : 'bg-red-500'
-                }`} />
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <Home className={`w-6 h-6 sm:w-8 sm:h-8 ${
-                        pkg.bedroom_count === 0 ? 'text-purple-500' : 
-                        pkg.bedroom_count === 1 ? 'text-blue-500' : 
-                        pkg.bedroom_count === 2 ? 'text-green-500' : 
-                        pkg.bedroom_count === 3 ? 'text-orange-500' : 'text-red-500'
-                      }`} />
-                      <div>
-                        <CardTitle className="text-lg sm:text-xl">{getPackageName(pkg)}</CardTitle>
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                          {pkg.time_included}
-                        </span>
-                      </div>
+              <div key={pkg.id} className="relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group h-[420px]">
+                {/* Modern gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-secondary/20" />
+                
+                {/* Decorative elements */}
+                <div className="absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-secondary/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+                
+                {/* Content */}
+                <div className="relative h-full flex flex-col p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg">
+                      <Home className="h-6 w-6 text-primary-foreground" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-foreground">{getPackageName(pkg)}</h3>
+                      <p className="text-sm text-muted-foreground flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {pkg.time_included} {t.minutes}
+                      </p>
                     </div>
                   </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Pricing */}
-                  <div className="space-y-3 bg-secondary/20 rounded-lg p-3 sm:p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-primary" />
-                        <span className="text-xs sm:text-sm text-muted-foreground">{t.oneTime}</span>
-                      </div>
-                      <span className="text-xl sm:text-2xl font-bold text-primary flex items-center">
-                        <CurrencyIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                        {pkg.one_time_price}
-                      </span>
+                  
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    <div className="bg-card/60 backdrop-blur-sm rounded-xl p-4 border border-border/50">
+                      <p className="text-xs text-muted-foreground mb-1">{t.oneTime}</p>
+                      <p className="text-2xl font-bold flex items-center gap-1">
+                        <CurrencyIcon className="h-5 w-5" />
+                        {pkg.one_time_price.toFixed(2)}
+                      </p>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-green-600" />
-                        <span className="text-xs sm:text-sm text-muted-foreground">{t.recurring}</span>
-                      </div>
-                      <span className="text-xl sm:text-2xl font-bold text-green-600 flex items-center">
-                        <CurrencyIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                        {pkg.recurring_price}
-                      </span>
+                    
+                    <div className="bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur-sm rounded-xl p-4 border border-primary/20">
+                      <p className="text-xs text-muted-foreground mb-1">{t.recurring}</p>
+                      <p className="text-2xl font-bold flex items-center gap-1 text-primary">
+                        <CurrencyIcon className="h-5 w-5" />
+                        {pkg.recurring_price.toFixed(2)}
+                      </p>
                     </div>
                   </div>
 
-                  {/* Areas Included */}
-                  <div className="pt-3 border-t">
-                    <p className="text-xs font-semibold mb-3 uppercase text-muted-foreground flex items-center gap-2">
-                      <Bath className="w-4 h-4" />
+                  <div className="flex-1 bg-card/40 backdrop-blur-sm rounded-xl p-4 border border-border/50 mb-4">
+                    <p className="font-semibold mb-3 flex items-center gap-2 text-foreground">
+                      <Sparkles className="h-4 w-4 text-primary" />
                       {t.areasIncluded}
                     </p>
-                    <ul className="space-y-2">
-                      {getTranslatedAreas(pkg.areas_included).map((area: string, idx: number) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm">
-                          <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                          <span>{area}</span>
-                        </li>
+                    <div className="flex flex-wrap gap-2">
+                      {getTranslatedAreas(pkg.areas_included).map((area, index) => (
+                        <span key={index} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium border border-primary/20">
+                          {area}
+                        </span>
                       ))}
-                    </ul>
+                    </div>
                   </div>
 
                   <Button 
-                    className="w-full mt-4"
-                    onClick={() => navigate('/customer/booking')}
+                    onClick={() => navigate('/customer/booking')} 
+                    className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg"
                   >
                     {t.bookNow}
                   </Button>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -294,24 +283,30 @@ const Pricing = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {addons.map((addon) => (
-              <Card key={addon.id} className="border hover:border-primary/50 transition-all hover:shadow-md">
-                <CardContent className="p-3 sm:p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                      </div>
-                      <h3 className="font-semibold text-sm sm:text-base">
-                        {language === "pt" ? addon.name_pt : addon.name_en}
-                      </h3>
+              <div key={addon.id} className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group h-[160px]">
+                {/* Background gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-accent/30 via-background to-muted/30" />
+                
+                {/* Decorative blur */}
+                <div className="absolute -top-10 -right-10 w-24 h-24 bg-accent/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+                
+                {/* Content */}
+                <div className="relative h-full flex flex-col justify-between p-5">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent/60 flex items-center justify-center shadow-md flex-shrink-0">
+                      <Plus className="h-5 w-5 text-accent-foreground" />
                     </div>
-                    <span className="text-lg sm:text-xl font-bold text-primary flex items-center">
-                      <CurrencyIcon className="w-4 h-4" />
-                      {addon.price}
-                    </span>
+                    <h3 className="text-lg font-bold text-foreground leading-tight">
+                      {language === "pt" ? addon.name_pt : addon.name_en}
+                    </h3>
                   </div>
-                </CardContent>
-              </Card>
+                  
+                  <div className="bg-card/60 backdrop-blur-sm rounded-lg p-3 border border-border/50 inline-flex items-center gap-2 self-start">
+                    <CurrencyIcon className="h-5 w-5 text-primary" />
+                    <span className="text-2xl font-bold text-primary">{addon.price.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
