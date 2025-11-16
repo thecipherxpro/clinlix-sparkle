@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Settings, LogOut, Key, CheckCircle } from "lucide-react";
+import { Settings, LogOut, Key, CheckCircle, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/drawer";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import NotificationPreferences from "@/components/NotificationPreferences";
 
 interface SettingsDrawerProps {
   role: 'customer' | 'provider';
@@ -259,37 +260,19 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
                 </Card>
               )}
 
-              {/* Notifications */}
-              <Card>
+              {/* Notifications - Enhanced */}
+              <Card className="border-primary/20">
                 <CardHeader>
-                  <CardTitle>Notifications</CardTitle>
-                  <CardDescription>Manage how you receive updates</CardDescription>
+                  <div className="flex items-center gap-2">
+                    <Bell className="w-5 h-5 text-primary" />
+                    <CardTitle>Notifications</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Control all your notification preferences
+                  </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label>Email Notifications</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Receive {role === 'provider' ? 'job' : 'booking'} updates via email
-                      </p>
-                    </div>
-                  <Switch
-                    checked={profile?.notifications_enabled ?? true}
-                    onCheckedChange={(checked) => updateSetting('notifications_enabled', checked)}
-                  />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label>SMS Notifications</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Receive {role === 'provider' ? 'job' : 'booking'} updates via SMS
-                      </p>
-                    </div>
-                  <Switch
-                    checked={profile?.sms_notifications ?? true}
-                    onCheckedChange={(checked) => updateSetting('sms_notifications', checked)}
-                  />
-                  </div>
+                <CardContent>
+                  <NotificationPreferences role={role} />
                 </CardContent>
               </Card>
 
