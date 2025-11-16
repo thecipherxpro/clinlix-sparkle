@@ -19,8 +19,9 @@ import { BookingCardSkeletonList } from "@/components/skeletons/BookingCardSkele
 
 // Import dashboard background images
 import bookCleaningBg from "@/assets/dashboard/book-cleaning-bg.jpg";
+import bookingsBg from "@/assets/dashboard/bookings-bg.jpg";
+import providersBg from "@/assets/dashboard/providers-bg.jpg";
 import addressesBg from "@/assets/dashboard/addresses-bg.jpg";
-import paymentBg from "@/assets/dashboard/payment-bg.jpg";
 import profileBg from "@/assets/dashboard/profile-bg.jpg";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
@@ -149,7 +150,7 @@ const CustomerDashboard = () => {
               title: t.dashboard.myBookings,
               description: upcomingBookings.length > 0 ? `${upcomingBookings.length} upcoming` : t.dashboard.noBookings,
               onClick: () => navigate("/customer/my-bookings"),
-              bgImage: bookCleaningBg,
+              bgImage: bookingsBg,
               gradientOverlay: "from-emerald-500/90 to-emerald-600/80",
               badge: upcomingBookings.length > 0 ? upcomingBookings.length : null,
               badgeColor: "bg-white text-emerald-600"
@@ -158,7 +159,7 @@ const CustomerDashboard = () => {
               title: t.dashboard.findProviders,
               description: "Browse cleaners",
               onClick: () => navigate("/customer/providers"),
-              bgImage: bookCleaningBg,
+              bgImage: providersBg,
               gradientOverlay: "from-blue-500/90 to-blue-600/80",
               badge: null,
               badgeColor: ""
