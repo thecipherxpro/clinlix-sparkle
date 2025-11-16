@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import AvatarDisplay from "@/components/AvatarDisplay";
 import { ChatDrawer } from "@/components/chat/ChatDrawer";
+import { JobCardSkeletonList } from "@/components/skeletons/JobCardSkeleton";
 
 interface CompletedJob {
   id: string;
@@ -90,14 +91,8 @@ const CompletedJobsList = () => {
 
   if (loading) {
     return (
-      <div className="p-6 space-y-4">
-        {[1, 2].map((i) => (
-          <Card key={i} className="animate-pulse">
-            <CardContent className="p-6">
-              <div className="h-20 bg-muted rounded"></div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="p-6">
+        <JobCardSkeletonList count={2} />
       </div>
     );
   }

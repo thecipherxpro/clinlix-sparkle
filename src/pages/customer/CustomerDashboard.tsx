@@ -14,6 +14,8 @@ import { NotificationPermissionPrompt } from "@/components/NotificationPermissio
 import { StatusBadge } from "@/components/StatusBadge";
 import { useI18n } from "@/contexts/I18nContext";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { DashboardStatsSkeleton, DashboardCardSkeleton } from "@/components/skeletons/DashboardSkeleton";
+import { BookingCardSkeletonList } from "@/components/skeletons/BookingCardSkeleton";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
@@ -69,9 +71,16 @@ const CustomerDashboard = () => {
     }
   };
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+        <div className="w-full px-[clamp(16px,4vw,32px)] pt-[clamp(16px,4vw,24px)]">
+          <div className="space-y-6">
+            <DashboardStatsSkeleton />
+            <BookingCardSkeletonList count={3} />
+          </div>
+        </div>
+      </div>
+    );
   }
   return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
       <DashboardHeader 

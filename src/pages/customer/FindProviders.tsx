@@ -13,6 +13,7 @@ import { SwipeableProviderCard } from "@/components/provider/SwipeableProviderCa
 import { FilterChips } from "@/components/provider/FilterChips";
 import { EmptyProvidersState } from "@/components/provider/EmptyProvidersState";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ProviderCardSkeletonList } from "@/components/skeletons/ProviderCardSkeleton";
 import { useI18n } from "@/contexts/I18nContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -184,19 +185,8 @@ const FindProviders = () => {
             </div>
           </div>
         </header>
-        <main className="mobile-container py-6 space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="border-0 shadow-sm rounded-xl p-4 bg-card">
-              <div className="flex gap-4">
-                <Skeleton className="w-16 h-16 rounded-full" />
-                <div className="flex-1 space-y-2">
-                  <Skeleton className="h-5 w-32" />
-                  <Skeleton className="h-4 w-48" />
-                  <Skeleton className="h-4 w-full" />
-                </div>
-              </div>
-            </div>
-          ))}
+        <main className="mobile-container py-6">
+          <ProviderCardSkeletonList count={3} />
         </main>
       </div>
     );

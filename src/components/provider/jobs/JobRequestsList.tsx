@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import AvatarDisplay from "@/components/AvatarDisplay";
 import { QuickAcceptRejectDialog } from "@/components/provider/QuickAcceptRejectDialog";
+import { JobCardSkeletonList } from "@/components/skeletons/JobCardSkeleton";
 
 interface JobRequest {
   id: string;
@@ -129,14 +130,8 @@ const JobRequestsList = () => {
 
   if (loading) {
     return (
-      <div className="p-6 space-y-4">
-        {[1, 2, 3].map((i) => (
-          <Card key={i} className="animate-pulse">
-            <CardContent className="p-6">
-              <div className="h-20 bg-muted rounded"></div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="p-6">
+        <JobCardSkeletonList count={3} />
       </div>
     );
   }
