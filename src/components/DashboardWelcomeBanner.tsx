@@ -92,7 +92,7 @@ const DashboardWelcomeBanner = ({
 
       {/* Notification Bell - Top Right */}
       <div className="absolute top-4 right-4 z-10">
-        <NotificationCenter />
+        <NotificationCenter onUnreadCountChange={(count) => console.log('Unread:', count)} />
       </div>
 
       {/* Avatar Overlapping Pattern - Centered */}
