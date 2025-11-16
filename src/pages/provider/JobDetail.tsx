@@ -39,6 +39,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import AvatarDisplay from "@/components/AvatarDisplay";
+import { ChatDrawer } from "@/components/chat/ChatDrawer";
+import { MessageCircle } from "lucide-react";
 
 interface JobDetail {
   id: string;
@@ -90,6 +92,7 @@ const JobDetail = () => {
   const [loading, setLoading] = useState(true);
   const [showDeclineDialog, setShowDeclineDialog] = useState(false);
   const [showAcceptDialog, setShowAcceptDialog] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -422,6 +425,15 @@ const JobDetail = () => {
                         </Button>
                       </a>
                     )}
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1 min-w-[120px]"
+                      onClick={() => setChatOpen(true)}
+                    >
+                      <MessageCircle className="h-3.5 w-3.5 mr-1.5" />
+                      <span className="text-xs">Message</span>
+                    </Button>
                     {job.profiles?.email && (
                       <a href={`mailto:${job.profiles.email}`} className="flex-1 min-w-[120px]">
                         <Button variant="outline" size="sm" className="w-full">
@@ -793,6 +805,13 @@ const JobDetail = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ChatDrawer
+        open={chatOpen}
+        onClose={() => setChatOpen(false)}
+        bookingId={job.id}
+        otherPartyName={`${job.profiles.first_name} ${job.profiles.last_name}`}
+      />
     </div>
   );
 };
