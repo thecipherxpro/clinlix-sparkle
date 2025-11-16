@@ -16,6 +16,12 @@ import { useI18n } from "@/contexts/I18nContext";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { DashboardStatsSkeleton, DashboardCardSkeleton } from "@/components/skeletons/DashboardSkeleton";
 import { BookingCardSkeletonList } from "@/components/skeletons/BookingCardSkeleton";
+
+// Import dashboard background images
+import bookCleaningBg from "@/assets/dashboard/book-cleaning-bg.jpg";
+import addressesBg from "@/assets/dashboard/addresses-bg.jpg";
+import paymentBg from "@/assets/dashboard/payment-bg.jpg";
+import profileBg from "@/assets/dashboard/profile-bg.jpg";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
@@ -107,27 +113,34 @@ const CustomerDashboard = () => {
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">{t.ui.quickActions}</h3>
           
           {/* Hero Quick Action Card */}
-          <Card 
-            className="bg-gradient-to-br from-primary to-primary/80 cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border-primary/30"
+          <div 
+            className="relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group shadow-lg"
             onClick={() => navigate("/customer/booking")}
           >
-            <CardContent className="p-6 md:p-8">
+            <div 
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${bookCleaningBg})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/60" />
+            <div className="relative p-6 md:p-8">
               <div className="flex items-center justify-between">
                 <div className="space-y-3 flex-1">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-8 h-8 text-primary-foreground" />
-                    <h3 className="text-xl md:text-2xl font-bold text-primary-foreground">{t.dashboard.bookCleaning}</h3>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
+                      <Calendar className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-bold text-white">{t.dashboard.bookCleaning}</h3>
                   </div>
-                  <p className="text-primary-foreground/90 text-sm md:text-base">
+                  <p className="text-white/90 text-sm md:text-base font-medium">
                     {t.ui.scheduleService}
                   </p>
                 </div>
-                <Button variant="secondary" size="lg" className="hidden md:flex">
+                <Button variant="secondary" size="lg" className="hidden md:flex shadow-lg">
                   Book Now
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Secondary Actions Grid - 2x2 */}
           <div className="grid grid-cols-2 gap-4">
@@ -136,15 +149,17 @@ const CustomerDashboard = () => {
               title: t.dashboard.myBookings,
               description: upcomingBookings.length > 0 ? `${upcomingBookings.length} upcoming` : t.dashboard.noBookings,
               onClick: () => navigate("/customer/my-bookings"),
-              color: "from-secondary/10 to-secondary/20 border-secondary/30",
+              bgImage: bookCleaningBg,
+              gradientOverlay: "from-emerald-500/90 to-emerald-600/80",
               badge: upcomingBookings.length > 0 ? upcomingBookings.length : null,
-              badgeColor: "bg-secondary text-secondary-foreground"
+              badgeColor: "bg-white text-emerald-600"
             }, {
               icon: Search,
               title: t.dashboard.findProviders,
               description: "Browse cleaners",
               onClick: () => navigate("/customer/providers"),
-              color: "from-accent/10 to-accent/20 border-accent/30",
+              bgImage: bookCleaningBg,
+              gradientOverlay: "from-blue-500/90 to-blue-600/80",
               badge: null,
               badgeColor: ""
             }, {
@@ -152,7 +167,8 @@ const CustomerDashboard = () => {
               title: t.dashboard.myAddresses,
               description: t.ui.yourLocations,
               onClick: () => navigate("/customer/my-addresses"),
-              color: "from-muted/50 to-muted border-border",
+              bgImage: addressesBg,
+              gradientOverlay: "from-purple-500/90 to-purple-600/80",
               badge: null,
               badgeColor: ""
             }, {
@@ -160,32 +176,42 @@ const CustomerDashboard = () => {
               title: t.common.profile,
               description: t.ui.updateInfo,
               onClick: () => navigate("/customer/profile"),
-              color: "from-muted/50 to-muted border-border",
+              bgImage: profileBg,
+              gradientOverlay: "from-orange-500/90 to-pink-600/80",
               badge: !profile?.phone ? "!" : null,
-              badgeColor: "bg-destructive text-destructive-foreground"
+              badgeColor: "bg-white text-orange-600"
             }].map((action, index) => {
               const Icon = action.icon;
               return (
-                <Card 
+                <div 
                   key={index} 
-                  className={`bg-gradient-to-br ${action.color} cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 relative`} 
+                  className="relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 shadow-md group"
                   onClick={action.onClick}
                 >
-                  <CardContent className="p-4 md:p-6 space-y-3">
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
+                    style={{ backgroundImage: `url(${action.bgImage})` }}
+                  />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${action.gradientOverlay}`} />
+                  <div className="relative p-4 md:p-6 space-y-3 min-h-[160px] flex flex-col">
                     <div className="flex items-start justify-between">
-                      <Icon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+                      <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
+                        <Icon className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                      </div>
                       {action.badge && (
-                        <span className={`${action.badgeColor} text-xs font-bold rounded-full px-2 py-1 min-w-[24px] text-center`}>
+                        <span className={`${action.badgeColor} text-xs font-bold rounded-full px-2 py-1 min-w-[24px] text-center shadow-sm`}>
                           {action.badge}
                         </span>
                       )}
                     </div>
-                    <h3 className="text-sm md:text-base font-semibold text-foreground">{action.title}</h3>
-                    <p className="text-xs text-muted-foreground leading-snug line-clamp-2">
-                      {action.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                    <div className="flex-1 flex flex-col justify-end">
+                      <h3 className="text-sm md:text-base font-bold text-white mb-1">{action.title}</h3>
+                      <p className="text-xs text-white/90 leading-snug line-clamp-2">
+                        {action.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </div>
