@@ -11,6 +11,8 @@ import { NotificationCenter } from "@/components/NotificationCenter";
 import { NotificationPermissionPrompt } from "@/components/NotificationPermissionPrompt";
 import { useI18n } from "@/contexts/I18nContext";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { DashboardStatsSkeleton, DashboardCardSkeleton, DashboardActivitySkeleton } from "@/components/skeletons/DashboardSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 const ProviderDashboard = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
@@ -90,9 +92,20 @@ const ProviderDashboard = () => {
     }
   };
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
+        <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
+          <div className="mobile-container py-3 sm:py-4">
+            <Skeleton className="h-8 w-48" />
+          </div>
+        </header>
+        <main className="mobile-container py-6 space-y-6">
+          <DashboardStatsSkeleton />
+          <DashboardCardSkeleton />
+          <DashboardActivitySkeleton />
+        </main>
+      </div>
+    );
   }
   return <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
       <DashboardHeader 

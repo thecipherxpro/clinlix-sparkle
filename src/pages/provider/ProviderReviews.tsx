@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowLeft, Star, User } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "@/contexts/I18nContext";
+import { ReviewSkeletonList } from "@/components/skeletons/ReviewSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ProviderReviews = () => {
   const navigate = useNavigate();
@@ -82,8 +84,21 @@ const ProviderReviews = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
+        <header className="bg-card/50 backdrop-blur-sm sticky top-0 z-10 border-b safe-top">
+          <div className="mobile-container py-4 flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-lg" />
+            <Skeleton className="h-6 w-32" />
+          </div>
+        </header>
+        <main className="mobile-container py-6 max-w-4xl space-y-6">
+          <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
+            <Skeleton className="h-16 w-16 mx-auto rounded-full mb-4" />
+            <Skeleton className="h-6 w-32 mx-auto mb-2" />
+            <Skeleton className="h-4 w-24 mx-auto" />
+          </div>
+          <ReviewSkeletonList count={4} />
+        </main>
       </div>
     );
   }
