@@ -102,17 +102,92 @@ const CustomerDashboard = () => {
 
       {/* Mobile-first main container with auto-fit max-width and responsive padding */}
       <main className="w-full max-w-[min(1280px,calc(100%-32px))] py-[clamp(16px,4vw,32px)] px-0 mx-[18px]">
-        {/* Quick Actions - Auto-fit grid with responsive gaps */}
-        <div className="mb-[clamp(20px,5vw,32px)]">
+        {/* Quick Actions - Hero Card + 2x2 Grid */}
+        <div className="mb-[clamp(20px,5vw,32px)] space-y-4">
           <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">{t.ui.quickActions}</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <JobCard title={t.dashboard.bookCleaning} description={t.ui.scheduleService} value={t.ui.newBooking} image="https://i.postimg.cc/LXSMYzdW/calnder24.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/booking")} />
+          
+          {/* Hero Quick Action Card */}
+          <Card 
+            className="bg-gradient-to-br from-primary to-primary/80 cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border-primary/30"
+            onClick={() => navigate("/customer/booking")}
+          >
+            <CardContent className="p-6 md:p-8">
+              <div className="flex items-center justify-between">
+                <div className="space-y-3 flex-1">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-8 h-8 text-primary-foreground" />
+                    <h3 className="text-xl md:text-2xl font-bold text-primary-foreground">{t.dashboard.bookCleaning}</h3>
+                  </div>
+                  <p className="text-primary-foreground/90 text-sm md:text-base">
+                    {t.ui.scheduleService}
+                  </p>
+                </div>
+                <Button variant="secondary" size="lg" className="hidden md:flex">
+                  Book Now
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
-            <JobCard title={t.dashboard.myAddresses} description={t.ui.yourLocations} value={t.ui.manage} image="https://i.postimg.cc/hjB2bst8/map.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/my-addresses")} />
-
-            <JobCard title={t.dashboard.paymentMethods} description={t.ui.manageMethods} value={t.ui.methods} image="https://i.postimg.cc/9MhLtbQp/walletss.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/payment-methods")} />
-
-            <JobCard title={t.common.profile} description={t.ui.updateInfo} value={t.common.settings} image="https://i.postimg.cc/qRrdh8Vf/Profiles.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/profile")} />
+          {/* Secondary Actions Grid - 2x2 */}
+          <div className="grid grid-cols-2 gap-4">
+            {[{
+              icon: Clock,
+              title: t.dashboard.myBookings,
+              description: upcomingBookings.length > 0 ? `${upcomingBookings.length} upcoming` : t.dashboard.noBookings,
+              onClick: () => navigate("/customer/my-bookings"),
+              color: "from-secondary/10 to-secondary/20 border-secondary/30",
+              badge: upcomingBookings.length > 0 ? upcomingBookings.length : null,
+              badgeColor: "bg-secondary text-secondary-foreground"
+            }, {
+              icon: Search,
+              title: t.dashboard.findProviders,
+              description: "Browse cleaners",
+              onClick: () => navigate("/customer/providers"),
+              color: "from-accent/10 to-accent/20 border-accent/30",
+              badge: null,
+              badgeColor: ""
+            }, {
+              icon: MapPin,
+              title: t.dashboard.myAddresses,
+              description: t.ui.yourLocations,
+              onClick: () => navigate("/customer/my-addresses"),
+              color: "from-muted/50 to-muted border-border",
+              badge: null,
+              badgeColor: ""
+            }, {
+              icon: User,
+              title: t.common.profile,
+              description: t.ui.updateInfo,
+              onClick: () => navigate("/customer/profile"),
+              color: "from-muted/50 to-muted border-border",
+              badge: !profile?.phone ? "!" : null,
+              badgeColor: "bg-destructive text-destructive-foreground"
+            }].map((action, index) => {
+              const Icon = action.icon;
+              return (
+                <Card 
+                  key={index} 
+                  className={`bg-gradient-to-br ${action.color} cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 relative`} 
+                  onClick={action.onClick}
+                >
+                  <CardContent className="p-4 md:p-6 space-y-3">
+                    <div className="flex items-start justify-between">
+                      <Icon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+                      {action.badge && (
+                        <span className={`${action.badgeColor} text-xs font-bold rounded-full px-2 py-1 min-w-[24px] text-center`}>
+                          {action.badge}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="text-sm md:text-base font-semibold text-foreground">{action.title}</h3>
+                    <p className="text-xs text-muted-foreground leading-snug line-clamp-2">
+                      {action.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
 
