@@ -199,13 +199,7 @@ const CustomerDashboard = () => {
         </div>
       </main>
 
-      {/* Notification Center */}
-      {showNotifications && (
-        <NotificationCenter 
-          onClose={() => setShowNotifications(false)}
-          onUnreadCountChange={setNotificationCount}
-        />
-      )}
+      {/* Notification Center - Removed, now in DashboardWelcomeBanner */}
 
       {/* Notification Permission Prompt */}
       <NotificationPermissionPrompt />

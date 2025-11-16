@@ -22,7 +22,7 @@ export const NotificationCenter = ({ onClose, onUnreadCountChange }: Notificatio
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     loadNotifications();
@@ -105,9 +105,40 @@ export const NotificationCenter = ({ onClose, onUnreadCountChange }: Notificatio
   };
 
   const handleOpenChange = (newOpen: boolean) => {
+    // Haptic feedback
+    if (window.navigator.vibrate) {
+      window.navigator.vibrate(newOpen ? 50 : 30);
+    }
+    
     setOpen(newOpen);
     if (!newOpen) {
       onClose?.();
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const unreadIds = notifications
+        .filter(n => !n.read_status)
+        .map(n => n.id);
+
+      if (unreadIds.length === 0) return;
+
+      const { error } = await supabase
+        .from('notifications' as any)
+        .update({ read_status: true } as any)
+        .in('id', unreadIds);
+
+      if (error) throw error;
+
+      setNotifications(prev => prev.map(n => ({ ...n, read_status: true })));
+      setUnreadCount(0);
+      onUnreadCountChange?.(0);
+    } catch (error) {
+      console.error('Error marking all as read:', error);
     }
   };
   const formatDate = (dateString: string) => {
@@ -123,10 +154,39 @@ export const NotificationCenter = ({ onClose, onUnreadCountChange }: Notificatio
     if (diffDays < 7) return `${diffDays}d ago`;
     return date.toLocaleDateString();
   };
-  return <Sheet open={open} onOpenChange={handleOpenChange}>
+  return (
+    <Sheet open={open} onOpenChange={handleOpenChange}>
+      <SheetTrigger asChild>
+        <button
+          className="relative p-2 rounded-full bg-background/80 hover:bg-background transition-all duration-200 border border-border/50 hover:border-primary/30 hover:scale-105 active:scale-95"
+          aria-label="Notifications"
+        >
+          <Bell className="h-5 w-5 text-foreground" strokeWidth={2} />
+          {unreadCount > 0 && (
+            <div className="absolute -top-1 -right-1 flex items-center justify-center">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-destructive opacity-75"></span>
+              <span className="relative inline-flex items-center justify-center h-5 w-5 rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground ring-2 ring-background">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            </div>
+          )}
+        </button>
+      </SheetTrigger>
       <SheetContent side="right" className="w-full sm:max-w-md">
         <SheetHeader>
-          <SheetTitle>Notifications</SheetTitle>
+          <div className="flex items-center justify-between">
+            <SheetTitle>Notifications</SheetTitle>
+            {unreadCount > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={markAllAsRead}
+                className="text-xs"
+              >
+                Mark all read
+              </Button>
+            )}
+          </div>
         </SheetHeader>
         
         <ScrollArea className="h-[calc(100vh-100px)] mt-6">
@@ -154,6 +214,7 @@ export const NotificationCenter = ({ onClose, onUnreadCountChange }: Notificatio
                 </div>)}
             </div>}
         </ScrollArea>
-      </SheetContent>
-    </Sheet>;
+        </SheetContent>
+    </Sheet>
+  );
 };
