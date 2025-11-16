@@ -15,6 +15,8 @@ import { Avatar } from "@/components/base/avatar/avatar";
 import { useI18n } from "@/contexts/I18nContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { ProfileFormSkeleton } from "@/components/skeletons/FormSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const profileFormSchema = z.object({
   first_name: z.string().min(2, "First name must be at least 2 characters"),
@@ -120,8 +122,18 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
+        <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
+          <div className="mobile-container py-3 sm:py-4 flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-lg" />
+            <Skeleton className="h-6 w-32" />
+          </div>
+        </header>
+        <main className="mobile-container py-6 max-w-4xl">
+          <div className="bg-card rounded-xl shadow-sm border border-border p-6">
+            <ProfileFormSkeleton />
+          </div>
+        </main>
       </div>
     );
   }

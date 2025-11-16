@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { ArrowLeft, CreditCard, Plus, Wallet, TrendingUp, Shield, MoreVertical } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { WalletStatsSkeleton, TransactionSkeletonList } from "@/components/skeletons/TransactionSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Mock data for demonstration
 const mockPaymentMethods = [
@@ -103,8 +105,17 @@ const PaymentMethods = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/5 to-background pb-20 md:pb-4">
+        <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-10 safe-top">
+          <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center gap-3 max-w-4xl">
+            <Skeleton className="h-10 w-10 rounded-lg" />
+            <Skeleton className="h-6 w-32" />
+          </div>
+        </header>
+        <main className="container mx-auto px-4 py-6 max-w-4xl space-y-6">
+          <WalletStatsSkeleton />
+          <TransactionSkeletonList count={6} />
+        </main>
       </div>
     );
   }

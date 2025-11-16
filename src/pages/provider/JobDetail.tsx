@@ -41,6 +41,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import AvatarDisplay from "@/components/AvatarDisplay";
 import { ChatDrawer } from "@/components/chat/ChatDrawer";
 import { MessageCircle } from "lucide-react";
+import { DetailCardSkeletonList } from "@/components/skeletons/DetailCardSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface JobDetail {
   id: string;
@@ -353,12 +355,16 @@ const JobDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background animate-pulse">
-        <div className="h-20 bg-muted"></div>
-        <div className="p-6 space-y-4">
-          <div className="h-40 bg-muted rounded"></div>
-          <div className="h-60 bg-muted rounded"></div>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+        <header className="sticky top-0 z-10 bg-card/50 backdrop-blur-sm border-b safe-top">
+          <div className="mobile-container py-3 sm:py-4 flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-lg" />
+            <Skeleton className="h-6 w-32" />
+          </div>
+        </header>
+        <main className="mobile-container py-6 max-w-4xl">
+          <DetailCardSkeletonList count={3} />
+        </main>
       </div>
     );
   }

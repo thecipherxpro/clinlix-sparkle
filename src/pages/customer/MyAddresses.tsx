@@ -11,6 +11,8 @@ import { ArrowLeft, MapPin, Home, Plus, Star, Trash2, Bath, ChefHat, Sofa, Layer
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/contexts/I18nContext";
+import { AddressCardSkeletonList } from "@/components/skeletons/AddressCardSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const MyAddresses = () => {
   const navigate = useNavigate();
@@ -196,8 +198,16 @@ const MyAddresses = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-20">
+        <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-10 safe-top">
+          <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center gap-3 max-w-4xl">
+            <Skeleton className="h-10 w-10 rounded-lg" />
+            <Skeleton className="h-6 w-40" />
+          </div>
+        </header>
+        <main className="container mx-auto px-4 py-6 max-w-4xl">
+          <AddressCardSkeletonList count={3} />
+        </main>
       </div>
     );
   }

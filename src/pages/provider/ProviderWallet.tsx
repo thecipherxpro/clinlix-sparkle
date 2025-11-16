@@ -7,6 +7,8 @@ import { Tabs, Tab } from "@heroui/react";
 import { ArrowLeft, DollarSign, TrendingUp, Clock, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "@/contexts/I18nContext";
+import { WalletStatsSkeleton, TransactionSkeletonList } from "@/components/skeletons/TransactionSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ProviderWallet = () => {
   const navigate = useNavigate();
@@ -78,8 +80,17 @@ const ProviderWallet = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
+        <header className="bg-card/50 backdrop-blur-sm sticky top-0 z-10 border-b safe-top">
+          <div className="mobile-container py-4 flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-lg" />
+            <Skeleton className="h-6 w-32" />
+          </div>
+        </header>
+        <main className="mobile-container py-6 max-w-6xl space-y-6">
+          <WalletStatsSkeleton />
+          <TransactionSkeletonList count={8} />
+        </main>
       </div>
     );
   }

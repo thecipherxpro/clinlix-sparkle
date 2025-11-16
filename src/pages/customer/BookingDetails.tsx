@@ -12,6 +12,8 @@ import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import { StatusBadge } from "@/components/StatusBadge";
 import { CancellationDialog } from "@/components/booking/CancellationDialog";
 import { ChatDrawer } from "@/components/chat/ChatDrawer";
+import { DetailCardSkeletonList } from "@/components/skeletons/DetailCardSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 const BookingDetails = () => {
   const navigate = useNavigate();
   const {
@@ -78,9 +80,19 @@ const BookingDetails = () => {
     setCancelDialogOpen(true);
   };
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-6">
+        <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
+          <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
+            <Skeleton className="h-10 w-10 rounded-lg" />
+            <Skeleton className="h-6 w-40" />
+          </div>
+        </header>
+        <main className="mobile-container py-4 sm:py-6 max-w-4xl">
+          <DetailCardSkeletonList count={3} />
+        </main>
+      </div>
+    );
   }
   if (!booking) return null;
   const canCancel = ['pending', 'confirmed'].includes(booking.job_status);
