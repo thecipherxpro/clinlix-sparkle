@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import JobStatusBar from "./JobStatusBar";
 import AvatarDisplay from "@/components/AvatarDisplay";
 import { ChatDrawer } from "@/components/chat/ChatDrawer";
+import { JobCardSkeletonList } from "@/components/skeletons/JobCardSkeleton";
 
 interface ConfirmedJob {
   id: string;
@@ -82,14 +83,8 @@ const ConfirmedJobsList = () => {
 
   if (loading) {
     return (
-      <div className="p-6 space-y-4">
-        {[1, 2].map((i) => (
-          <Card key={i} className="animate-pulse">
-            <CardContent className="p-6">
-              <div className="h-24 bg-muted rounded"></div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="p-6">
+        <JobCardSkeletonList count={2} />
       </div>
     );
   }

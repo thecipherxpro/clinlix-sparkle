@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { useI18n } from "@/contexts/I18nContext";
 import { ChatDrawer } from "@/components/chat/ChatDrawer";
+import { BookingCardSkeletonList } from "@/components/skeletons/BookingCardSkeleton";
 
 const MyBookings = () => {
   const navigate = useNavigate();
@@ -180,8 +181,15 @@ const MyBookings = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-background pb-20">
+        <div className="sticky top-0 z-10 bg-background border-b border-border/40">
+          <div className="px-4 py-5">
+            <h1 className="text-2xl font-bold text-foreground">My Bookings</h1>
+          </div>
+        </div>
+        <div className="px-4 pt-6">
+          <BookingCardSkeletonList count={4} />
+        </div>
       </div>
     );
   }

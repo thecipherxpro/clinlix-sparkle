@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
+import { NotificationSkeletonList } from '@/components/skeletons/NotificationSkeleton';
 
 interface Notification {
   id: string;
@@ -264,14 +265,7 @@ export const NotificationCenter = ({ onClose, onUnreadCountChange }: Notificatio
 
         <ScrollArea className="h-[calc(100vh-7rem)]">
           {loading ? (
-            <div className="p-4 space-y-3">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="p-4 border-b">
-                  <div className="h-4 bg-muted rounded w-3/4 mb-2" />
-                  <div className="h-3 bg-muted rounded w-1/2" />
-                </div>
-              ))}
-            </div>
+            <NotificationSkeletonList count={5} />
           ) : notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
               <Bell className="h-12 w-12 text-muted-foreground mb-4" />
