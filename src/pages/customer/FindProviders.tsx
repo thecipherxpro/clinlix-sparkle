@@ -243,79 +243,40 @@ const FindProviders = () => {
                   <SlidersHorizontal className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-full sm:max-w-md">
-                <SheetHeader>
-                  <SheetTitle className="text-base">{t.providers.filterProviders}</SheetTitle>
-                  <SheetDescription className="text-xs">
-                    {t.providers.narrowSearch}
-                  </SheetDescription>
+              <SheetContent side="bottom" className="h-[85vh] p-0">
+                <SheetHeader className="p-6 pb-4 border-b sticky top-0 bg-background z-10">
+                  <SheetTitle className="text-lg font-semibold">{t.providers.filterProviders}</SheetTitle>
+                  <SheetDescription className="text-sm">{t.providers.narrowSearch}</SheetDescription>
                 </SheetHeader>
                 
-                <div className="space-y-6 py-6">
-                  {/* Verified Only */}
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="verified" className="text-sm">{t.providers.verifiedOnly}</Label>
-                      <p className="text-xs text-muted-foreground">{t.providers.showVerifiedOnly}</p>
+                <div className="space-y-6 py-4 px-6 overflow-y-auto max-h-[calc(85vh-180px)]">
+                  <div className="flex items-center justify-between py-2">
+                    <Label htmlFor="verified" className="text-sm font-medium">{t.providers.verifiedOnly}</Label>
+                    <Switch id="verified" checked={verifiedOnly} onCheckedChange={setVerifiedOnly} className="touch-manipulation" />
+                  </div>
+
+                  <div className="space-y-3 py-2">
+                    <div className="flex justify-between items-center">
+                      <Label className="text-sm font-medium">{t.providers.minimumRating}</Label>
+                      <span className="text-sm font-semibold text-primary">{minRating[0]}.0+</span>
                     </div>
-                  <Switch
-                    id="verified"
-                    checked={verifiedOnly}
-                    onCheckedChange={setVerifiedOnly}
-                  />
+                    <Slider value={minRating} onValueChange={setMinRating} max={5} step={1} className="w-full touch-manipulation" />
                   </div>
 
-                  {/* Min Rating */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-sm">{t.providers.minimumRating}</Label>
-                      <span className="text-sm font-medium">{minRating[0]}.0+</span>
-                    </div>
-                    <Slider
-                      value={minRating}
-                      onValueChange={setMinRating}
-                      max={5}
-                      step={1}
-                      className="w-full"
-                    />
+                  <div className="space-y-2 py-2">
+                    <Label htmlFor="area" className="text-sm font-medium">{t.providers.whereNeedService}</Label>
+                    <Input id="area" placeholder={t.providers.enterCity} value={serviceAreaFilter} onChange={(e) => setServiceAreaFilter(e.target.value)} className="h-11 touch-manipulation" />
                   </div>
 
-                  {/* Service Area */}
-                  <div className="space-y-2">
-                    <Label htmlFor="area" className="text-sm">{t.providers.whereNeedService}</Label>
-                    <Input
-                      id="area"
-                      placeholder={t.providers.enterCity}
-                      value={serviceAreaFilter}
-                      onChange={(e) => setServiceAreaFilter(e.target.value)}
-                      className="touch-target text-sm"
-                    />
+                  <div className="space-y-2 py-2">
+                    <Label htmlFor="date" className="text-sm font-medium">{t.providers.checkAvailability}</Label>
+                    <Input id="date" type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} min={new Date().toISOString().split('T')[0]} className="h-11 touch-manipulation" />
                   </div>
+                </div>
 
-                  {/* Availability Date */}
-                  <div className="space-y-2">
-                    <Label htmlFor="date" className="text-sm">{t.providers.checkAvailability}</Label>
-                    <Input
-                      id="date"
-                      type="date"
-                      value={selectedDate}
-                      onChange={(e) => setSelectedDate(e.target.value)}
-                      min={new Date().toISOString().split('T')[0]}
-                      className="touch-target text-sm"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      {t.providers.filterByDate}
-                    </p>
-                  </div>
-
-                  {/* Clear Filters */}
-                  <Button
-                    variant="outline"
-                    onClick={clearFilters}
-                    className="w-full touch-target text-sm"
-                  >
-                    {t.providers.resetFilters}
-                  </Button>
+                <div className="sticky bottom-0 bg-background border-t p-6 flex gap-3">
+                  <Button variant="outline" onClick={clearFilters} className="flex-1 h-11 touch-manipulation active:scale-95">{t.providers.resetFilters}</Button>
+                  <Button onClick={() => {}} className="flex-1 h-11 touch-manipulation active:scale-95">Apply</Button>
                 </div>
               </SheetContent>
             </Sheet>
