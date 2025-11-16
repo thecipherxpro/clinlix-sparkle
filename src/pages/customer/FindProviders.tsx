@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -7,18 +7,24 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { ArrowLeft, Search, SlidersHorizontal, UserX } from "lucide-react";
+import { ArrowLeft, Search, SlidersHorizontal, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
-import ProviderCard from "@/components/ProviderCard";
+import { SwipeableProviderCard } from "@/components/provider/SwipeableProviderCard";
+import { FilterChips } from "@/components/provider/FilterChips";
+import { EmptyProvidersState } from "@/components/provider/EmptyProvidersState";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useI18n } from "@/contexts/I18nContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const FindProviders = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
+  const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [providers, setProviders] = useState<any[]>([]);
   const [filteredProviders, setFilteredProviders] = useState<any[]>([]);
+  const [sheetOpen, setSheetOpen] = useState(false);
   
   // Search & Filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -127,7 +133,38 @@ const FindProviders = () => {
     setMinRating([0]);
     setServiceAreaFilter("");
     setSelectedDate("");
+    setSheetOpen(false);
   };
+
+  const handlePullToRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await fetchProviders();
+      toast.success("Providers refreshed");
+    } catch (error) {
+      console.error("Refresh error:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
+
+  const toggleQuickFilter = (type: "verified" | "rating" | "location") => {
+    switch (type) {
+      case "verified":
+        setVerifiedOnly(!verifiedOnly);
+        break;
+      case "rating":
+        setMinRating(minRating[0] > 0 ? [0] : [4.0]);
+        break;
+      case "location":
+        // Toggle location filter - for now just clears it
+        setServiceAreaFilter(serviceAreaFilter ? "" : "Lisbon");
+        break;
+    }
+  };
+
+  const hasActiveFilters = verifiedOnly || minRating[0] > 0 || Boolean(serviceAreaFilter) || Boolean(selectedDate);
+  const activeFilterCount = [verifiedOnly, minRating[0] > 0, Boolean(serviceAreaFilter), Boolean(selectedDate)].filter(Boolean).length;
 
   if (loading) {
     return (
@@ -313,21 +350,16 @@ const FindProviders = () => {
         </div>
 
         {/* Provider List */}
-        <div className="space-y-4">
+        <div className="space-y-5 pb-24">
           {filteredProviders.length === 0 ? (
-            <div className="text-center py-16">
-              <UserX className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <h3 className="text-base font-semibold mb-2">{t.providers.noMatches}</h3>
-              <p className="text-xs text-muted-foreground mb-4">
-                {t.providers.tryDifferentFilters}
-              </p>
-              <Button onClick={clearFilters} variant="outline" className="text-sm">
-                {t.providers.resetFilters}
-              </Button>
-            </div>
+            <EmptyProvidersState
+              hasFilters={hasActiveFilters}
+              onClearFilters={clearFilters}
+              searchQuery={searchQuery}
+            />
           ) : (
             filteredProviders.map((provider) => (
-              <ProviderCard
+              <SwipeableProviderCard
                 key={provider.id}
                 providerId={provider.id}
                 userId={provider.user_id}
@@ -340,7 +372,6 @@ const FindProviders = () => {
                 serviceAreas={provider.service_areas || []}
                 skills={provider.skills || []}
                 bio={provider.bio}
-                showActions={true}
                 createdAt={provider.created_at}
               />
             ))
