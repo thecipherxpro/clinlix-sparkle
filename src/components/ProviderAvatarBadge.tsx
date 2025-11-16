@@ -1,5 +1,4 @@
 import { Avatar } from "@/components/base/avatar/avatar";
-import { Badge } from "@/components/base/badges/badges";
 import { cn } from "@/lib/utils";
 
 interface ProviderAvatarBadgeProps {
@@ -20,13 +19,6 @@ const ProviderAvatarBadge = ({
   className = "",
 }: ProviderAvatarBadgeProps) => {
   
-  const isNewProvider = (createdAt?: string | null): boolean => {
-    if (!createdAt) return false;
-    const created = new Date(createdAt);
-    const daysDiff = (Date.now() - created.getTime()) / (1000 * 60 * 60 * 24);
-    return daysDiff < 15;
-  };
-
   // Map number sizes to string variants for backward compatibility
   const getAvatarSize = (size: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | number): "xs" | "sm" | "md" | "lg" | "xl" | "2xl" => {
     if (typeof size === "string") return size;
@@ -40,7 +32,6 @@ const ProviderAvatarBadge = ({
     return "2xl";
   };
 
-  const isNew = isNewProvider(createdAt);
   const avatarSize = getAvatarSize(size);
 
   return (
@@ -52,18 +43,6 @@ const ProviderAvatarBadge = ({
         verified={isVerified}
         fallback={alt?.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)}
       />
-      
-      {/* NEW Badge overlay for new providers (only if not verified) */}
-      {isNew && !isVerified && (
-        <Badge
-          type="pill-color"
-          color="accent"
-          size="sm"
-          className="absolute -top-1 -right-1 text-[10px] font-bold"
-        >
-          NEW
-        </Badge>
-      )}
     </div>
   );
 };

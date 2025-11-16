@@ -97,6 +97,13 @@ const ProviderProfile = () => {
             )}
           </div>
 
+          {/* New Provider Badge */}
+          {!provider.verified && provider.new_provider && (
+            <Badge variant="secondary" className="mb-2">
+              NEW
+            </Badge>
+          )}
+
           {/* Subtitle */}
           <p className="text-sm text-muted-foreground mb-2">
             {primarySkill} • {experienceText}
