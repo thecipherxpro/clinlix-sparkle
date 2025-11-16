@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
-import { Bell } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import { Bell, Settings2, Check, X, MessageSquare, Calendar, CreditCard, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+
 interface Notification {
   id: string;
   title: string;
@@ -12,6 +15,12 @@ interface Notification {
   target_url: string | null;
   read_status: boolean;
   created_at: string;
+  type?: 'booking' | 'message' | 'payment' | 'reminder' | 'info';
+  priority?: 'high' | 'medium' | 'low';
+  action_data?: {
+    booking_id?: string;
+    action_type?: 'accept' | 'reject' | 'reply';
+  };
 }
 interface NotificationCenterProps {
   onClose?: () => void;
@@ -23,7 +32,14 @@ export const NotificationCenter = ({ onClose, onUnreadCountChange }: Notificatio
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [swipeStates, setSwipeStates] = useState<Record<string, number>>({});
   const navigate = useNavigate();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Initialize notification sound
+  useEffect(() => {
+    audioRef.current = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBi6Azv');
+  }, []);
   useEffect(() => {
     loadNotifications();
     subscribeToNotifications();
@@ -65,12 +81,21 @@ export const NotificationCenter = ({ onClose, onUnreadCountChange }: Notificatio
         table: 'notifications',
         filter: `user_id=eq.${data.user.id}`
       }, payload => {
-        setNotifications(prev => [payload.new as Notification, ...prev]);
+        const newNotification = payload.new as Notification;
+        setNotifications(prev => [newNotification, ...prev]);
         setUnreadCount(prev => {
           const newCount = prev + 1;
           onUnreadCountChange?.(newCount);
           return newCount;
         });
+        
+        // Play sound and vibrate
+        if (audioRef.current) {
+          audioRef.current.play().catch(() => {});
+        }
+        if (window.navigator.vibrate) {
+          window.navigator.vibrate([100, 50, 100]);
+        }
       }).subscribe();
     });
   };
@@ -154,6 +179,86 @@ export const NotificationCenter = ({ onClose, onUnreadCountChange }: Notificatio
     if (diffDays < 7) return `${diffDays}d ago`;
     return date.toLocaleDateString();
   };
+
+  const getDateGroup = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return 'This Week';
+    return 'Older';
+  };
+
+  const groupedNotifications = notifications.reduce((groups, notification) => {
+    const group = getDateGroup(notification.created_at);
+    if (!groups[group]) groups[group] = [];
+    groups[group].push(notification);
+    return groups;
+  }, {} as Record<string, Notification[]>);
+
+  const getNotificationIcon = (notification: Notification) => {
+    if (notification.title.toLowerCase().includes('booking') || notification.title.toLowerCase().includes('job')) {
+      return <Calendar className="w-4 h-4" />;
+    }
+    if (notification.title.toLowerCase().includes('message')) {
+      return <MessageSquare className="w-4 h-4" />;
+    }
+    if (notification.title.toLowerCase().includes('payment')) {
+      return <CreditCard className="w-4 h-4" />;
+    }
+    return <Bell className="w-4 h-4" />;
+  };
+
+  const getPriorityColor = (priority?: string) => {
+    switch (priority) {
+      case 'high': return 'text-destructive';
+      case 'medium': return 'text-primary';
+      default: return 'text-muted-foreground';
+    }
+  };
+
+  const handleSwipeStart = (e: React.TouchEvent, notificationId: string) => {
+    const touch = e.touches[0];
+    setSwipeStates(prev => ({ ...prev, [notificationId]: touch.clientX }));
+  };
+
+  const handleSwipeMove = (e: React.TouchEvent, notificationId: string) => {
+    const touch = e.touches[0];
+    const startX = swipeStates[notificationId];
+    if (startX) {
+      const diff = touch.clientX - startX;
+      if (diff > 0) {
+        (e.currentTarget as HTMLElement).style.transform = `translateX(${Math.min(diff, 100)}px)`;
+      }
+    }
+  };
+
+  const handleSwipeEnd = (e: React.TouchEvent, notification: Notification) => {
+    const element = e.currentTarget as HTMLElement;
+    const startX = swipeStates[notification.id];
+    const touch = e.changedTouches[0];
+    const diff = touch.clientX - startX;
+    
+    if (diff > 80) {
+      // Swipe right - mark as read and dismiss
+      markAsRead(notification.id);
+      element.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
+      element.style.transform = 'translateX(100%)';
+      element.style.opacity = '0';
+    } else {
+      // Reset position
+      element.style.transition = 'transform 0.2s ease-out';
+      element.style.transform = 'translateX(0)';
+    }
+    
+    setSwipeStates(prev => {
+      const newState = { ...prev };
+      delete newState[notification.id];
+      return newState;
+    });
+  };
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>
@@ -176,43 +281,161 @@ export const NotificationCenter = ({ onClose, onUnreadCountChange }: Notificatio
         <SheetHeader>
           <div className="flex items-center justify-between">
             <SheetTitle>Notifications</SheetTitle>
-            {unreadCount > 0 && (
+            <div className="flex gap-2">
+              {unreadCount > 0 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={markAllAsRead}
+                  className="text-xs h-8"
+                >
+                  <Check className="w-4 h-4 mr-1" />
+                  Mark all read
+                </Button>
+              )}
               <Button
                 variant="ghost"
-                size="sm"
-                onClick={markAllAsRead}
-                className="text-xs"
+                size="icon"
+                onClick={() => {
+                  setOpen(false);
+                  navigate('/customer/settings');
+                }}
+                className="h-8 w-8"
               >
-                Mark all read
+                <Settings2 className="w-4 h-4" />
               </Button>
-            )}
+            </div>
           </div>
         </SheetHeader>
         
         <ScrollArea className="h-[calc(100vh-100px)] mt-6">
-          {loading ? <div className="flex items-center justify-center py-8">
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            </div> : notifications.length === 0 ? <div className="text-center py-8">
+            </div>
+          ) : notifications.length === 0 ? (
+            <div className="text-center py-8">
               <Bell className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-muted-foreground">No notifications yet</p>
-            </div> : <div className="space-y-2">
-              {notifications.map(notification => <div key={notification.id} onClick={() => handleNotificationClick(notification)} className={`p-4 rounded-lg border cursor-pointer transition-colors hover:bg-accent ${!notification.read_status ? 'bg-primary/5' : ''}`}>
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-sm mb-1">
-                        {notification.title}
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        {notification.body}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-2">
-                        {formatDate(notification.created_at)}
-                      </p>
-                    </div>
-                    {!notification.read_status && <div className="w-2 h-2 rounded-full bg-primary mt-1"></div>}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {Object.entries(groupedNotifications).map(([group, groupNotifications]) => (
+                <div key={group}>
+                  <div className="sticky top-0 bg-background/95 backdrop-blur-sm z-10 py-2 px-1">
+                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      {group}
+                    </h3>
                   </div>
-                </div>)}
-            </div>}
+                  <div className="space-y-2">
+                    {groupNotifications.map(notification => (
+                      <div
+                        key={notification.id}
+                        onTouchStart={(e) => handleSwipeStart(e, notification.id)}
+                        onTouchMove={(e) => handleSwipeMove(e, notification.id)}
+                        onTouchEnd={(e) => handleSwipeEnd(e, notification)}
+                        className={`relative p-4 rounded-lg border cursor-pointer transition-all hover:bg-accent ${
+                          !notification.read_status ? 'bg-primary/5 border-primary/20' : ''
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center ${
+                            getPriorityColor(notification.priority)
+                          }`}>
+                            {getNotificationIcon(notification)}
+                          </div>
+                          
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between gap-2 mb-1">
+                              <h4 className="font-semibold text-sm line-clamp-1">
+                                {notification.title}
+                              </h4>
+                              {!notification.read_status && (
+                                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-primary"></div>
+                              )}
+                            </div>
+                            
+                            <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                              {notification.body}
+                            </p>
+                            
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs text-muted-foreground">
+                                {formatDate(notification.created_at)}
+                              </p>
+                              
+                              {notification.priority === 'high' && (
+                                <Badge variant="destructive" className="text-xs h-5">
+                                  <AlertCircle className="w-3 h-3 mr-1" />
+                                  Urgent
+                                </Badge>
+                              )}
+                            </div>
+                            
+                            {/* Action buttons for specific notification types */}
+                            {notification.action_data && (
+                              <div className="flex gap-2 mt-3">
+                                {notification.action_data.action_type === 'accept' && (
+                                  <>
+                                    <Button
+                                      size="sm"
+                                      className="flex-1 h-8"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleNotificationClick(notification);
+                                      }}
+                                    >
+                                      <Check className="w-3 h-3 mr-1" />
+                                      Accept
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="flex-1 h-8"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        markAsRead(notification.id);
+                                      }}
+                                    >
+                                      <X className="w-3 h-3 mr-1" />
+                                      Decline
+                                    </Button>
+                                  </>
+                                )}
+                                
+                                {notification.action_data.action_type === 'reply' && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="w-full h-8"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleNotificationClick(notification);
+                                    }}
+                                  >
+                                    <MessageSquare className="w-3 h-3 mr-1" />
+                                    Reply
+                                  </Button>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        
+                        {/* Swipe indicator */}
+                        {!notification.read_status && (
+                          <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <p className="text-xs text-muted-foreground">Swipe to dismiss →</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <Separator className="mt-4" />
+                </div>
+              ))}
+            </div>
+          )}
         </ScrollArea>
         </SheetContent>
     </Sheet>
