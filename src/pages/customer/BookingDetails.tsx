@@ -10,6 +10,8 @@ import { ArrowLeft, Calendar, Clock, MapPin, Phone, Mail, Star, Package, DollarS
 import { toast } from "sonner";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import { StatusBadge } from "@/components/StatusBadge";
+import { CancellationDialog } from "@/components/booking/CancellationDialog";
+import { ChatDrawer } from "@/components/chat/ChatDrawer";
 const BookingDetails = () => {
   const navigate = useNavigate();
   const {
@@ -18,6 +20,8 @@ const BookingDetails = () => {
   const [booking, setBooking] = useState<any>(null);
   const [addons, setAddons] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   useEffect(() => {
     fetchBookingDetails();
   }, [id]);
@@ -70,20 +74,8 @@ const BookingDetails = () => {
       setLoading(false);
     }
   };
-  const handleCancelBooking = async () => {
-    if (!confirm('Are you sure you want to cancel this booking?')) return;
-    try {
-      const {
-        error
-      } = await supabase.from('bookings').update({
-        job_status: 'cancelled'
-      }).eq('id', id);
-      if (error) throw error;
-      toast.success('Booking cancelled');
-      fetchBookingDetails();
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to cancel booking');
-    }
+  const handleCancelBooking = () => {
+    setCancelDialogOpen(true);
   };
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">
@@ -229,6 +221,8 @@ const BookingDetails = () => {
                 <Button 
                   variant="outline" 
                   className="w-full bg-gray-50 hover:bg-gray-100 border-2 border-gray-200 text-gray-700 font-semibold touch-target"
+                  onClick={() => setChatOpen(true)}
+                  disabled={!provider}
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Chat
@@ -343,7 +337,7 @@ const BookingDetails = () => {
             </CardContent>
           </Card>}
 
-        {booking.job_status === 'completed' && <Card className="border-0 shadow-sm rounded-xl">
+        {booking.job_status === 'completed' && !booking.has_review && <Card className="border-0 shadow-sm rounded-xl">
             <CardContent className="pt-6 p-4 sm:p-6">
               <Button variant="outline" size="lg" className="w-full" onClick={() => navigate(`/customer/bookings/${booking.id}/review`)}>
                 <Star className="w-4 h-4 mr-2" />
@@ -352,6 +346,25 @@ const BookingDetails = () => {
             </CardContent>
           </Card>}
       </main>
+
+      {/* Dialogs */}
+      <CancellationDialog
+        open={cancelDialogOpen}
+        onClose={() => setCancelDialogOpen(false)}
+        bookingId={booking?.id || ""}
+        bookingDate={booking?.requested_date || ""}
+        bookingTime={booking?.requested_time || ""}
+        totalAmount={booking?.total_estimate || 0}
+        onSuccess={fetchBookingDetails}
+      />
+
+      <ChatDrawer
+        open={chatOpen}
+        onClose={() => setChatOpen(false)}
+        bookingId={booking?.id || ""}
+        otherPartyName={provider?.full_name || "Provider"}
+        otherPartyAvatar={provider?.photo_url}
+      />
     </div>;
 };
 export default BookingDetails;

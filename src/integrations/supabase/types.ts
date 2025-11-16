@@ -30,6 +30,9 @@ export type Database = {
           payment_intent_id: string | null
           payment_status: string
           provider_id: string | null
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_reason: string | null
           requested_date: string
           requested_time: string
           started_at: string | null
@@ -53,6 +56,9 @@ export type Database = {
           payment_intent_id?: string | null
           payment_status?: string
           provider_id?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           requested_date: string
           requested_time: string
           started_at?: string | null
@@ -76,6 +82,9 @@ export type Database = {
           payment_intent_id?: string | null
           payment_status?: string
           provider_id?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           requested_date?: string
           requested_time?: string
           started_at?: string | null
@@ -111,6 +120,47 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cancellation_policies: {
+        Row: {
+          booking_id: string
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string
+          created_at: string | null
+          id: string
+          refund_amount: number | null
+          refund_percentage: number | null
+        }
+        Insert: {
+          booking_id: string
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by: string
+          created_at?: string | null
+          id?: string
+          refund_amount?: number | null
+          refund_percentage?: number | null
+        }
+        Update: {
+          booking_id?: string
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string
+          created_at?: string | null
+          id?: string
+          refund_amount?: number | null
+          refund_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cancellation_policies_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
             referencedColumns: ["id"]
           },
         ]
@@ -271,6 +321,44 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "cleaning_packages"
             referencedColumns: ["package_code"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          booking_id: string
+          content: string
+          created_at: string | null
+          id: string
+          read_status: boolean | null
+          sender_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          booking_id: string
+          content: string
+          created_at?: string | null
+          id?: string
+          read_status?: boolean | null
+          sender_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          booking_id?: string
+          content?: string
+          created_at?: string | null
+          id?: string
+          read_status?: boolean | null
+          sender_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -665,6 +753,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_cancellation_refund: {
+        Args: { p_booking_id: string; p_cancelled_by: string }
+        Returns: {
+          refund_amount: number
+          refund_percentage: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
