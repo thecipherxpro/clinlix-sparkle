@@ -23,6 +23,12 @@ import bookingsBg from "@/assets/dashboard/bookings-bg.jpg";
 import providersBg from "@/assets/dashboard/providers-bg.jpg";
 import addressesBg from "@/assets/dashboard/addresses-bg.jpg";
 import profileBg from "@/assets/dashboard/profile-bg.jpg";
+
+// Import custom dashboard icons
+import bookingsIcon from "@/assets/dashboard/bookings-icon.png";
+import providersIcon from "@/assets/dashboard/providers-icon.png";
+import addressesIcon from "@/assets/dashboard/addresses-icon.png";
+import profileIcon from "@/assets/dashboard/profile-icon.png";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
@@ -146,7 +152,7 @@ const CustomerDashboard = () => {
           {/* Secondary Actions Grid - 2x2 */}
           <div className="grid grid-cols-2 gap-4">
             {[{
-              icon: Clock,
+              iconImage: bookingsIcon,
               title: t.dashboard.myBookings,
               description: upcomingBookings.length > 0 ? `${upcomingBookings.length} upcoming` : t.dashboard.noBookings,
               onClick: () => navigate("/customer/my-bookings"),
@@ -155,7 +161,7 @@ const CustomerDashboard = () => {
               badge: upcomingBookings.length > 0 ? upcomingBookings.length : null,
               badgeColor: "bg-white text-emerald-600"
             }, {
-              icon: Search,
+              iconImage: providersIcon,
               title: t.dashboard.findProviders,
               description: "Browse cleaners",
               onClick: () => navigate("/customer/providers"),
@@ -164,7 +170,7 @@ const CustomerDashboard = () => {
               badge: null,
               badgeColor: ""
             }, {
-              icon: MapPin,
+              iconImage: addressesIcon,
               title: t.dashboard.myAddresses,
               description: t.ui.yourLocations,
               onClick: () => navigate("/customer/my-addresses"),
@@ -173,7 +179,7 @@ const CustomerDashboard = () => {
               badge: null,
               badgeColor: ""
             }, {
-              icon: User,
+              iconImage: profileIcon,
               title: t.common.profile,
               description: t.ui.updateInfo,
               onClick: () => navigate("/customer/profile"),
@@ -181,9 +187,7 @@ const CustomerDashboard = () => {
               gradientOverlay: "from-orange-500/90 to-pink-600/80",
               badge: !profile?.phone ? "!" : null,
               badgeColor: "bg-white text-orange-600"
-            }].map((action, index) => {
-              const Icon = action.icon;
-              return (
+            }].map((action, index) => (
                 <div 
                   key={index} 
                   className="relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 shadow-md group"
@@ -196,8 +200,8 @@ const CustomerDashboard = () => {
                   <div className={`absolute inset-0 bg-gradient-to-br ${action.gradientOverlay}`} />
                   <div className="relative p-4 md:p-6 space-y-3 min-h-[160px] flex flex-col">
                     <div className="flex items-start justify-between">
-                      <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
-                        <Icon className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                      <div className="w-12 h-12 md:w-14 md:h-14 bg-white/95 backdrop-blur-sm rounded-xl p-2.5 shadow-lg flex items-center justify-center">
+                        <img src={action.iconImage} alt={action.title} className="w-full h-full object-contain" />
                       </div>
                       {action.badge && (
                         <span className={`${action.badgeColor} text-xs font-bold rounded-full px-2 py-1 min-w-[24px] text-center shadow-sm`}>
@@ -213,8 +217,7 @@ const CustomerDashboard = () => {
                     </div>
                   </div>
                 </div>
-              );
-            })}
+              ))}
           </div>
         </div>
 
