@@ -6,6 +6,7 @@ import { Calendar, MapPin, Clock, Star, MoreVertical, MessageSquare } from "luci
 import { toast } from "sonner";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { useI18n } from "@/contexts/I18nContext";
+import { ChatDrawer } from "@/components/chat/ChatDrawer";
 
 const MyBookings = () => {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ const MyBookings = () => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("upcoming");
+  const [chatOpen, setChatOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<any>(null);
 
   useEffect(() => {
     checkAuthAndFetchBookings();
@@ -148,8 +151,12 @@ const MyBookings = () => {
             className="rounded-full px-4 h-8 text-xs"
             onClick={(e) => {
               e.stopPropagation();
-              // Add message functionality
-              toast.info("Messaging feature coming soon!");
+              if (provider) {
+                setSelectedBooking(booking);
+                setChatOpen(true);
+              } else {
+                toast.info("Provider not assigned yet");
+              }
             }}
           >
             <MessageSquare className="w-3 h-3 mr-1.5" />
@@ -245,6 +252,20 @@ const MyBookings = () => {
             ))}
         </div>
       </div>
+
+      {/* Chat Drawer */}
+      {selectedBooking && (
+        <ChatDrawer
+          open={chatOpen}
+          onClose={() => {
+            setChatOpen(false);
+            setSelectedBooking(null);
+          }}
+          bookingId={selectedBooking.id}
+          otherPartyName={selectedBooking.provider_profiles?.full_name || "Provider"}
+          otherPartyAvatar={selectedBooking.provider_profiles?.photo_url}
+        />
+      )}
     </div>
   );
 };

@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
+import { MapPin, CheckCircle, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import AvatarDisplay from "@/components/AvatarDisplay";
+import { QuickAcceptRejectDialog } from "@/components/provider/QuickAcceptRejectDialog";
 
 interface JobRequest {
   id: string;
@@ -45,6 +46,11 @@ const JobRequestsList = () => {
   const [jobRequests, setJobRequests] = useState<JobRequest[]>([]);
   const [addons, setAddons] = useState<Addon[]>([]);
   const [loading, setLoading] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMode, setDialogMode] = useState<"accept" | "reject">("accept");
+  const [selectedBookingId, setSelectedBookingId] = useState("");
+  const [selectedEarnings, setSelectedEarnings] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -144,8 +150,9 @@ const JobRequestsList = () => {
   }
 
   return (
-    <div className="p-4 space-y-4">
-      {jobRequests.map((job) => {
+    <>
+      <div className="p-4 space-y-4">
+        {jobRequests.map((job) => {
         const jobAddons = getJobAddons(job.addon_ids);
         const totalWithAddons = calculateTotalWithAddons(job.total_estimate, job.addon_ids);
         const providerEarnings = (totalWithAddons * 0.85).toFixed(2);
@@ -223,18 +230,57 @@ const JobRequestsList = () => {
                 </div>
               </div>
 
-              {/* Action Button */}
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => navigate(`/provider/jobs/${job.id}`)}
+                >
+                  View Details
+                </Button>
+                <Button
+                  className="w-full bg-green-600 hover:bg-green-700 text-white"
+                  onClick={() => {
+                    setSelectedBookingId(job.id);
+                    setSelectedEarnings(providerEarnings);
+                    setSelectedTime(job.requested_time);
+                    setDialogMode("accept");
+                    setDialogOpen(true);
+                  }}
+                >
+                  <CheckCircle className="h-4 w-4 mr-1" />
+                  Accept
+                </Button>
+              </div>
               <Button
-                className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-700 text-white font-semibold"
-                onClick={() => navigate(`/provider/jobs/${job.id}`)}
+                variant="ghost"
+                className="w-full text-destructive hover:text-destructive hover:bg-destructive/10 mt-2"
+                onClick={() => {
+                  setSelectedBookingId(job.id);
+                  setDialogMode("reject");
+                  setDialogOpen(true);
+                }}
               >
-                View Job Details
+                <XCircle className="h-4 w-4 mr-1" />
+                Decline
               </Button>
             </CardContent>
           </Card>
         );
-      })}
-    </div>
+        })}
+      </div>
+
+      <QuickAcceptRejectDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        bookingId={selectedBookingId}
+        mode={dialogMode}
+        earnings={selectedEarnings}
+        serviceTime={selectedTime}
+        onSuccess={fetchJobRequests}
+      />
+    </>
   );
 };
 
