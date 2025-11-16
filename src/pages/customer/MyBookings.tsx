@@ -2,13 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, Tab } from "@heroui/react";
-import { ArrowLeft, Calendar, MapPin, Clock, Star } from "lucide-react";
+import { Calendar, MapPin, Clock, Star, MoreVertical, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
-import { Separator } from "@/components/ui/separator";
-import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
-import { StatusBadge } from "@/components/StatusBadge";
+import { Avatar } from "@/components/base/avatar/avatar";
 import { useI18n } from "@/contexts/I18nContext";
 
 const MyBookings = () => {
@@ -16,7 +12,7 @@ const MyBookings = () => {
   const { t } = useI18n();
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("active");
+  const [activeTab, setActiveTab] = useState("upcoming");
 
   useEffect(() => {
     checkAuthAndFetchBookings();
@@ -61,21 +57,6 @@ const MyBookings = () => {
     }
   };
 
-  const handleCancelBooking = async (bookingId: string) => {
-    if (!confirm(t.bookings.confirmCancel)) return;
-
-    try {
-      const { error } = await supabase.from("bookings").update({ job_status: "cancelled" }).eq("id", bookingId);
-
-      if (error) throw error;
-
-      toast.success(t.bookings.bookingCancelled);
-      checkAuthAndFetchBookings();
-    } catch (error: any) {
-      toast.error(error.message || t.bookings.failedToCancel);
-    }
-  };
-
   const activeBookings = bookings.filter((b) =>
     ["pending", "confirmed", "on_the_way", "arrived", "started"].includes(b.job_status),
   );
@@ -85,243 +66,185 @@ const MyBookings = () => {
   const cancelledBookings = bookings.filter((b) => b.job_status === "cancelled");
 
   const renderBookingCard = (booking: any) => {
-    const canCancel = ["pending", "confirmed"].includes(booking.job_status);
+    const provider = booking.provider_profiles;
+    const address = booking.customer_addresses;
+    const packageData = address?.cleaning_packages;
 
     return (
-      <Card key={booking.id} className="border-0 shadow-sm">
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <StatusBadge status={booking.job_status} className="w-auto" />
-                {booking.payment_status === "paid" && (
-                  <div className="badge badge-success text-white border-0 shadow-md px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold">
-                    {t.bookings.paid}
-                  </div>
-                )}
+      <div
+        key={booking.id}
+        className="bg-card rounded-2xl p-4 shadow-sm border border-border/50 hover:shadow-md transition-shadow cursor-pointer"
+        onClick={() => navigate(`/customer/bookings/${booking.id}`)}
+      >
+        {/* Header: Avatar, Name, Price */}
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex items-start gap-3 flex-1">
+            <Avatar
+              src={provider?.photo_url}
+              alt={provider?.full_name || "Provider"}
+              fallback={provider?.full_name?.charAt(0) || "P"}
+              size="md"
+              className="ring-2 ring-border/50"
+            />
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-sm text-foreground truncate">
+                {provider?.full_name || "Unassigned"}
+              </h3>
+              <p className="text-xs text-muted-foreground">{packageData?.package_name || "House Cleaning"}</p>
+              <div className="flex items-center gap-1 mt-1">
+                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                <span className="text-xs font-medium text-foreground">
+                  {provider?.rating_avg ? Number(provider.rating_avg).toFixed(1) : "N/A"}
+                </span>
               </div>
-              <CardTitle className="text-base sm:text-lg">{booking.customer_addresses?.label}</CardTitle>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                {booking.customer_addresses?.property_type} • {booking.customer_addresses?.layout_type}
-              </p>
             </div>
-            <Button variant="ghost" size="sm" onClick={() => navigate(`/customer/bookings/${booking.id}`)} className="text-xs">
-              {t.bookings.viewDetails}
-            </Button>
           </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {/* Date & Time */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <p className="font-medium">
-                  {new Date(booking.requested_date).toLocaleDateString("en-US", {
-                    weekday: "long",
-                    month: "long",
+          <div className="flex flex-col items-end gap-1">
+            <span className="text-base font-bold text-foreground">
+              €{Number(booking.total_estimate).toFixed(2)}
+            </span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                // Add menu functionality here
+              }}
+              className="p-1 hover:bg-muted rounded-full transition-colors"
+            >
+              <MoreVertical className="w-4 h-4 text-muted-foreground" />
+            </button>
+          </div>
+        </div>
+
+        {/* Details: Date, Time, Address */}
+        <div className="space-y-2 mb-3">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Calendar className="w-4 h-4" />
+            <span>
+              {booking.requested_date === new Date().toISOString().split("T")[0]
+                ? "Today"
+                : new Date(booking.requested_date).toLocaleDateString("en-US", {
+                    month: "short",
                     day: "numeric",
-                    year: "numeric",
                   })}
-                </p>
-                <p className="text-sm text-muted-foreground flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
-                  {booking.requested_time}
-                </p>
-              </div>
-            </div>
-
-            {/* Address */}
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">
-                  {booking.customer_addresses?.country === "Portugal" ? (
-                    <>
-                      {booking.customer_addresses.rua}, {booking.customer_addresses.localidade}
-                    </>
-                  ) : (
-                    <>
-                      {booking.customer_addresses?.street}, {booking.customer_addresses?.city}
-                    </>
-                  )}
-                </p>
-              </div>
-            </div>
-
-            <Separator />
-
-            {/* Provider */}
-            {booking.provider_profiles && (
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <ProviderAvatarBadge
-                    imageUrl={booking.provider_profiles.photo_url}
-                    isVerified={booking.provider_profiles.verified}
-                    createdAt={booking.provider_profiles.created_at}
-                    size={40}
-                    alt={booking.provider_profiles.full_name}
-                  />
-                  <div>
-                    <p className="font-medium text-sm">{booking.provider_profiles.full_name}</p>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                      {booking.provider_profiles.rating_avg.toFixed(1)}
-                    </p>
-                  </div>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate(`/providers/profile/${booking.provider_profiles.id}`)}
-                >
-                  View Profile
-                </Button>
-              </div>
-            )}
-
-            <Separator />
-
-            {/* Package & Total */}
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs sm:text-sm text-muted-foreground">{t.bookings.package}</p>
-                <p className="font-medium text-sm sm:text-base">{booking.customer_addresses?.cleaning_packages?.package_name}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs sm:text-sm text-muted-foreground">{t.bookings.total}</p>
-                <p className="font-semibold text-base sm:text-lg">
-                  {booking.customer_addresses?.currency === "EUR" ? "€" : "$"}
-                  {booking.total_final || booking.total_estimate}
-                </p>
-              </div>
-            </div>
-
-            {/* Actions */}
-            {canCancel && (
-              <div className="pt-2">
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  className="w-full text-xs"
-                  onClick={() => handleCancelBooking(booking.id)}
-                >
-                  {t.bookings.cancelBooking}
-                </Button>
-              </div>
-            )}
-
-            {booking.job_status === "completed" && !booking.has_review && (
-              <div className="pt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full text-xs"
-                  onClick={() => navigate(`/customer/bookings/${booking.id}/review`)}
-                >
-                  <Star className="w-3.5 h-3.5 mr-2" />
-                  {t.bookings.leaveReview}
-                </Button>
-              </div>
-            )}
+            </span>
           </div>
-        </CardContent>
-      </Card>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Clock className="w-4 h-4" />
+            <span>{booking.requested_time}</span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <MapPin className="w-4 h-4" />
+            <span className="truncate">
+              {address?.street || address?.rua}, {address?.apt_unit || address?.porta_andar}
+            </span>
+          </div>
+        </div>
+
+        {/* Footer: Message Button & Status */}
+        <div className="flex items-center justify-between">
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-full px-4 h-8 text-xs"
+            onClick={(e) => {
+              e.stopPropagation();
+              // Add message functionality
+              toast.info("Messaging feature coming soon!");
+            }}
+          >
+            <MessageSquare className="w-3 h-3 mr-1.5" />
+            Message
+          </Button>
+          <span
+            className={`text-xs font-medium px-3 py-1 rounded-full ${
+              booking.job_status === "completed"
+                ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                : booking.job_status === "cancelled"
+                  ? "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400"
+                  : "bg-primary/10 text-primary"
+            }`}
+          >
+            {booking.job_status.charAt(0).toUpperCase() + booking.job_status.slice(1).replace("_", " ")}
+          </span>
+        </div>
+      </div>
     );
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-background pb-mobile-nav">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
-        <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate("/customer/dashboard")}
-            className="touch-target md:hidden"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            {t.dashboard.myBookings}
-          </h1>
+    <div className="min-h-screen bg-background pb-20">
+      {/* Header */}
+      <div className="sticky top-0 z-10 bg-background border-b border-border/40">
+        <div className="px-4 py-5">
+          <h1 className="text-2xl font-bold text-foreground">My Bookings</h1>
         </div>
-      </header>
+      </div>
 
-      <main className="mobile-container py-4 sm:py-8 max-w-4xl">
-        <Tabs 
-          selectedKey={activeTab}
-          onSelectionChange={(key) => setActiveTab(key as string)}
-          classNames={{
-            tabList: "w-full bg-muted p-1 rounded-lg mb-6",
-            cursor: "bg-background shadow-sm",
-          }}
-        >
-          <Tab key="active" title={`${t.bookings.active} (${activeBookings.length})`} />
-          <Tab key="completed" title={`${t.bookings.completed} (${completedBookings.length})`} />
-          <Tab key="cancelled" title={`${t.bookings.cancelled} (${cancelledBookings.length})`} />
-        </Tabs>
-        
-        {activeTab === 'active' && (
-          <div className="space-y-4">
-          {activeBookings.length === 0 ? (
-              <Card className="border-0 shadow-sm">
-                <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
-                  <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm sm:text-base text-muted-foreground mb-4">{t.dashboard.noBookings}</p>
-                  <Button onClick={() => navigate("/customer/booking")} className="w-full sm:w-auto">
-                    {t.dashboard.bookCleaning}
-                  </Button>
-                </CardContent>
-              </Card>
-            ) : (
+      {/* Tabs */}
+      <div className="px-4 pt-4">
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setActiveTab("upcoming")}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              activeTab === "upcoming"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            Upcoming
+          </button>
+          <button
+            onClick={() => setActiveTab("completed")}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              activeTab === "completed"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            Completed
+          </button>
+          <button
+            onClick={() => setActiveTab("cancelled")}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              activeTab === "cancelled"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            Cancelled
+          </button>
+        </div>
+
+        {/* Booking Cards */}
+        <div className="space-y-3">
+          {activeTab === "upcoming" &&
+            (activeBookings.length > 0 ? (
               activeBookings.map(renderBookingCard)
-            )}
-          </div>
-        )}
-
-        {activeTab === 'completed' && (
-          <div className="space-y-4">
-          {completedBookings.length === 0 ? (
-              <Card className="border-0 shadow-sm">
-                <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
-                  <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm sm:text-base text-muted-foreground">{t.bookings.noCompleted}</p>
-                </CardContent>
-              </Card>
             ) : (
+              <p className="text-center text-muted-foreground py-8 text-sm">No upcoming bookings</p>
+            ))}
+          {activeTab === "completed" &&
+            (completedBookings.length > 0 ? (
               completedBookings.map(renderBookingCard)
-            )}
-          </div>
-        )}
-
-        {activeTab === 'cancelled' && (
-          <div className="space-y-4">
-          {cancelledBookings.length === 0 ? (
-              <Card className="border-0 shadow-sm">
-                <CardContent className="pt-8 pb-8 sm:pt-12 sm:pb-12 text-center">
-                  <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm sm:text-base text-muted-foreground">{t.bookings.noCancelled}</p>
-                </CardContent>
-              </Card>
             ) : (
+              <p className="text-center text-muted-foreground py-8 text-sm">No completed bookings</p>
+            ))}
+          {activeTab === "cancelled" &&
+            (cancelledBookings.length > 0 ? (
               cancelledBookings.map(renderBookingCard)
-            )}
-          </div>
-        )}
-      </main>
+            ) : (
+              <p className="text-center text-muted-foreground py-8 text-sm">No cancelled bookings</p>
+            ))}
+        </div>
+      </div>
     </div>
   );
 };
