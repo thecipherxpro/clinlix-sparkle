@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Calendar, Clock, MapPin, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import JobStatusBar from "./JobStatusBar";
 import AvatarDisplay from "@/components/AvatarDisplay";
+import { ChatDrawer } from "@/components/chat/ChatDrawer";
 
 interface ConfirmedJob {
   id: string;
@@ -28,6 +29,8 @@ interface ConfirmedJob {
 const ConfirmedJobsList = () => {
   const [confirmedJobs, setConfirmedJobs] = useState<ConfirmedJob[]>([]);
   const [loading, setLoading] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<ConfirmedJob | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -137,17 +140,43 @@ const ConfirmedJobsList = () => {
             </div>
 
             {/* Action */}
-            <Button
-              variant="default"
-              size="sm"
-              className="w-full"
-              onClick={() => navigate(`/provider/jobs/${job.id}`)}
-            >
-              View Job
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1"
+                onClick={() => {
+                  setSelectedJob(job);
+                  setChatOpen(true);
+                }}
+              >
+                <MessageCircle className="h-4 w-4 mr-2" />
+                Message
+              </Button>
+              <Button
+                variant="default"
+                size="sm"
+                className="flex-1"
+                onClick={() => navigate(`/provider/jobs/${job.id}`)}
+              >
+                View Job
+              </Button>
+            </div>
           </CardContent>
         </Card>
       ))}
+
+      {selectedJob && (
+        <ChatDrawer
+          open={chatOpen}
+          onClose={() => {
+            setChatOpen(false);
+            setSelectedJob(null);
+          }}
+          bookingId={selectedJob.id}
+          otherPartyName={`${selectedJob.profiles.first_name} ${selectedJob.profiles.last_name}`}
+        />
+      )}
     </div>
   );
 };
