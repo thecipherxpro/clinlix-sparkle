@@ -46,30 +46,30 @@ export const LocationCard = ({ address, defaultExpanded = false }: LocationCardP
   };
 
   return (
-    <Card className="border-0 shadow-sm">
-      <CardHeader className="pb-3">
+    <Card>
+      <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-primary" />
+          <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+            <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             Location
           </CardTitle>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setExpanded(!expanded)}
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0 hover:bg-primary/10"
           >
             <ChevronDown className={cn("w-4 h-4 transition-transform", expanded && "rotate-180")} />
           </Button>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-4">
         {/* Collapsed View */}
         {!expanded && (
-          <div className="flex items-start gap-2">
+          <div className="flex items-start gap-2.5">
             <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-            <p className="text-sm text-foreground">{address.label || street}</p>
+            <p className="text-xs sm:text-sm text-foreground line-clamp-2">{address.label || street}</p>
           </div>
         )}
 
@@ -77,7 +77,7 @@ export const LocationCard = ({ address, defaultExpanded = false }: LocationCardP
         {expanded && (
           <>
             {address.label && (
-              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-foreground">
                 {address.property_type === "apartment" ? (
                   <Building2 className="w-4 h-4 text-primary" />
                 ) : (
@@ -87,33 +87,33 @@ export const LocationCard = ({ address, defaultExpanded = false }: LocationCardP
               </div>
             )}
 
-            <div className="space-y-2 text-sm">
-              <div>
-                <span className="text-muted-foreground">Address: </span>
+            <div className="space-y-2.5 text-xs sm:text-sm">
+              <div className="flex flex-wrap gap-1">
+                <span className="text-muted-foreground font-medium">Address:</span>
                 <span className="text-foreground">{street}</span>
               </div>
               
               {unit && (
-                <div>
-                  <span className="text-muted-foreground">Unit: </span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="text-muted-foreground font-medium">Unit:</span>
                   <span className="text-foreground">{unit}</span>
                 </div>
               )}
 
-              <div>
-                <span className="text-muted-foreground">City: </span>
+              <div className="flex flex-wrap gap-1">
+                <span className="text-muted-foreground font-medium">City:</span>
                 <span className="text-foreground">{city}</span>
               </div>
 
               {province && (
-                <div>
-                  <span className="text-muted-foreground">Province: </span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="text-muted-foreground font-medium">Province:</span>
                   <span className="text-foreground">{province}</span>
                 </div>
               )}
 
-              <div>
-                <span className="text-muted-foreground">Postal Code: </span>
+              <div className="flex flex-wrap gap-1">
+                <span className="text-muted-foreground font-medium">Postal Code:</span>
                 <span className="text-foreground">{postal}</span>
               </div>
 

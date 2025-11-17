@@ -50,17 +50,17 @@ export const ServiceDetailsCard = ({
   const overtimeCharge = (overtimeMinutes / 30) * 10;
 
   return (
-    <Card className="border-0 shadow-sm">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Package className="w-5 h-5 text-primary" />
+    <Card>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+          <Package className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           Service Details
         </CardTitle>
       </CardHeader>
 
       <CardContent>
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-auto">
+          <TabsList className="grid w-full grid-cols-3 h-9 sm:h-10">
             <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
             <TabsTrigger value="addons" className="text-xs sm:text-sm">
               Add-ons {addons.length > 0 && `(${addons.length})`}
@@ -69,41 +69,41 @@ export const ServiceDetailsCard = ({
           </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="mt-4 space-y-4">
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-base">{packageInfo.package_name}</h3>
-                <Badge variant="outline" className="gap-1">
+          <TabsContent value="overview" className="mt-5 space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h3 className="font-semibold text-sm sm:text-base">{packageInfo.package_name}</h3>
+                <Badge variant="outline" className="gap-1 text-xs">
                   <Clock className="w-3 h-3" />
                   {packageInfo.time_included}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {packageInfo.bedroom_count} Bedroom{packageInfo.bedroom_count !== 1 ? 's' : ''}
               </p>
             </div>
 
             {packageInfo.areas_included && packageInfo.areas_included.length > 0 && (
-              <div>
+              <div className="space-y-2">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setAreasExpanded(!areasExpanded)}
-                  className="w-full justify-between px-0 hover:bg-transparent"
+                  className="w-full justify-between px-0 h-auto py-2 hover:bg-primary/5"
                 >
-                  <span className="text-sm font-medium">Areas Included</span>
+                  <span className="text-xs sm:text-sm font-medium">Areas Included</span>
                   <ChevronDown
                     className={cn("w-4 h-4 transition-transform", areasExpanded && "rotate-180")}
                   />
                 </Button>
 
                 {!areasExpanded ? (
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     {packageInfo.areas_included.slice(0, 3).map(area => areaIcons[area] || '•').join(' ')}
                     {packageInfo.areas_included.length > 3 && ` +${packageInfo.areas_included.length - 3} more`}
                   </p>
                 ) : (
-                  <div className="grid grid-cols-2 gap-2 mt-2">
+                  <div className="grid grid-cols-2 gap-2.5">
                     {packageInfo.areas_included.map((area, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-sm">
                         <span>{areaIcons[area] || '•'}</span>

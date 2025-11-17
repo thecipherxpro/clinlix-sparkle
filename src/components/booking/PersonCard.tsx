@@ -1,6 +1,7 @@
 import { User, Star, Shield } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContactActionRow } from "./ContactActionRow";
 
@@ -38,38 +39,39 @@ export const PersonCard = ({
     .slice(0, 2);
 
   return (
-    <Card className="border-0 shadow-sm">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <User className="w-5 h-5 text-primary" />
+    <Card>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+          <User className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           {title}
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="space-y-4">
-        <div className="flex items-start gap-4">
-          <Avatar className="h-16 w-16 border-2 border-primary/20">
+      <CardContent className="space-y-5">
+        <div className="flex items-start gap-3 sm:gap-4">
+          <Avatar className="h-14 w-14 sm:h-16 sm:w-16 border-2 border-primary/20 shrink-0">
             <AvatarImage src={person.photo_url} alt={fullName} />
-            <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
+            <AvatarFallback className="bg-primary/10 text-primary text-base sm:text-lg font-semibold">
               {initials}
             </AvatarFallback>
           </Avatar>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-semibold text-base truncate">{fullName}</h3>
+          <div className="flex-1 min-w-0 space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-semibold text-sm sm:text-base truncate">{fullName}</h3>
               {person.verified && (
-                <Badge variant="secondary" className="gap-1 shrink-0">
+                <Badge variant="secondary" className="gap-1 shrink-0 text-xs">
                   <Shield className="w-3 h-3" />
-                  Verified
+                  <span className="hidden sm:inline">Verified</span>
+                  <span className="sm:hidden">✓</span>
                 </Badge>
               )}
             </div>
 
             {person.rating_avg !== undefined && person.rating_avg !== null && (
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex items-center gap-2 text-xs sm:text-sm">
                 <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-primary text-primary" />
                   <span className="font-medium">{person.rating_avg.toFixed(1)}</span>
                 </div>
                 {person.rating_count !== undefined && person.rating_count > 0 && (
@@ -80,12 +82,14 @@ export const PersonCard = ({
               </div>
             )}
 
-            {person.email && (
-              <p className="text-sm text-muted-foreground truncate mt-1">{person.email}</p>
-            )}
-            {person.phone && (
-              <p className="text-sm text-muted-foreground mt-0.5">{person.phone}</p>
-            )}
+            <div className="space-y-1">
+              {person.email && (
+                <p className="text-xs sm:text-sm text-muted-foreground truncate">{person.email}</p>
+              )}
+              {person.phone && (
+                <p className="text-xs sm:text-sm text-muted-foreground">{person.phone}</p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -97,12 +101,13 @@ export const PersonCard = ({
         />
 
         {onViewProfile && (
-          <button
+          <Button
+            variant="ghost"
             onClick={onViewProfile}
-            className="w-full text-sm text-primary hover:underline mt-2"
+            className="w-full h-9 text-sm text-primary hover:text-primary hover:bg-primary/10"
           >
             View Full Profile
-          </button>
+          </Button>
         )}
       </CardContent>
     </Card>

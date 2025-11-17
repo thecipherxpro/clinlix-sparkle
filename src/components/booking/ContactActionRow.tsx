@@ -36,11 +36,11 @@ export const ContactActionRow = ({
           variant="outline"
           size="sm"
           onClick={handleCall}
-          className="flex-col h-auto py-3 gap-1"
+          className="flex-col h-auto py-2.5 sm:py-3 gap-1 hover:bg-primary/5 hover:text-primary hover:border-primary"
           title="Call"
         >
-          <Phone className="w-4 h-4" />
-          <span className="text-xs">Call</span>
+          <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="text-[10px] sm:text-xs font-medium">Call</span>
         </Button>
       )}
 
@@ -49,11 +49,11 @@ export const ContactActionRow = ({
           variant="default"
           size="sm"
           onClick={onMessage}
-          className="flex-col h-auto py-3 gap-1"
+          className="flex-col h-auto py-2.5 sm:py-3 gap-1"
           title="Message"
         >
-          <MessageCircle className="w-4 h-4" />
-          <span className="text-xs">Chat</span>
+          <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="text-[10px] sm:text-xs font-medium">Chat</span>
         </Button>
       )}
 
@@ -62,11 +62,11 @@ export const ContactActionRow = ({
           variant="outline"
           size="sm"
           onClick={handleEmail}
-          className="flex-col h-auto py-3 gap-1"
+          className="flex-col h-auto py-2.5 sm:py-3 gap-1 hover:bg-primary/5 hover:text-primary hover:border-primary"
           title="Email"
         >
-          <Mail className="w-4 h-4" />
-          <span className="text-xs">Email</span>
+          <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="text-[10px] sm:text-xs font-medium">Email</span>
         </Button>
       )}
 
@@ -75,11 +75,11 @@ export const ContactActionRow = ({
           variant="outline"
           size="sm"
           onClick={onNavigate}
-          className="flex-col h-auto py-3 gap-1"
+          className="flex-col h-auto py-2.5 sm:py-3 gap-1 hover:bg-primary/5 hover:text-primary hover:border-primary"
           title="Navigate"
         >
-          <Navigation className="w-4 h-4" />
-          <span className="text-xs">Navigate</span>
+          <Navigation className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="text-[10px] sm:text-xs font-medium">Navigate</span>
         </Button>
       )}
     </div>
