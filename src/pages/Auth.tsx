@@ -2,19 +2,19 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { UntitledInput } from "@/components/ui/untitled-input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Shield, ArrowLeft, Mail, Lock, Eye, EyeOff, User, ChevronRight, ChevronLeft, Check } from "lucide-react";
+import { Shield, ArrowLeft, Mail, Lock, User, ChevronRight, ChevronLeft, Check, UserCircle, Calendar, MapPin, Home, Building, Map, Globe } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
 import logoImage from "@/assets/logo-clinlix.png";
 import { useI18n } from "@/contexts/I18nContext";
 
 type Role = "customer" | "provider";
-type AuthMode = "signin" | "signup";
+type AuthMode = "signin" | "signup" | "roleselect";
 type SignupStep = 1 | 2 | 3;
 
 const Auth = () => {
@@ -23,7 +23,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>("signin");
   const [signupStep, setSignupStep] = useState<SignupStep>(1);
-  const [selectedRole, setSelectedRole] = useState<Role>("customer");
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -46,7 +46,7 @@ const Auth = () => {
     residential_city: "",
     residential_province: "",
     residential_postal_code: "",
-    residential_country: "Portugal",
+    residential_country: "",
   });
 
   const [validationErrors, setValidationErrors] = useState({
@@ -121,441 +121,426 @@ const Auth = () => {
 
       if (error) throw error;
     } catch (error: any) {
-      toast.error(error.message || "Social login failed");
+      toast.error(error.message || t.auth.signInError);
+    } finally {
       setLoading(false);
     }
   };
 
-  const handleSignupStep1 = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!registerForm.firstName || !registerForm.lastName || !registerForm.email || !registerForm.password || !registerForm.confirmPassword) {
-      toast.error("Please fill in all required fields");
-      return;
+  const handleNextStep = () => {
+    if (signupStep === 1) {
+      if (!registerForm.firstName || !registerForm.lastName || !registerForm.email || !registerForm.password || !registerForm.confirmPassword) {
+        toast.error(t.auth.allFieldsRequired);
+        return;
+      }
+      if (!validateEmail(registerForm.email)) return;
+      if (!validatePassword(registerForm.password)) return;
+      if (registerForm.password !== registerForm.confirmPassword) {
+        setValidationErrors((prev) => ({ ...prev, confirmPassword: "Passwords do not match." }));
+        return;
+      }
+      setSignupStep(2);
+    } else if (signupStep === 2) {
+      if (!registerForm.gender || !registerForm.dateOfBirth) {
+        toast.error(t.auth.allFieldsRequired);
+        return;
+      }
+      const birthDate = new Date(registerForm.dateOfBirth);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      if (age < 18) {
+        toast.error("You must be at least 18 years old to register.");
+        return;
+      }
+      setSignupStep(3);
     }
-
-    if (!validateEmail(registerForm.email)) return;
-    if (!validatePassword(registerForm.password)) return;
-
-    if (registerForm.password !== registerForm.confirmPassword) {
-      toast.error("Passwords don't match");
-      return;
-    }
-
-    setSignupStep(2);
   };
 
-  const handleSignupStep2 = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!registerForm.gender || !registerForm.dateOfBirth) {
-      toast.error("Please select gender and date of birth");
-      return;
+  const handlePreviousStep = () => {
+    if (signupStep > 1) {
+      setSignupStep((signupStep - 1) as SignupStep);
     }
-
-    // Validate age (18+)
-    const dob = new Date(registerForm.dateOfBirth);
-    const today = new Date();
-    const age = today.getFullYear() - dob.getFullYear();
-    if (age < 18) {
-      toast.error("You must be at least 18 years old");
-      return;
-    }
-
-    setSignupStep(3);
   };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!registerForm.residential_country) {
+      toast.error("Please select a country");
+      return;
+    }
+
     if (!registerForm.residential_street || !registerForm.residential_city || !registerForm.residential_province || !registerForm.residential_postal_code) {
-      toast.error("Please fill in all address fields");
+      toast.error(t.auth.allFieldsRequired);
       return;
     }
 
     setLoading(true);
     try {
+      const redirectUrl = `${window.location.origin}/`;
       const { data, error } = await supabase.auth.signUp({
         email: registerForm.email,
         password: registerForm.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
-          data: {
-            first_name: registerForm.firstName,
-            last_name: registerForm.lastName,
-            role: selectedRole,
-          },
+          emailRedirectTo: redirectUrl,
         },
       });
 
       if (error) throw error;
 
       if (data.user) {
-        await supabase.from("profiles").update({
+        const { error: profileError } = await supabase.from("profiles").update({
+          first_name: registerForm.firstName,
+          last_name: registerForm.lastName,
           gender: registerForm.gender as "male" | "female" | "other" | "prefer_not_to_say",
           date_of_birth: registerForm.dateOfBirth,
           residential_street: registerForm.residential_street,
-          residential_apt_unit: registerForm.residential_apt_unit,
+          residential_apt_unit: registerForm.residential_apt_unit || null,
           residential_city: registerForm.residential_city,
           residential_province: registerForm.residential_province,
           residential_postal_code: registerForm.residential_postal_code,
-          residential_country: registerForm.residential_country,
+          residential_country: registerForm.residential_country as "Portugal" | "Canada",
         }).eq("id", data.user.id);
 
-        toast.success(t.auth.signInSuccess);
+        if (profileError) throw profileError;
+
+        const { error: roleError } = await supabase
+          .from("user_roles")
+          .insert({ user_id: data.user.id, role: selectedRole! });
+
+        if (roleError) throw roleError;
+
+        toast.success("Account created successfully!");
         const redirectPath = selectedRole === "provider" ? "/provider/dashboard" : "/customer/dashboard";
         navigate(redirectPath);
       }
     } catch (error: any) {
-      if (error.message.includes("already registered")) {
-        toast.error("This email is already registered. Please sign in instead.");
-      } else {
-        toast.error(error.message || t.auth.signInError);
-      }
+      toast.error(error.message || "Failed to create account");
     } finally {
       setLoading(false);
     }
   };
 
-  const renderProgressIndicator = () => (
-    <div className="flex items-center justify-center gap-2 mb-6">
-      {[1, 2, 3].map((step) => (
-        <div key={step} className="flex items-center">
-          <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-              signupStep > step
-                ? "bg-primary text-primary-foreground"
-                : signupStep === step
-                ? "bg-primary text-primary-foreground ring-2 ring-primary ring-offset-2"
-                : "bg-muted text-muted-foreground"
-            }`}
-          >
-            {signupStep > step ? <Check className="w-4 h-4" /> : step}
+  const portugueseDistricts = [
+    "Aveiro", "Beja", "Braga", "Bragança", "Castelo Branco", "Coimbra",
+    "Évora", "Faro", "Guarda", "Leiria", "Lisboa", "Portalegre",
+    "Porto", "Santarém", "Setúbal", "Viana do Castelo", "Vila Real", "Viseu",
+    "Açores", "Madeira"
+  ];
+
+  const canadianProvinces = [
+    "Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador",
+    "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island",
+    "Quebec", "Saskatchewan", "Yukon"
+  ];
+
+  const renderRoleSelection = () => (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 gap-3">
+        <button
+          onClick={() => {
+            setSelectedRole("customer");
+            setAuthMode("signup");
+            setSignupStep(1);
+          }}
+          className="group relative p-6 rounded-lg border-2 border-border bg-card hover:border-primary hover:bg-primary/5 transition-all duration-200 text-left"
+        >
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <User className="w-6 h-6 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-semibold mb-1">I'm a Customer</h3>
+              <p className="text-sm text-muted-foreground">
+                Book cleaning services for your home or business
+              </p>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
           </div>
-          {step < 3 && (
-            <div
-              className={`w-12 h-1 mx-1 rounded ${
-                signupStep > step ? "bg-primary" : "bg-muted"
-              }`}
-            />
-          )}
-        </div>
-      ))}
+        </button>
+
+        <button
+          onClick={() => {
+            setSelectedRole("provider");
+            setAuthMode("signup");
+            setSignupStep(1);
+          }}
+          className="group relative p-6 rounded-lg border-2 border-border bg-card hover:border-primary hover:bg-primary/5 transition-all duration-200 text-left"
+        >
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <Shield className="w-6 h-6 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-semibold mb-1">I'm a Provider</h3>
+              <p className="text-sm text-muted-foreground">
+                Offer your cleaning services to customers
+              </p>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+          </div>
+        </button>
+      </div>
+
+      <div className="text-center pt-2">
+        <p className="text-sm text-muted-foreground">
+          Already have an account?{" "}
+          <button
+            onClick={() => setAuthMode("signin")}
+            className="text-primary hover:underline font-medium"
+          >
+            Sign in
+          </button>
+        </p>
+      </div>
     </div>
   );
 
-  // Sign In View
-  if (authMode === "signin") {
+  const renderSignInForm = () => (
+    <form onSubmit={handleLogin} className="space-y-4">
+      <div className="space-y-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="email" className="text-sm font-medium">
+            {t.auth.email}
+          </Label>
+          <UntitledInput
+            id="email"
+            type="email"
+            icon={Mail}
+            placeholder="Enter your email"
+            value={loginForm.email}
+            onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+            error={!!validationErrors.email}
+            size="md"
+          />
+          {validationErrors.email && (
+            <p className="text-xs text-destructive mt-1">{validationErrors.email}</p>
+          )}
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="password" className="text-sm font-medium">
+            {t.auth.password}
+          </Label>
+          <UntitledInput
+            id="password"
+            type="password"
+            icon={Lock}
+            placeholder="Enter your password"
+            value={loginForm.password}
+            onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+            size="md"
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="remember"
+            checked={rememberMe}
+            onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+          />
+          <label
+            htmlFor="remember"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Remember me
+          </label>
+        </div>
+        <button type="button" className="text-sm text-primary hover:underline">
+          {t.auth.forgotPassword}
+        </button>
+      </div>
+
+      <Button type="submit" className="w-full h-11 rounded-lg" disabled={loading}>
+        {loading ? "Signing in..." : t.auth.signIn}
+      </Button>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+        </div>
+      </div>
+
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full h-11 rounded-lg"
+        onClick={() => handleSocialLogin("google")}
+        disabled={loading}
+      >
+        <FaGoogle className="mr-2 h-4 w-4" />
+        Google
+      </Button>
+
+      <div className="text-center pt-2">
+        <p className="text-sm text-muted-foreground">
+          Don't have an account?{" "}
+          <button
+            onClick={() => setAuthMode("roleselect")}
+            className="text-primary hover:underline font-medium"
+          >
+            {t.auth.signUp}
+          </button>
+        </p>
+      </div>
+    </form>
+  );
+
+  const renderSignUpWizard = () => {
+    const progress = (signupStep / 3) * 100;
+
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background to-muted/20">
-        <Card className="w-full max-w-md rounded-3xl shadow-lg border-0">
-          <CardHeader className="space-y-3 pt-8 pb-6 px-6">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/")}
-              className="absolute top-6 left-6 rounded-full"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
+      <div className="space-y-4">
+        {/* Progress indicator */}
+        <div className="space-y-2">
+          <div className="flex justify-between text-xs text-muted-foreground mb-1">
+            <span>Step {signupStep} of 3</span>
+            <span>{Math.round(progress)}% Complete</span>
+          </div>
+          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+            <div
+              className="h-full bg-primary transition-all duration-300 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
 
-            <img src={logoImage} alt="Clinlix Logo" className="mx-auto w-16 h-16 mb-2" />
-            <CardTitle className="text-3xl font-bold text-center">Welcome Back</CardTitle>
-            <CardDescription className="text-center">
-              Sign in to access your account
-            </CardDescription>
-          </CardHeader>
+        {/* Role badge */}
+        <div className="flex items-center gap-2 p-3 bg-primary/10 rounded-lg">
+          {selectedRole === "customer" ? (
+            <User className="w-4 h-4 text-primary" />
+          ) : (
+            <Shield className="w-4 h-4 text-primary" />
+          )}
+          <span className="text-sm font-medium">
+            Signing up as {selectedRole === "customer" ? "Customer" : "Provider"}
+          </span>
+          <button
+            onClick={() => {
+              setAuthMode("roleselect");
+              setSelectedRole(null);
+              setSignupStep(1);
+            }}
+            className="ml-auto text-xs text-primary hover:underline"
+          >
+            Change
+          </button>
+        </div>
 
-          <CardContent className="px-6 pb-8">
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="login-email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="login-email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={loginForm.email}
-                    onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
-                    disabled={loading}
-                    className="pl-10 h-12 rounded-2xl"
+        <form onSubmit={signupStep === 3 ? handleRegister : (e) => e.preventDefault()} className="space-y-4">
+          {signupStep === 1 && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="firstName" className="text-sm font-medium">
+                    First Name
+                  </Label>
+                  <UntitledInput
+                    id="firstName"
+                    icon={User}
+                    placeholder="John"
+                    value={registerForm.firstName}
+                    onChange={(e) => setRegisterForm({ ...registerForm, firstName: e.target.value })}
+                    size="sm"
                   />
                 </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="lastName" className="text-sm font-medium">
+                    Last Name
+                  </Label>
+                  <UntitledInput
+                    id="lastName"
+                    icon={User}
+                    placeholder="Doe"
+                    value={registerForm.lastName}
+                    onChange={(e) => setRegisterForm({ ...registerForm, lastName: e.target.value })}
+                    size="sm"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="email-signup" className="text-sm font-medium">
+                  {t.auth.email}
+                </Label>
+                <UntitledInput
+                  id="email-signup"
+                  type="email"
+                  icon={Mail}
+                  placeholder="Enter your email"
+                  value={registerForm.email}
+                  onChange={(e) => {
+                    setRegisterForm({ ...registerForm, email: e.target.value });
+                    validateEmail(e.target.value);
+                  }}
+                  error={!!validationErrors.email}
+                  size="md"
+                />
                 {validationErrors.email && (
-                  <p className="text-xs text-destructive">{validationErrors.email}</p>
+                  <p className="text-xs text-destructive mt-1">{validationErrors.email}</p>
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="login-password">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="login-password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter password"
-                    value={loginForm.password}
-                    onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-                    disabled={loading}
-                    className="pl-10 pr-10 h-12 rounded-2xl"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4 text-muted-foreground" />
-                    ) : (
-                      <Eye className="w-4 h-4 text-muted-foreground" />
-                    )}
-                  </button>
-                </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="password-signup" className="text-sm font-medium">
+                  {t.auth.password}
+                </Label>
+                <UntitledInput
+                  id="password-signup"
+                  type="password"
+                  icon={Lock}
+                  placeholder="Create a password"
+                  value={registerForm.password}
+                  onChange={(e) => {
+                    setRegisterForm({ ...registerForm, password: e.target.value });
+                    validatePassword(e.target.value);
+                  }}
+                  error={!!validationErrors.password}
+                  size="md"
+                />
+                {validationErrors.password && (
+                  <p className="text-xs text-destructive mt-1">{validationErrors.password}</p>
+                )}
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id="remember"
-                    checked={rememberMe}
-                    onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                  />
-                  <Label htmlFor="remember" className="text-sm cursor-pointer">
-                    Remember me
-                  </Label>
-                </div>
-                <Button
-                  type="button"
-                  variant="link"
-                  onClick={() => navigate("/auth/forgot-password")}
-                  className="h-auto p-0 text-sm"
-                >
-                  Forgot password?
-                </Button>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full h-12 rounded-2xl"
-                disabled={loading}
-              >
-                {loading ? "Signing in..." : "Sign In"}
-              </Button>
-            </form>
-
-            <div className="text-center text-sm mt-4">
-              <span className="text-muted-foreground">Don't have an account? </span>
-              <Button
-                variant="link"
-                onClick={() => {
-                  setAuthMode("signup");
-                  setSignupStep(1);
-                }}
-                className="h-auto p-0 font-semibold"
-              >
-                Sign Up
-              </Button>
-            </div>
-
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or</span>
+              <div className="space-y-1.5">
+                <Label htmlFor="confirmPassword" className="text-sm font-medium">
+                  {t.auth.confirmPassword}
+                </Label>
+                <UntitledInput
+                  id="confirmPassword"
+                  type="password"
+                  icon={Lock}
+                  placeholder="Confirm your password"
+                  value={registerForm.confirmPassword}
+                  onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })}
+                  error={!!validationErrors.confirmPassword}
+                  size="md"
+                />
+                {validationErrors.confirmPassword && (
+                  <p className="text-xs text-destructive mt-1">{validationErrors.confirmPassword}</p>
+                )}
               </div>
             </div>
-
-            <Button
-              type="button"
-              onClick={() => handleSocialLogin("google")}
-              disabled={loading}
-              variant="outline"
-              className="w-full h-12 rounded-2xl"
-            >
-              <FaGoogle className="w-5 h-5 mr-2 text-[#DB4437]" />
-              Continue with Google
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  // Sign Up View
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background to-muted/20">
-      <Card className="w-full max-w-md rounded-3xl shadow-lg border-0">
-        <CardHeader className="space-y-3 pt-8 pb-6 px-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => {
-              if (signupStep === 1) {
-                setAuthMode("signin");
-              } else {
-                setSignupStep((prev) => (prev - 1) as SignupStep);
-              }
-            }}
-            className="absolute top-6 left-6 rounded-full"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-
-          <img src={logoImage} alt="Clinlix Logo" className="mx-auto w-16 h-16 mb-2" />
-          <CardTitle className="text-3xl font-bold text-center">Create Account</CardTitle>
-          <CardDescription className="text-center">
-            {signupStep === 1 && "Let's get started with your account"}
-            {signupStep === 2 && "Tell us about yourself"}
-            {signupStep === 3 && "Where do you live?"}
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="px-6 pb-8">
-          {renderProgressIndicator()}
-
-          {signupStep === 1 && (
-            <>
-              <div className="mb-6">
-                <Label className="text-sm font-medium mb-3 block">I want to...</Label>
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    type="button"
-                    variant={selectedRole === "customer" ? "default" : "outline"}
-                    onClick={() => setSelectedRole("customer")}
-                    className="h-20 flex flex-col items-center justify-center gap-2 rounded-2xl"
-                  >
-                    <User className="w-5 h-5" />
-                    <span className="font-medium">Book Services</span>
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={selectedRole === "provider" ? "default" : "outline"}
-                    onClick={() => setSelectedRole("provider")}
-                    className="h-20 flex flex-col items-center justify-center gap-2 rounded-2xl"
-                  >
-                    <Shield className="w-5 h-5" />
-                    <span className="font-medium">Provide Services</span>
-                  </Button>
-                </div>
-              </div>
-
-              <form onSubmit={handleSignupStep1} className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="first-name">First Name *</Label>
-                    <Input
-                      id="first-name"
-                      placeholder="John"
-                      value={registerForm.firstName}
-                      onChange={(e) => setRegisterForm({ ...registerForm, firstName: e.target.value })}
-                      disabled={loading}
-                      className="h-12 rounded-2xl"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="last-name">Last Name *</Label>
-                    <Input
-                      id="last-name"
-                      placeholder="Doe"
-                      value={registerForm.lastName}
-                      onChange={(e) => setRegisterForm({ ...registerForm, lastName: e.target.value })}
-                      disabled={loading}
-                      className="h-12 rounded-2xl"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={registerForm.email}
-                    onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
-                    disabled={loading}
-                    className="h-12 rounded-2xl"
-                  />
-                  {validationErrors.email && (
-                    <p className="text-xs text-destructive">{validationErrors.email}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password *</Label>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Min. 8 characters"
-                      value={registerForm.password}
-                      onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
-                      disabled={loading}
-                      className="pr-10 h-12 rounded-2xl"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2"
-                    >
-                      {showPassword ? (
-                        <EyeOff className="w-4 h-4 text-muted-foreground" />
-                      ) : (
-                        <Eye className="w-4 h-4 text-muted-foreground" />
-                      )}
-                    </button>
-                  </div>
-                  {validationErrors.password && (
-                    <p className="text-xs text-destructive">{validationErrors.password}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm Password *</Label>
-                  <div className="relative">
-                    <Input
-                      id="confirm-password"
-                      type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Re-enter password"
-                      value={registerForm.confirmPassword}
-                      onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })}
-                      disabled={loading}
-                      className="pr-10 h-12 rounded-2xl"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2"
-                    >
-                      {showConfirmPassword ? (
-                        <EyeOff className="w-4 h-4 text-muted-foreground" />
-                      ) : (
-                        <Eye className="w-4 h-4 text-muted-foreground" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                <Button type="submit" className="w-full h-12 rounded-2xl" disabled={loading}>
-                  Continue
-                  <ChevronRight className="w-4 h-4 ml-2" />
-                </Button>
-              </form>
-            </>
           )}
 
           {signupStep === 2 && (
-            <form onSubmit={handleSignupStep2} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="gender">Gender *</Label>
-                <Select
-                  value={registerForm.gender}
-                  onValueChange={(value) => setRegisterForm({ ...registerForm, gender: value })}
-                  disabled={loading}
-                >
-                  <SelectTrigger id="gender" className="h-12 rounded-2xl">
+            <div className="space-y-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="gender" className="text-sm font-medium">
+                  Gender
+                </Label>
+                <Select value={registerForm.gender} onValueChange={(value) => setRegisterForm({ ...registerForm, gender: value })}>
+                  <SelectTrigger className="h-12 rounded-lg">
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>
@@ -567,66 +552,44 @@ const Auth = () => {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="date-of-birth">Date of Birth * (18+ only)</Label>
-                <Input
-                  id="date-of-birth"
+              <div className="space-y-1.5">
+                <Label htmlFor="dateOfBirth" className="text-sm font-medium">
+                  Date of Birth
+                </Label>
+                <UntitledInput
+                  id="dateOfBirth"
                   type="date"
+                  icon={Calendar}
                   value={registerForm.dateOfBirth}
                   onChange={(e) => setRegisterForm({ ...registerForm, dateOfBirth: e.target.value })}
-                  max={new Date(new Date().setFullYear(new Date().getFullYear() - 18))
-                    .toISOString()
-                    .split("T")[0]}
-                  disabled={loading}
-                  className="h-12 rounded-2xl"
+                  size="md"
                 />
+                <p className="text-xs text-muted-foreground mt-1">You must be at least 18 years old</p>
               </div>
-
-              <div className="flex gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setSignupStep(1)}
-                  className="w-full h-12 rounded-2xl"
-                  disabled={loading}
-                >
-                  <ChevronLeft className="w-4 h-4 mr-2" />
-                  Back
-                </Button>
-                <Button type="submit" className="w-full h-12 rounded-2xl" disabled={loading}>
-                  Continue
-                  <ChevronRight className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-            </form>
+            </div>
           )}
 
           {signupStep === 3 && (
-            <form onSubmit={handleRegister} className="space-y-4">
-              <p className="text-sm text-muted-foreground mb-4">
-                This address is for security purposes only and separate from service addresses.
-              </p>
-
-              {/* Country Selection First */}
-              <div className="space-y-2">
-                <Label htmlFor="country">Country *</Label>
+            <div className="space-y-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="country" className="text-sm font-medium">
+                  Country
+                </Label>
                 <Select
                   value={registerForm.residential_country}
                   onValueChange={(value) => {
-                    setRegisterForm({ 
-                      ...registerForm, 
+                    setRegisterForm({
+                      ...registerForm,
                       residential_country: value,
-                      // Clear address fields when country changes
                       residential_street: "",
                       residential_apt_unit: "",
                       residential_city: "",
                       residential_province: "",
-                      residential_postal_code: ""
+                      residential_postal_code: "",
                     });
                   }}
-                  disabled={loading}
                 >
-                  <SelectTrigger id="country" className="h-12 rounded-2xl">
+                  <SelectTrigger className="h-12 rounded-lg">
                     <SelectValue placeholder="Select country" />
                   </SelectTrigger>
                   <SelectContent>
@@ -636,234 +599,149 @@ const Auth = () => {
                 </Select>
               </div>
 
-              {/* Portugal Address Fields */}
-              {registerForm.residential_country === "Portugal" && (
+              {registerForm.residential_country && (
                 <>
-                  <div className="space-y-2">
-                    <Label htmlFor="street">Rua (Street) *</Label>
-                    <Input
+                  <div className="space-y-1.5">
+                    <Label htmlFor="street" className="text-sm font-medium">
+                      {registerForm.residential_country === "Portugal" ? "Rua" : "Street Address"}
+                    </Label>
+                    <UntitledInput
                       id="street"
-                      placeholder="Rua da Liberdade"
+                      icon={Home}
+                      placeholder={registerForm.residential_country === "Portugal" ? "Rua da Liberdade" : "123 Main St"}
                       value={registerForm.residential_street}
                       onChange={(e) => setRegisterForm({ ...registerForm, residential_street: e.target.value })}
-                      disabled={loading}
-                      className="h-12 rounded-2xl"
+                      size="md"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="apt">Porta/Andar (Door/Floor)</Label>
-                    <Input
+                  <div className="space-y-1.5">
+                    <Label htmlFor="apt" className="text-sm font-medium">
+                      {registerForm.residential_country === "Portugal" ? "Porta/Andar" : "Unit/Suite"} (Optional)
+                    </Label>
+                    <UntitledInput
                       id="apt"
-                      placeholder="3º Esq"
+                      icon={Building}
+                      placeholder={registerForm.residential_country === "Portugal" ? "3º Esq" : "Apt 4B"}
                       value={registerForm.residential_apt_unit}
                       onChange={(e) => setRegisterForm({ ...registerForm, residential_apt_unit: e.target.value })}
-                      disabled={loading}
-                      className="h-12 rounded-2xl"
+                      size="md"
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label htmlFor="postal-code">Código Postal *</Label>
-                      <Input
-                        id="postal-code"
-                        placeholder="1000-001"
-                        value={registerForm.residential_postal_code}
-                        onChange={(e) => setRegisterForm({ ...registerForm, residential_postal_code: e.target.value })}
-                        maxLength={8}
-                        disabled={loading}
-                        className="h-12 rounded-2xl"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="city">Localidade (Locality) *</Label>
-                      <Input
-                        id="city"
-                        placeholder="Lisboa"
-                        value={registerForm.residential_city}
-                        onChange={(e) => setRegisterForm({ ...registerForm, residential_city: e.target.value })}
-                        disabled={loading}
-                        className="h-12 rounded-2xl"
-                      />
-                    </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="city" className="text-sm font-medium">
+                      {registerForm.residential_country === "Portugal" ? "Localidade" : "City"}
+                    </Label>
+                    <UntitledInput
+                      id="city"
+                      icon={MapPin}
+                      placeholder={registerForm.residential_country === "Portugal" ? "Lisboa" : "Toronto"}
+                      value={registerForm.residential_city}
+                      onChange={(e) => setRegisterForm({ ...registerForm, residential_city: e.target.value })}
+                      size="md"
+                    />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="district">Distrito (District) *</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="province" className="text-sm font-medium">
+                      {registerForm.residential_country === "Portugal" ? "Distrito" : "Province"}
+                    </Label>
                     <Select
                       value={registerForm.residential_province}
                       onValueChange={(value) => setRegisterForm({ ...registerForm, residential_province: value })}
-                      disabled={loading}
                     >
-                      <SelectTrigger id="district" className="h-12 rounded-2xl">
-                        <SelectValue placeholder="Select district" />
+                      <SelectTrigger className="h-12 rounded-lg">
+                        <SelectValue placeholder={`Select ${registerForm.residential_country === "Portugal" ? "distrito" : "province"}`} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Aveiro">Aveiro</SelectItem>
-                        <SelectItem value="Beja">Beja</SelectItem>
-                        <SelectItem value="Braga">Braga</SelectItem>
-                        <SelectItem value="Bragança">Bragança</SelectItem>
-                        <SelectItem value="Castelo Branco">Castelo Branco</SelectItem>
-                        <SelectItem value="Coimbra">Coimbra</SelectItem>
-                        <SelectItem value="Évora">Évora</SelectItem>
-                        <SelectItem value="Faro">Faro</SelectItem>
-                        <SelectItem value="Guarda">Guarda</SelectItem>
-                        <SelectItem value="Leiria">Leiria</SelectItem>
-                        <SelectItem value="Lisboa">Lisboa</SelectItem>
-                        <SelectItem value="Portalegre">Portalegre</SelectItem>
-                        <SelectItem value="Porto">Porto</SelectItem>
-                        <SelectItem value="Santarém">Santarém</SelectItem>
-                        <SelectItem value="Setúbal">Setúbal</SelectItem>
-                        <SelectItem value="Viana do Castelo">Viana do Castelo</SelectItem>
-                        <SelectItem value="Vila Real">Vila Real</SelectItem>
-                        <SelectItem value="Viseu">Viseu</SelectItem>
-                        <SelectItem value="Açores">Açores</SelectItem>
-                        <SelectItem value="Madeira">Madeira</SelectItem>
+                        {(registerForm.residential_country === "Portugal" ? portugueseDistricts : canadianProvinces).map((item) => (
+                          <SelectItem key={item} value={item}>
+                            {item}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
-                </>
-              )}
 
-              {/* Canada Address Fields */}
-              {registerForm.residential_country === "Canada" && (
-                <>
-                  <div className="space-y-2">
-                    <Label htmlFor="street">Street Address *</Label>
-                    <Input
-                      id="street"
-                      placeholder="123 Main Street"
-                      value={registerForm.residential_street}
-                      onChange={(e) => setRegisterForm({ ...registerForm, residential_street: e.target.value })}
-                      disabled={loading}
-                      className="h-12 rounded-2xl"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="apt">Unit/Suite</Label>
-                    <Input
-                      id="apt"
-                      placeholder="Unit 4B"
-                      value={registerForm.residential_apt_unit}
-                      onChange={(e) => setRegisterForm({ ...registerForm, residential_apt_unit: e.target.value })}
-                      disabled={loading}
-                      className="h-12 rounded-2xl"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label htmlFor="city">City *</Label>
-                      <Input
-                        id="city"
-                        placeholder="Toronto"
-                        value={registerForm.residential_city}
-                        onChange={(e) => setRegisterForm({ ...registerForm, residential_city: e.target.value })}
-                        disabled={loading}
-                        className="h-12 rounded-2xl"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="province">Province *</Label>
-                      <Select
-                        value={registerForm.residential_province}
-                        onValueChange={(value) => setRegisterForm({ ...registerForm, residential_province: value })}
-                        disabled={loading}
-                      >
-                        <SelectTrigger id="province" className="h-12 rounded-2xl">
-                          <SelectValue placeholder="Select province" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="AB">Alberta</SelectItem>
-                          <SelectItem value="BC">British Columbia</SelectItem>
-                          <SelectItem value="MB">Manitoba</SelectItem>
-                          <SelectItem value="NB">New Brunswick</SelectItem>
-                          <SelectItem value="NL">Newfoundland and Labrador</SelectItem>
-                          <SelectItem value="NS">Nova Scotia</SelectItem>
-                          <SelectItem value="NT">Northwest Territories</SelectItem>
-                          <SelectItem value="NU">Nunavut</SelectItem>
-                          <SelectItem value="ON">Ontario</SelectItem>
-                          <SelectItem value="PE">Prince Edward Island</SelectItem>
-                          <SelectItem value="QC">Quebec</SelectItem>
-                          <SelectItem value="SK">Saskatchewan</SelectItem>
-                          <SelectItem value="YT">Yukon</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="postal-code">Postal Code *</Label>
-                    <Input
-                      id="postal-code"
-                      placeholder="A1A 1A1"
+                  <div className="space-y-1.5">
+                    <Label htmlFor="postal" className="text-sm font-medium">
+                      {registerForm.residential_country === "Portugal" ? "Código Postal" : "Postal Code"}
+                    </Label>
+                    <UntitledInput
+                      id="postal"
+                      icon={Map}
+                      placeholder={registerForm.residential_country === "Portugal" ? "1000-001" : "M5H 2N2"}
                       value={registerForm.residential_postal_code}
-                      onChange={(e) => setRegisterForm({ ...registerForm, residential_postal_code: e.target.value.toUpperCase() })}
-                      maxLength={7}
-                      disabled={loading}
-                      className="h-12 rounded-2xl"
+                      onChange={(e) => setRegisterForm({ ...registerForm, residential_postal_code: e.target.value })}
+                      size="md"
                     />
                   </div>
                 </>
               )}
-
-              <div className="flex gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setSignupStep(2)}
-                  className="w-full h-12 rounded-2xl"
-                  disabled={loading}
-                >
-                  <ChevronLeft className="w-4 h-4 mr-2" />
-                  Back
-                </Button>
-                <Button type="submit" className="w-full h-12 rounded-2xl" disabled={loading}>
-                  {loading ? "Creating Account..." : "Complete Sign Up"}
-                  <Check className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-            </form>
+            </div>
           )}
 
-          <div className="text-center text-sm mt-4">
-            <span className="text-muted-foreground">Already have an account? </span>
-            <Button
-              variant="link"
-              onClick={() => setAuthMode("signin")}
-              className="h-auto p-0 font-semibold"
-            >
-              Sign In
-            </Button>
-          </div>
-
-          {signupStep === 1 && (
-            <>
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Or</span>
-                </div>
-              </div>
-
-              <Button
-                type="button"
-                onClick={() => handleSocialLogin("google")}
-                disabled={loading}
-                variant="outline"
-                className="w-full h-12 rounded-2xl"
-              >
-                <FaGoogle className="w-5 h-5 mr-2 text-[#DB4437]" />
-                Continue with Google
+          <div className="flex gap-2 pt-2">
+            {signupStep > 1 && (
+              <Button type="button" variant="outline" onClick={handlePreviousStep} className="flex-1 h-11 rounded-lg">
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Back
               </Button>
-            </>
-          )}
+            )}
+            {signupStep < 3 ? (
+              <Button type="button" onClick={handleNextStep} className="flex-1 h-11 rounded-lg">
+                Next
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            ) : (
+              <Button type="submit" disabled={loading} className="flex-1 h-11 rounded-lg">
+                {loading ? "Creating account..." : (
+                  <>
+                    <Check className="w-4 h-4 mr-1" />
+                    Complete
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
+        </form>
+
+        <div className="text-center pt-2">
+          <p className="text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <button
+              onClick={() => setAuthMode("signin")}
+              className="text-primary hover:underline font-medium"
+            >
+              Sign in
+            </button>
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted/20 p-3 sm:p-4">
+      <Card className="w-full max-w-md shadow-xl rounded-xl">
+        <CardHeader className="space-y-1 text-center pb-4">
+          <div className="flex justify-center mb-3">
+            <img src={logoImage} alt="Clinlix Logo" className="h-10 sm:h-12" />
+          </div>
+          <CardTitle className="text-2xl sm:text-3xl font-bold tracking-tight">
+            {authMode === "roleselect" ? "Choose Your Path" : authMode === "signin" ? t.auth.signIn : t.auth.signUp}
+          </CardTitle>
+          <CardDescription className="text-sm sm:text-base">
+            {authMode === "roleselect" 
+              ? "Select how you'd like to use Clinlix" 
+              : authMode === "signin" 
+              ? "Welcome back! Sign in to continue" 
+              : "Create your account to get started"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 px-4 sm:px-6">
+          {authMode === "roleselect" ? renderRoleSelection() : authMode === "signin" ? renderSignInForm() : renderSignUpWizard()}
         </CardContent>
       </Card>
     </div>
