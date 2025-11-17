@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Calendar, Heart } from "lucide-react";
 import ProviderCard from "@/components/ProviderCard";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 
 interface SwipeableProviderCardProps {
   providerId: string;
@@ -50,13 +50,13 @@ export const SwipeableProviderCard = (props: SwipeableProviderCardProps) => {
     // Right swipe - Book
     if (swipeOffset > SWIPE_THRESHOLD) {
       if (navigator.vibrate) navigator.vibrate(50);
-      toast.success(`Booking with ${props.fullName}`);
+      banner.success(`Booking with ${props.fullName}`);
       navigate(`/customer/booking?providerId=${props.providerId}`);
     }
     // Left swipe - Save/Favorite
     else if (swipeOffset < -SWIPE_THRESHOLD) {
       if (navigator.vibrate) navigator.vibrate(50);
-      toast.success(`${props.fullName} saved to favorites`);
+      banner.success(`${props.fullName} saved to favorites`);
       // Here you would save to favorites
     }
 

@@ -18,7 +18,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 import NotificationPreferences from "@/components/NotificationPreferences";
 
 interface SettingsDrawerProps {
@@ -55,7 +55,7 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
       setProfile(profileData);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Failed to load settings');
+      banner.error('Failed to load settings');
     } finally {
       setLoading(false);
     }
@@ -74,10 +74,10 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
       if (error) throw error;
 
       setProfile({ ...profile, [field]: value });
-      toast.success('✅ Changes saved');
+      banner.success('✅ Changes saved');
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Failed to save changes');
+      banner.error('Failed to save changes');
     }
   };
 
@@ -88,22 +88,22 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
       });
 
       if (error) throw error;
-      toast.success('Password reset email sent! Check your inbox.');
+      banner.success('Password reset email sent! Check your inbox.');
       setOpen(false);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Failed to send reset email');
+      banner.error('Failed to send reset email');
     }
   };
 
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
-      toast.success("Logged out successfully");
+      banner.success("Logged out successfully");
       navigate('/auth');
     } catch (error) {
       console.error('Logout error:', error);
-      toast.error("Failed to logout");
+      banner.error("Failed to logout");
     }
   };
 

@@ -3,7 +3,7 @@ import { Avatar } from '@/components/base/avatar/avatar';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { banner } from "@/hooks/use-banner";
 
 interface DashboardHeaderProps {
   firstName: string;
@@ -23,7 +23,7 @@ export const DashboardHeader = ({
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      toast.error('Failed to logout');
+      banner.error('Failed to logout');
     } else {
       navigate('/auth');
     }
