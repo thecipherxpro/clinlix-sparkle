@@ -90,22 +90,17 @@ export const QuickAcceptRejectDialog = ({
 
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
-
-      const { error } = await supabase
-        .from("bookings")
-        .update({
-          job_status: "rejected",
-          rejection_reason: finalReason,
-          rejected_at: new Date().toISOString(),
-          rejected_by: user.id,
-        })
-        .eq("id", bookingId);
+      // Call edge function to handle decline notification and customer reassignment
+      const { error } = await supabase.functions.invoke('handle-booking-decline', {
+        body: {
+          bookingId: bookingId,
+          rejectionReason: finalReason
+        }
+      });
 
       if (error) throw error;
 
-      toast.success("Job declined");
+      toast.success("Job declined - Customer notified");
       onSuccess?.();
       onClose();
     } catch (error: any) {

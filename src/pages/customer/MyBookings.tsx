@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Clock, Star, MoreVertical, MessageSquare } from "lucide-react";
+import { Calendar, MapPin, Clock, Star, MoreVertical, MessageSquare, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { useI18n } from "@/contexts/I18nContext";
 import { ChatDrawer } from "@/components/chat/ChatDrawer";
 import { BookingCardSkeletonList } from "@/components/skeletons/BookingCardSkeleton";
+import { BookingReassignmentDialog } from "@/components/booking/BookingReassignmentDialog";
 
 const MyBookings = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const MyBookings = () => {
   const [activeTab, setActiveTab] = useState("upcoming");
   const [chatOpen, setChatOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
+  const [reassignmentOpen, setReassignmentOpen] = useState(false);
+  const [declinedBooking, setDeclinedBooking] = useState<any>(null);
 
   useEffect(() => {
     checkAuthAndFetchBookings();
@@ -65,9 +68,104 @@ const MyBookings = () => {
     ["pending", "confirmed", "on_the_way", "arrived", "started"].includes(b.job_status),
   );
 
+  const declinedBookings = bookings.filter((b) => b.job_status === "declined");
+
   const completedBookings = bookings.filter((b) => b.job_status === "completed");
 
   const cancelledBookings = bookings.filter((b) => b.job_status === "cancelled");
+
+  const renderDeclinedBookingCard = (booking: any) => {
+    const provider = booking.provider_profiles;
+    const address = booking.customer_addresses;
+    const packageData = address?.cleaning_packages;
+
+    return (
+      <div
+        key={booking.id}
+        className="bg-card rounded-2xl p-4 shadow-sm border-2 border-warning/50 hover:shadow-md transition-shadow cursor-pointer"
+        onClick={() => {
+          setDeclinedBooking(booking);
+          setReassignmentOpen(true);
+        }}
+      >
+        {/* Warning Banner */}
+        <div className="flex items-center gap-2 mb-3 px-3 py-2 bg-warning/10 rounded-lg">
+          <AlertTriangle className="w-4 h-4 text-warning" />
+          <span className="text-xs font-medium text-warning">Action Required - Click to Reassign</span>
+        </div>
+
+        {/* Header: Avatar, Name, Price */}
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex items-start gap-3 flex-1">
+            <Avatar
+              src={provider?.photo_url}
+              alt={provider?.full_name || "Provider"}
+              fallback={provider?.full_name?.charAt(0) || "P"}
+              size="md"
+              className="ring-2 ring-warning/50"
+            />
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-sm text-foreground truncate">
+                {provider?.full_name || "Unassigned"}
+              </h3>
+              <p className="text-xs text-muted-foreground">{packageData?.package_name || "House Cleaning"}</p>
+              {booking.rejection_reason && (
+                <p className="text-xs text-warning mt-1 italic">{booking.rejection_reason}</p>
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col items-end gap-1">
+            <span className="text-base font-bold text-foreground">
+              €{Number(booking.total_estimate).toFixed(2)}
+            </span>
+          </div>
+        </div>
+
+        {/* Details: Date, Time, Address */}
+        <div className="space-y-2 mb-3">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Calendar className="w-4 h-4" />
+            <span>
+              {new Date(booking.requested_date).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              })}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Clock className="w-4 h-4" />
+            <span>{booking.requested_time}</span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <MapPin className="w-4 h-4" />
+            <span className="truncate">
+              {address?.street || address?.rua}, {address?.apt_unit || address?.porta_andar}
+            </span>
+          </div>
+        </div>
+
+        {/* Footer: Status */}
+        <div className="flex items-center justify-between">
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-full px-4 h-8 text-xs border-warning text-warning hover:bg-warning/10"
+            onClick={(e) => {
+              e.stopPropagation();
+              setDeclinedBooking(booking);
+              setReassignmentOpen(true);
+            }}
+          >
+            <AlertTriangle className="w-3 h-3 mr-1.5" />
+            Reassign Now
+          </Button>
+          <span className="text-xs font-medium px-3 py-1 rounded-full bg-warning/10 text-warning">
+            Declined
+          </span>
+        </div>
+      </div>
+    );
+  };
 
   const renderBookingCard = (booking: any) => {
     const provider = booking.provider_profiles;
@@ -205,10 +303,23 @@ const MyBookings = () => {
 
       {/* Tabs */}
       <div className="px-4 pt-4">
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-2 mb-6 overflow-x-auto">
+          {declinedBookings.length > 0 && (
+            <button
+              onClick={() => setActiveTab("declined")}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
+                activeTab === "declined"
+                  ? "bg-warning text-white shadow-sm"
+                  : "bg-warning/10 text-warning hover:bg-warning/20"
+              }`}
+            >
+              <AlertTriangle className="w-3 h-3" />
+              Action Required ({declinedBookings.length})
+            </button>
+          )}
           <button
             onClick={() => setActiveTab("upcoming")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === "upcoming"
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
@@ -218,7 +329,7 @@ const MyBookings = () => {
           </button>
           <button
             onClick={() => setActiveTab("completed")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === "completed"
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
@@ -228,7 +339,7 @@ const MyBookings = () => {
           </button>
           <button
             onClick={() => setActiveTab("cancelled")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === "cancelled"
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
@@ -240,6 +351,12 @@ const MyBookings = () => {
 
         {/* Booking Cards */}
         <div className="space-y-3">
+          {activeTab === "declined" &&
+            (declinedBookings.length > 0 ? (
+              declinedBookings.map(renderDeclinedBookingCard)
+            ) : (
+              <p className="text-center text-muted-foreground py-8 text-sm">No declined bookings</p>
+            ))}
           {activeTab === "upcoming" &&
             (activeBookings.length > 0 ? (
               activeBookings.map(renderBookingCard)
@@ -274,6 +391,18 @@ const MyBookings = () => {
           otherPartyAvatar={selectedBooking.provider_profiles?.photo_url}
         />
       )}
+
+      {/* Reassignment Dialog */}
+      <BookingReassignmentDialog
+        open={reassignmentOpen}
+        onClose={() => {
+          setReassignmentOpen(false);
+          setDeclinedBooking(null);
+          checkAuthAndFetchBookings(); // Refresh bookings
+        }}
+        bookingId={declinedBooking?.id}
+        bookingDetails={declinedBooking}
+      />
     </div>
   );
 };
