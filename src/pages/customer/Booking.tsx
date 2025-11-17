@@ -13,6 +13,9 @@ import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import ProviderCard from "@/components/ProviderCard";
 import { checkUserRole } from "@/lib/roleUtils";
 import { useI18n } from "@/contexts/I18nContext";
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import { StripePaymentForm } from '@/components/booking/StripePaymentForm';
 const STEPS = [{
   id: 1,
   name: "Where",
@@ -56,14 +59,75 @@ const Booking = () => {
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [recurringService, setRecurringService] = useState(false);
+  
+  // Payment state
+  const [stripePromise, setStripePromise] = useState<any>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
   useEffect(() => {
     checkAuthAndFetchData();
+    // Initialize Stripe
+    initializeStripe();
   }, []);
+  
   useEffect(() => {
     if (currentStep === 3 && selectedDate) {
       fetchAvailableProviders();
     }
   }, [currentStep, selectedDate]);
+  
+  useEffect(() => {
+    if (currentStep === 5 && !clientSecret && !paymentProcessing) {
+      createPaymentIntent();
+    }
+  }, [currentStep]);
+  
+  const initializeStripe = async () => {
+    const publishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+    if (publishableKey) {
+      const stripe = await loadStripe(publishableKey);
+      setStripePromise(stripe);
+    }
+  };
+  
+  const createPaymentIntent = async () => {
+    if (!selectedAddress || paymentProcessing) return;
+    
+    setPaymentProcessing(true);
+    try {
+      const total = calculateTotal();
+      const currency = selectedAddress.currency;
+      
+      const { data, error } = await supabase.functions.invoke('create-payment-intent', {
+        body: {
+          amount: total,
+          currency: currency,
+          metadata: {
+            addressId: selectedAddress.id,
+            providerId: selectedProvider?.id,
+            packageId: selectedAddress.cleaning_packages?.id,
+          }
+        }
+      });
+      
+      if (error) throw error;
+      
+      setClientSecret(data.clientSecret);
+      setPaymentIntentId(data.paymentIntentId);
+    } catch (error: any) {
+      console.error('Error creating payment intent:', error);
+      toast.error('Failed to initialize payment');
+      setCurrentStep(4); // Go back to add-ons step
+    } finally {
+      setPaymentProcessing(false);
+    }
+  };
+  
+  const handlePaymentSuccess = (intentId: string) => {
+    setPaymentIntentId(intentId);
+    setCurrentStep(6); // Move to review step
+  };
   const checkAuthAndFetchData = async () => {
     try {
       const {
@@ -139,6 +203,10 @@ const Booking = () => {
       toast.error('Choose a provider to continue booking');
       return;
     }
+    if (currentStep === 5) {
+      // Payment handled by StripePaymentForm component
+      return;
+    }
     if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     } else {
@@ -151,6 +219,12 @@ const Booking = () => {
     }
   };
   const handleConfirmBooking = async () => {
+    if (!paymentIntentId) {
+      toast.error('Payment required to complete booking');
+      setCurrentStep(5); // Go back to payment
+      return;
+    }
+    
     try {
       const {
         data: {
@@ -177,7 +251,8 @@ const Booking = () => {
           addonIds: selectedAddons,
           requestedDate: dateString,
           requestedTime: selectedTime,
-          recurringService: recurringService
+          recurringService: recurringService,
+          paymentIntentId: paymentIntentId
         }
       });
 
@@ -593,23 +668,31 @@ const Booking = () => {
             <div>
               <h2 className="text-2xl font-bold mb-2">Payment Information</h2>
               <p className="text-muted-foreground">
-                Payment will be charged after provider confirms booking
+                Secure payment processing via Stripe
               </p>
             </div>
 
-            <Card className="border-0 shadow-sm">
-              <CardContent className="pt-6">
-                <div className="text-center py-8">
-                  <CreditCard className="w-16 h-16 mx-auto mb-4 text-primary" />
-                  <p className="text-muted-foreground mb-4">
-                    Stripe payment integration coming soon
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    For now, you can proceed with the booking request
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            {paymentProcessing && (
+              <Card className="border-0 shadow-sm">
+                <CardContent className="pt-6">
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Initializing payment...</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {!paymentProcessing && clientSecret && stripePromise && (
+              <Elements stripe={stripePromise} options={{ clientSecret }}>
+                <StripePaymentForm 
+                  onSuccess={handlePaymentSuccess}
+                  onBack={handleBack}
+                  amount={calculateTotal()}
+                  currency={selectedAddress?.currency || 'EUR'}
+                />
+              </Elements>
+            )}
           </div>}
 
         {/* Step 6: Review */}
