@@ -261,6 +261,29 @@ const BookingDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+            {/* Provider Card - Mobile Only */}
+            {isMobile && provider && (
+              <PersonCard
+                title="Your Provider"
+                person={{
+                  ...provider,
+                  phone: provider.profiles?.phone,
+                  email: provider.profiles?.email || "",
+                }}
+                onMessage={canMessage ? handleMessage : undefined}
+                onNavigate={handleNavigate}
+                onViewProfile={() => navigate(`/provider-profile/${provider.id}`)}
+              />
+            )}
+
+            {isMobile && !provider && (
+              <Card className="animate-fade-in shadow-sm">
+                <CardContent className="p-4 text-center text-muted-foreground">
+                  <p className="text-sm">No provider assigned yet</p>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Status Stepper */}
             {!['cancelled', 'declined'].includes(booking.job_status) && (
               <Card className="animate-fade-in shadow-sm">
