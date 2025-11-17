@@ -152,13 +152,13 @@ const BookingDetails = () => {
   const currency = address?.currency || "EUR";
 
   const getStatusConfig = (status: string) => {
-    const configs: Record<string, { label: string; color: string }> = {
-      pending: { label: "⏳ Awaiting Confirmation", color: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20" },
-      confirmed: { label: "✓ Confirmed", color: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
-      started: { label: "🔄 In Progress", color: "bg-purple-500/10 text-purple-600 border-purple-500/20" },
-      completed: { label: "✅ Completed", color: "bg-green-500/10 text-green-600 border-green-500/20" },
-      cancelled: { label: "❌ Cancelled", color: "bg-red-500/10 text-red-600 border-red-500/20" },
-      declined: { label: "⚠️ Declined", color: "bg-orange-500/10 text-orange-600 border-orange-500/20" },
+    const configs: Record<string, { label: string; variant: "secondary" | "default" | "destructive" | "outline" }> = {
+      pending: { label: "⏳ Awaiting Confirmation", variant: "secondary" },
+      confirmed: { label: "✓ Confirmed", variant: "default" },
+      started: { label: "🔄 In Progress", variant: "default" },
+      completed: { label: "✅ Completed", variant: "default" },
+      cancelled: { label: "❌ Cancelled", variant: "destructive" },
+      declined: { label: "⚠️ Declined", variant: "destructive" },
     };
     return configs[status] || configs.pending;
   };
@@ -168,28 +168,28 @@ const BookingDetails = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <StickyPageHeader title="Booking Details">
-        <div className="px-4 py-3 flex items-center justify-between border-t border-border">
-          <Badge className={`px-3 py-1 text-sm font-medium border ${statusConfig.color}`}>
+        <div className="px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-t border-border">
+          <Badge variant={statusConfig.variant} className="text-xs sm:text-sm">
             {statusConfig.label}
           </Badge>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Calendar className="w-4 h-4" />
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             {format(new Date(booking.requested_date), "MMM dd, yyyy")}
-            <Clock className="w-4 h-4 ml-2" />
+            <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1 sm:ml-2" />
             {booking.requested_time}
           </div>
         </div>
       </StickyPageHeader>
 
-      <main className="container max-w-4xl px-4 py-6">
-        {/* Desktop: 2-column layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
+      <main className="container max-w-4xl px-4 py-4 sm:py-6">
+        {/* Mobile & Desktop: Responsive layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2 space-y-4">
             {/* Status Stepper */}
             {!['cancelled', 'declined'].includes(booking.job_status) && (
-              <Card className="border-0 shadow-sm">
-                <CardContent className="p-4">
+              <Card>
+                <CardContent className="p-3 sm:p-4">
                   <StatusStepper currentStatus={booking.job_status} />
                 </CardContent>
               </Card>
@@ -197,16 +197,16 @@ const BookingDetails = () => {
 
             {/* Declined Warning */}
             {isDeclined && (
-              <Card className="border-orange-500/20 bg-orange-500/5">
-                <CardContent className="p-4 flex items-start gap-3">
-                  <XCircle className="w-5 h-5 text-orange-600 shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-orange-600 mb-1">Booking Declined</h3>
-                    <p className="text-sm text-orange-600/80">
+              <Card className="border-destructive/30 bg-destructive/5">
+                <CardContent className="p-3 sm:p-4 flex items-start gap-2 sm:gap-3">
+                  <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-destructive shrink-0 mt-0.5" />
+                  <div className="flex-1 space-y-1">
+                    <h3 className="font-semibold text-sm sm:text-base text-destructive">Booking Declined</h3>
+                    <p className="text-xs sm:text-sm text-destructive/80">
                       This booking was declined by the provider. Please reassign to another provider.
                     </p>
                     {booking.rejection_reason && (
-                      <p className="text-sm text-orange-600/80 mt-2 italic">
+                      <p className="text-xs sm:text-sm text-destructive/80 mt-1 italic">
                         Reason: {booking.rejection_reason}
                       </p>
                     )}
