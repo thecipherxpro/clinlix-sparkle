@@ -168,28 +168,31 @@ const BookingDetails = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <StickyPageHeader title="Booking Details">
-        <div className="px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-t border-border">
-          <Badge variant={statusConfig.variant} className="text-xs sm:text-sm">
+        <div className="px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t">
+          <Badge variant={statusConfig.variant} className="text-xs sm:text-sm px-3 py-1">
             {statusConfig.label}
           </Badge>
-          <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            {format(new Date(booking.requested_date), "MMM dd, yyyy")}
-            <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1 sm:ml-2" />
-            {booking.requested_time}
+          <div className="flex items-center gap-3 text-xs sm:text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <Calendar className="w-4 h-4" />
+              <span>{format(new Date(booking.requested_date), "MMM dd, yyyy")}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Clock className="w-4 h-4" />
+              <span>{booking.requested_time}</span>
+            </div>
           </div>
         </div>
       </StickyPageHeader>
 
-      <main className="container max-w-4xl px-4 py-4 sm:py-6">
-        {/* Mobile & Desktop: Responsive layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <main className="container max-w-5xl px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-6">
             {/* Status Stepper */}
             {!['cancelled', 'declined'].includes(booking.job_status) && (
               <Card>
-                <CardContent className="p-3 sm:p-4">
+                <CardContent className="p-6">
                   <StatusStepper currentStatus={booking.job_status} />
                 </CardContent>
               </Card>
@@ -197,16 +200,16 @@ const BookingDetails = () => {
 
             {/* Declined Warning */}
             {isDeclined && (
-              <Card className="border-destructive/30 bg-destructive/5">
-                <CardContent className="p-3 sm:p-4 flex items-start gap-2 sm:gap-3">
-                  <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-destructive shrink-0 mt-0.5" />
-                  <div className="flex-1 space-y-1">
-                    <h3 className="font-semibold text-sm sm:text-base text-destructive">Booking Declined</h3>
-                    <p className="text-xs sm:text-sm text-destructive/80">
+              <Card className="border-destructive/50 bg-destructive/5">
+                <CardContent className="p-6 flex items-start gap-3">
+                  <XCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+                  <div className="flex-1 space-y-2">
+                    <h3 className="font-semibold text-base text-destructive">Booking Declined</h3>
+                    <p className="text-sm text-destructive/80">
                       This booking was declined by the provider. Please reassign to another provider.
                     </p>
                     {booking.rejection_reason && (
-                      <p className="text-xs sm:text-sm text-destructive/80 mt-1 italic">
+                      <p className="text-sm text-destructive/80 italic">
                         Reason: {booking.rejection_reason}
                       </p>
                     )}
@@ -234,7 +237,7 @@ const BookingDetails = () => {
           </div>
 
           {/* Right Sidebar */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* Provider Card */}
             {provider ? (
               <PersonCard
@@ -249,7 +252,7 @@ const BookingDetails = () => {
                 onViewProfile={() => navigate(`/provider-profile/${provider.id}`)}
               />
             ) : (
-              <Card className="border-0 shadow-sm">
+              <Card>
                 <CardContent className="p-6 text-center text-muted-foreground">
                   <p className="text-sm">No provider assigned yet</p>
                 </CardContent>
@@ -257,25 +260,27 @@ const BookingDetails = () => {
             )}
 
             {/* Actions */}
-            <Card className="border-0 shadow-sm sticky top-20">
-              <CardContent className="p-4 space-y-2">
+            <Card className="sticky top-20">
+              <CardContent className="p-4 space-y-3">
                 {isDeclined && (
                   <Button
                     onClick={handleReassign}
-                    className="w-full gap-2"
+                    className="w-full gap-2 h-10"
+                    size="default"
                   >
                     <RotateCcw className="w-4 h-4" />
-                    Reassign to Another Provider
+                    Reassign Provider
                   </Button>
                 )}
 
                 {canReview && (
                   <Button
                     onClick={handleReview}
-                    className="w-full gap-2"
+                    className="w-full gap-2 h-10"
+                    size="default"
                   >
                     <Star className="w-4 h-4" />
-                    Leave a Review
+                    Leave Review
                   </Button>
                 )}
 
@@ -283,7 +288,8 @@ const BookingDetails = () => {
                   <Button
                     variant="outline"
                     onClick={handleMessage}
-                    className="w-full gap-2"
+                    className="w-full gap-2 h-10"
+                    size="default"
                   >
                     <MessageCircle className="w-4 h-4" />
                     Message Provider
@@ -294,7 +300,8 @@ const BookingDetails = () => {
                   <Button
                     variant="outline"
                     onClick={() => setCancelDialogOpen(true)}
-                    className="w-full gap-2 text-destructive hover:text-destructive border-destructive/20"
+                    className="w-full gap-2 h-10 text-destructive hover:text-destructive hover:bg-destructive/10"
+                    size="default"
                   >
                     <XCircle className="w-4 h-4" />
                     Cancel Booking

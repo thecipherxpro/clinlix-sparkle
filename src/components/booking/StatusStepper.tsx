@@ -1,4 +1,4 @@
-import { CheckCircle, Circle, Clock, Loader2 } from "lucide-react";
+import { CheckCircle, Circle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Step {
@@ -28,19 +28,19 @@ export const StatusStepper = ({ currentStatus }: StatusStepperProps) => {
   const getStepIcon = (status: Step["status"]) => {
     switch (status) {
       case "completed":
-        return <CheckCircle className="w-6 h-6 text-green-600" />;
+        return <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-primary fill-primary/10" />;
       case "current":
-        return <Loader2 className="w-6 h-6 text-primary animate-spin" />;
+        return <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 text-primary animate-spin" />;
       case "upcoming":
-        return <Circle className="w-6 h-6 text-muted-foreground" />;
+        return <Circle className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" />;
     }
   };
 
   return (
     <div className="w-full py-6">
-      <div className="flex items-center justify-between relative px-4 md:px-0">
+      <div className="flex items-center justify-between relative">
         {/* Progress Line */}
-        <div className="absolute top-3 left-0 right-0 h-0.5 bg-border mx-4 md:mx-0">
+        <div className="absolute top-2.5 sm:top-3 left-0 right-0 h-0.5 bg-border">
           <div
             className="h-full bg-primary transition-all duration-500"
             style={{
@@ -53,22 +53,15 @@ export const StatusStepper = ({ currentStatus }: StatusStepperProps) => {
         {steps.map((step, index) => (
           <div
             key={index}
-            className="flex flex-col items-center gap-2 z-10 bg-background"
+            className="flex flex-col items-center gap-2 z-10 relative"
           >
-            <div
-              className={cn(
-                "rounded-full p-1 transition-all duration-300",
-                step.status === "completed" && "bg-green-100 dark:bg-green-950",
-                step.status === "current" && "bg-primary/10 animate-pulse",
-                step.status === "upcoming" && "bg-muted"
-              )}
-            >
+            <div className="bg-background px-1">
               {getStepIcon(step.status)}
             </div>
             <span
               className={cn(
-                "text-xs sm:text-sm font-medium text-center max-w-[80px] transition-colors",
-                step.status === "completed" && "text-green-600",
+                "text-xs sm:text-sm font-medium text-center max-w-[70px] sm:max-w-[80px]",
+                step.status === "completed" && "text-primary",
                 step.status === "current" && "text-primary font-semibold",
                 step.status === "upcoming" && "text-muted-foreground"
               )}
