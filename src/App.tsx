@@ -33,7 +33,7 @@ import PaymentMethods from "./pages/customer/PaymentMethods";
 import CustomerSettings from "./pages/customer/CustomerSettings";
 import ProviderSettings from "./pages/provider/ProviderSettings";
 import JobDetail from "./pages/provider/JobDetail";
-import Messages from "./pages/Messages";
+
 import NotFound from "./pages/NotFound";
 import CustomerLayout from "./components/layouts/CustomerLayout";
 import ProviderLayout from "./components/layouts/ProviderLayout";
@@ -73,7 +73,6 @@ const App = () => (
             <Route path="/customer/payment-methods" element={<PaymentMethods />} />
             <Route path="/customer/how-it-works" element={<HowItWorks />} />
             <Route path="/customer/pricing" element={<Pricing />} />
-            <Route path="/customer/messages" element={<Messages />} />
           </Route>
           
           <Route path="/providers/profile/:providerId" element={<ProviderProfile />} />
@@ -89,7 +88,6 @@ const App = () => (
             <Route path="/provider/profile" element={<ProviderProfilePage />} />
             <Route path="/provider/settings" element={<ProviderSettings />} />
             <Route path="/provider/reviews" element={<ProviderReviews />} />
-            <Route path="/provider/messages" element={<Messages />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
