@@ -16,25 +16,25 @@ export const DemographicsFields = ({ form, disabled = false }: DemographicsField
         name="gender"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Gender *</FormLabel>
+            <FormLabel className="text-sm font-medium">Gender *</FormLabel>
             <Select 
               onValueChange={field.onChange} 
               defaultValue={field.value}
               disabled={disabled}
             >
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="h-11 text-base">
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-                <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="male" className="text-base py-3">Male</SelectItem>
+                <SelectItem value="female" className="text-base py-3">Female</SelectItem>
+                <SelectItem value="other" className="text-base py-3">Other</SelectItem>
+                <SelectItem value="prefer_not_to_say" className="text-base py-3">Prefer not to say</SelectItem>
               </SelectContent>
             </Select>
-            <FormMessage />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />
@@ -44,16 +44,17 @@ export const DemographicsFields = ({ form, disabled = false }: DemographicsField
         name="date_of_birth"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Date of Birth *</FormLabel>
+            <FormLabel className="text-sm font-medium">Date of Birth *</FormLabel>
             <FormControl>
               <Input 
                 {...field} 
                 type="date" 
                 disabled={disabled}
                 max={new Date().toISOString().split('T')[0]}
+                className="h-11 text-base"
               />
             </FormControl>
-            <FormMessage />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />
