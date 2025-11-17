@@ -451,13 +451,21 @@ export type Database = {
           country: string | null
           created_at: string | null
           currency: string | null
+          date_of_birth: string | null
           email: string
           first_name: string
+          gender: Database["public"]["Enums"]["gender_type"] | null
           id: string
           language: string | null
           last_name: string
           notifications_enabled: boolean | null
           phone: string | null
+          residential_apt_unit: string | null
+          residential_city: string | null
+          residential_country: string | null
+          residential_postal_code: string | null
+          residential_province: string | null
+          residential_street: string | null
           role: Database["public"]["Enums"]["app_role"]
           sms_notifications: boolean | null
           updated_at: string | null
@@ -469,13 +477,21 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           currency?: string | null
+          date_of_birth?: string | null
           email: string
           first_name: string
+          gender?: Database["public"]["Enums"]["gender_type"] | null
           id: string
           language?: string | null
           last_name: string
           notifications_enabled?: boolean | null
           phone?: string | null
+          residential_apt_unit?: string | null
+          residential_city?: string | null
+          residential_country?: string | null
+          residential_postal_code?: string | null
+          residential_province?: string | null
+          residential_street?: string | null
           role: Database["public"]["Enums"]["app_role"]
           sms_notifications?: boolean | null
           updated_at?: string | null
@@ -487,13 +503,21 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           currency?: string | null
+          date_of_birth?: string | null
           email?: string
           first_name?: string
+          gender?: Database["public"]["Enums"]["gender_type"] | null
           id?: string
           language?: string | null
           last_name?: string
           notifications_enabled?: boolean | null
           phone?: string | null
+          residential_apt_unit?: string | null
+          residential_city?: string | null
+          residential_country?: string | null
+          residential_postal_code?: string | null
+          residential_province?: string | null
+          residential_street?: string | null
           role?: Database["public"]["Enums"]["app_role"]
           sms_notifications?: boolean | null
           updated_at?: string | null
@@ -773,6 +797,7 @@ export type Database = {
     }
     Enums: {
       app_role: "customer" | "provider"
+      gender_type: "male" | "female" | "other" | "prefer_not_to_say"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -901,6 +926,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["customer", "provider"],
+      gender_type: ["male", "female", "other", "prefer_not_to_say"],
     },
   },
 } as const

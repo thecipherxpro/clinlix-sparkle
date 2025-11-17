@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, Tab } from "@heroui/react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -32,7 +33,17 @@ const Auth = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    gender: "",
+    dateOfBirth: "",
+    residential_street: "",
+    residential_apt_unit: "",
+    residential_city: "",
+    residential_province: "",
+    residential_postal_code: "",
+    residential_country: "Portugal",
   });
+  
+  const [signupStep, setSignupStep] = useState<1 | 2>(1);
   const [validationErrors, setValidationErrors] = useState({
     email: "",
     password: "",
@@ -111,45 +122,95 @@ const Auth = () => {
   };
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!registerForm.firstName || !registerForm.lastName || !registerForm.email || !registerForm.password) {
-      toast.error(t.auth.allFieldsRequired);
+
+    // Step 1: Basic Info + Password
+    if (signupStep === 1) {
+      if (!registerForm.firstName || !registerForm.lastName || !registerForm.email || !registerForm.password || !registerForm.confirmPassword) {
+        toast.error(t.auth.allFieldsRequired);
+        return;
+      }
+
+      if (!validateEmail(registerForm.email)) return;
+      if (!validatePassword(registerForm.password)) return;
+
+      if (registerForm.password !== registerForm.confirmPassword) {
+        setValidationErrors((prev) => ({
+          ...prev,
+          confirmPassword: t.auth.passwordMismatch,
+        }));
+        return;
+      }
+
+      setSignupStep(2);
       return;
     }
-    if (!validateEmail(registerForm.email)) return;
-    if (!validatePassword(registerForm.password)) return;
-    if (registerForm.password !== registerForm.confirmPassword) {
-      setValidationErrors((prev) => ({
-        ...prev,
-        confirmPassword: "Passwords don't match.",
-      }));
+
+    // Step 2: Demographics + Residential Address
+    if (!registerForm.gender || !registerForm.dateOfBirth || 
+        !registerForm.residential_street || !registerForm.residential_city || 
+        !registerForm.residential_province || !registerForm.residential_postal_code) {
+      toast.error("Please fill in all required fields");
       return;
     }
-    setValidationErrors((prev) => ({
-      ...prev,
-      confirmPassword: "",
-    }));
+
+    // Validate age (must be 18+)
+    const dob = new Date(registerForm.dateOfBirth);
+    const today = new Date();
+    const age = today.getFullYear() - dob.getFullYear();
+    if (age < 18) {
+      toast.error("You must be at least 18 years old to register");
+      return;
+    }
+
     setLoading(true);
+
     try {
+      const redirectUrl = `${window.location.origin}/`;
       const { data, error } = await supabase.auth.signUp({
         email: registerForm.email,
         password: registerForm.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
+          emailRedirectTo: redirectUrl,
           data: {
             first_name: registerForm.firstName,
             last_name: registerForm.lastName,
             role: selectedRole,
+            gender: registerForm.gender,
+            date_of_birth: registerForm.dateOfBirth,
+            residential_street: registerForm.residential_street,
+            residential_apt_unit: registerForm.residential_apt_unit,
+            residential_city: registerForm.residential_city,
+            residential_province: registerForm.residential_province,
+            residential_postal_code: registerForm.residential_postal_code,
+            residential_country: registerForm.residential_country,
           },
         },
       });
+
       if (error) throw error;
+
       if (data.user) {
-        toast.success(t.auth.accountCreated);
+        await supabase.from("profiles").update({
+            gender: registerForm.gender as "male" | "female" | "other" | "prefer_not_to_say",
+          date_of_birth: registerForm.dateOfBirth,
+          residential_street: registerForm.residential_street,
+          residential_apt_unit: registerForm.residential_apt_unit,
+          residential_city: registerForm.residential_city,
+          residential_province: registerForm.residential_province,
+          residential_postal_code: registerForm.residential_postal_code,
+          residential_country: registerForm.residential_country,
+        }).eq("id", data.user.id);
+
+        toast.success(t.auth.signInSuccess);
         const redirectPath = selectedRole === "provider" ? "/provider/dashboard" : "/customer/dashboard";
         navigate(redirectPath);
       }
     } catch (error: any) {
-      toast.error(error.message || "Failed to create account");
+      if (error.message.includes("already registered") || error.message.includes("User already registered")) {
+        toast.error("This email is already registered. Please sign in instead.");
+      } else {
+        toast.error(error.message || t.auth.signInError);
+      }
     } finally {
       setLoading(false);
     }
@@ -356,150 +417,281 @@ const Auth = () => {
               </div>
 
               <form onSubmit={handleRegister} className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="first-name" className="text-sm font-medium">
-                      {t.auth.firstName}
-                    </Label>
-                    <Input
-                      id="first-name"
-                      placeholder="John"
-                      value={registerForm.firstName}
-                      onChange={(e) =>
-                        setRegisterForm({
-                          ...registerForm,
-                          firstName: e.target.value,
-                        })
-                      }
-                      disabled={loading}
-                      className="h-12 rounded-[20px] bg-muted/50 border-0"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="last-name" className="text-sm font-medium">
-                      {t.auth.lastName}
-                    </Label>
-                    <Input
-                      id="last-name"
-                      placeholder="Doe"
-                      value={registerForm.lastName}
-                      onChange={(e) =>
-                        setRegisterForm({
-                          ...registerForm,
-                          lastName: e.target.value,
-                        })
-                      }
-                      disabled={loading}
-                      className="h-12 rounded-[20px] bg-muted/50 border-0"
-                    />
-                  </div>
-                </div>
+                {signupStep === 1 ? (
+                  <>
+                    {/* Step 1: Basic Info + Password */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="first-name" className="text-sm font-medium">
+                          {t.auth.firstName}
+                        </Label>
+                        <Input
+                          id="first-name"
+                          placeholder="John"
+                          value={registerForm.firstName}
+                          onChange={(e) =>
+                            setRegisterForm({
+                              ...registerForm,
+                              firstName: e.target.value,
+                            })
+                          }
+                          disabled={loading}
+                          className="h-12 rounded-[20px] bg-muted/50 border-0"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="last-name" className="text-sm font-medium">
+                          {t.auth.lastName}
+                        </Label>
+                        <Input
+                          id="last-name"
+                          placeholder="Doe"
+                          value={registerForm.lastName}
+                          onChange={(e) =>
+                            setRegisterForm({
+                              ...registerForm,
+                              lastName: e.target.value,
+                            })
+                          }
+                          disabled={loading}
+                          className="h-12 rounded-[20px] bg-muted/50 border-0"
+                        />
+                      </div>
+                    </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="register-email" className="text-sm font-medium">
-                    {t.auth.email}
-                  </Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      id="register-email"
-                      type="email"
-                      placeholder="name@example.com"
-                      value={registerForm.email}
-                      onChange={(e) =>
-                        setRegisterForm({
-                          ...registerForm,
-                          email: e.target.value,
-                        })
-                      }
-                      disabled={loading}
-                      className="pl-10 h-12 rounded-[20px] bg-muted/50 border-0"
-                    />
-                  </div>
-                  {validationErrors.email && <p className="text-xs text-destructive">{validationErrors.email}</p>}
-                </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="register-email" className="text-sm font-medium">
+                        {t.auth.email}
+                      </Label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          id="register-email"
+                          type="email"
+                          placeholder="name@example.com"
+                          value={registerForm.email}
+                          onChange={(e) =>
+                            setRegisterForm({
+                              ...registerForm,
+                              email: e.target.value,
+                            })
+                          }
+                          disabled={loading}
+                          className="pl-10 h-12 rounded-[20px] bg-muted/50 border-0"
+                        />
+                      </div>
+                      {validationErrors.email && <p className="text-xs text-destructive">{validationErrors.email}</p>}
+                    </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="register-password" className="text-sm font-medium">
-                    {t.auth.password}
-                  </Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      id="register-password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="At least 8 characters"
-                      value={registerForm.password}
-                      onChange={(e) =>
-                        setRegisterForm({
-                          ...registerForm,
-                          password: e.target.value,
-                        })
-                      }
-                      disabled={loading}
-                      className="pl-10 pr-10 h-12 rounded-[20px] bg-muted/50 border-0"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 touch-target rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                    >
-                      {showPassword ? (
-                        <EyeOff className="w-4 h-4 text-muted-foreground" />
-                      ) : (
-                        <Eye className="w-4 h-4 text-muted-foreground" />
-                      )}
-                    </button>
-                  </div>
-                  {validationErrors.password && <p className="text-xs text-destructive">{validationErrors.password}</p>}
-                </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="register-password" className="text-sm font-medium">
+                        {t.auth.password}
+                      </Label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          id="register-password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="At least 8 characters"
+                          value={registerForm.password}
+                          onChange={(e) =>
+                            setRegisterForm({
+                              ...registerForm,
+                              password: e.target.value,
+                            })
+                          }
+                          disabled={loading}
+                          className="pl-10 pr-10 h-12 rounded-[20px] bg-muted/50 border-0"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 touch-target rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4 text-muted-foreground" /> : <Eye className="w-4 h-4 text-muted-foreground" />}
+                        </button>
+                      </div>
+                      {validationErrors.password && <p className="text-xs text-destructive">{validationErrors.password}</p>}
+                    </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password" className="text-sm font-medium">
-                    Confirm Password
-                  </Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      id="confirm-password"
-                      type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Re-enter password"
-                      value={registerForm.confirmPassword}
-                      onChange={(e) =>
-                        setRegisterForm({
-                          ...registerForm,
-                          confirmPassword: e.target.value,
-                        })
-                      }
-                      disabled={loading}
-                      className="pl-10 pr-10 h-12 rounded-[20px] bg-muted/50 border-0"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 touch-target rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
-                    >
-                      {showConfirmPassword ? (
-                        <EyeOff className="w-4 h-4 text-muted-foreground" />
-                      ) : (
-                        <Eye className="w-4 h-4 text-muted-foreground" />
-                      )}
-                    </button>
-                  </div>
-                  {validationErrors.confirmPassword && (
-                    <p className="text-xs text-destructive">{validationErrors.confirmPassword}</p>
-                  )}
-                </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="confirm-password" className="text-sm font-medium">
+                        {t.auth.confirmPassword}
+                      </Label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          id="confirm-password"
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="Confirm your password"
+                          value={registerForm.confirmPassword}
+                          onChange={(e) =>
+                            setRegisterForm({
+                              ...registerForm,
+                              confirmPassword: e.target.value,
+                            })
+                          }
+                          disabled={loading}
+                          className="pl-10 pr-10 h-12 rounded-[20px] bg-muted/50 border-0"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 touch-target rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                        >
+                          {showConfirmPassword ? <EyeOff className="w-4 h-4 text-muted-foreground" /> : <Eye className="w-4 h-4 text-muted-foreground" />}
+                        </button>
+                      </div>
+                      {validationErrors.confirmPassword && <p className="text-xs text-destructive">{validationErrors.confirmPassword}</p>}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Step 2: Demographics + Residential Address */}
+                    <div className="space-y-2">
+                      <Label htmlFor="gender" className="text-sm font-medium">
+                        Gender *
+                      </Label>
+                      <Select
+                        value={registerForm.gender}
+                        onValueChange={(value) => setRegisterForm({ ...registerForm, gender: value })}
+                      >
+                        <SelectTrigger id="gender" className="h-12 rounded-[20px] bg-muted/50 border-0">
+                          <SelectValue placeholder="Select gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="male">Male</SelectItem>
+                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                          <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                <Button
-                  type="submit"
-                  className="w-full h-[50px] rounded-[30px] bg-gradient-to-r from-primary to-accent text-base font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
-                  disabled={loading}
-                >
-                  {loading ? "Creating account..." : "Sign Up"}
-                </Button>
+                    <div className="space-y-2">
+                      <Label htmlFor="date-of-birth" className="text-sm font-medium">
+                        Date of Birth * (Must be 18+)
+                      </Label>
+                      <Input
+                        id="date-of-birth"
+                        type="date"
+                        value={registerForm.dateOfBirth}
+                        onChange={(e) => setRegisterForm({ ...registerForm, dateOfBirth: e.target.value })}
+                        max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
+                        disabled={loading}
+                        className="h-12 rounded-[20px] bg-muted/50 border-0"
+                      />
+                    </div>
+
+                    <div className="pt-2 border-t">
+                      <p className="text-sm font-medium mb-3">Residential Address (for security purposes)</p>
+                      
+                      <div className="space-y-3">
+                        <Input
+                          placeholder="Street Address *"
+                          value={registerForm.residential_street}
+                          onChange={(e) => setRegisterForm({ ...registerForm, residential_street: e.target.value })}
+                          disabled={loading}
+                          className="h-12 rounded-[20px] bg-muted/50 border-0"
+                        />
+
+                        <Input
+                          placeholder="Apartment/Unit (Optional)"
+                          value={registerForm.residential_apt_unit}
+                          onChange={(e) => setRegisterForm({ ...registerForm, residential_apt_unit: e.target.value })}
+                          disabled={loading}
+                          className="h-12 rounded-[20px] bg-muted/50 border-0"
+                        />
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input
+                            placeholder="City *"
+                            value={registerForm.residential_city}
+                            onChange={(e) => setRegisterForm({ ...registerForm, residential_city: e.target.value })}
+                            disabled={loading}
+                            className="h-12 rounded-[20px] bg-muted/50 border-0"
+                          />
+                          <Input
+                            placeholder="Postal Code *"
+                            value={registerForm.residential_postal_code}
+                            onChange={(e) => setRegisterForm({ ...registerForm, residential_postal_code: e.target.value })}
+                            disabled={loading}
+                            className="h-12 rounded-[20px] bg-muted/50 border-0"
+                          />
+                        </div>
+
+                        <Input
+                          placeholder="Province/State *"
+                          value={registerForm.residential_province}
+                          onChange={(e) => setRegisterForm({ ...registerForm, residential_province: e.target.value })}
+                          disabled={loading}
+                          className="h-12 rounded-[20px] bg-muted/50 border-0"
+                        />
+
+                        <Select
+                          value={registerForm.residential_country}
+                          onValueChange={(value) => setRegisterForm({ ...registerForm, residential_country: value })}
+                        >
+                          <SelectTrigger className="h-12 rounded-[20px] bg-muted/50 border-0">
+                            <SelectValue placeholder="Country *" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Portugal">Portugal</SelectItem>
+                            <SelectItem value="Spain">Spain</SelectItem>
+                            <SelectItem value="France">France</SelectItem>
+                            <SelectItem value="Germany">Germany</SelectItem>
+                            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                            <SelectItem value="Canada">Canada</SelectItem>
+                            <SelectItem value="United States">United States</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setSignupStep(1)}
+                        className="flex-1 h-12 rounded-[20px]"
+                        disabled={loading}
+                      >
+                        Back
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="flex-1 h-12 rounded-[20px]"
+                        disabled={loading}
+                      >
+                        {loading ? t.common.loading : "Create Account"}
+                      </Button>
+                    </div>
+                  </>
+                )}
+
+                {signupStep === 1 && (
+                  <Button
+                    type="submit"
+                    className="w-full h-12 rounded-[20px]"
+                    disabled={loading}
+                  >
+                    {loading ? t.common.loading : "Continue"}
+                  </Button>
+                )}
+
+                <div className="text-center text-sm">
+                  <span className="text-muted-foreground">{t.auth.alreadyHaveAccount} </span>
+                  <Button
+                    type="button"
+                    variant="link"
+                    onClick={() => setActiveTab("login")}
+                    className="h-auto p-0 font-semibold text-sm"
+                  >
+                    {t.auth.signIn}
+                  </Button>
+                </div>
               </form>
 
               <div className="text-center text-sm">

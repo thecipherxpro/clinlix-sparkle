@@ -149,6 +149,112 @@ const CustomerSettings = () => {
               />
               <p className="text-xs text-muted-foreground">{t.settings.emailCannotChange}</p>
             </div>
+            <div className="grid grid-cols-2 gap-4 pt-2">
+              <div className="space-y-2">
+                <Label>Gender</Label>
+                <Select
+                  value={profile?.gender || ''}
+                  onValueChange={(value) => updateSetting('gender', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select gender" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Date of Birth</Label>
+                <Input
+                  type="date"
+                  value={profile?.date_of_birth || ''}
+                  onChange={(e) => setProfile({ ...profile, date_of_birth: e.target.value })}
+                  onBlur={() => updateSetting('date_of_birth', profile.date_of_birth)}
+                  max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Residential Address */}
+        <Card className="border-0 shadow-sm">
+          <CardHeader>
+            <CardTitle>Residential Address</CardTitle>
+            <CardDescription>Your personal address for security purposes (separate from service addresses)</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label>Street Address</Label>
+              <Input
+                value={profile?.residential_street || ''}
+                onChange={(e) => setProfile({ ...profile, residential_street: e.target.value })}
+                onBlur={() => updateSetting('residential_street', profile.residential_street)}
+                placeholder="123 Main Street"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Apartment/Unit</Label>
+              <Input
+                value={profile?.residential_apt_unit || ''}
+                onChange={(e) => setProfile({ ...profile, residential_apt_unit: e.target.value })}
+                onBlur={() => updateSetting('residential_apt_unit', profile.residential_apt_unit)}
+                placeholder="Apt 4B (Optional)"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>City</Label>
+                <Input
+                  value={profile?.residential_city || ''}
+                  onChange={(e) => setProfile({ ...profile, residential_city: e.target.value })}
+                  onBlur={() => updateSetting('residential_city', profile.residential_city)}
+                  placeholder="Lisbon"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Postal Code</Label>
+                <Input
+                  value={profile?.residential_postal_code || ''}
+                  onChange={(e) => setProfile({ ...profile, residential_postal_code: e.target.value })}
+                  onBlur={() => updateSetting('residential_postal_code', profile.residential_postal_code)}
+                  placeholder="1000-001"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Province/State</Label>
+              <Input
+                value={profile?.residential_province || ''}
+                onChange={(e) => setProfile({ ...profile, residential_province: e.target.value })}
+                onBlur={() => updateSetting('residential_province', profile.residential_province)}
+                placeholder="Lisboa"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Country</Label>
+              <Select
+                value={profile?.residential_country || 'Portugal'}
+                onValueChange={(value) => updateSetting('residential_country', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Portugal">Portugal</SelectItem>
+                  <SelectItem value="Spain">Spain</SelectItem>
+                  <SelectItem value="France">France</SelectItem>
+                  <SelectItem value="Germany">Germany</SelectItem>
+                  <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                  <SelectItem value="Canada">Canada</SelectItem>
+                  <SelectItem value="United States">United States</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </CardContent>
         </Card>
 
