@@ -1,5 +1,5 @@
-import { useState, ReactNode, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Home, Briefcase, Calendar, DollarSign, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -10,68 +10,6 @@ const tabs = [
   { title: 'Wallet', icon: <DollarSign />, path: '/provider/wallet' },
   { title: 'Profile', icon: <User />, path: '/provider/profile' },
 ];
-
-const buttonVariants = {
-  initial: {
-    gap: 0,
-    paddingLeft: '.5rem',
-    paddingRight: '.5rem',
-  },
-  animate: (selected: boolean) => ({
-    gap: selected ? '.5rem' : 0,
-    paddingLeft: selected ? '1rem' : '.5rem',
-    paddingRight: selected ? '1rem' : '.5rem',
-  }),
-};
-
-const spanVariants = {
-  initial: { width: 0, opacity: 0 },
-  animate: { width: 'auto', opacity: 1 },
-  exit: { width: 0, opacity: 0 },
-};
-
-const transition = { type: 'tween' as const, duration: 0.2 };
-
-interface TabProps {
-  text: string;
-  selected: boolean;
-  onSelect: () => void;
-  children: ReactNode;
-}
-
-const Tab = ({ text, selected, onSelect, children }: TabProps) => {
-  return (
-    <motion.button
-      variants={buttonVariants}
-      initial="initial"
-      animate="animate"
-      custom={selected}
-      onClick={onSelect}
-      transition={transition}
-      className={`${
-        selected
-          ? 'bg-primary/15 text-primary'
-          : 'text-gray-500 hover:text-gray-900 dark:hover:text-gray-100'
-      } relative flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 focus-within:outline-primary/50`}
-    >
-      {children}
-      <AnimatePresence>
-        {selected && (
-          <motion.span
-            variants={spanVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={transition}
-            className="overflow-hidden"
-          >
-            {text}
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </motion.button>
-  );
-};
 
 const ProviderTabNav = () => {
   const navigate = useNavigate();
@@ -91,19 +29,48 @@ const ProviderTabNav = () => {
   };
 
   return (
-    <nav className="sticky bottom-0 left-0 right-0 z-50 w-full bg-background border-t border-border">
-      <div className="flex items-center justify-around max-w-screen-xl mx-auto px-2 py-2">
-        {tabs.map((tab) => (
-          <Tab
-            key={tab.title}
-            text={tab.title}
-            selected={selected === tab}
-            onSelect={() => handleTabSelect(tab)}
-          >
-            {tab.icon}
-          </Tab>
-        ))}
-      </div>
+    <nav className="fixed bottom-0 left-0 right-0 z-50 pb-3 px-4 pointer-events-none">
+      <motion.div 
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        className="max-w-md mx-auto pointer-events-auto"
+      >
+        <div className="flex items-center justify-around gap-1 px-3 py-2.5 rounded-full 
+                        bg-background/80 backdrop-blur-xl border border-border/50 shadow-lg">
+          {tabs.map((tab) => {
+            const isSelected = selected === tab;
+            return (
+              <motion.button
+                key={tab.title}
+                onClick={() => handleTabSelect(tab)}
+                className="relative flex flex-col items-center justify-center min-w-[56px] min-h-[56px] 
+                           rounded-full transition-colors touch-target"
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <motion.div
+                  animate={{
+                    scale: isSelected ? 1.1 : 1,
+                    color: isSelected ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))'
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  className="relative"
+                >
+                  {tab.icon}
+                  {isSelected && (
+                    <motion.div
+                      layoutId="providerActiveIndicator"
+                      className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                </motion.div>
+              </motion.button>
+            );
+          })}
+        </div>
+      </motion.div>
     </nav>
   );
 };
