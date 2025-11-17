@@ -74,7 +74,7 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
       if (error) throw error;
 
       setProfile({ ...profile, [field]: value });
-      banner.success('✅ Changes saved');
+      banner.success('Changes saved');
     } catch (error) {
       console.error('Error:', error);
       banner.error('Failed to save changes');

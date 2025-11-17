@@ -25,7 +25,7 @@ export function useInstallPrompt() {
 
     // Check if app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
-      console.log('✅ Clinlix PWA is installed');
+      console.log('Clinlix PWA is installed');
     }
 
     return () => window.removeEventListener('beforeinstallprompt', handler);
@@ -40,9 +40,9 @@ export function useInstallPrompt() {
     setShowPrompt(false);
     
     if (choice.outcome === 'accepted') {
-      console.log('✅ User installed Clinlix PWA');
+      console.log('User installed Clinlix PWA');
     } else {
-      console.log('❌ User dismissed install');
+      console.log('User dismissed install');
     }
     
     setDeferredPrompt(null);

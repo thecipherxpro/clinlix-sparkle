@@ -4,7 +4,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, MessageCircle, XCircle, Star, RotateCcw, Calendar, Clock } from "lucide-react";
+import { 
+  ArrowLeft, 
+  MessageCircle, 
+  XCircle, 
+  Star, 
+  RotateCcw, 
+  Calendar, 
+  Clock,
+  CircleDashed,
+  CheckCircle,
+  Loader2,
+  AlertTriangle,
+  Ban,
+  MoreVertical
+} from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { StatusStepper } from "@/components/booking/StatusStepper";
@@ -13,17 +27,25 @@ import { LocationCard } from "@/components/booking/LocationCard";
 import { ServiceDetailsCard } from "@/components/booking/ServiceDetailsCard";
 import { CancellationDialog } from "@/components/booking/CancellationDialog";
 import { ChatDrawer } from "@/components/chat/ChatDrawer";
-import { DetailCardSkeletonList } from "@/components/skeletons/DetailCardSkeleton";
+import { BookingDetailsSkeleton } from "@/components/booking/BookingDetailsSkeleton";
+import { BookingActionsSheet } from "@/components/booking/BookingActionsSheet";
 import { StickyPageHeader } from "@/components/StickyPageHeader";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
+import { useIsMobile } from "@/hooks/use-mobile";
+import PullToRefresh from "react-pull-to-refresh";
 
 const BookingDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const isMobile = useIsMobile();
+  const { triggerHaptic } = useHapticFeedback();
   const [booking, setBooking] = useState<any>(null);
   const [addons, setAddons] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [actionsSheetOpen, setActionsSheetOpen] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     fetchBookingDetails();
@@ -100,19 +122,29 @@ const BookingDetails = () => {
       navigate('/customer/bookings');
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    triggerHaptic('medium');
+    await fetchBookingDetails();
+    triggerHaptic('success');
+  };
+
   const handleMessage = () => {
+    triggerHaptic('light');
     setChatOpen(true);
   };
 
   const handleReassign = () => {
+    triggerHaptic('medium');
     navigate(`/customer/find-providers?bookingId=${id}`);
   };
 
   const handleReview = () => {
-    // TODO: Implement review modal
+    triggerHaptic('light');
     toast.info('Review feature coming soon');
   };
 
@@ -133,9 +165,7 @@ const BookingDetails = () => {
     return (
       <div className="min-h-screen bg-background pb-6">
         <StickyPageHeader title="Booking Details" />
-        <main className="container max-w-4xl py-4 space-y-4">
-          <DetailCardSkeletonList count={4} />
-        </main>
+        <BookingDetailsSkeleton />
       </div>
     );
   }
@@ -152,24 +182,53 @@ const BookingDetails = () => {
   const currency = address?.currency || "EUR";
 
   const getStatusConfig = (status: string) => {
-    const configs: Record<string, { label: string; variant: "secondary" | "default" | "destructive" | "outline" }> = {
-      pending: { label: "⏳ Awaiting Confirmation", variant: "secondary" },
-      confirmed: { label: "✓ Confirmed", variant: "default" },
-      started: { label: "🔄 In Progress", variant: "default" },
-      completed: { label: "✅ Completed", variant: "default" },
-      cancelled: { label: "❌ Cancelled", variant: "destructive" },
-      declined: { label: "⚠️ Declined", variant: "destructive" },
+    const configs: Record<string, { 
+      label: string; 
+      variant: "secondary" | "default" | "destructive" | "outline";
+      icon: React.ReactNode;
+    }> = {
+      pending: { 
+        label: "Awaiting Confirmation", 
+        variant: "secondary",
+        icon: <CircleDashed className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
+      },
+      confirmed: { 
+        label: "Confirmed", 
+        variant: "default",
+        icon: <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
+      },
+      started: { 
+        label: "In Progress", 
+        variant: "default",
+        icon: <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 animate-spin" />
+      },
+      completed: { 
+        label: "Completed", 
+        variant: "default",
+        icon: <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
+      },
+      cancelled: { 
+        label: "Cancelled", 
+        variant: "destructive",
+        icon: <Ban className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
+      },
+      declined: { 
+        label: "Declined", 
+        variant: "destructive",
+        icon: <AlertTriangle className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
+      },
     };
     return configs[status] || configs.pending;
   };
 
   const statusConfig = getStatusConfig(booking.job_status);
 
-  return (
+  const pageContent = (
     <div className="min-h-screen bg-background pb-safe-bottom">
       <StickyPageHeader title="Booking Details">
         <div className="px-3 sm:px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t">
-          <Badge variant={statusConfig.variant} className="text-xs sm:text-sm px-3 py-1.5 font-medium">
+          <Badge variant={statusConfig.variant} className="text-xs sm:text-sm px-3 py-1.5 font-medium flex items-center">
+            {statusConfig.icon}
             {statusConfig.label}
           </Badge>
           <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
@@ -182,6 +241,19 @@ const BookingDetails = () => {
               <span className="font-medium">{booking.requested_time}</span>
             </div>
           </div>
+          {isMobile && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => {
+                triggerHaptic('light');
+                setActionsSheetOpen(true);
+              }}
+              className="absolute right-3 top-3 h-9 w-9"
+            >
+              <MoreVertical className="w-5 h-5" />
+            </Button>
+          )}
         </div>
       </StickyPageHeader>
 
@@ -236,82 +308,110 @@ const BookingDetails = () => {
             )}
           </div>
 
-          {/* Right Sidebar */}
-          <div className="space-y-4 sm:space-y-6">
-            {/* Provider Card */}
-            {provider ? (
-              <PersonCard
-                title="Your Provider"
-                person={{
-                  ...provider,
-                  phone: provider.profiles?.phone,
-                  email: provider.profiles?.email || "",
-                }}
-                onMessage={canMessage ? handleMessage : undefined}
-                onNavigate={handleNavigate}
-                onViewProfile={() => navigate(`/provider-profile/${provider.id}`)}
-              />
-            ) : (
-              <Card className="animate-fade-in shadow-sm">
-                <CardContent className="p-6 text-center text-muted-foreground">
-                  <p className="text-sm">No provider assigned yet</p>
+          {/* Right Sidebar - Desktop Only */}
+          {!isMobile && (
+            <div className="space-y-4 sm:space-y-6">
+              {/* Provider Card */}
+              {provider ? (
+                <PersonCard
+                  title="Your Provider"
+                  person={{
+                    ...provider,
+                    phone: provider.profiles?.phone,
+                    email: provider.profiles?.email || "",
+                  }}
+                  onMessage={canMessage ? handleMessage : undefined}
+                  onNavigate={handleNavigate}
+                  onViewProfile={() => navigate(`/provider-profile/${provider.id}`)}
+                />
+              ) : (
+                <Card className="animate-fade-in shadow-sm">
+                  <CardContent className="p-6 text-center text-muted-foreground">
+                    <p className="text-sm">No provider assigned yet</p>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Actions */}
+              <Card className="sticky top-20 animate-fade-in shadow-sm" style={{ animationDelay: '100ms' }}>
+                <CardContent className="p-3 sm:p-4 space-y-2.5 sm:space-y-3">
+                  {isDeclined && (
+                    <Button
+                      onClick={() => {
+                        triggerHaptic('medium');
+                        handleReassign();
+                      }}
+                      className="w-full gap-2 h-11 hover-scale transition-all duration-200 font-medium"
+                      size="default"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                      Reassign Provider
+                    </Button>
+                  )}
+
+                  {canReview && (
+                    <Button
+                      onClick={() => {
+                        triggerHaptic('light');
+                        handleReview();
+                      }}
+                      className="w-full gap-2 h-11 hover-scale transition-all duration-200 font-medium"
+                      size="default"
+                    >
+                      <Star className="w-4 h-4" />
+                      Leave Review
+                    </Button>
+                  )}
+
+                  {canMessage && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        triggerHaptic('light');
+                        handleMessage();
+                      }}
+                      className="w-full gap-2 h-11 hover-scale transition-all duration-200 font-medium"
+                      size="default"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      Message Provider
+                    </Button>
+                  )}
+
+                  {canCancel && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        triggerHaptic('warning');
+                        setCancelDialogOpen(true);
+                      }}
+                      className="w-full gap-2 h-11 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30 transition-all duration-200 font-medium"
+                      size="default"
+                    >
+                      <XCircle className="w-4 h-4" />
+                      Cancel Booking
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
-            )}
-
-            {/* Actions */}
-            <Card className="sticky top-20 animate-fade-in shadow-sm" style={{ animationDelay: '100ms' }}>
-              <CardContent className="p-3 sm:p-4 space-y-2.5 sm:space-y-3">
-                {isDeclined && (
-                  <Button
-                    onClick={handleReassign}
-                    className="w-full gap-2 h-11 hover-scale transition-all duration-200 font-medium"
-                    size="default"
-                  >
-                    <RotateCcw className="w-4 h-4" />
-                    Reassign Provider
-                  </Button>
-                )}
-
-                {canReview && (
-                  <Button
-                    onClick={handleReview}
-                    className="w-full gap-2 h-11 hover-scale transition-all duration-200 font-medium"
-                    size="default"
-                  >
-                    <Star className="w-4 h-4" />
-                    Leave Review
-                  </Button>
-                )}
-
-                {canMessage && (
-                  <Button
-                    variant="outline"
-                    onClick={handleMessage}
-                    className="w-full gap-2 h-11 hover-scale transition-all duration-200 font-medium"
-                    size="default"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    Message Provider
-                  </Button>
-                )}
-
-                {canCancel && (
-                  <Button
-                    variant="outline"
-                    onClick={() => setCancelDialogOpen(true)}
-                    className="w-full gap-2 h-11 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30 transition-all duration-200 font-medium"
-                    size="default"
-                  >
-                    <XCircle className="w-4 h-4" />
-                    Cancel Booking
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+            </div>
+          )}
         </div>
       </main>
+
+      {/* Mobile Actions Sheet */}
+      <BookingActionsSheet
+        open={actionsSheetOpen}
+        onOpenChange={setActionsSheetOpen}
+        canCancel={canCancel}
+        canMessage={canMessage}
+        canReview={canReview}
+        isDeclined={isDeclined}
+        onCancel={() => setCancelDialogOpen(true)}
+        onMessage={handleMessage}
+        onReview={handleReview}
+        onReassign={handleReassign}
+      />
 
       {/* Dialogs */}
       {canCancel && booking && (
@@ -330,16 +430,18 @@ const BookingDetails = () => {
         />
       )}
 
-      {booking && canMessage && provider && (
-        <ChatDrawer
-          open={chatOpen}
-          onClose={() => setChatOpen(false)}
-          bookingId={booking.id}
-          otherPartyName={provider.full_name || "Provider"}
-          otherPartyAvatar={provider.photo_url}
-        />
-      )}
     </div>
+  );
+
+  return isMobile ? (
+    <PullToRefresh
+      onRefresh={handleRefresh}
+      resistance={3}
+    >
+      {pageContent}
+    </PullToRefresh>
+  ) : (
+    pageContent
   );
 };
 

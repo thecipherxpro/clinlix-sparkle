@@ -8,10 +8,10 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register('/service-worker.js')
       .then((registration) => {
-        console.log('✅ Clinlix PWA Active:', registration.scope);
+        console.log('Clinlix PWA Active:', registration.scope);
       })
       .catch((error) => {
-        console.error('❌ SW registration failed:', error);
+        console.error('SW registration failed:', error);
       });
   });
 }
