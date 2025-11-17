@@ -271,7 +271,6 @@ const BookingDetails = () => {
                   email: provider.profiles?.email || "",
                 }}
                 onMessage={canMessage ? handleMessage : undefined}
-                onNavigate={handleNavigate}
                 onViewProfile={() => navigate(`/provider-profile/${provider.id}`)}
               />
             )}
