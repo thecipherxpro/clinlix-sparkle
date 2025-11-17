@@ -1,30 +1,26 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Home, Briefcase, Calendar, MessageSquare, User } from 'lucide-react';
+import { Home, Briefcase, Calendar, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const tabs = [
   { title: 'Home', icon: <Home />, path: '/provider/dashboard' },
   { title: 'Jobs', icon: <Briefcase />, path: '/provider/jobs' },
   { title: 'Schedule', icon: <Calendar />, path: '/provider/schedule' },
-  { title: 'Messages', icon: <MessageSquare />, path: '/provider/messages' },
   { title: 'Profile', icon: <User />, path: '/provider/profile' },
 ];
 
 const ProviderTabNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [selected, setSelected] = useState(tabs[0]);
+  const [selectedPath, setSelectedPath] = useState(location.pathname);
 
   useEffect(() => {
-    const currentTab = tabs.find(tab => tab.path === location.pathname);
-    if (currentTab) {
-      setSelected(currentTab);
-    }
+    setSelectedPath(location.pathname);
   }, [location.pathname]);
 
   const handleTabSelect = (tab: typeof tabs[0]) => {
-    setSelected(tab);
+    setSelectedPath(tab.path);
     navigate(tab.path);
   };
 
@@ -32,7 +28,7 @@ const ProviderTabNav = () => {
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border">
       <div className="flex items-center justify-around px-2 py-2 pb-safe-bottom">
         {tabs.map((tab, index) => {
-          const isSelected = selected === tab;
+          const isSelected = selectedPath === tab.path;
           return (
             <motion.button
               key={tab.title}

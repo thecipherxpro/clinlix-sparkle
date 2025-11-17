@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Home, Calendar, Sparkles, MessageSquare, User } from 'lucide-react';
+import { Home, Calendar, Sparkles, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useI18n } from '@/contexts/I18nContext';
 
@@ -13,7 +13,6 @@ const CustomerTabNav = () => {
     { title: 'Home', icon: <Home />, path: '/customer/dashboard' },
     { title: 'Book', icon: <Calendar />, path: '/customer/booking' },
     { title: 'Bookings', icon: <Sparkles />, path: '/customer/my-bookings' },
-    { title: 'Messages', icon: <MessageSquare />, path: '/customer/messages' },
     { title: 'Profile', icon: <User />, path: '/customer/profile' },
   ];
   
