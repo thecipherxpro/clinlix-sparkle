@@ -231,12 +231,26 @@ export const ModernBookingCard = ({
               </>
             )}
 
+            {/* View Details Button - Always visible */}
+            {onViewDetails && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onViewDetails(booking)}
+                className="h-9 px-3 gap-2 border-primary/20 text-primary hover:bg-primary/10"
+                title="View full booking details"
+              >
+                <Eye className="h-4 w-4" />
+                <span className="font-medium hidden sm:inline">Details</span>
+              </Button>
+            )}
+
             {/* Expand/Collapse Button */}
             <Button
               size="sm"
               variant="ghost"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="h-9 px-3 ml-auto shrink-0"
+              className="h-9 px-3 shrink-0"
             >
               <ChevronDown
                 className={cn(
