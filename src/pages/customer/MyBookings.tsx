@@ -297,9 +297,9 @@ const MyBookings = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      {/* Sticky Header with Tabs */}
-      <StickyPageHeader title="My Bookings">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        {/* Sticky Header with Tabs */}
+        <StickyPageHeader title="My Bookings">
           <div className="overflow-x-auto pb-3 px-4 pt-2 scrollbar-hide">
             <TabsList className="inline-flex h-auto p-1 bg-muted/50 backdrop-blur-sm rounded-full w-auto min-w-full">
               {declinedBookings.length > 0 && (
@@ -353,12 +353,10 @@ const MyBookings = () => {
               </TabsTrigger>
             </TabsList>
           </div>
-        </Tabs>
-      </StickyPageHeader>
+        </StickyPageHeader>
 
-      {/* Booking Cards */}
-      <div className="px-4 pt-4">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        {/* Booking Cards */}
+        <div className="px-4 pt-4">
           <TabsContent value="declined" className="mt-0 space-y-3 pb-4 animate-fade-in">
             {declinedBookings.length > 0 ? (
               declinedBookings.map(renderDeclinedBookingCard)
@@ -390,8 +388,8 @@ const MyBookings = () => {
               <p className="text-center text-muted-foreground py-8 text-sm">No cancelled bookings</p>
             )}
           </TabsContent>
-        </Tabs>
-      </div>
+        </div>
+      </Tabs>
 
       {/* Chat Drawer */}
       {selectedBooking && (
