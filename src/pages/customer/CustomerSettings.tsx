@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Key } from "lucide-react";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { useI18n } from "@/contexts/I18nContext";
 
@@ -46,7 +46,7 @@ const CustomerSettings = () => {
       setProfile(profileData);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Failed to load settings');
+      banner.error('Failed to load settings');
     } finally {
       setLoading(false);
     }
@@ -65,10 +65,10 @@ const CustomerSettings = () => {
       if (error) throw error;
 
       setProfile({ ...profile, [field]: value });
-      toast.success(t.settings.changesSaved);
+      banner.success(t.settings.changesSaved);
     } catch (error) {
       console.error('Error:', error);
-      toast.error(t.settings.failedToSave);
+      banner.error(t.settings.failedToSave);
     }
   };
 
@@ -79,10 +79,10 @@ const CustomerSettings = () => {
       });
 
       if (error) throw error;
-      toast.success(t.settings.passwordResetSent);
+      banner.success(t.settings.passwordResetSent);
     } catch (error) {
       console.error('Error:', error);
-      toast.error(t.settings.failedToSendReset);
+      banner.error(t.settings.failedToSendReset);
     }
   };
 
@@ -106,158 +106,6 @@ const CustomerSettings = () => {
       </header>
 
       <main className="mobile-container py-4 sm:py-8 max-w-2xl space-y-4">
-        {/* Account Info */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle>{t.settings.accountInfo}</CardTitle>
-            <CardDescription>{t.settings.accountDetails}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{t.settings.firstName}</Label>
-                <Input
-                  value={profile?.first_name || ''}
-                  onChange={(e) => setProfile({ ...profile, first_name: e.target.value })}
-                  onBlur={() => updateSetting('first_name', profile.first_name)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>{t.settings.lastName}</Label>
-                <Input
-                  value={profile?.last_name || ''}
-                  onChange={(e) => setProfile({ ...profile, last_name: e.target.value })}
-                  onBlur={() => updateSetting('last_name', profile.last_name)}
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label>{t.settings.phoneNumber}</Label>
-              <Input
-                value={profile?.phone || ''}
-                onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                onBlur={() => updateSetting('phone', profile.phone)}
-                placeholder="+351 XXX XXX XXX"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{t.settings.emailAddress}</Label>
-              <Input
-                value={profile?.email || ''}
-                disabled
-                className="bg-muted"
-              />
-              <p className="text-xs text-muted-foreground">{t.settings.emailCannotChange}</p>
-            </div>
-            <div className="grid grid-cols-2 gap-4 pt-2">
-              <div className="space-y-2">
-                <Label>Gender</Label>
-                <Select
-                  value={profile?.gender || ''}
-                  onValueChange={(value) => updateSetting('gender', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                    <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Date of Birth</Label>
-                <Input
-                  type="date"
-                  value={profile?.date_of_birth || ''}
-                  onChange={(e) => setProfile({ ...profile, date_of_birth: e.target.value })}
-                  onBlur={() => updateSetting('date_of_birth', profile.date_of_birth)}
-                  max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Residential Address */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle>Residential Address</CardTitle>
-            <CardDescription>Your personal address for security purposes (separate from service addresses)</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>Street Address</Label>
-              <Input
-                value={profile?.residential_street || ''}
-                onChange={(e) => setProfile({ ...profile, residential_street: e.target.value })}
-                onBlur={() => updateSetting('residential_street', profile.residential_street)}
-                placeholder="123 Main Street"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Apartment/Unit</Label>
-              <Input
-                value={profile?.residential_apt_unit || ''}
-                onChange={(e) => setProfile({ ...profile, residential_apt_unit: e.target.value })}
-                onBlur={() => updateSetting('residential_apt_unit', profile.residential_apt_unit)}
-                placeholder="Apt 4B (Optional)"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>City</Label>
-                <Input
-                  value={profile?.residential_city || ''}
-                  onChange={(e) => setProfile({ ...profile, residential_city: e.target.value })}
-                  onBlur={() => updateSetting('residential_city', profile.residential_city)}
-                  placeholder="Lisbon"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Postal Code</Label>
-                <Input
-                  value={profile?.residential_postal_code || ''}
-                  onChange={(e) => setProfile({ ...profile, residential_postal_code: e.target.value })}
-                  onBlur={() => updateSetting('residential_postal_code', profile.residential_postal_code)}
-                  placeholder="1000-001"
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label>Province/State</Label>
-              <Input
-                value={profile?.residential_province || ''}
-                onChange={(e) => setProfile({ ...profile, residential_province: e.target.value })}
-                onBlur={() => updateSetting('residential_province', profile.residential_province)}
-                placeholder="Lisboa"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Country</Label>
-              <Select
-                value={profile?.residential_country || 'Portugal'}
-                onValueChange={(value) => updateSetting('residential_country', value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select country" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Portugal">Portugal</SelectItem>
-                  <SelectItem value="Spain">Spain</SelectItem>
-                  <SelectItem value="France">France</SelectItem>
-                  <SelectItem value="Germany">Germany</SelectItem>
-                  <SelectItem value="United Kingdom">United Kingdom</SelectItem>
-                  <SelectItem value="Canada">Canada</SelectItem>
-                  <SelectItem value="United States">United States</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Notifications */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
@@ -275,10 +123,10 @@ const CustomerSettings = () => {
               onCheckedChange={async (checked) => {
                 if (checked) {
                   const success = await subscribe();
-                  if (success) toast.success(t.settings.pushEnabled);
+                  if (success) banner.success(t.settings.pushEnabled);
                 } else {
                   await unsubscribe();
-                  toast.success(t.settings.pushDisabled);
+                  banner.success(t.settings.pushDisabled);
                 }
               }}
               disabled={pushLoading}
