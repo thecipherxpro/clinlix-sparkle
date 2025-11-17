@@ -70,6 +70,7 @@ const App = () => (
             <Route path="/customer/bookings/:id" element={<BookingDetails />} />
             <Route path="/customer/my-bookings/:id" element={<BookingDetails />} />
             <Route path="/customer/bookings/:id/review" element={<ReviewBooking />} />
+            <Route path="/customer/account" element={<CustomerAccount />} />
             <Route path="/customer/profile" element={<Profile />} />
             <Route path="/customer/settings" element={<CustomerSettings />} />
             <Route path="/customer/payment-methods" element={<PaymentMethods />} />
@@ -87,6 +88,7 @@ const App = () => (
             <Route path="/provider/jobs/:id/summary" element={<JobDetail />} />
             <Route path="/provider/schedule" element={<ProviderSchedule />} />
             <Route path="/provider/wallet" element={<ProviderWallet />} />
+            <Route path="/provider/account" element={<ProviderAccount />} />
             <Route path="/provider/profile" element={<ProviderProfilePage />} />
             <Route path="/provider/settings" element={<ProviderSettings />} />
             <Route path="/provider/reviews" element={<ProviderReviews />} />

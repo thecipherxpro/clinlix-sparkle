@@ -389,13 +389,13 @@ const JobDetail = () => {
       {/* Header */}
       <header className="sticky top-0 z-10 bg-card border-b px-4 py-3">
         <div className="flex items-center gap-3">
-          <HeroButton
-            isIconOnly
-            variant="light"
-            onPress={() => navigate("/provider/jobs")}
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => navigate("/provider/jobs")}
           >
             <ArrowLeft className="h-5 w-5" />
-          </HeroButton>
+          </Button>
           <h1 className="text-lg sm:text-xl font-bold text-foreground">Job Details</h1>
         </div>
       </header>
@@ -463,26 +463,19 @@ const JobDetail = () => {
         </Card>
 
         {/* Tabbed Interface */}
-        <Tabs 
-          defaultSelectedKey="when" 
-          color="secondary"
-          radius="lg"
-          className="w-full"
-          classNames={{
-            tabList: "grid w-full grid-cols-2",
-            tab: "text-xs sm:text-sm h-12"
-          }}
-        >
-          <Tab 
-            key="when" 
-            title={
-              <div className="flex items-center gap-1 sm:gap-2">
-                <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                <span>When</span>
-              </div>
-            }
-          >
-            <div className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
+        <Tabs defaultValue="when" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="when" className="text-xs sm:text-sm h-12 gap-1 sm:gap-2">
+              <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <span>When</span>
+            </TabsTrigger>
+            <TabsTrigger value="where" className="text-xs sm:text-sm h-12 gap-1 sm:gap-2">
+              <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <span>Where</span>
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="when" className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base sm:text-lg">Booking Details</CardTitle>
@@ -644,19 +637,9 @@ const JobDetail = () => {
                 </Button>
               )}
             </div>
-            </div>
-          </Tab>
+          </TabsContent>
 
-          <Tab 
-            key="where" 
-            title={
-              <div className="flex items-center gap-1 sm:gap-2">
-                <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                <span>Where</span>
-              </div>
-            }
-          >
-            <div className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
+          <TabsContent value="where" className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base sm:text-lg">Customer Address</CardTitle>
@@ -767,8 +750,7 @@ const JobDetail = () => {
                 </div>
               </CardContent>
             </Card>
-            </div>
-          </Tab>
+          </TabsContent>
         </Tabs>
       </div>
 

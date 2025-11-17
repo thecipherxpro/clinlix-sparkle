@@ -150,18 +150,14 @@ const ProviderWallet = () => {
             <CardDescription className="text-xs">{t.provider.viewAllTransactions}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs 
-              selectedKey="all"
-              onSelectionChange={() => {}}
-              classNames={{
-                tabList: "w-full bg-muted p-1 rounded-lg mb-4",
-                cursor: "bg-background shadow-sm",
-              }}
-            >
-              <Tab key="all" title={t.provider.all} />
-              <Tab key="pending" title={t.provider.pending} />
-              <Tab key="paid" title={t.provider.paid} />
-            </Tabs>
+            <Tabs defaultValue="all" className="w-full">
+              <TabsList className="w-full bg-muted p-1 rounded-lg mb-4">
+                <TabsTrigger value="all">{t.provider.all}</TabsTrigger>
+                <TabsTrigger value="pending">{t.provider.pending}</TabsTrigger>
+                <TabsTrigger value="paid">{t.provider.paid}</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="all">
             
             <div className="space-y-3">
             {wallet.length === 0 ? (
@@ -215,7 +211,17 @@ const ProviderWallet = () => {
                     </div>
                   ))
                 )}
-            </div>
+              </div>
+              </TabsContent>
+
+              <TabsContent value="pending">
+                {/* Same content filtered by pending */}
+              </TabsContent>
+
+              <TabsContent value="paid">
+                {/* Same content filtered by paid */}
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
       </main>
