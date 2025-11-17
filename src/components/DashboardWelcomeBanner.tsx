@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Upload, Search } from "lucide-react";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { cn } from "@/lib/utils";
@@ -28,7 +28,7 @@ const DashboardWelcomeBanner = ({
     const file = event.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      toast.error("Please select an image file");
+      banner.error("Please select an image file");
       return;
     }
     setUploading(true);
@@ -70,10 +70,10 @@ const DashboardWelcomeBanner = ({
         }).eq("user_id", authUser.id);
       }
       setAvatarUrl(newAvatarUrl);
-      toast.success("Profile picture updated successfully");
+      banner.success("Profile picture updated successfully");
     } catch (error) {
       console.error("Error uploading image:", error);
-      toast.error("Failed to upload image");
+      banner.error("Failed to upload image");
     } finally {
       setUploading(false);
     }

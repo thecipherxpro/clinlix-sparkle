@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, X } from "lucide-react";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 import { format } from "date-fns";
 import { Avatar } from "@/components/base/avatar/avatar";
 
@@ -77,7 +77,7 @@ export const ChatDrawer = ({ open, onClose, bookingId, otherPartyName, otherPart
       }
     } catch (error) {
       console.error("Error fetching messages:", error);
-      toast.error("Failed to load messages");
+      banner.error("Failed to load messages");
     }
   };
 
@@ -98,12 +98,7 @@ export const ChatDrawer = ({ open, onClose, bookingId, otherPartyName, otherPart
           
           // Show toast notification if message is from other party
           if (newMsg.sender_id !== currentUserId && currentUserId) {
-            toast.info(`💬 New message from ${otherPartyName}`, {
-              description: newMsg.content.length > 50 
-                ? newMsg.content.substring(0, 47) + '...' 
-                : newMsg.content,
-              duration: 4000,
-            });
+            banner.info(`💬 New message from ${otherPartyName}`);
           }
         }
       )
@@ -132,7 +127,7 @@ export const ChatDrawer = ({ open, onClose, bookingId, otherPartyName, otherPart
       setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
-      toast.error("Failed to send message");
+      banner.error("Failed to send message");
     } finally {
       setLoading(false);
     }

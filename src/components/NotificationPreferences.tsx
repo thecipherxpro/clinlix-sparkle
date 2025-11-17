@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { banner } from "@/hooks/use-banner";
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 interface NotificationPreferencesProps {
@@ -58,12 +58,12 @@ const NotificationPreferences = ({ role }: NotificationPreferencesProps) => {
       const success = await subscribe();
       if (success) {
         setPreferences(prev => ({ ...prev, push_enabled: true }));
-        toast.success('Push notifications enabled');
+        banner.success('Push notifications enabled');
       }
     } else {
       await unsubscribe();
       setPreferences(prev => ({ ...prev, push_enabled: false }));
-      toast.success('Push notifications disabled');
+      banner.success('Push notifications disabled');
     }
   };
 
@@ -85,10 +85,10 @@ const NotificationPreferences = ({ role }: NotificationPreferencesProps) => {
       }
 
       setPreferences(prev => ({ ...prev, [field]: value }));
-      toast.success('Preference updated');
+      banner.success('Preference updated');
     } catch (error) {
       console.error('Error updating preference:', error);
-      toast.error('Failed to update preference');
+      banner.error('Failed to update preference');
     }
   };
 

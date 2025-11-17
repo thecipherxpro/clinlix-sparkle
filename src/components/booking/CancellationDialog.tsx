@@ -12,7 +12,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 import { Info, AlertCircle } from "lucide-react";
 
 interface CancellationDialogProps {
@@ -68,7 +68,7 @@ export const CancellationDialog = ({
 
   const handleCancel = async () => {
     if (!reason.trim()) {
-      toast.error("Please provide a cancellation reason");
+      banner.error("Please provide a cancellation reason");
       return;
     }
 
@@ -98,12 +98,12 @@ export const CancellationDialog = ({
 
       if (policyError) throw policyError;
 
-      toast.success("Booking cancelled successfully");
+      banner.success("Booking cancelled successfully");
       onSuccess?.();
       onClose();
     } catch (error: any) {
       console.error("Error cancelling booking:", error);
-      toast.error(error.message || "Failed to cancel booking");
+      banner.error(error.message || "Failed to cancel booking");
     } finally {
       setLoading(false);
     }

@@ -19,7 +19,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 import { CheckCircle, XCircle } from "lucide-react";
 
 interface QuickAcceptRejectDialogProps {
@@ -66,12 +66,12 @@ export const QuickAcceptRejectDialog = ({
 
       if (error) throw error;
 
-      toast.success("Job accepted successfully!");
+      banner.success("Job accepted successfully!");
       onSuccess?.();
       onClose();
     } catch (error: any) {
       console.error("Error accepting job:", error);
-      toast.error(error.message || "Failed to accept job");
+      banner.error(error.message || "Failed to accept job");
     } finally {
       setLoading(false);
     }
@@ -84,7 +84,7 @@ export const QuickAcceptRejectDialog = ({
         : rejectionReason;
 
     if (!finalReason) {
-      toast.error("Please select or provide a rejection reason");
+      banner.error("Please select or provide a rejection reason");
       return;
     }
 
@@ -100,12 +100,12 @@ export const QuickAcceptRejectDialog = ({
 
       if (error) throw error;
 
-      toast.success("Job declined - Customer notified");
+      banner.success("Job declined - Customer notified");
       onSuccess?.();
       onClose();
     } catch (error: any) {
       console.error("Error rejecting job:", error);
-      toast.error(error.message || "Failed to decline job");
+      banner.error(error.message || "Failed to decline job");
     } finally {
       setLoading(false);
     }

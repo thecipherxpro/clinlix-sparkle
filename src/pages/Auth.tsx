@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 import { Shield, ArrowLeft, Mail, Lock, User, ChevronRight, ChevronLeft, Check, UserCircle, Calendar, MapPin, Home, Building, Map, Globe } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
 import logoImage from "@/assets/logo-clinlix.png";
@@ -82,10 +82,8 @@ const Auth = () => {
   };
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
     if (!loginForm.email || !loginForm.password) {
-      toast.error(t.auth.allFieldsRequired);
+      banner.error(t.auth.allFieldsRequired);
       return;
     }
     if (!validateEmail(loginForm.email)) return;
@@ -104,15 +102,14 @@ const Auth = () => {
           data: profile
         } = await supabase.from("profiles").select("role").eq("id", data.user.id).single();
         const redirectPath = profile?.role === "provider" ? "/provider/dashboard" : "/customer/dashboard";
-        toast.success(t.auth.signInSuccess);
+        banner.success(t.auth.signInSuccess);
         navigate(redirectPath);
       }
     } catch (error: any) {
-      toast.error(error.message || t.auth.signInError);
+      banner.error(error.message || t.auth.signInError);
     } finally {
       setLoading(false);
     }
-  };
   };
   const handleSocialLogin = async (provider: "google") => {
     setLoading(true);
@@ -127,7 +124,7 @@ const Auth = () => {
       });
       if (error) throw error;
     } catch (error: any) {
-      toast.error(error.message || t.auth.signInError);
+      banner.error(error.message || t.auth.signInError);
     } finally {
       setLoading(false);
     }
@@ -135,7 +132,7 @@ const Auth = () => {
   const handleNextStep = () => {
     if (signupStep === 1) {
       if (!registerForm.firstName || !registerForm.lastName || !registerForm.email || !registerForm.password || !registerForm.confirmPassword) {
-        toast.error(t.auth.allFieldsRequired);
+        banner.error(t.auth.allFieldsRequired);
         return;
       }
       if (!validateEmail(registerForm.email)) return;
@@ -150,7 +147,7 @@ const Auth = () => {
       setSignupStep(2);
     } else if (signupStep === 2) {
       if (!registerForm.gender || !registerForm.dateOfBirth) {
-        toast.error(t.auth.allFieldsRequired);
+        banner.error(t.auth.allFieldsRequired);
         return;
       }
       const birthDate = new Date(registerForm.dateOfBirth);
@@ -161,7 +158,7 @@ const Auth = () => {
         age--;
       }
       if (age < 18) {
-        toast.error("You must be at least 18 years old to register.");
+        banner.error("You must be at least 18 years old to register.");
         return;
       }
       setSignupStep(3);
@@ -175,11 +172,11 @@ const Auth = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!registerForm.residential_country) {
-      toast.error("Please select a country");
+      banner.error("Please select a country");
       return;
     }
     if (!registerForm.residential_street || !registerForm.residential_city || !registerForm.residential_province || !registerForm.residential_postal_code) {
-      toast.error(t.auth.allFieldsRequired);
+      banner.error(t.auth.allFieldsRequired);
       return;
     }
     setLoading(true);
@@ -219,12 +216,12 @@ const Auth = () => {
           role: selectedRole!
         });
         if (roleError) throw roleError;
-        toast.success("Account created successfully!");
+        banner.success("Account created successfully!");
         const redirectPath = selectedRole === "provider" ? "/provider/dashboard" : "/customer/dashboard";
         navigate(redirectPath);
       }
     } catch (error: any) {
-      toast.error(error.message || "Failed to create account");
+      banner.error(error.message || "Failed to create account");
     } finally {
       setLoading(false);
     }

@@ -7,7 +7,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
+import { banner } from "@/hooks/use-banner";
 
 interface StripePaymentFormProps {
   onSuccess: (paymentIntentId: string) => void;
@@ -43,14 +43,14 @@ export const StripePaymentForm = ({ onSuccess, onBack, amount, currency }: Strip
 
       if (error) {
         setErrorMessage(error.message || 'Payment failed');
-        toast.error(error.message || 'Payment failed');
+        banner.error(error.message || 'Payment failed');
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        toast.success('Payment successful!');
+        banner.success('Payment successful!');
         onSuccess(paymentIntent.id);
       }
     } catch (err: any) {
       setErrorMessage(err.message || 'An error occurred');
-      toast.error(err.message || 'An error occurred');
+      banner.error(err.message || 'An error occurred');
     } finally {
       setIsProcessing(false);
     }

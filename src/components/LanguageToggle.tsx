@@ -1,6 +1,6 @@
 import { useI18n } from '@/contexts/I18nContext';
 import { Languages } from 'lucide-react';
-import { toast } from 'sonner';
+import { banner } from "@/hooks/use-banner";
 
 export const LanguageToggle = () => {
   const { language, setLanguage } = useI18n();
@@ -8,7 +8,7 @@ export const LanguageToggle = () => {
   const handleToggle = async () => {
     const newLang = language === 'en' ? 'pt' : 'en';
     await setLanguage(newLang);
-    toast.success(`Language switched to ${newLang === 'en' ? 'English' : 'Português'}`);
+    banner.success(`Language switched to ${newLang === 'en' ? 'English' : 'Português'}`);
   };
 
   return (

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 import { ArrowLeft, Mail } from "lucide-react";
 import logoImage from "@/assets/logo-clinlix.png";
 
@@ -19,7 +19,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     
     if (!email) {
-      toast.error("Please enter your email address");
+      banner.error("Please enter your email address");
       return;
     }
 
@@ -32,9 +32,9 @@ const ForgotPassword = () => {
       if (error) throw error;
 
       setEmailSent(true);
-      toast.success("Password reset email sent! Check your inbox.");
+      banner.success("Password reset email sent! Check your inbox.");
     } catch (error: any) {
-      toast.error(error.message || "Failed to send reset email");
+      banner.error(error.message || "Failed to send reset email");
     } finally {
       setLoading(false);
     }

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 import { Lock, Eye, EyeOff } from "lucide-react";
 import logoImage from "@/assets/logo-clinlix.png";
 
@@ -21,7 +21,7 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (!token) {
-      toast.error("Invalid reset link");
+      banner.error("Invalid reset link");
       navigate('/auth/forgot-password');
     }
   }, [token, navigate]);
@@ -30,17 +30,17 @@ const ResetPassword = () => {
     e.preventDefault();
     
     if (!password || !confirmPassword) {
-      toast.error("Please fill in all fields");
+      banner.error("Please fill in all fields");
       return;
     }
 
     if (password.length < 8) {
-      toast.error("Password must be at least 8 characters");
+      banner.error("Password must be at least 8 characters");
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error("Passwords don't match");
+      banner.error("Passwords don't match");
       return;
     }
 
@@ -52,10 +52,10 @@ const ResetPassword = () => {
 
       if (error) throw error;
 
-      toast.success("Password updated successfully!");
+      banner.success("Password updated successfully!");
       navigate('/auth');
     } catch (error: any) {
-      toast.error(error.message || "Failed to update password");
+      banner.error(error.message || "Failed to update password");
     } finally {
       setLoading(false);
     }

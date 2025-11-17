@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, ArrowRight, Check, Calendar as CalendarIcon, MapPin, User, Plus, CreditCard, Bath, ChefHat, Sofa, Layers, Sparkles, Square, Home, Mail, Phone, ChevronLeft, ChevronRight, Building2, Star } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 import { Separator } from "@/components/ui/separator";
 import ProviderAvatarBadge from "@/components/ProviderAvatarBadge";
 import ProviderCard from "@/components/ProviderCard";
@@ -117,7 +117,7 @@ const Booking = () => {
       setPaymentIntentId(data.paymentIntentId);
     } catch (error: any) {
       console.error('Error creating payment intent:', error);
-      toast.error('Failed to initialize payment');
+      banner.error('Failed to initialize payment');
       setCurrentStep(4); // Go back to add-ons step
     } finally {
       setPaymentProcessing(false);
@@ -192,15 +192,15 @@ const Booking = () => {
   };
   const handleNext = () => {
     if (currentStep === 1 && !selectedAddress) {
-      toast.error('Choose an address to continue');
+      banner.error('Choose an address to continue');
       return;
     }
     if (currentStep === 2 && (!selectedDate || !selectedTime)) {
-      toast.error('Pick a date and time to see available providers');
+      banner.error('Pick a date and time to see available providers');
       return;
     }
     if (currentStep === 3 && !selectedProvider) {
-      toast.error('Choose a provider to continue booking');
+      banner.error('Choose a provider to continue booking');
       return;
     }
     if (currentStep === 5) {
@@ -220,7 +220,7 @@ const Booking = () => {
   };
   const handleConfirmBooking = async () => {
     if (!paymentIntentId) {
-      toast.error('Payment required to complete booking');
+      banner.error('Payment required to complete booking');
       setCurrentStep(5); // Go back to payment
       return;
     }
@@ -234,7 +234,7 @@ const Booking = () => {
       } = await supabase.auth.getUser();
       
       if (userError || !user) {
-        toast.error('Please log in to continue');
+        banner.error('Please log in to continue');
         navigate('/auth');
         return;
       }
@@ -307,10 +307,10 @@ const Booking = () => {
           acceptUrl: `https://clinlix.com/provider/jobs`
         }
       }).catch(err => console.error('Error sending provider email:', err));
-      toast.success("Booking sent! We'll notify you when your provider confirms.");
+      banner.success("Booking sent! We'll notify you when your provider confirms.");
       navigate('/customer/dashboard');
     } catch (error: any) {
-      toast.error(error.message || 'Failed to create booking');
+      banner.error(error.message || 'Failed to create booking');
     }
   };
   const generateDateOptions = () => {

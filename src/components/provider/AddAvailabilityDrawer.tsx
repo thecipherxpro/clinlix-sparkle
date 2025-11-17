@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetT
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "sonner";
+import { banner } from "@/hooks/use-banner";
 
 interface AddAvailabilityDrawerProps {
   open: boolean;
@@ -41,7 +41,7 @@ export function AddAvailabilityDrawer({
 
   const handleSubmit = async () => {
     if (startTime >= endTime) {
-      toast.error("End time must be after start time");
+      banner.error("End time must be after start time");
       return;
     }
 
@@ -51,7 +51,7 @@ export function AddAvailabilityDrawer({
     const endMinute = parseInt(endTime.split(':')[1]);
 
     if (startHour < 7 || endHour > 19 || (endHour === 19 && endMinute > 0)) {
-      toast.error("Time must be between 7:00 AM and 7:00 PM");
+      banner.error("Time must be between 7:00 AM and 7:00 PM");
       return;
     }
 

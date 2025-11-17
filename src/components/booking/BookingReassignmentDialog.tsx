@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Calendar, User, MapPin, Clock, AlertTriangle } from 'lucide-react';
-import { toast } from 'sonner';
+import { banner } from "@/hooks/use-banner";
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 
@@ -55,7 +55,7 @@ export const BookingReassignmentDialog = ({
       setBooking(data);
     } catch (error) {
       console.error('Error fetching booking:', error);
-      toast.error('Failed to load booking details');
+      banner.error('Failed to load booking details');
     }
   };
 
@@ -96,12 +96,12 @@ export const BookingReassignmentDialog = ({
 
       if (error) throw error;
 
-      toast.success(`Refund of ${data.currency}${data.refundAmount.toFixed(2)} processed successfully`);
+      banner.success(`Refund of ${data.currency}${data.refundAmount.toFixed(2)} processed successfully`);
       onClose();
       navigate('/customer/bookings');
     } catch (error: any) {
       console.error('Error processing refund:', error);
-      toast.error('Failed to process refund');
+      banner.error('Failed to process refund');
     } finally {
       setLoading(false);
     }
