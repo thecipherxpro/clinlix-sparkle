@@ -4,14 +4,20 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, LogOut, Save, User, MapPin, UserCircle, Settings } from "lucide-react";
+import { ArrowLeft, LogOut, Save, User, MapPin, UserCircle } from "lucide-react";
 import { toast } from "sonner";
-import { Separator } from "@/components/ui/separator";
 import { Form } from "@/components/ui/form";
 import { ProfileFormSkeleton } from "@/components/skeletons/FormSkeleton";
-import { profileSchema, ProfileFormData } from "@/lib/schemas/profileSchema";
+import { 
+  accountInfoSchema, 
+  demographicsSchema, 
+  addressSchema,
+  AccountInfoData,
+  DemographicsData,
+  AddressData 
+} from "@/lib/schemas/profileSchema";
 import { AccountInfoFields } from "@/components/forms/AccountInfoFields";
 import { DemographicsFields } from "@/components/forms/DemographicsFields";
 import { ResidentialAddressFields } from "@/components/forms/ResidentialAddressFields";
@@ -20,27 +26,43 @@ import AvatarUploader from "@/components/AvatarUploader";
 const CustomerAccount = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [savingAccount, setSavingAccount] = useState(false);
+  const [savingDemographics, setSavingDemographics] = useState(false);
+  const [savingAddress, setSavingAddress] = useState(false);
   const [userId, setUserId] = useState<string>("");
+  const [profileData, setProfileData] = useState<any>(null);
 
-  const form = useForm<ProfileFormData>({
-    resolver: zodResolver(profileSchema),
+  // Separate forms for each tab
+  const accountForm = useForm<AccountInfoData>({
+    resolver: zodResolver(accountInfoSchema),
     defaultValues: {
       first_name: "",
       last_name: "",
       email: "",
       phone: "",
+      country: "Portugal",
+      currency: "EUR",
+      language: "en"
+    }
+  });
+
+  const demographicsForm = useForm<DemographicsData>({
+    resolver: zodResolver(demographicsSchema),
+    defaultValues: {
       gender: "prefer_not_to_say",
       date_of_birth: "",
+    }
+  });
+
+  const addressForm = useForm<AddressData>({
+    resolver: zodResolver(addressSchema),
+    defaultValues: {
       residential_street: "",
       residential_apt_unit: "",
       residential_city: "",
       residential_province: "",
       residential_postal_code: "",
       residential_country: "Portugal",
-      country: "Portugal",
-      currency: "EUR",
-      language: "en"
     }
   });
 
@@ -59,7 +81,7 @@ const CustomerAccount = () => {
 
       setUserId(user.id);
 
-      const { data: profileData, error } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
@@ -67,27 +89,36 @@ const CustomerAccount = () => {
 
       if (error) throw error;
 
-      if (profileData?.role !== 'customer') {
+      if (data?.role !== 'customer') {
         navigate('/provider/dashboard');
         return;
       }
 
-      form.reset({
-        first_name: profileData.first_name || "",
-        last_name: profileData.last_name || "",
-        email: profileData.email || "",
-        phone: profileData.phone || "",
-        gender: profileData.gender || "prefer_not_to_say",
-        date_of_birth: profileData.date_of_birth || "",
-        residential_street: profileData.residential_street || "",
-        residential_apt_unit: profileData.residential_apt_unit || "",
-        residential_city: profileData.residential_city || "",
-        residential_province: profileData.residential_province || "",
-        residential_postal_code: profileData.residential_postal_code || "",
-        residential_country: (profileData.residential_country === "Canada" ? "Canada" : "Portugal") as "Canada" | "Portugal",
-        country: profileData.country || "Portugal",
-        currency: profileData.currency || "EUR",
-        language: profileData.language || "en"
+      setProfileData(data);
+
+      // Reset each form separately
+      accountForm.reset({
+        first_name: data.first_name || "",
+        last_name: data.last_name || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        country: data.country || "Portugal",
+        currency: data.currency || "EUR",
+        language: data.language || "en"
+      });
+
+      demographicsForm.reset({
+        gender: data.gender || "prefer_not_to_say",
+        date_of_birth: data.date_of_birth || "",
+      });
+
+      addressForm.reset({
+        residential_street: data.residential_street || "",
+        residential_apt_unit: data.residential_apt_unit || "",
+        residential_city: data.residential_city || "",
+        residential_province: data.residential_province || "",
+        residential_postal_code: data.residential_postal_code || "",
+        residential_country: (data.residential_country === "Canada" ? "Canada" : "Portugal") as "Canada" | "Portugal",
       });
     } catch (error: any) {
       console.error('Error:', error);
@@ -97,8 +128,8 @@ const CustomerAccount = () => {
     }
   };
 
-  const onSubmit = async (values: ProfileFormData) => {
-    setSaving(true);
+  const onSubmitAccount = async (values: AccountInfoData) => {
+    setSavingAccount(true);
     try {
       const { error } = await supabase
         .from('profiles')
@@ -107,13 +138,53 @@ const CustomerAccount = () => {
 
       if (error) throw error;
 
-      toast.success('Profile updated successfully');
+      toast.success('Account information updated successfully');
       await loadProfile();
     } catch (error: any) {
       console.error('Error:', error);
-      toast.error(error.message || 'Failed to update profile');
+      toast.error(error.message || 'Failed to update account information');
     } finally {
-      setSaving(false);
+      setSavingAccount(false);
+    }
+  };
+
+  const onSubmitDemographics = async (values: DemographicsData) => {
+    setSavingDemographics(true);
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update(values)
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      toast.success('Personal information updated successfully');
+      await loadProfile();
+    } catch (error: any) {
+      console.error('Error:', error);
+      toast.error(error.message || 'Failed to update personal information');
+    } finally {
+      setSavingDemographics(false);
+    }
+  };
+
+  const onSubmitAddress = async (values: AddressData) => {
+    setSavingAddress(true);
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update(values)
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      toast.success('Address updated successfully');
+      await loadProfile();
+    } catch (error: any) {
+      console.error('Error:', error);
+      toast.error(error.message || 'Failed to update address');
+    } finally {
+      setSavingAddress(false);
     }
   };
 
@@ -168,69 +239,106 @@ const CustomerAccount = () => {
           </p>
         </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <Tabs defaultValue="profile" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 h-auto p-1">
-                <TabsTrigger value="profile" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  <User className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span>Account</span>
-                </TabsTrigger>
-                <TabsTrigger value="demographics" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  <UserCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span>Personal</span>
-                </TabsTrigger>
-                <TabsTrigger value="address" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span>Address</span>
-                </TabsTrigger>
-              </TabsList>
+        <Tabs defaultValue="profile" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 h-auto p-1">
+            <TabsTrigger value="profile" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <User className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>Account</span>
+            </TabsTrigger>
+            <TabsTrigger value="demographics" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <UserCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>Personal</span>
+            </TabsTrigger>
+            <TabsTrigger value="address" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>Address</span>
+            </TabsTrigger>
+          </TabsList>
 
-              <Card className="mt-4 border-0 shadow-sm">
-                <CardContent className="p-4 md:p-6">
-                  <TabsContent value="profile" className="mt-0 space-y-4">
-                    <AccountInfoFields form={form} disabled={saving} />
-                  </TabsContent>
+          {/* Account Info Tab */}
+          <TabsContent value="profile" className="mt-4">
+            <Form {...accountForm}>
+              <form onSubmit={accountForm.handleSubmit(onSubmitAccount)}>
+                <Card className="border-0 shadow-sm">
+                  <CardContent className="p-4 md:p-6 space-y-4">
+                    <AccountInfoFields form={accountForm} disabled={savingAccount} />
+                    <div className="flex justify-end gap-3 pt-4 border-t">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => navigate('/customer/dashboard')}
+                      >
+                        Cancel
+                      </Button>
+                      <Button type="submit" disabled={savingAccount} className="gap-2">
+                        <Save className="w-4 h-4" />
+                        {savingAccount ? 'Saving...' : 'Save Account Info'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </form>
+            </Form>
+          </TabsContent>
 
-                  <TabsContent value="demographics" className="mt-0 space-y-4">
-                    <p className="text-sm text-muted-foreground mb-4">
+          {/* Demographics Tab */}
+          <TabsContent value="demographics" className="mt-4">
+            <Form {...demographicsForm}>
+              <form onSubmit={demographicsForm.handleSubmit(onSubmitDemographics)}>
+                <Card className="border-0 shadow-sm">
+                  <CardContent className="p-4 md:p-6 space-y-4">
+                    <p className="text-sm text-muted-foreground">
                       This information helps us provide better services.
                     </p>
-                    <DemographicsFields form={form} disabled={saving} />
-                  </TabsContent>
+                    <DemographicsFields form={demographicsForm} disabled={savingDemographics} />
+                    <div className="flex justify-end gap-3 pt-4 border-t">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => navigate('/customer/dashboard')}
+                      >
+                        Cancel
+                      </Button>
+                      <Button type="submit" disabled={savingDemographics} className="gap-2">
+                        <Save className="w-4 h-4" />
+                        {savingDemographics ? 'Saving...' : 'Save Personal Info'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </form>
+            </Form>
+          </TabsContent>
 
-                  <TabsContent value="address" className="mt-0 space-y-4">
-                    <p className="text-sm text-muted-foreground mb-4">
+          {/* Address Tab */}
+          <TabsContent value="address" className="mt-4">
+            <Form {...addressForm}>
+              <form onSubmit={addressForm.handleSubmit(onSubmitAddress)}>
+                <Card className="border-0 shadow-sm">
+                  <CardContent className="p-4 md:p-6 space-y-4">
+                    <p className="text-sm text-muted-foreground">
                       Used for security and verification purposes.
                     </p>
-                    <ResidentialAddressFields form={form} disabled={saving} />
-                  </TabsContent>
-                </CardContent>
-              </Card>
-            </Tabs>
-
-            <div className="sticky bottom-0 bg-background border-t border-border -mx-4 px-4 py-3 md:mx-0 md:border-0 md:px-0">
-              <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => navigate('/customer/dashboard')}
-                  className="w-full sm:w-auto order-2 sm:order-1"
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  type="submit" 
-                  disabled={saving} 
-                  className="w-full sm:w-auto order-1 sm:order-2 gap-2"
-                >
-                  <Save className="w-4 h-4" />
-                  {saving ? 'Saving...' : 'Save Changes'}
-                </Button>
-              </div>
-            </div>
-          </form>
-        </Form>
+                    <ResidentialAddressFields form={addressForm} disabled={savingAddress} />
+                    <div className="flex justify-end gap-3 pt-4 border-t">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => navigate('/customer/dashboard')}
+                      >
+                        Cancel
+                      </Button>
+                      <Button type="submit" disabled={savingAddress} className="gap-2">
+                        <Save className="w-4 h-4" />
+                        {savingAddress ? 'Saving...' : 'Save Address'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </form>
+            </Form>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
