@@ -35,7 +35,7 @@ const ProviderAvatarBadge = ({
   const avatarSize = getAvatarSize(size);
 
   return (
-    <div className={cn("relative inline-flex", className)}>
+    <div className={cn("relative inline-flex rounded-full", className)}>
       <Avatar
         src={imageUrl || undefined}
         alt={alt}
