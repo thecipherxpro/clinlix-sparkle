@@ -17,9 +17,14 @@ const avatarContainerVariants = cva(
         "3xl": "w-20 h-20",
         "4xl": "w-24 h-24",
       },
+      shape: {
+        circle: "rounded-full",
+        rounded: "rounded-lg",
+      },
     },
     defaultVariants: {
       size: "md",
+      shape: "circle",
     },
   }
 );
@@ -126,7 +131,7 @@ export function Avatar({
   };
 
   return (
-    <div className={cx(avatarContainerVariants({ size }), className)} {...props}>
+    <div className={cx(avatarContainerVariants({ size, shape }), className)} {...props}>
       <div className={cx(avatarImageContainerVariants({ shape }))}>
         {src && !imageError ? (
           <img
