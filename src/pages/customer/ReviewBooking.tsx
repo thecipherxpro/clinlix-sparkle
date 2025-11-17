@@ -140,9 +140,9 @@ const ReviewBooking = () => {
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
         <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
           <Button 
-            isIconOnly
-            variant="light"
-            onPress={() => navigate('/customer/bookings')} 
+            size="icon"
+            variant="ghost"
+            onClick={() => navigate('/customer/bookings')} 
             className="touch-target"
           >
             <ArrowLeft className="w-5 h-5" />
