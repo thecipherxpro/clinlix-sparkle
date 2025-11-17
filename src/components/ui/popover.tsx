@@ -23,7 +23,7 @@ const PopoverContent = React.forwardRef<
     <HeadlessPopover.Panel
       ref={ref}
       className={cn(
-        "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none",
+        "absolute right-0 top-full mt-2 z-[100] w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-lg outline-none",
         className,
       )}
       {...props}
