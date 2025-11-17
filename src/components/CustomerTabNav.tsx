@@ -17,17 +17,14 @@ const CustomerTabNav = () => {
     { title: 'Profile', icon: <User />, path: '/customer/profile' },
   ];
   
-  const [selected, setSelected] = useState(tabs[0]);
+  const [selectedPath, setSelectedPath] = useState(location.pathname);
 
   useEffect(() => {
-    const currentTab = tabs.find(tab => tab.path === location.pathname);
-    if (currentTab) {
-      setSelected(currentTab);
-    }
-  }, [location.pathname, t]);
+    setSelectedPath(location.pathname);
+  }, [location.pathname]);
 
   const handleTabSelect = (tab: typeof tabs[0]) => {
-    setSelected(tab);
+    setSelectedPath(tab.path);
     navigate(tab.path);
   };
 
@@ -35,7 +32,7 @@ const CustomerTabNav = () => {
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border">
       <div className="flex items-center justify-around px-2 py-2 pb-safe-bottom">
         {tabs.map((tab, index) => {
-          const isSelected = selected === tab;
+          const isSelected = selectedPath === tab.path;
           return (
             <motion.button
               key={tab.title}
