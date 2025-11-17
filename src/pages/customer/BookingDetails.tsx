@@ -166,33 +166,33 @@ const BookingDetails = () => {
   const statusConfig = getStatusConfig(booking.job_status);
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background pb-safe-bottom">
       <StickyPageHeader title="Booking Details">
-        <div className="px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t">
-          <Badge variant={statusConfig.variant} className="text-xs sm:text-sm px-3 py-1">
+        <div className="px-3 sm:px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t">
+          <Badge variant={statusConfig.variant} className="text-xs sm:text-sm px-3 py-1.5 font-medium">
             {statusConfig.label}
           </Badge>
-          <div className="flex items-center gap-3 text-xs sm:text-sm text-muted-foreground">
+          <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4" />
-              <span>{format(new Date(booking.requested_date), "MMM dd, yyyy")}</span>
+              <Calendar className="w-4 h-4 flex-shrink-0" />
+              <span className="font-medium">{format(new Date(booking.requested_date), "MMM dd, yyyy")}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              <span>{booking.requested_time}</span>
+              <Clock className="w-4 h-4 flex-shrink-0" />
+              <span className="font-medium">{booking.requested_time}</span>
             </div>
           </div>
         </div>
       </StickyPageHeader>
 
-      <main className="container max-w-5xl px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <main className="container max-w-5xl px-3 sm:px-4 py-4 sm:py-6 pb-20 sm:pb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Status Stepper */}
             {!['cancelled', 'declined'].includes(booking.job_status) && (
-              <Card className="animate-fade-in">
-                <CardContent className="p-6">
+              <Card className="animate-fade-in shadow-sm">
+                <CardContent className="p-4 sm:p-6">
                   <StatusStepper currentStatus={booking.job_status} />
                 </CardContent>
               </Card>
@@ -200,16 +200,16 @@ const BookingDetails = () => {
 
             {/* Declined Warning */}
             {isDeclined && (
-              <Card className="border-destructive/50 bg-destructive/5 animate-scale-in">
-                <CardContent className="p-6 flex items-start gap-3">
-                  <XCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5 animate-pulse" />
+              <Card className="border-destructive/50 bg-destructive/5 animate-scale-in shadow-sm">
+                <CardContent className="p-4 sm:p-6 flex items-start gap-3">
+                  <XCircle className="w-5 h-5 sm:w-6 sm:h-6 text-destructive shrink-0 mt-0.5 animate-pulse" />
                   <div className="flex-1 space-y-2">
-                    <h3 className="font-semibold text-base text-destructive">Booking Declined</h3>
-                    <p className="text-sm text-destructive/80">
+                    <h3 className="font-semibold text-sm sm:text-base text-destructive">Booking Declined</h3>
+                    <p className="text-xs sm:text-sm text-destructive/80 leading-relaxed">
                       This booking was declined by the provider. Please reassign to another provider.
                     </p>
                     {booking.rejection_reason && (
-                      <p className="text-sm text-destructive/80 italic">
+                      <p className="text-xs sm:text-sm text-destructive/80 italic leading-relaxed">
                         Reason: {booking.rejection_reason}
                       </p>
                     )}
@@ -237,7 +237,7 @@ const BookingDetails = () => {
           </div>
 
           {/* Right Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Provider Card */}
             {provider ? (
               <PersonCard
@@ -252,7 +252,7 @@ const BookingDetails = () => {
                 onViewProfile={() => navigate(`/provider-profile/${provider.id}`)}
               />
             ) : (
-              <Card className="animate-fade-in">
+              <Card className="animate-fade-in shadow-sm">
                 <CardContent className="p-6 text-center text-muted-foreground">
                   <p className="text-sm">No provider assigned yet</p>
                 </CardContent>
@@ -260,12 +260,12 @@ const BookingDetails = () => {
             )}
 
             {/* Actions */}
-            <Card className="sticky top-20 animate-fade-in" style={{ animationDelay: '100ms' }}>
-              <CardContent className="p-4 space-y-3">
+            <Card className="sticky top-20 animate-fade-in shadow-sm" style={{ animationDelay: '100ms' }}>
+              <CardContent className="p-3 sm:p-4 space-y-2.5 sm:space-y-3">
                 {isDeclined && (
                   <Button
                     onClick={handleReassign}
-                    className="w-full gap-2 h-10 hover-scale transition-all duration-200"
+                    className="w-full gap-2 h-11 hover-scale transition-all duration-200 font-medium"
                     size="default"
                   >
                     <RotateCcw className="w-4 h-4" />
@@ -276,7 +276,7 @@ const BookingDetails = () => {
                 {canReview && (
                   <Button
                     onClick={handleReview}
-                    className="w-full gap-2 h-10 hover-scale transition-all duration-200"
+                    className="w-full gap-2 h-11 hover-scale transition-all duration-200 font-medium"
                     size="default"
                   >
                     <Star className="w-4 h-4" />
@@ -288,7 +288,7 @@ const BookingDetails = () => {
                   <Button
                     variant="outline"
                     onClick={handleMessage}
-                    className="w-full gap-2 h-10 hover-scale transition-all duration-200"
+                    className="w-full gap-2 h-11 hover-scale transition-all duration-200 font-medium"
                     size="default"
                   >
                     <MessageCircle className="w-4 h-4" />
@@ -300,7 +300,7 @@ const BookingDetails = () => {
                   <Button
                     variant="outline"
                     onClick={() => setCancelDialogOpen(true)}
-                    className="w-full gap-2 h-10 text-destructive hover:text-destructive hover:bg-destructive/10 transition-all duration-200"
+                    className="w-full gap-2 h-11 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30 transition-all duration-200 font-medium"
                     size="default"
                   >
                     <XCircle className="w-4 h-4" />

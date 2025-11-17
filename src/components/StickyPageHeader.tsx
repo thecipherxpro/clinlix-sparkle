@@ -29,33 +29,35 @@ export const StickyPageHeader = ({
   };
 
   return (
-    <div
+    <header
       className={cn(
-        "sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border",
+        "sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b shadow-sm",
+        "safe-area-inset-top",
         className
       )}
     >
-      <div className="flex items-center gap-3 px-4 py-4">
+      <div className="flex items-center gap-3 px-3 sm:px-4 py-3 sm:py-4 min-h-[60px]">
         <Button
           variant="ghost"
           size="icon"
           onClick={handleBack}
-          className="rounded-full h-10 w-10 shrink-0"
+          className="rounded-full h-11 w-11 shrink-0 hover:bg-primary/10 active:scale-95 transition-transform"
+          aria-label="Go back"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-semibold text-foreground truncate">
+          <h1 className="text-lg sm:text-xl font-semibold text-foreground truncate leading-tight">
             {title}
           </h1>
           {subtitle && (
-            <p className="text-sm text-muted-foreground truncate">
+            <p className="text-xs sm:text-sm text-muted-foreground truncate mt-0.5">
               {subtitle}
             </p>
           )}
         </div>
       </div>
       {children}
-    </div>
+    </header>
   );
 };

@@ -29,18 +29,24 @@ export const ContactActionRow = ({
     }
   };
 
+  const actionCount = [phone, onMessage, email, onNavigate].filter(Boolean).length;
+
   return (
-    <div className={cn("grid grid-cols-4 gap-2", className)}>
+    <div className={cn(
+      "grid gap-2.5 sm:gap-3",
+      actionCount === 4 ? "grid-cols-2" : `grid-cols-${Math.min(actionCount, 3)}`,
+      className
+    )}>
       {phone && (
         <Button
           variant="outline"
           size="sm"
           onClick={handleCall}
-          className="flex-col h-auto py-2.5 sm:py-3 gap-1 hover:bg-primary/5 hover:text-primary hover:border-primary"
-          title="Call"
+          className="flex-col h-auto py-3 sm:py-3.5 gap-1.5 hover:bg-primary/5 hover:text-primary hover:border-primary active:scale-95 transition-all"
+          aria-label="Call provider"
         >
-          <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          <span className="text-[10px] sm:text-xs font-medium">Call</span>
+          <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="text-xs font-medium">Call</span>
         </Button>
       )}
 
@@ -49,11 +55,11 @@ export const ContactActionRow = ({
           variant="default"
           size="sm"
           onClick={onMessage}
-          className="flex-col h-auto py-2.5 sm:py-3 gap-1"
-          title="Message"
+          className="flex-col h-auto py-3 sm:py-3.5 gap-1.5 active:scale-95 transition-all"
+          aria-label="Message provider"
         >
-          <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          <span className="text-[10px] sm:text-xs font-medium">Chat</span>
+          <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="text-xs font-medium">Chat</span>
         </Button>
       )}
 
@@ -62,11 +68,11 @@ export const ContactActionRow = ({
           variant="outline"
           size="sm"
           onClick={handleEmail}
-          className="flex-col h-auto py-2.5 sm:py-3 gap-1 hover:bg-primary/5 hover:text-primary hover:border-primary"
-          title="Email"
+          className="flex-col h-auto py-3 sm:py-3.5 gap-1.5 hover:bg-primary/5 hover:text-primary hover:border-primary active:scale-95 transition-all"
+          aria-label="Email provider"
         >
-          <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          <span className="text-[10px] sm:text-xs font-medium">Email</span>
+          <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="text-xs font-medium">Email</span>
         </Button>
       )}
 
@@ -75,11 +81,11 @@ export const ContactActionRow = ({
           variant="outline"
           size="sm"
           onClick={onNavigate}
-          className="flex-col h-auto py-2.5 sm:py-3 gap-1 hover:bg-primary/5 hover:text-primary hover:border-primary"
-          title="Navigate"
+          className="flex-col h-auto py-3 sm:py-3.5 gap-1.5 hover:bg-primary/5 hover:text-primary hover:border-primary active:scale-95 transition-all"
+          aria-label="Navigate to location"
         >
-          <Navigation className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          <span className="text-[10px] sm:text-xs font-medium">Navigate</span>
+          <Navigation className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="text-xs font-medium">Navigate</span>
         </Button>
       )}
     </div>
