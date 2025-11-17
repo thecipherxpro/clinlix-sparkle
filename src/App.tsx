@@ -71,6 +71,7 @@ const App = () => (
             <Route path="/customer/my-bookings" element={<MyBookings />} />
             <Route path="/customer/bookings/:id" element={<BookingDetails />} />
             <Route path="/customer/my-bookings/:id" element={<BookingDetails />} />
+            <Route path="/customer/booking-details/:id" element={<BookingDetails />} />
             <Route path="/customer/bookings/:id/review" element={<ReviewBooking />} />
             <Route path="/customer/account" element={<CustomerAccount />} />
             <Route path="/customer/profile" element={<Profile />} />
