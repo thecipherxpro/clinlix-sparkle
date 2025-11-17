@@ -7,7 +7,7 @@ const tabs = [
   { title: 'Home', icon: <Home />, path: '/provider/dashboard' },
   { title: 'Jobs', icon: <Briefcase />, path: '/provider/jobs' },
   { title: 'Schedule', icon: <Calendar />, path: '/provider/schedule' },
-  { title: 'Profile', icon: <User />, path: '/provider/profile' },
+  { title: 'Account', icon: <User />, path: '/provider/account' },
 ];
 
 const ProviderTabNav = () => {
