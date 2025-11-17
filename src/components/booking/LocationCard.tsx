@@ -46,7 +46,7 @@ export const LocationCard = ({ address, defaultExpanded = false }: LocationCardP
   };
 
   return (
-    <Card>
+    <Card className="hover-scale animate-fade-in">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base sm:text-lg flex items-center gap-2">
@@ -57,9 +57,9 @@ export const LocationCard = ({ address, defaultExpanded = false }: LocationCardP
             variant="ghost"
             size="sm"
             onClick={() => setExpanded(!expanded)}
-            className="h-8 w-8 p-0 hover:bg-primary/10"
+            className="h-8 w-8 p-0 hover:bg-primary/10 transition-all duration-200"
           >
-            <ChevronDown className={cn("w-4 h-4 transition-transform", expanded && "rotate-180")} />
+            <ChevronDown className={cn("w-4 h-4 transition-transform duration-300", expanded && "rotate-180")} />
           </Button>
         </div>
       </CardHeader>
@@ -75,7 +75,7 @@ export const LocationCard = ({ address, defaultExpanded = false }: LocationCardP
 
         {/* Expanded View */}
         {expanded && (
-          <>
+          <div className="animate-accordion-down space-y-3">
             {address.label && (
               <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-foreground">
                 {address.property_type === "apartment" ? (
@@ -130,12 +130,12 @@ export const LocationCard = ({ address, defaultExpanded = false }: LocationCardP
               variant="outline"
               size="sm"
               onClick={handleNavigate}
-              className="w-full mt-2 gap-2"
+              className="w-full mt-2 gap-2 transition-all duration-200 hover:gap-3"
             >
               <Navigation className="w-4 h-4" />
               Get Directions
             </Button>
-          </>
+          </div>
         )}
       </CardContent>
     </Card>
