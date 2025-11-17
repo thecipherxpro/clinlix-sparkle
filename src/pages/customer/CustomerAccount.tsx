@@ -174,12 +174,11 @@ const CustomerAccount = () => {
               <TabsList className="grid w-full grid-cols-3 h-auto p-1">
                 <TabsTrigger value="profile" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                   <User className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span>Profile</span>
+                  <span>Account</span>
                 </TabsTrigger>
                 <TabsTrigger value="demographics" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                   <UserCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="hidden sm:inline">Demographics</span>
-                  <span className="sm:hidden">Demo</span>
+                  <span>Personal</span>
                 </TabsTrigger>
                 <TabsTrigger value="address" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                   <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
