@@ -13,7 +13,7 @@ const CustomerTabNav = () => {
     { title: 'Home', icon: <Home />, path: '/customer/dashboard' },
     { title: 'Book', icon: <Calendar />, path: '/customer/booking' },
     { title: 'Bookings', icon: <Sparkles />, path: '/customer/my-bookings' },
-    { title: 'Profile', icon: <User />, path: '/customer/profile' },
+    { title: 'Account', icon: <User />, path: '/customer/account' },
   ];
   
   const [selectedPath, setSelectedPath] = useState(location.pathname);
