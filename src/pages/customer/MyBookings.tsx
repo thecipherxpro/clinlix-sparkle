@@ -300,7 +300,7 @@ const MyBookings = () => {
       {/* Sticky Header with Tabs */}
       <StickyPageHeader title="My Bookings">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="overflow-x-auto pb-3 px-4 pt-2 touch-pan-x">
+          <div className="overflow-x-auto pb-3 px-4 pt-2 scrollbar-hide">
             <TabsList className="inline-flex h-auto p-1 bg-muted/50 backdrop-blur-sm rounded-full w-auto min-w-full">
               {declinedBookings.length > 0 && (
                 <TabsTrigger 
