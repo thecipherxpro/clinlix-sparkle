@@ -48,34 +48,34 @@ export const ResidentialAddressFields = ({ form, disabled = false }: Residential
 
   return (
     <div className="space-y-4">
-      {/* Country Selection - First */}
+      {/* Country Selection */}
       <FormField
         control={form.control}
         name="residential_country"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Country *</FormLabel>
+            <FormLabel className="text-sm font-medium">Country *</FormLabel>
             <Select 
               onValueChange={field.onChange} 
               defaultValue={field.value || "Portugal"}
               disabled={disabled}
             >
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="h-11 text-base">
                   <SelectValue placeholder="Select country" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
-                <SelectItem value="Portugal">Portugal</SelectItem>
-                <SelectItem value="Canada">Canada</SelectItem>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="Portugal" className="text-base py-3">Portugal</SelectItem>
+                <SelectItem value="Canada" className="text-base py-3">Canada</SelectItem>
               </SelectContent>
             </Select>
-            <FormMessage />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />
 
-      {/* Portugal Address Fields */}
+      {/* Portugal Fields */}
       {selectedCountry === "Portugal" && (
         <>
           <FormField
@@ -83,11 +83,11 @@ export const ResidentialAddressFields = ({ form, disabled = false }: Residential
             name="residential_street"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Rua (Street) *</FormLabel>
+                <FormLabel className="text-sm font-medium">Rua (Street) *</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={disabled} placeholder="Rua da Liberdade" />
+                  <Input {...field} disabled={disabled} placeholder="Rua da Liberdade" className="h-11 text-base" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
@@ -97,31 +97,26 @@ export const ResidentialAddressFields = ({ form, disabled = false }: Residential
             name="residential_apt_unit"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Porta/Andar (Door/Floor)</FormLabel>
+                <FormLabel className="text-sm font-medium">Porta/Andar (Door/Floor)</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={disabled} placeholder="3º Esq" />
+                  <Input {...field} disabled={disabled} placeholder="3º Esq" className="h-11 text-base" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <FormField
               control={form.control}
               name="residential_postal_code"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Código Postal *</FormLabel>
+                  <FormLabel className="text-sm font-medium">Código Postal *</FormLabel>
                   <FormControl>
-                    <Input 
-                      {...field} 
-                      disabled={disabled} 
-                      placeholder="1000-001"
-                      maxLength={8}
-                    />
+                    <Input {...field} disabled={disabled} placeholder="1000-001" className="h-11 text-base" />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -131,11 +126,11 @@ export const ResidentialAddressFields = ({ form, disabled = false }: Residential
               name="residential_city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Localidade (Locality) *</FormLabel>
+                  <FormLabel className="text-sm font-medium">Localidade (City) *</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={disabled} placeholder="Lisboa" />
+                    <Input {...field} disabled={disabled} placeholder="Lisboa" className="h-11 text-base" />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -146,33 +141,33 @@ export const ResidentialAddressFields = ({ form, disabled = false }: Residential
             name="residential_province"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Distrito (District) *</FormLabel>
+                <FormLabel className="text-sm font-medium">Distrito (District) *</FormLabel>
                 <Select 
                   onValueChange={field.onChange} 
                   defaultValue={field.value}
                   disabled={disabled}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-11 text-base">
                       <SelectValue placeholder="Select district" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="bg-background z-50 max-h-[300px]">
                     {PORTUGUESE_DISTRICTS.map((district) => (
-                      <SelectItem key={district} value={district}>
+                      <SelectItem key={district} value={district} className="text-base py-3">
                         {district}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
         </>
       )}
 
-      {/* Canada Address Fields */}
+      {/* Canada Fields */}
       {selectedCountry === "Canada" && (
         <>
           <FormField
@@ -180,11 +175,11 @@ export const ResidentialAddressFields = ({ form, disabled = false }: Residential
             name="residential_street"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Street Address *</FormLabel>
+                <FormLabel className="text-sm font-medium">Street Address *</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={disabled} placeholder="123 Main Street" />
+                  <Input {...field} disabled={disabled} placeholder="123 Main Street" className="h-11 text-base" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
@@ -194,55 +189,40 @@ export const ResidentialAddressFields = ({ form, disabled = false }: Residential
             name="residential_apt_unit"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Unit/Suite</FormLabel>
+                <FormLabel className="text-sm font-medium">Apt/Unit</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={disabled} placeholder="Unit 4B" />
+                  <Input {...field} disabled={disabled} placeholder="Apt 4B" className="h-11 text-base" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <FormField
               control={form.control}
               name="residential_city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City *</FormLabel>
+                  <FormLabel className="text-sm font-medium">City *</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={disabled} placeholder="Toronto" />
+                    <Input {...field} disabled={disabled} placeholder="Toronto" className="h-11 text-base" />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
 
             <FormField
               control={form.control}
-              name="residential_province"
+              name="residential_postal_code"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Province *</FormLabel>
-                  <Select 
-                    onValueChange={field.onChange} 
-                    defaultValue={field.value}
-                    disabled={disabled}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select province" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {CANADIAN_PROVINCES.map((province) => (
-                        <SelectItem key={province.value} value={province.value}>
-                          {province.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
+                  <FormLabel className="text-sm font-medium">Postal Code *</FormLabel>
+                  <FormControl>
+                    <Input {...field} disabled={disabled} placeholder="M5H 2N2" className="h-11 text-base" />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -250,19 +230,29 @@ export const ResidentialAddressFields = ({ form, disabled = false }: Residential
 
           <FormField
             control={form.control}
-            name="residential_postal_code"
+            name="residential_province"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Postal Code *</FormLabel>
-                <FormControl>
-                  <Input 
-                    {...field} 
-                    disabled={disabled} 
-                    placeholder="A1A 1A1"
-                    maxLength={7}
-                  />
-                </FormControl>
-                <FormMessage />
+                <FormLabel className="text-sm font-medium">Province *</FormLabel>
+                <Select 
+                  onValueChange={field.onChange} 
+                  defaultValue={field.value}
+                  disabled={disabled}
+                >
+                  <FormControl>
+                    <SelectTrigger className="h-11 text-base">
+                      <SelectValue placeholder="Select province" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-background z-50 max-h-[300px]">
+                    {CANADIAN_PROVINCES.map((province) => (
+                      <SelectItem key={province.value} value={province.value} className="text-base py-3">
+                        {province.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />

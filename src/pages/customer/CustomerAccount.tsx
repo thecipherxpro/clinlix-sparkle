@@ -133,110 +133,105 @@ const CustomerAccount = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-background">
+      <div className="sticky top-0 z-10 bg-background border-b border-border px-4 py-3 md:py-4">
+        <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
           <Button
             variant="ghost"
+            size="sm"
             onClick={() => navigate('/customer/dashboard')}
-            className="gap-2"
+            className="gap-1.5 -ml-2"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
+            <span className="hidden sm:inline">Back</span>
           </Button>
+          <div className="flex items-center gap-2">
+            <AvatarUploader role="customer" editable={true} />
+          </div>
           <Button
-            variant="destructive"
+            variant="ghost"
+            size="sm"
             onClick={handleLogout}
-            className="gap-2"
+            className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
           >
             <LogOut className="w-4 h-4" />
-            Logout
+            <span className="hidden sm:inline">Logout</span>
           </Button>
         </div>
+      </div>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-3xl">My Account</CardTitle>
-                <CardDescription>
-                  Manage your profile information and settings
-                </CardDescription>
-              </div>
-              <div className="flex items-center gap-4">
-                <AvatarUploader role="customer" editable={true} />
+      <div className="max-w-4xl mx-auto px-4 py-4 md:py-6 space-y-4 md:space-y-6">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold">My Account</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Manage your profile information
+          </p>
+        </div>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <Tabs defaultValue="profile" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 h-auto p-1">
+                <TabsTrigger value="profile" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                  <User className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Profile</span>
+                </TabsTrigger>
+                <TabsTrigger value="demographics" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                  <UserCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline">Demographics</span>
+                  <span className="sm:hidden">Demo</span>
+                </TabsTrigger>
+                <TabsTrigger value="address" className="flex-col gap-1 py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Address</span>
+                </TabsTrigger>
+              </TabsList>
+
+              <Card className="mt-4 border-0 shadow-sm">
+                <CardContent className="p-4 md:p-6">
+                  <TabsContent value="profile" className="mt-0 space-y-4">
+                    <AccountInfoFields form={form} disabled={saving} />
+                  </TabsContent>
+
+                  <TabsContent value="demographics" className="mt-0 space-y-4">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      This information helps us provide better services.
+                    </p>
+                    <DemographicsFields form={form} disabled={saving} />
+                  </TabsContent>
+
+                  <TabsContent value="address" className="mt-0 space-y-4">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Used for security and verification purposes.
+                    </p>
+                    <ResidentialAddressFields form={form} disabled={saving} />
+                  </TabsContent>
+                </CardContent>
+              </Card>
+            </Tabs>
+
+            <div className="sticky bottom-0 bg-background border-t border-border -mx-4 px-4 py-3 md:mx-0 md:border-0 md:px-0">
+              <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => navigate('/customer/dashboard')}
+                  className="w-full sm:w-auto order-2 sm:order-1"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={saving} 
+                  className="w-full sm:w-auto order-1 sm:order-2 gap-2"
+                >
+                  <Save className="w-4 h-4" />
+                  {saving ? 'Saving...' : 'Save Changes'}
+                </Button>
               </div>
             </div>
-          </CardHeader>
-
-          <Separator />
-
-          <CardContent className="pt-6">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <Tabs defaultValue="profile" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="profile" className="gap-2">
-                      <User className="w-4 h-4" />
-                      Profile
-                    </TabsTrigger>
-                    <TabsTrigger value="demographics" className="gap-2">
-                      <UserCircle className="w-4 h-4" />
-                      Demographics
-                    </TabsTrigger>
-                    <TabsTrigger value="address" className="gap-2">
-                      <MapPin className="w-4 h-4" />
-                      Residential Address
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="profile" className="space-y-6 mt-6">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Account Information</h3>
-                      <AccountInfoFields form={form} disabled={saving} />
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="demographics" className="space-y-6 mt-6">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Demographics</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        This information helps us provide better services and is kept secure.
-                      </p>
-                      <DemographicsFields form={form} disabled={saving} />
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="address" className="space-y-6 mt-6">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Residential Address</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Your residential address is separate from your service addresses and is used for security purposes.
-                      </p>
-                      <ResidentialAddressFields form={form} disabled={saving} />
-                    </div>
-                  </TabsContent>
-                </Tabs>
-
-                <Separator />
-
-                <div className="flex justify-end gap-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => navigate('/customer/dashboard')}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={saving} className="gap-2">
-                    <Save className="w-4 h-4" />
-                    {saving ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+          </form>
+        </Form>
       </div>
     </div>
   );
