@@ -607,87 +607,209 @@ const Auth = () => {
                 This address is for security purposes only and separate from service addresses.
               </p>
 
-              <div className="space-y-2">
-                <Label htmlFor="street">Street Address *</Label>
-                <Input
-                  id="street"
-                  placeholder="123 Main Street"
-                  value={registerForm.residential_street}
-                  onChange={(e) => setRegisterForm({ ...registerForm, residential_street: e.target.value })}
-                  disabled={loading}
-                  className="h-12 rounded-2xl"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="apt">Apartment/Unit (Optional)</Label>
-                <Input
-                  id="apt"
-                  placeholder="Apt 4B"
-                  value={registerForm.residential_apt_unit}
-                  onChange={(e) => setRegisterForm({ ...registerForm, residential_apt_unit: e.target.value })}
-                  disabled={loading}
-                  className="h-12 rounded-2xl"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label htmlFor="city">City *</Label>
-                  <Input
-                    id="city"
-                    placeholder="Lisbon"
-                    value={registerForm.residential_city}
-                    onChange={(e) => setRegisterForm({ ...registerForm, residential_city: e.target.value })}
-                    disabled={loading}
-                    className="h-12 rounded-2xl"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="postal">Postal Code *</Label>
-                  <Input
-                    id="postal"
-                    placeholder="1000-001"
-                    value={registerForm.residential_postal_code}
-                    onChange={(e) => setRegisterForm({ ...registerForm, residential_postal_code: e.target.value })}
-                    disabled={loading}
-                    className="h-12 rounded-2xl"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="province">Province/State *</Label>
-                <Input
-                  id="province"
-                  placeholder="Lisboa"
-                  value={registerForm.residential_province}
-                  onChange={(e) => setRegisterForm({ ...registerForm, residential_province: e.target.value })}
-                  disabled={loading}
-                  className="h-12 rounded-2xl"
-                />
-              </div>
-
+              {/* Country Selection First */}
               <div className="space-y-2">
                 <Label htmlFor="country">Country *</Label>
                 <Select
                   value={registerForm.residential_country}
-                  onValueChange={(value) => setRegisterForm({ ...registerForm, residential_country: value })}
+                  onValueChange={(value) => {
+                    setRegisterForm({ 
+                      ...registerForm, 
+                      residential_country: value,
+                      // Clear address fields when country changes
+                      residential_street: "",
+                      residential_apt_unit: "",
+                      residential_city: "",
+                      residential_province: "",
+                      residential_postal_code: ""
+                    });
+                  }}
                   disabled={loading}
                 >
                   <SelectTrigger id="country" className="h-12 rounded-2xl">
-                    <SelectValue />
+                    <SelectValue placeholder="Select country" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Portugal">Portugal</SelectItem>
-                    <SelectItem value="Spain">Spain</SelectItem>
-                    <SelectItem value="France">France</SelectItem>
-                    <SelectItem value="United Kingdom">United Kingdom</SelectItem>
                     <SelectItem value="Canada">Canada</SelectItem>
-                    <SelectItem value="United States">United States</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* Portugal Address Fields */}
+              {registerForm.residential_country === "Portugal" && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="street">Rua (Street) *</Label>
+                    <Input
+                      id="street"
+                      placeholder="Rua da Liberdade"
+                      value={registerForm.residential_street}
+                      onChange={(e) => setRegisterForm({ ...registerForm, residential_street: e.target.value })}
+                      disabled={loading}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="apt">Porta/Andar (Door/Floor)</Label>
+                    <Input
+                      id="apt"
+                      placeholder="3º Esq"
+                      value={registerForm.residential_apt_unit}
+                      onChange={(e) => setRegisterForm({ ...registerForm, residential_apt_unit: e.target.value })}
+                      disabled={loading}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="postal-code">Código Postal *</Label>
+                      <Input
+                        id="postal-code"
+                        placeholder="1000-001"
+                        value={registerForm.residential_postal_code}
+                        onChange={(e) => setRegisterForm({ ...registerForm, residential_postal_code: e.target.value })}
+                        maxLength={8}
+                        disabled={loading}
+                        className="h-12 rounded-2xl"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="city">Localidade (Locality) *</Label>
+                      <Input
+                        id="city"
+                        placeholder="Lisboa"
+                        value={registerForm.residential_city}
+                        onChange={(e) => setRegisterForm({ ...registerForm, residential_city: e.target.value })}
+                        disabled={loading}
+                        className="h-12 rounded-2xl"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="district">Distrito (District) *</Label>
+                    <Select
+                      value={registerForm.residential_province}
+                      onValueChange={(value) => setRegisterForm({ ...registerForm, residential_province: value })}
+                      disabled={loading}
+                    >
+                      <SelectTrigger id="district" className="h-12 rounded-2xl">
+                        <SelectValue placeholder="Select district" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Aveiro">Aveiro</SelectItem>
+                        <SelectItem value="Beja">Beja</SelectItem>
+                        <SelectItem value="Braga">Braga</SelectItem>
+                        <SelectItem value="Bragança">Bragança</SelectItem>
+                        <SelectItem value="Castelo Branco">Castelo Branco</SelectItem>
+                        <SelectItem value="Coimbra">Coimbra</SelectItem>
+                        <SelectItem value="Évora">Évora</SelectItem>
+                        <SelectItem value="Faro">Faro</SelectItem>
+                        <SelectItem value="Guarda">Guarda</SelectItem>
+                        <SelectItem value="Leiria">Leiria</SelectItem>
+                        <SelectItem value="Lisboa">Lisboa</SelectItem>
+                        <SelectItem value="Portalegre">Portalegre</SelectItem>
+                        <SelectItem value="Porto">Porto</SelectItem>
+                        <SelectItem value="Santarém">Santarém</SelectItem>
+                        <SelectItem value="Setúbal">Setúbal</SelectItem>
+                        <SelectItem value="Viana do Castelo">Viana do Castelo</SelectItem>
+                        <SelectItem value="Vila Real">Vila Real</SelectItem>
+                        <SelectItem value="Viseu">Viseu</SelectItem>
+                        <SelectItem value="Açores">Açores</SelectItem>
+                        <SelectItem value="Madeira">Madeira</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </>
+              )}
+
+              {/* Canada Address Fields */}
+              {registerForm.residential_country === "Canada" && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="street">Street Address *</Label>
+                    <Input
+                      id="street"
+                      placeholder="123 Main Street"
+                      value={registerForm.residential_street}
+                      onChange={(e) => setRegisterForm({ ...registerForm, residential_street: e.target.value })}
+                      disabled={loading}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="apt">Unit/Suite</Label>
+                    <Input
+                      id="apt"
+                      placeholder="Unit 4B"
+                      value={registerForm.residential_apt_unit}
+                      onChange={(e) => setRegisterForm({ ...registerForm, residential_apt_unit: e.target.value })}
+                      disabled={loading}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="city">City *</Label>
+                      <Input
+                        id="city"
+                        placeholder="Toronto"
+                        value={registerForm.residential_city}
+                        onChange={(e) => setRegisterForm({ ...registerForm, residential_city: e.target.value })}
+                        disabled={loading}
+                        className="h-12 rounded-2xl"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="province">Province *</Label>
+                      <Select
+                        value={registerForm.residential_province}
+                        onValueChange={(value) => setRegisterForm({ ...registerForm, residential_province: value })}
+                        disabled={loading}
+                      >
+                        <SelectTrigger id="province" className="h-12 rounded-2xl">
+                          <SelectValue placeholder="Select province" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="AB">Alberta</SelectItem>
+                          <SelectItem value="BC">British Columbia</SelectItem>
+                          <SelectItem value="MB">Manitoba</SelectItem>
+                          <SelectItem value="NB">New Brunswick</SelectItem>
+                          <SelectItem value="NL">Newfoundland and Labrador</SelectItem>
+                          <SelectItem value="NS">Nova Scotia</SelectItem>
+                          <SelectItem value="NT">Northwest Territories</SelectItem>
+                          <SelectItem value="NU">Nunavut</SelectItem>
+                          <SelectItem value="ON">Ontario</SelectItem>
+                          <SelectItem value="PE">Prince Edward Island</SelectItem>
+                          <SelectItem value="QC">Quebec</SelectItem>
+                          <SelectItem value="SK">Saskatchewan</SelectItem>
+                          <SelectItem value="YT">Yukon</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="postal-code">Postal Code *</Label>
+                    <Input
+                      id="postal-code"
+                      placeholder="A1A 1A1"
+                      value={registerForm.residential_postal_code}
+                      onChange={(e) => setRegisterForm({ ...registerForm, residential_postal_code: e.target.value.toUpperCase() })}
+                      maxLength={7}
+                      disabled={loading}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+                </>
+              )}
 
               <div className="flex gap-3 pt-4">
                 <Button
@@ -701,7 +823,8 @@ const Auth = () => {
                   Back
                 </Button>
                 <Button type="submit" className="w-full h-12 rounded-2xl" disabled={loading}>
-                  {loading ? "Creating Account..." : "Create Account"}
+                  {loading ? "Creating Account..." : "Complete Sign Up"}
+                  <Check className="w-4 h-4 ml-2" />
                 </Button>
               </div>
             </form>
