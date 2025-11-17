@@ -131,9 +131,9 @@
     @apply rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 shadow-sm;
   }
 
-  /* Bottom nav spacing */
+  /* Bottom nav spacing - Updated for floating nav */
   .pb-mobile-nav {
-    @apply pb-20 md:pb-8;
+    @apply pb-24 md:pb-8;
   }
 
   /* Responsive text sizes */

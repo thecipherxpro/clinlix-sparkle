@@ -102,10 +102,10 @@ const CustomerDashboard = () => {
 
       {/* Mobile-first main container with auto-fit max-width and responsive padding */}
       <main className="w-full max-w-[min(1280px,calc(100%-32px))] py-[clamp(16px,4vw,32px)] px-0 mx-[18px]">
-        {/* Quick Actions - Auto-fit grid with responsive gaps */}
-        <div className="mb-[clamp(20px,5vw,32px)]">
-          <h3 className="text-[clamp(18px,4.5vw,24px)] font-semibold mb-[clamp(12px,3vw,16px)]">{t.ui.quickActions}</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        {/* Quick Actions - Responsive grid with optimized breakpoints */}
+        <div className="mb-6 sm:mb-8">
+          <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">{t.ui.quickActions}</h3>
+          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             <JobCard title={t.dashboard.bookCleaning} description={t.ui.scheduleService} value={t.ui.newBooking} image="https://i.postimg.cc/LXSMYzdW/calnder24.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/booking")} />
 
             <JobCard title={t.dashboard.myAddresses} description={t.ui.yourLocations} value={t.ui.manage} image="https://i.postimg.cc/hjB2bst8/map.png" heroColor="#e2e2e4" onClick={() => navigate("/customer/my-addresses")} />
