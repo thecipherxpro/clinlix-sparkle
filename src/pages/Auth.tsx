@@ -82,6 +82,8 @@ const Auth = () => {
   };
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!loginForm.email || !loginForm.password) {
       toast.error(t.auth.allFieldsRequired);
       return;
@@ -110,6 +112,7 @@ const Auth = () => {
     } finally {
       setLoading(false);
     }
+  };
   };
   const handleSocialLogin = async (provider: "google") => {
     setLoading(true);
@@ -309,7 +312,7 @@ const Auth = () => {
             Remember me
           </label>
         </div>
-        <button type="button" className="text-sm text-primary hover:underline">
+        <button type="button" onClick={() => navigate('/auth/forgot-password')} className="text-sm text-primary hover:underline font-medium">
           {t.auth.forgotPassword}
         </button>
       </div>
