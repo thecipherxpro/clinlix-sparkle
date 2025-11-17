@@ -112,8 +112,7 @@ const ProviderDashboard = () => {
         firstName={profile?.first_name || "User"}
         lastName={profile?.last_name || ""}
         avatarUrl={profile?.avatar_url}
-        notificationCount={notificationCount}
-        onNotificationClick={() => setShowNotifications(true)}
+        role="provider"
       />
       
       {/* Mobile-first header with auto-fit padding */}
