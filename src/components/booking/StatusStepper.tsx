@@ -37,12 +37,12 @@ export const StatusStepper = ({ currentStatus }: StatusStepperProps) => {
   };
 
   return (
-    <div className="w-full py-6">
+    <div className="w-full py-6 animate-fade-in">
       <div className="flex items-center justify-between relative">
         {/* Progress Line */}
         <div className="absolute top-2.5 sm:top-3 left-0 right-0 h-0.5 bg-border">
           <div
-            className="h-full bg-primary transition-all duration-500"
+            className="h-full bg-primary transition-all duration-500 ease-out"
             style={{
               width: `${(steps.filter(s => s.status === "completed").length / (steps.length - 1)) * 100}%`,
             }}
@@ -53,14 +53,15 @@ export const StatusStepper = ({ currentStatus }: StatusStepperProps) => {
         {steps.map((step, index) => (
           <div
             key={index}
-            className="flex flex-col items-center gap-2 z-10 relative"
+            className="flex flex-col items-center gap-2 z-10 relative animate-scale-in"
+            style={{ animationDelay: `${index * 100}ms` }}
           >
-            <div className="bg-background px-1">
+            <div className="bg-background px-1 transition-transform duration-200 hover:scale-110">
               {getStepIcon(step.status)}
             </div>
             <span
               className={cn(
-                "text-xs sm:text-sm font-medium text-center max-w-[70px] sm:max-w-[80px]",
+                "text-xs sm:text-sm font-medium text-center max-w-[70px] sm:max-w-[80px] transition-colors duration-300",
                 step.status === "completed" && "text-primary",
                 step.status === "current" && "text-primary font-semibold",
                 step.status === "upcoming" && "text-muted-foreground"

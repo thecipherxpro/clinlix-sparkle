@@ -191,7 +191,7 @@ const BookingDetails = () => {
           <div className="lg:col-span-2 space-y-6">
             {/* Status Stepper */}
             {!['cancelled', 'declined'].includes(booking.job_status) && (
-              <Card>
+              <Card className="animate-fade-in">
                 <CardContent className="p-6">
                   <StatusStepper currentStatus={booking.job_status} />
                 </CardContent>
@@ -200,9 +200,9 @@ const BookingDetails = () => {
 
             {/* Declined Warning */}
             {isDeclined && (
-              <Card className="border-destructive/50 bg-destructive/5">
+              <Card className="border-destructive/50 bg-destructive/5 animate-scale-in">
                 <CardContent className="p-6 flex items-start gap-3">
-                  <XCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+                  <XCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5 animate-pulse" />
                   <div className="flex-1 space-y-2">
                     <h3 className="font-semibold text-base text-destructive">Booking Declined</h3>
                     <p className="text-sm text-destructive/80">
@@ -252,7 +252,7 @@ const BookingDetails = () => {
                 onViewProfile={() => navigate(`/provider-profile/${provider.id}`)}
               />
             ) : (
-              <Card>
+              <Card className="animate-fade-in">
                 <CardContent className="p-6 text-center text-muted-foreground">
                   <p className="text-sm">No provider assigned yet</p>
                 </CardContent>
@@ -260,12 +260,12 @@ const BookingDetails = () => {
             )}
 
             {/* Actions */}
-            <Card className="sticky top-20">
+            <Card className="sticky top-20 animate-fade-in" style={{ animationDelay: '100ms' }}>
               <CardContent className="p-4 space-y-3">
                 {isDeclined && (
                   <Button
                     onClick={handleReassign}
-                    className="w-full gap-2 h-10"
+                    className="w-full gap-2 h-10 hover-scale transition-all duration-200"
                     size="default"
                   >
                     <RotateCcw className="w-4 h-4" />
@@ -276,7 +276,7 @@ const BookingDetails = () => {
                 {canReview && (
                   <Button
                     onClick={handleReview}
-                    className="w-full gap-2 h-10"
+                    className="w-full gap-2 h-10 hover-scale transition-all duration-200"
                     size="default"
                   >
                     <Star className="w-4 h-4" />
@@ -288,7 +288,7 @@ const BookingDetails = () => {
                   <Button
                     variant="outline"
                     onClick={handleMessage}
-                    className="w-full gap-2 h-10"
+                    className="w-full gap-2 h-10 hover-scale transition-all duration-200"
                     size="default"
                   >
                     <MessageCircle className="w-4 h-4" />
@@ -300,7 +300,7 @@ const BookingDetails = () => {
                   <Button
                     variant="outline"
                     onClick={() => setCancelDialogOpen(true)}
-                    className="w-full gap-2 h-10 text-destructive hover:text-destructive hover:bg-destructive/10"
+                    className="w-full gap-2 h-10 text-destructive hover:text-destructive hover:bg-destructive/10 transition-all duration-200"
                     size="default"
                   >
                     <XCircle className="w-4 h-4" />

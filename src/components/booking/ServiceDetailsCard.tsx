@@ -50,7 +50,7 @@ export const ServiceDetailsCard = ({
   const overtimeCharge = (overtimeMinutes / 30) * 10;
 
   return (
-    <Card>
+    <Card className="hover-scale animate-fade-in">
       <CardHeader className="pb-4">
         <CardTitle className="text-base sm:text-lg flex items-center gap-2">
           <Package className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
@@ -61,11 +61,11 @@ export const ServiceDetailsCard = ({
       <CardContent>
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="grid w-full grid-cols-3 h-9 sm:h-10">
-            <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
-            <TabsTrigger value="addons" className="text-xs sm:text-sm">
+            <TabsTrigger value="overview" className="text-xs sm:text-sm transition-all duration-200">Overview</TabsTrigger>
+            <TabsTrigger value="addons" className="text-xs sm:text-sm transition-all duration-200">
               Add-ons {addons.length > 0 && `(${addons.length})`}
             </TabsTrigger>
-            <TabsTrigger value="payment" className="text-xs sm:text-sm">Payment</TabsTrigger>
+            <TabsTrigger value="payment" className="text-xs sm:text-sm transition-all duration-200">Payment</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -89,11 +89,11 @@ export const ServiceDetailsCard = ({
                   variant="ghost"
                   size="sm"
                   onClick={() => setAreasExpanded(!areasExpanded)}
-                  className="w-full justify-between px-0 h-auto py-2 hover:bg-primary/5"
+                  className="w-full justify-between px-0 h-auto py-2 hover:bg-primary/5 transition-all duration-200"
                 >
                   <span className="text-xs sm:text-sm font-medium">Areas Included</span>
                   <ChevronDown
-                    className={cn("w-4 h-4 transition-transform", areasExpanded && "rotate-180")}
+                    className={cn("w-4 h-4 transition-transform duration-300", areasExpanded && "rotate-180")}
                   />
                 </Button>
 
@@ -103,7 +103,7 @@ export const ServiceDetailsCard = ({
                     {packageInfo.areas_included.length > 3 && ` +${packageInfo.areas_included.length - 3} more`}
                   </p>
                 ) : (
-                  <div className="grid grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-2 gap-2.5 animate-accordion-down">
                     {packageInfo.areas_included.map((area, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-sm">
                         <span>{areaIcons[area] || '•'}</span>
