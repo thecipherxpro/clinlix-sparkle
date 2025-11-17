@@ -137,7 +137,7 @@ export const NotificationPermissionPrompt = ({ onClose, role: propRole }: Notifi
           }}
           exit={{ opacity: 0, y: -100 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-md touch-none"
+          className="fixed top-20 left-1/2 -translate-x-1/2 z-[200] w-[calc(100%-2rem)] max-w-md touch-none"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}

@@ -34,7 +34,7 @@ export const DashboardHeader = ({
   };
   return (
     <header className="sticky top-0 z-50 w-full bg-gradient-to-b from-background to-background/0">
-      <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+      <div className="flex h-16 items-center justify-between px-4 sm:px-6 relative">
         {/* Left Side - Logo */}
         <div className="flex items-center">
           <div className="bg-gradient-to-r from-primary to-primary/80 px-4 py-1.5 rounded-full">
@@ -56,7 +56,7 @@ export const DashboardHeader = ({
               <ChevronDown className="h-4 w-4 text-muted-foreground hidden sm:block" />
             </PopoverTrigger>
             
-            <PopoverContent className="w-56 p-2 mr-4">
+            <PopoverContent className="w-56 p-2">
               <div className="px-3 py-2 border-b border-border mb-2">
                 <p className="text-sm font-medium text-foreground">{firstName} {lastName}</p>
                 <p className="text-xs text-muted-foreground capitalize">{role}</p>
