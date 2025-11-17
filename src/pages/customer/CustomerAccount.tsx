@@ -84,7 +84,7 @@ const CustomerAccount = () => {
         residential_city: profileData.residential_city || "",
         residential_province: profileData.residential_province || "",
         residential_postal_code: profileData.residential_postal_code || "",
-        residential_country: profileData.residential_country || "Portugal",
+        residential_country: (profileData.residential_country === "Canada" ? "Canada" : "Portugal") as "Canada" | "Portugal",
         country: profileData.country || "Portugal",
         currency: profileData.currency || "EUR",
         language: profileData.language || "en"
