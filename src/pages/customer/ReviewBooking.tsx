@@ -114,7 +114,7 @@ const ReviewBooking = () => {
 
       if (bookingError) throw bookingError;
 
-      toast.success('✅ Thank you! Your feedback helps improve Clinlix.');
+      toast.success('Thank you! Your feedback helps improve Clinlix.');
       navigate('/customer/bookings');
     } catch (error: any) {
       console.error('Error:', error);

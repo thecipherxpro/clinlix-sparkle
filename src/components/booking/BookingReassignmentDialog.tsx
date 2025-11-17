@@ -154,8 +154,9 @@ export const BookingReassignmentDialog = ({
           </CardContent>
         </Card>
 
-        <div className="space-y-2 text-sm text-muted-foreground">
-          <p>⏱️ You have 24 hours to choose an option, or the booking will be automatically cancelled with a full refund.</p>
+        <div className="space-y-2 text-sm text-muted-foreground flex items-start gap-2">
+          <Clock className="w-4 h-4 shrink-0 mt-0.5" />
+          <p>You have 24 hours to choose an option, or the booking will be automatically cancelled with a full refund.</p>
         </div>
 
         <AlertDialogFooter className="flex-col sm:flex-col gap-2">

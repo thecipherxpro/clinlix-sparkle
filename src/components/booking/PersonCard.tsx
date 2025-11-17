@@ -62,8 +62,7 @@ export const PersonCard = ({
               {person.verified && (
                 <Badge variant="secondary" className="gap-1 shrink-0 text-xs animate-scale-in">
                   <Shield className="w-3 h-3" />
-                  <span className="hidden sm:inline">Verified</span>
-                  <span className="sm:hidden">✓</span>
+                  Verified
                 </Badge>
               )}
             </div>

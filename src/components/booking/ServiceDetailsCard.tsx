@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Package, Clock, ChevronDown, Sparkles } from "lucide-react";
+import { Package, Clock, ChevronDown, Sparkles, Droplet, ChefHat, Sofa, Home, WandSparkles, Shirt, Bed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,14 +25,17 @@ interface ServiceDetailsCardProps {
   currency?: string;
 }
 
-const areaIcons: Record<string, string> = {
-  bathroom: "🚿",
-  kitchen: "🍳",
-  livingroom: "🛋️",
-  floors: "🏠",
-  dusting: "✨",
-  surfaces: "🧽",
-  bedroom: "🛏️",
+const getAreaIcon = (area: string) => {
+  const iconMap: Record<string, React.ReactNode> = {
+    bathroom: <Droplet className="w-4 h-4 text-primary" />,
+    kitchen: <ChefHat className="w-4 h-4 text-primary" />,
+    livingroom: <Sofa className="w-4 h-4 text-primary" />,
+    floors: <Home className="w-4 h-4 text-primary" />,
+    dusting: <WandSparkles className="w-4 h-4 text-primary" />,
+    surfaces: <Sparkles className="w-4 h-4 text-primary" />,
+    bedroom: <Bed className="w-4 h-4 text-primary" />,
+  };
+  return iconMap[area] || <Sparkles className="w-4 h-4 text-primary" />;
 };
 
 export const ServiceDetailsCard = ({
@@ -98,16 +101,25 @@ export const ServiceDetailsCard = ({
                 </Button>
 
                 {!areasExpanded ? (
-                  <p className="text-xs sm:text-sm text-muted-foreground">
-                    {packageInfo.areas_included.slice(0, 3).map(area => areaIcons[area] || '•').join(' ')}
-                    {packageInfo.areas_included.length > 3 && ` +${packageInfo.areas_included.length - 3} more`}
+                  <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-2">
+                    {packageInfo.areas_included.slice(0, 3).map((area, idx) => (
+                      <span key={idx} className="inline-flex items-center">
+                        {getAreaIcon(area)}
+                      </span>
+                    ))}
+                    {packageInfo.areas_included.length > 3 && (
+                      <span className="text-xs">+{packageInfo.areas_included.length - 3} more</span>
+                    )}
                   </p>
                 ) : (
                   <div className="grid grid-cols-2 gap-2.5 animate-accordion-down">
                     {packageInfo.areas_included.map((area, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-sm">
-                        <span>{areaIcons[area] || '•'}</span>
-                        <span className="capitalize">{area}</span>
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2 text-xs sm:text-sm p-2 rounded-md bg-muted/50 border border-border/50"
+                      >
+                        {getAreaIcon(area)}
+                        <span className="capitalize font-medium">{area}</span>
                       </div>
                     ))}
                   </div>
