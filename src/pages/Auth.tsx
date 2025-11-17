@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, Tab } from "@heroui/react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
@@ -237,21 +237,13 @@ const Auth = () => {
         </CardHeader>
 
         <CardContent className="px-6 pb-8">
-          <Tabs 
-            selectedKey={activeTab}
-            onSelectionChange={(key) => setActiveTab(key as "login" | "register")}
-            classNames={{
-              tabList: "w-full bg-muted p-1 rounded-lg mb-6",
-              tab: "h-12",
-              cursor: "bg-background shadow-sm",
-            }}
-          >
-            <Tab key="login" title={t.auth.signIn} />
-            <Tab key="register" title={t.auth.signUp} />
-          </Tabs>
-          
-          {activeTab === 'login' && (
-            <div className="space-y-5 mt-6">
+          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "login" | "register")} className="w-full">
+            <TabsList className="w-full grid grid-cols-2 mb-6">
+              <TabsTrigger value="login">{t.auth.signIn}</TabsTrigger>
+              <TabsTrigger value="register">{t.auth.signUp}</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="login" className="space-y-5 mt-6">
               <div className="text-center space-y-2 mb-6">
                 <p className="text-sm text-muted-foreground">
                   Enter your email and password to securely access your account and manage your services.
@@ -382,11 +374,9 @@ const Auth = () => {
                 <FaGoogle className="w-5 h-5 text-[#DB4437]" />
                 <span className="font-medium text-foreground">{t.auth.continueWithGoogle}</span>
               </Button>
-            </div>
-          )}
+            </TabsContent>
 
-          {activeTab === 'register' && (
-            <div className="space-y-5 mt-6">
+            <TabsContent value="register" className="space-y-5 mt-6">
               <div className="text-center space-y-2 mb-6">
                 <p className="text-sm text-muted-foreground">Sign up to book or manage cleaning services easily.</p>
               </div>
@@ -724,8 +714,8 @@ const Auth = () => {
                 <FaGoogle className="w-5 h-5 text-[#DB4437]" />
                 <span className="font-medium text-foreground">Continue with Google</span>
               </Button>
-              </div>
-            )}
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>

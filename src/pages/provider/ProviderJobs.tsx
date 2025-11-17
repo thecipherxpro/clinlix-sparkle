@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Tabs, Tab } from "@heroui/react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, CheckCircle, Flag } from "lucide-react";
 import JobRequestsList from "@/components/provider/jobs/JobRequestsList";
 import ConfirmedJobsList from "@/components/provider/jobs/ConfirmedJobsList";
