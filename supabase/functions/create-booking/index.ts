@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.75.0';
+import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,6 +20,7 @@ interface BookingRequest {
   requestedDate: string;
   requestedTime: string;
   recurringService: boolean;
+  paymentIntentId: string;
 }
 
 Deno.serve(async (req) => {
@@ -48,6 +50,29 @@ Deno.serve(async (req) => {
     if (bookingData.customerId !== user.id) {
       throw new Error('Cannot create booking for another user');
     }
+
+    // Verify payment intent
+    if (!bookingData.paymentIntentId) {
+      throw new Error('Payment required');
+    }
+
+    const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
+    if (!stripeKey) {
+      throw new Error('Stripe not configured');
+    }
+
+    const stripe = new Stripe(stripeKey, {
+      apiVersion: '2023-10-16',
+    });
+
+    // Retrieve and verify payment intent
+    const paymentIntent = await stripe.paymentIntents.retrieve(bookingData.paymentIntentId);
+    
+    if (paymentIntent.status !== 'succeeded') {
+      throw new Error('Payment not completed');
+    }
+
+    console.log('Payment verified:', paymentIntent.id);
 
     // Fetch address with package to calculate server-side price
     const { data: address, error: addressError } = await supabase
@@ -115,7 +140,8 @@ Deno.serve(async (req) => {
         requested_time: bookingData.requestedTime,
         total_estimate: totalEstimate,
         status: 'pending',
-        payment_status: 'pending',
+        payment_status: 'paid',
+        payment_intent_id: bookingData.paymentIntentId,
         job_status: 'pending'
       }])
       .select()
