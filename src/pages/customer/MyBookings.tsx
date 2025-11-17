@@ -10,6 +10,8 @@ import { ChatDrawer } from "@/components/chat/ChatDrawer";
 import { BookingCardSkeletonList } from "@/components/skeletons/BookingCardSkeleton";
 import { BookingReassignmentDialog } from "@/components/booking/BookingReassignmentDialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { StickyPageHeader } from "@/components/StickyPageHeader";
+import { Badge } from "@/components/ui/badge";
 
 const MyBookings = () => {
   const navigate = useNavigate();
@@ -295,17 +297,10 @@ const MyBookings = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      {/* Header */}
-      <div className="sticky top-0 z-10 bg-background border-b border-border/40">
-        <div className="px-4 py-5">
-          <h1 className="text-2xl font-bold text-foreground">My Bookings</h1>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="px-4 pt-4">
+      {/* Sticky Header with Tabs */}
+      <StickyPageHeader title="My Bookings">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="mb-6 overflow-x-auto pb-2 -mx-4 px-4">
+          <div className="overflow-x-auto pb-3 px-4 pt-2 touch-pan-x">
             <TabsList className="inline-flex h-auto p-1 bg-muted/50 backdrop-blur-sm rounded-full w-auto min-w-full">
               {declinedBookings.length > 0 && (
                 <TabsTrigger 
@@ -358,9 +353,13 @@ const MyBookings = () => {
               </TabsTrigger>
             </TabsList>
           </div>
+        </Tabs>
+      </StickyPageHeader>
 
-          {/* Booking Cards */}
-          <TabsContent value="declined" className="mt-0 space-y-3 animate-fade-in">
+      {/* Booking Cards */}
+      <div className="px-4 pt-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsContent value="declined" className="mt-0 space-y-3 pb-4 animate-fade-in">
             {declinedBookings.length > 0 ? (
               declinedBookings.map(renderDeclinedBookingCard)
             ) : (
@@ -368,7 +367,7 @@ const MyBookings = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="upcoming" className="mt-0 space-y-3 animate-fade-in">
+          <TabsContent value="upcoming" className="mt-0 space-y-3 pb-4 animate-fade-in">
             {activeBookings.length > 0 ? (
               activeBookings.map(renderBookingCard)
             ) : (
@@ -376,7 +375,7 @@ const MyBookings = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="completed" className="mt-0 space-y-3 animate-fade-in">
+          <TabsContent value="completed" className="mt-0 space-y-3 pb-4 animate-fade-in">
             {completedBookings.length > 0 ? (
               completedBookings.map(renderBookingCard)
             ) : (
@@ -384,7 +383,7 @@ const MyBookings = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="cancelled" className="mt-0 space-y-3 animate-fade-in">
+          <TabsContent value="cancelled" className="mt-0 space-y-3 pb-4 animate-fade-in">
             {cancelledBookings.length > 0 ? (
               cancelledBookings.map(renderBookingCard)
             ) : (
