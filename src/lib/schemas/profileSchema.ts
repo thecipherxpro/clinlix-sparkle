@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-export const profileSchema = z.object({
+const PORTUGAL_POSTAL_CODE_REGEX = /^\d{4}-\d{3}$/;
+const CANADA_POSTAL_CODE_REGEX = /^[A-Z]\d[A-Z]\s?\d[A-Z]\d$/i;
+
+const baseProfileSchema = z.object({
   first_name: z.string().min(1, "First name is required").max(50, "First name too long"),
   last_name: z.string().min(1, "Last name is required").max(50, "Last name too long"),
   email: z.string().email("Invalid email address"),
@@ -16,21 +19,51 @@ export const profileSchema = z.object({
   }, "You must be at least 18 years old"),
   residential_street: z.string().min(1, "Street address is required"),
   residential_apt_unit: z.string().optional(),
-  residential_city: z.string().min(1, "City is required"),
-  residential_province: z.string().min(1, "Province/State is required"),
+  residential_city: z.string().min(1, "City/Locality is required"),
+  residential_province: z.string().min(1, "Province/District is required"),
   residential_postal_code: z.string().min(1, "Postal code is required"),
-  residential_country: z.string().min(1, "Country is required"),
+  residential_country: z.enum(["Portugal", "Canada"], {
+    required_error: "Please select a country"
+  }),
   language: z.string().optional(),
   country: z.string().optional(),
   currency: z.string().optional(),
 });
 
-export const signupSchema = profileSchema.extend({
+export const profileSchema = baseProfileSchema.refine((data) => {
+  // Validate Portugal postal code format
+  if (data.residential_country === "Portugal") {
+    return PORTUGAL_POSTAL_CODE_REGEX.test(data.residential_postal_code);
+  }
+  // Validate Canada postal code format
+  if (data.residential_country === "Canada") {
+    return CANADA_POSTAL_CODE_REGEX.test(data.residential_postal_code);
+  }
+  return true;
+}, {
+  message: "Invalid postal code format for selected country",
+  path: ["residential_postal_code"]
+});
+
+export const signupSchema = baseProfileSchema.extend({
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string().min(8, "Please confirm your password"),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
+}).refine((data) => {
+  // Validate Portugal postal code format
+  if (data.residential_country === "Portugal") {
+    return PORTUGAL_POSTAL_CODE_REGEX.test(data.residential_postal_code);
+  }
+  // Validate Canada postal code format
+  if (data.residential_country === "Canada") {
+    return CANADA_POSTAL_CODE_REGEX.test(data.residential_postal_code);
+  }
+  return true;
+}, {
+  message: "Invalid postal code format for selected country",
+  path: ["residential_postal_code"]
 });
 
 export type ProfileFormData = z.infer<typeof profileSchema>;
