@@ -32,6 +32,8 @@ import Profile from "./pages/customer/Profile";
 import PaymentMethods from "./pages/customer/PaymentMethods";
 import CustomerSettings from "./pages/customer/CustomerSettings";
 import ProviderSettings from "./pages/provider/ProviderSettings";
+import CustomerAccount from "./pages/customer/CustomerAccount";
+import ProviderAccount from "./pages/provider/ProviderAccount";
 import JobDetail from "./pages/provider/JobDetail";
 
 import NotFound from "./pages/NotFound";

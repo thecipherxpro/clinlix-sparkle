@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -103,9 +102,9 @@ const BookingDetails = () => {
       {/* Header */}
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 safe-top">
         <div className="mobile-container py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
-          <HeroButton isIconOnly variant="light" onPress={() => navigate('/customer/bookings')} className="touch-target">
+          <Button isIconOnly variant="light" onPress={() => navigate('/customer/bookings')} className="touch-target">
             <ArrowLeft className="w-5 h-5" />
-          </HeroButton>
+          </Button>
           <h1 className="text-lg sm:text-xl font-bold text-left">Booking Details</h1>
         </div>
       </header>
