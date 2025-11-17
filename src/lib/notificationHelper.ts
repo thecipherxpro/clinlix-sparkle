@@ -61,6 +61,12 @@ export const NotificationTemplates = {
     title: '💰 Payment Received',
     body: `You've earned ${currency === 'EUR' ? '€' : '$'}${amount.toFixed(2)}.`,
     target_url: '/provider/wallet'
+  }),
+
+  newMessage: (senderName: string, messagePreview: string) => ({
+    title: `💬 New message from ${senderName}`,
+    body: messagePreview,
+    target_url: '/customer/bookings'
   })
 };
 
@@ -93,6 +99,14 @@ export const notifyJobCompleted = async (customerId: string, providerName: strin
   const template = NotificationTemplates.jobCompleted(providerName);
   return await sendPushNotification({
     user_ids: [customerId],
+    ...template
+  });
+};
+
+export const notifyNewMessage = async (recipientId: string, senderName: string, messagePreview: string) => {
+  const template = NotificationTemplates.newMessage(senderName, messagePreview);
+  return await sendPushNotification({
+    user_ids: [recipientId],
     ...template
   });
 };

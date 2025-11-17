@@ -93,7 +93,18 @@ export const ChatDrawer = ({ open, onClose, bookingId, otherPartyName, otherPart
           filter: `booking_id=eq.${bookingId}`,
         },
         (payload) => {
-          setMessages((prev) => [...prev, payload.new as Message]);
+          const newMsg = payload.new as Message;
+          setMessages((prev) => [...prev, newMsg]);
+          
+          // Show toast notification if message is from other party
+          if (newMsg.sender_id !== currentUserId && currentUserId) {
+            toast.info(`💬 New message from ${otherPartyName}`, {
+              description: newMsg.content.length > 50 
+                ? newMsg.content.substring(0, 47) + '...' 
+                : newMsg.content,
+              duration: 4000,
+            });
+          }
         }
       )
       .subscribe();
