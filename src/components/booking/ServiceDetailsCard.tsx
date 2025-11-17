@@ -12,6 +12,8 @@ interface ServiceDetailsCardProps {
     time_included: string;
     bedroom_count: number;
     areas_included?: string[];
+    one_time_price?: number;
+    recurring_price?: number;
   };
   addons?: Array<{
     id: string;
@@ -23,6 +25,7 @@ interface ServiceDetailsCardProps {
   totalFinal?: number | null;
   overtimeMinutes?: number;
   currency?: string;
+  isRecurring?: boolean;
 }
 
 const getAreaIcon = (area: string) => {
@@ -45,11 +48,17 @@ export const ServiceDetailsCard = ({
   totalFinal,
   overtimeMinutes = 0,
   currency = "EUR",
+  isRecurring = false,
 }: ServiceDetailsCardProps) => {
   const [areasExpanded, setAreasExpanded] = useState(false);
   
-  const basePrice = totalEstimate;
+  // Calculate addon total
   const addonTotal = addons.reduce((sum, addon) => sum + addon.price, 0);
+  
+  // Calculate base price by subtracting addons from total estimate
+  const basePrice = totalEstimate - addonTotal;
+  
+  // Calculate overtime charge
   const overtimeCharge = (overtimeMinutes / 30) * 10;
 
   return (
@@ -63,12 +72,27 @@ export const ServiceDetailsCard = ({
 
       <CardContent>
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-9 sm:h-10">
-            <TabsTrigger value="overview" className="text-xs sm:text-sm transition-all duration-200">Overview</TabsTrigger>
-            <TabsTrigger value="addons" className="text-xs sm:text-sm transition-all duration-200">
-              Add-ons {addons.length > 0 && `(${addons.length})`}
+          <TabsList className="grid w-full grid-cols-3 h-9 sm:h-10 gap-1">
+            <TabsTrigger 
+              value="overview" 
+              className="text-[10px] xs:text-xs sm:text-sm transition-all duration-200 px-2"
+            >
+              Overview
             </TabsTrigger>
-            <TabsTrigger value="payment" className="text-xs sm:text-sm transition-all duration-200">Payment</TabsTrigger>
+            <TabsTrigger 
+              value="addons" 
+              className="text-[10px] xs:text-xs sm:text-sm transition-all duration-200 px-2"
+            >
+              <span className="truncate">
+                Add-ons{addons.length > 0 && ` (${addons.length})`}
+              </span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="payment" 
+              className="text-[10px] xs:text-xs sm:text-sm transition-all duration-200 px-2"
+            >
+              Payment
+            </TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -155,39 +179,62 @@ export const ServiceDetailsCard = ({
 
           {/* Payment Tab */}
           <TabsContent value="payment" className="mt-4 space-y-3">
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Base Service</span>
-                <span>{currency === "EUR" ? "€" : "$"}{basePrice.toFixed(2)}</span>
+            <div className="space-y-2.5">
+              <div className="flex justify-between items-center py-2">
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">Base Service</span>
+                  <span className="text-xs text-muted-foreground">
+                    {packageInfo.package_name}
+                  </span>
+                </div>
+                <span className="text-sm font-semibold">
+                  {currency === "EUR" ? "€" : "$"}{basePrice.toFixed(2)}
+                </span>
               </div>
 
               {addons.length > 0 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Add-ons</span>
-                  <span>{currency === "EUR" ? "€" : "$"}{addonTotal.toFixed(2)}</span>
+                <div className="border-t pt-2.5">
+                  <div className="space-y-2">
+                    {addons.map((addon) => (
+                      <div key={addon.id} className="flex justify-between items-center">
+                        <span className="text-xs text-muted-foreground">{addon.name_en}</span>
+                        <span className="text-xs font-medium">
+                          {currency === "EUR" ? "€" : "$"}{addon.price.toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+                    <div className="flex justify-between items-center pt-1 border-t">
+                      <span className="text-sm font-medium">Add-ons Subtotal</span>
+                      <span className="text-sm font-semibold">
+                        {currency === "EUR" ? "€" : "$"}{addonTotal.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               )}
 
               {overtimeMinutes > 0 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">
+                <div className="flex justify-between items-center pt-2 border-t">
+                  <span className="text-sm text-muted-foreground">
                     Overtime ({overtimeMinutes} min)
                   </span>
-                  <span>{currency === "EUR" ? "€" : "$"}{overtimeCharge.toFixed(2)}</span>
+                  <span className="text-sm font-semibold">
+                    {currency === "EUR" ? "€" : "$"}{overtimeCharge.toFixed(2)}
+                  </span>
                 </div>
               )}
             </div>
 
-            <div className="border-t pt-3">
+            <div className="border-t-2 pt-3 mt-3">
               <div className="flex justify-between items-center">
-                <span className="font-semibold text-lg">Total</span>
-                <span className="font-bold text-2xl text-primary">
+                <span className="font-bold text-base sm:text-lg">Total Amount</span>
+                <span className="font-bold text-xl sm:text-2xl text-primary">
                   {currency === "EUR" ? "€" : "$"}
                   {(totalFinal || totalEstimate).toFixed(2)}
                 </span>
               </div>
               {totalFinal && totalFinal !== totalEstimate && (
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground mt-1.5">
                   Original estimate: {currency === "EUR" ? "€" : "$"}{totalEstimate.toFixed(2)}
                 </p>
               )}
