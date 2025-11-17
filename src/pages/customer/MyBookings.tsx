@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Clock, Star, MoreVertical, MessageSquare, AlertTriangle } from "lucide-react";
+import { Calendar, MapPin, Clock, Star, MoreVertical, MessageSquare, AlertTriangle, CheckCircle, XCircle, Loader } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { useI18n } from "@/contexts/I18nContext";
 import { ChatDrawer } from "@/components/chat/ChatDrawer";
 import { BookingCardSkeletonList } from "@/components/skeletons/BookingCardSkeleton";
 import { BookingReassignmentDialog } from "@/components/booking/BookingReassignmentDialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const MyBookings = () => {
   const navigate = useNavigate();
@@ -303,79 +304,94 @@ const MyBookings = () => {
 
       {/* Tabs */}
       <div className="px-4 pt-4">
-        <div className="flex gap-2 mb-6 overflow-x-auto">
-          {declinedBookings.length > 0 && (
-            <button
-              onClick={() => setActiveTab("declined")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
-                activeTab === "declined"
-                  ? "bg-warning text-white shadow-sm"
-                  : "bg-warning/10 text-warning hover:bg-warning/20"
-              }`}
-            >
-              <AlertTriangle className="w-3 h-3" />
-              Action Required ({declinedBookings.length})
-            </button>
-          )}
-          <button
-            onClick={() => setActiveTab("upcoming")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-              activeTab === "upcoming"
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "bg-muted text-muted-foreground hover:bg-muted/80"
-            }`}
-          >
-            Upcoming
-          </button>
-          <button
-            onClick={() => setActiveTab("completed")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-              activeTab === "completed"
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "bg-muted text-muted-foreground hover:bg-muted/80"
-            }`}
-          >
-            Completed
-          </button>
-          <button
-            onClick={() => setActiveTab("cancelled")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-              activeTab === "cancelled"
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "bg-muted text-muted-foreground hover:bg-muted/80"
-            }`}
-          >
-            Cancelled
-          </button>
-        </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <div className="mb-6 overflow-x-auto pb-2 -mx-4 px-4">
+            <TabsList className="inline-flex h-auto p-1 bg-muted/50 backdrop-blur-sm rounded-full w-auto min-w-full">
+              {declinedBookings.length > 0 && (
+                <TabsTrigger 
+                  value="declined" 
+                  className="rounded-full px-4 py-2.5 text-xs sm:text-sm font-medium transition-all data-[state=active]:bg-warning data-[state=active]:text-white data-[state=active]:shadow-lg flex items-center gap-2 whitespace-nowrap"
+                >
+                  <AlertTriangle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <span className="hidden xs:inline">Action Required</span>
+                  <span className="xs:hidden">Action</span>
+                  <span className="inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full bg-white/20">
+                    {declinedBookings.length}
+                  </span>
+                </TabsTrigger>
+              )}
+              <TabsTrigger 
+                value="upcoming" 
+                className="rounded-full px-4 py-2.5 text-xs sm:text-sm font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg flex items-center gap-2 whitespace-nowrap"
+              >
+                <Loader className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>Upcoming</span>
+                {activeBookings.length > 0 && (
+                  <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold rounded-full bg-white/20">
+                    {activeBookings.length}
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger 
+                value="completed" 
+                className="rounded-full px-4 py-2.5 text-xs sm:text-sm font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg flex items-center gap-2 whitespace-nowrap"
+              >
+                <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>Completed</span>
+                {completedBookings.length > 0 && (
+                  <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold rounded-full bg-white/20">
+                    {completedBookings.length}
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger 
+                value="cancelled" 
+                className="rounded-full px-4 py-2.5 text-xs sm:text-sm font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg flex items-center gap-2 whitespace-nowrap"
+              >
+                <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>Cancelled</span>
+                {cancelledBookings.length > 0 && (
+                  <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold rounded-full bg-white/20">
+                    {cancelledBookings.length}
+                  </span>
+                )}
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-        {/* Booking Cards */}
-        <div className="space-y-3">
-          {activeTab === "declined" &&
-            (declinedBookings.length > 0 ? (
+          {/* Booking Cards */}
+          <TabsContent value="declined" className="mt-0 space-y-3 animate-fade-in">
+            {declinedBookings.length > 0 ? (
               declinedBookings.map(renderDeclinedBookingCard)
             ) : (
               <p className="text-center text-muted-foreground py-8 text-sm">No declined bookings</p>
-            ))}
-          {activeTab === "upcoming" &&
-            (activeBookings.length > 0 ? (
+            )}
+          </TabsContent>
+
+          <TabsContent value="upcoming" className="mt-0 space-y-3 animate-fade-in">
+            {activeBookings.length > 0 ? (
               activeBookings.map(renderBookingCard)
             ) : (
               <p className="text-center text-muted-foreground py-8 text-sm">No upcoming bookings</p>
-            ))}
-          {activeTab === "completed" &&
-            (completedBookings.length > 0 ? (
+            )}
+          </TabsContent>
+
+          <TabsContent value="completed" className="mt-0 space-y-3 animate-fade-in">
+            {completedBookings.length > 0 ? (
               completedBookings.map(renderBookingCard)
             ) : (
               <p className="text-center text-muted-foreground py-8 text-sm">No completed bookings</p>
-            ))}
-          {activeTab === "cancelled" &&
-            (cancelledBookings.length > 0 ? (
+            )}
+          </TabsContent>
+
+          <TabsContent value="cancelled" className="mt-0 space-y-3 animate-fade-in">
+            {cancelledBookings.length > 0 ? (
               cancelledBookings.map(renderBookingCard)
             ) : (
               <p className="text-center text-muted-foreground py-8 text-sm">No cancelled bookings</p>
-            ))}
-        </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Chat Drawer */}
