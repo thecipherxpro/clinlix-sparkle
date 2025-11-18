@@ -1,13 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Key } from "lucide-react";
+import { Switch as HeadlessSwitch, Listbox, Transition } from '@headlessui/react';
+import { ArrowLeft, Key, Check, ChevronDown } from "lucide-react";
 import { banner } from "@/hooks/use-banner";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { useI18n } from "@/contexts/I18nContext";
