@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Settings, LogOut, Key, CheckCircle, Bell } from "lucide-react";
+import { Settings, LogOut, Key, CheckCircle, Bell, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,28 +8,26 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { supabase } from "@/integrations/supabase/client";
 import { banner } from "@/hooks/use-banner";
 import NotificationPreferences from "@/components/NotificationPreferences";
 
 interface SettingsDrawerProps {
   role: 'customer' | 'provider';
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
-  const [open, setOpen] = useState(false);
+const SettingsDrawer = ({ role, open: controlledOpen, onOpenChange }: SettingsDrawerProps) => {
+  const [internalOpen, setInternalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
   const navigate = useNavigate();
+
+  // Use controlled open state if provided, otherwise use internal state
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = onOpenChange || setInternalOpen;
 
   useEffect(() => {
     if (open) {
@@ -39,6 +37,7 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
 
   const loadProfile = async () => {
     try {
+      setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
@@ -109,70 +108,71 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <button
-          className="btn btn-circle btn-ghost hover:bg-primary/10 hover:scale-105 transition-all duration-200 touch-target shadow-sm hover:shadow-md border border-transparent hover:border-primary/20"
-          aria-label="Open settings"
-        >
-          <Settings className="w-5 h-5 text-primary" />
-        </button>
-      </DrawerTrigger>
-      
-      <DrawerContent className="max-h-[85vh] flex flex-col">
-        <DrawerHeader className="border-b shrink-0">
-          <DrawerTitle>Settings</DrawerTitle>
-          <DrawerDescription>
+      <DrawerContent className="max-h-[90vh] sm:max-h-[85vh] flex flex-col">
+        <DrawerHeader className="border-b shrink-0 pb-3 sm:pb-4">
+          <DrawerTitle className="text-xl font-semibold">Settings</DrawerTitle>
+          <DrawerDescription className="text-sm text-muted-foreground">
             Manage your account settings and preferences
           </DrawerDescription>
         </DrawerHeader>
 
-        <ScrollArea className="flex-1 overflow-auto">
+        <ScrollArea className="flex-1 overflow-y-auto px-3 sm:px-4">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <div className="flex items-center justify-center h-40">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </div>
           ) : (
-            <div className="px-4 pb-8 pt-4 space-y-4">
-              {/* Account Info */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Account Information</CardTitle>
-                  <CardDescription>Your basic account details</CardDescription>
+            <div className="space-y-3 sm:space-y-4 py-3 sm:py-4">
+              {/* Account Information */}
+              <Card className="border-border/50">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                    <UserIcon className="h-4 w-4 text-primary" />
+                    Account Information
+                  </CardTitle>
+                  <CardDescription className="text-xs">Your basic account details</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>First Name</Label>
+                <CardContent className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="firstName" className="text-xs font-medium">First Name</Label>
                       <Input
+                        id="firstName"
                         value={profile?.first_name || ''}
                         onChange={(e) => setProfile({ ...profile, first_name: e.target.value })}
                         onBlur={() => updateSetting('first_name', profile.first_name)}
+                        className="h-9 text-sm"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label>Last Name</Label>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="lastName" className="text-xs font-medium">Last Name</Label>
                       <Input
+                        id="lastName"
                         value={profile?.last_name || ''}
                         onChange={(e) => setProfile({ ...profile, last_name: e.target.value })}
                         onBlur={() => updateSetting('last_name', profile.last_name)}
+                        className="h-9 text-sm"
                       />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label>Phone Number</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phone" className="text-xs font-medium">Phone Number</Label>
                     <Input
+                      id="phone"
                       value={profile?.phone || ''}
                       onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                       onBlur={() => updateSetting('phone', profile.phone)}
                       placeholder="+351 XXX XXX XXX"
+                      className="h-9 text-sm"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label>Email Address</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="email" className="text-xs font-medium">Email</Label>
                     <Input
+                      id="email"
                       value={profile?.email || ''}
                       disabled
-                      className="bg-muted"
+                      className="h-9 text-sm bg-muted/50"
                     />
                     <p className="text-xs text-muted-foreground">Email cannot be changed</p>
                   </div>
@@ -182,59 +182,57 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
               {/* Provider-specific settings */}
               {role === 'provider' && (
                 <>
-                  {/* Availability Preferences */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Availability Preferences</CardTitle>
-                      <CardDescription>Manage your work preferences</CardDescription>
+                  <Card className="border-border/50">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-primary" />
+                        Provider Settings
+                      </CardTitle>
+                      <CardDescription className="text-xs">Manage your job availability</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label>Accept Recurring Clients</Label>
-                          <p className="text-sm text-muted-foreground">Allow customers to book you regularly</p>
+                      <div className="flex items-center justify-between gap-4 py-2">
+                        <div className="flex-1">
+                          <Label htmlFor="availability" className="text-sm font-medium">Available for Jobs</Label>
+                          <p className="text-xs text-muted-foreground mt-0.5">Show your profile to customers</p>
                         </div>
-                      <Switch
-                        checked={profile?.accept_recurring ?? false}
-                        onCheckedChange={(checked) => updateSetting('accept_recurring', checked)}
-                      />
+                        <Switch
+                          id="availability"
+                          checked={profile?.available_status || false}
+                          onCheckedChange={(checked) => updateSetting('available_status', checked)}
+                          className="touch-target"
+                        />
                       </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label>Currently Available</Label>
-                          <p className="text-sm text-muted-foreground">Show as available for new bookings</p>
+                      <div className="h-px bg-border/50" />
+                      <div className="flex items-center justify-between gap-4 py-2">
+                        <div className="flex-1">
+                          <Label htmlFor="recurring" className="text-sm font-medium">Accept Recurring Jobs</Label>
+                          <p className="text-xs text-muted-foreground mt-0.5">Receive scheduled bookings</p>
                         </div>
-                      <Switch
-                        checked={profile?.available_status ?? true}
-                        onCheckedChange={(checked) => updateSetting('available_status', checked)}
-                      />
+                        <Switch
+                          id="recurring"
+                          checked={profile?.accept_recurring || false}
+                          onCheckedChange={(checked) => updateSetting('accept_recurring', checked)}
+                          className="touch-target"
+                        />
                       </div>
                     </CardContent>
                   </Card>
 
-                  {/* Verification */}
-                  <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <CheckCircle className="w-5 h-5 text-primary" />
-                        Verification
+                  <Card className="border-border/50">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-primary" />
+                        Verification Status
                       </CardTitle>
-                      <CardDescription>Boost your profile credibility</CardDescription>
+                      <CardDescription className="text-xs">Your account verification</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Button
-                        variant="default"
-                        className="w-full bg-gradient-to-r from-primary to-accent"
-                        onClick={() => {
-                          setOpen(false);
-                          navigate('/provider/verify');
-                        }}
-                      >
-                        Become Verified
-                      </Button>
-                      <p className="text-xs text-muted-foreground mt-2">
-                        Verified providers get more bookings and customer trust
-                      </p>
+                      <div className="p-3 bg-muted/50 rounded-lg border border-border/30">
+                        <p className="text-xs text-center text-muted-foreground">
+                          Contact support to update your verification status
+                        </p>
+                      </div>
                     </CardContent>
                   </Card>
                 </>
@@ -242,34 +240,39 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
 
               {/* Customer-specific settings */}
               {role === 'customer' && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Currency Preference</CardTitle>
-                    <CardDescription>Based on your country selection</CardDescription>
+                <Card className="border-border/50">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-semibold">Preferences</CardTitle>
+                    <CardDescription className="text-xs">Your account preferences</CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <Input
-                      value={profile?.currency || 'EUR'}
-                      disabled
-                      className="bg-muted"
-                    />
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Currency is automatically set based on your country
-                    </p>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="currency" className="text-xs font-medium">Currency</Label>
+                      <Select
+                        value={profile?.currency || 'EUR'}
+                        onValueChange={(value) => updateSetting('currency', value)}
+                      >
+                        <SelectTrigger className="h-9 mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="EUR">EUR (€)</SelectItem>
+                          <SelectItem value="CAD">CAD ($)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </CardContent>
                 </Card>
               )}
 
-              {/* Notifications - Enhanced */}
-              <Card className="border-primary/20">
-                <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <Bell className="w-5 h-5 text-primary" />
-                    <CardTitle>Notifications</CardTitle>
-                  </div>
-                  <CardDescription>
-                    Control all your notification preferences
-                  </CardDescription>
+              {/* Notifications */}
+              <Card className="border-border/50">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                    <Bell className="h-4 w-4 text-primary" />
+                    Notifications
+                  </CardTitle>
+                  <CardDescription className="text-xs">Manage notification preferences</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <NotificationPreferences role={role} />
@@ -277,57 +280,64 @@ const SettingsDrawer = ({ role }: SettingsDrawerProps) => {
               </Card>
 
               {/* Language */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Language & Region</CardTitle>
-                  <CardDescription>Choose your preferred language</CardDescription>
+              <Card className="border-border/50">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-semibold">Language</CardTitle>
+                  <CardDescription className="text-xs">Choose your preferred language</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Select
                     value={profile?.language || 'en'}
                     onValueChange={(value) => updateSetting('language', value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="h-9">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="en">🇬🇧 English</SelectItem>
-                      <SelectItem value="pt">🇵🇹 Portuguese</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="pt">Português</SelectItem>
                     </SelectContent>
                   </Select>
                 </CardContent>
               </Card>
 
               {/* Security */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Security</CardTitle>
-                  <CardDescription>Manage your account security</CardDescription>
+              <Card className="border-border/50">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                    <Key className="h-4 w-4 text-primary" />
+                    Security
+                  </CardTitle>
+                  <CardDescription className="text-xs">Manage your account security</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-3">
+                <CardContent>
                   <Button
                     variant="outline"
+                    size="sm"
                     onClick={handlePasswordReset}
-                    className="w-full"
+                    className="w-full h-9 touch-target"
                   >
-                    <Key className="w-4 h-4 mr-2" />
-                    Change Password
+                    Reset Password
                   </Button>
-                  <p className="text-xs text-muted-foreground">
-                    We'll send you an email with instructions to reset your password
-                  </p>
                 </CardContent>
               </Card>
 
               {/* Logout */}
-              <Card>
-                <CardContent className="pt-6">
+              <Card className="border-destructive/30 bg-destructive/5">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2 text-destructive">
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </CardTitle>
+                  <CardDescription className="text-xs">End your current session</CardDescription>
+                </CardHeader>
+                <CardContent>
                   <Button
+                    variant="destructive"
+                    size="sm"
                     onClick={handleLogout}
-                    variant="outline"
-                    className="w-full border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                    className="w-full h-9 touch-target"
                   >
-                    <LogOut className="w-4 h-4 mr-2" />
                     Logout
                   </Button>
                 </CardContent>
