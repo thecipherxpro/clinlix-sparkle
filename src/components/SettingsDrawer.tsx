@@ -2,10 +2,6 @@ import { useState, useEffect, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dialog, Transition, Switch as HeadlessSwitch, Listbox } from "@headlessui/react";
 import { Settings, LogOut, Key, CheckCircle, Bell, User as UserIcon, Check, ChevronDown, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { banner } from "@/hooks/use-banner";
 import NotificationPreferences from "@/components/NotificationPreferences";
@@ -175,92 +171,96 @@ const SettingsDrawer = ({ role, open: controlledOpen, onOpenChange }: SettingsDr
                       ) : (
                         <div className="space-y-4 py-4 sm:py-5">
                           {/* Account Information */}
-                          <Card className="border-border/50">
-                            <CardHeader className="pb-3">
-                              <CardTitle className="text-[clamp(14px,3.5vw,16px)] font-semibold flex items-center gap-2">
+                          <div className="rounded-lg border border-border/50 bg-card shadow-sm">
+                            <div className="p-4 sm:p-5 pb-3">
+                              <h3 className="text-[clamp(14px,3.5vw,16px)] font-semibold text-card-foreground flex items-center gap-2">
                                 <UserIcon className="h-4 w-4 text-primary" />
                                 Account Information
-                              </CardTitle>
-                              <CardDescription className="text-[clamp(11px,2.5vw,13px)]">
+                              </h3>
+                              <p className="text-[clamp(11px,2.5vw,13px)] text-muted-foreground mt-1">
                                 Your basic account details
-                              </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-3">
+                              </p>
+                            </div>
+                            <div className="px-4 sm:px-5 pb-4 sm:pb-5 space-y-3">
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div className="space-y-1.5">
-                                  <Label htmlFor="firstName" className="text-[clamp(11px,2.5vw,13px)] font-medium">
+                                  <label htmlFor="firstName" className="text-[clamp(11px,2.5vw,13px)] font-medium text-foreground block">
                                     First Name
-                                  </Label>
-                                  <Input
+                                  </label>
+                                  <input
                                     id="firstName"
+                                    type="text"
                                     value={profile?.first_name || ''}
                                     onChange={(e) => setProfile({ ...profile, first_name: e.target.value })}
                                     onBlur={() => updateSetting('first_name', profile.first_name)}
-                                    className="min-h-[44px] text-[clamp(14px,3.5vw,16px)]"
+                                    className="w-full min-h-[44px] px-3 py-2 text-[clamp(14px,3.5vw,16px)] bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all touch-manipulation"
                                   />
                                 </div>
                                 <div className="space-y-1.5">
-                                  <Label htmlFor="lastName" className="text-[clamp(11px,2.5vw,13px)] font-medium">
+                                  <label htmlFor="lastName" className="text-[clamp(11px,2.5vw,13px)] font-medium text-foreground block">
                                     Last Name
-                                  </Label>
-                                  <Input
+                                  </label>
+                                  <input
                                     id="lastName"
+                                    type="text"
                                     value={profile?.last_name || ''}
                                     onChange={(e) => setProfile({ ...profile, last_name: e.target.value })}
                                     onBlur={() => updateSetting('last_name', profile.last_name)}
-                                    className="min-h-[44px] text-[clamp(14px,3.5vw,16px)]"
+                                    className="w-full min-h-[44px] px-3 py-2 text-[clamp(14px,3.5vw,16px)] bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all touch-manipulation"
                                   />
                                 </div>
                               </div>
                               <div className="space-y-1.5">
-                                <Label htmlFor="phone" className="text-[clamp(11px,2.5vw,13px)] font-medium">
+                                <label htmlFor="phone" className="text-[clamp(11px,2.5vw,13px)] font-medium text-foreground block">
                                   Phone Number
-                                </Label>
-                                <Input
+                                </label>
+                                <input
                                   id="phone"
+                                  type="tel"
                                   value={profile?.phone || ''}
                                   onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                                   onBlur={() => updateSetting('phone', profile.phone)}
                                   placeholder="+351 XXX XXX XXX"
-                                  className="min-h-[44px] text-[clamp(14px,3.5vw,16px)]"
+                                  className="w-full min-h-[44px] px-3 py-2 text-[clamp(14px,3.5vw,16px)] bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all touch-manipulation"
                                 />
                               </div>
                               <div className="space-y-1.5">
-                                <Label htmlFor="email" className="text-[clamp(11px,2.5vw,13px)] font-medium">
+                                <label htmlFor="email" className="text-[clamp(11px,2.5vw,13px)] font-medium text-foreground block">
                                   Email
-                                </Label>
-                                <Input
+                                </label>
+                                <input
                                   id="email"
+                                  type="email"
                                   value={profile?.email || ''}
                                   disabled
-                                  className="min-h-[44px] text-[clamp(14px,3.5vw,16px)] bg-muted/50"
+                                  className="w-full min-h-[44px] px-3 py-2 text-[clamp(14px,3.5vw,16px)] bg-muted/50 border border-input rounded-md text-muted-foreground cursor-not-allowed"
                                 />
                                 <p className="text-[clamp(10px,2.5vw,12px)] text-muted-foreground">
                                   Email cannot be changed
                                 </p>
                               </div>
-                            </CardContent>
-                          </Card>
+                            </div>
+                          </div>
 
                           {/* Provider-specific settings */}
                           {role === 'provider' && (
                             <>
-                              <Card className="border-border/50">
-                                <CardHeader className="pb-3">
-                                  <CardTitle className="text-[clamp(14px,3.5vw,16px)] font-semibold flex items-center gap-2">
+                              <div className="rounded-lg border border-border/50 bg-card shadow-sm">
+                                <div className="p-4 sm:p-5 pb-3">
+                                  <h3 className="text-[clamp(14px,3.5vw,16px)] font-semibold text-card-foreground flex items-center gap-2">
                                     <CheckCircle className="h-4 w-4 text-primary" />
                                     Provider Settings
-                                  </CardTitle>
-                                  <CardDescription className="text-[clamp(11px,2.5vw,13px)]">
+                                  </h3>
+                                  <p className="text-[clamp(11px,2.5vw,13px)] text-muted-foreground mt-1">
                                     Manage your job availability
-                                  </CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
+                                  </p>
+                                </div>
+                                <div className="px-4 sm:px-5 pb-4 sm:pb-5 space-y-4">
                                   <div className="flex items-center justify-between gap-4 py-2">
                                     <div className="flex-1">
-                                      <Label className="text-[clamp(13px,3vw,15px)] font-medium">
+                                      <label className="text-[clamp(13px,3vw,15px)] font-medium text-foreground block">
                                         Available for Jobs
-                                      </Label>
+                                      </label>
                                       <p className="text-[clamp(11px,2.5vw,13px)] text-muted-foreground mt-0.5">
                                         Show up in search results
                                       </p>
@@ -269,7 +269,7 @@ const SettingsDrawer = ({ role, open: controlledOpen, onOpenChange }: SettingsDr
                                       checked={profile?.available_status || false}
                                       onChange={(checked) => updateSetting('available_status', checked)}
                                       className={cn(
-                                        "relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 touch-manipulation active:scale-95 min-w-[44px] min-h-[44px] flex items-center justify-center",
+                                        "relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 touch-manipulation active:scale-95",
                                         profile?.available_status ? 'bg-primary' : 'bg-muted'
                                       )}
                                     >
@@ -284,9 +284,9 @@ const SettingsDrawer = ({ role, open: controlledOpen, onOpenChange }: SettingsDr
                                   <div className="h-px bg-border/50" />
                                   <div className="flex items-center justify-between gap-4 py-2">
                                     <div className="flex-1">
-                                      <Label className="text-[clamp(13px,3vw,15px)] font-medium">
+                                      <label className="text-[clamp(13px,3vw,15px)] font-medium text-foreground block">
                                         Accept Recurring Jobs
-                                      </Label>
+                                      </label>
                                       <p className="text-[clamp(11px,2.5vw,13px)] text-muted-foreground mt-0.5">
                                         Receive scheduled bookings
                                       </p>
@@ -295,7 +295,7 @@ const SettingsDrawer = ({ role, open: controlledOpen, onOpenChange }: SettingsDr
                                       checked={profile?.accept_recurring || false}
                                       onChange={(checked) => updateSetting('accept_recurring', checked)}
                                       className={cn(
-                                        "relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 touch-manipulation active:scale-95 min-w-[44px] min-h-[44px] flex items-center justify-center",
+                                        "relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 touch-manipulation active:scale-95",
                                         profile?.accept_recurring ? 'bg-primary' : 'bg-muted'
                                       )}
                                     >
@@ -307,50 +307,50 @@ const SettingsDrawer = ({ role, open: controlledOpen, onOpenChange }: SettingsDr
                                       />
                                     </HeadlessSwitch>
                                   </div>
-                                </CardContent>
-                              </Card>
+                                </div>
+                              </div>
 
-                              <Card className="border-border/50">
-                                <CardHeader className="pb-3">
-                                  <CardTitle className="text-[clamp(14px,3.5vw,16px)] font-semibold flex items-center gap-2">
+                              <div className="rounded-lg border border-border/50 bg-card shadow-sm">
+                                <div className="p-4 sm:p-5 pb-3">
+                                  <h3 className="text-[clamp(14px,3.5vw,16px)] font-semibold text-card-foreground flex items-center gap-2">
                                     <CheckCircle className="h-4 w-4 text-primary" />
                                     Verification Status
-                                  </CardTitle>
-                                  <CardDescription className="text-[clamp(11px,2.5vw,13px)]">
+                                  </h3>
+                                  <p className="text-[clamp(11px,2.5vw,13px)] text-muted-foreground mt-1">
                                     Your account verification
-                                  </CardDescription>
-                                </CardHeader>
-                                <CardContent>
+                                  </p>
+                                </div>
+                                <div className="px-4 sm:px-5 pb-4 sm:pb-5">
                                   <div className="p-3 bg-muted/50 rounded-lg border border-border/30">
                                     <p className="text-[clamp(11px,2.5vw,13px)] text-center text-muted-foreground">
                                       Contact support to update your verification status
                                     </p>
                                   </div>
-                                </CardContent>
-                              </Card>
+                                </div>
+                              </div>
                             </>
                           )}
 
                           {/* Customer-specific settings */}
                           {role === 'customer' && (
-                            <Card className="border-border/50">
-                              <CardHeader className="pb-3">
-                                <CardTitle className="text-[clamp(14px,3.5vw,16px)] font-semibold">
+                            <div className="rounded-lg border border-border/50 bg-card shadow-sm">
+                              <div className="p-4 sm:p-5 pb-3">
+                                <h3 className="text-[clamp(14px,3.5vw,16px)] font-semibold text-card-foreground">
                                   Preferences
-                                </CardTitle>
-                                <CardDescription className="text-[clamp(11px,2.5vw,13px)]">
+                                </h3>
+                                <p className="text-[clamp(11px,2.5vw,13px)] text-muted-foreground mt-1">
                                   Your account preferences
-                                </CardDescription>
-                              </CardHeader>
-                              <CardContent className="space-y-3">
+                                </p>
+                              </div>
+                              <div className="px-4 sm:px-5 pb-4 sm:pb-5 space-y-3">
                                 <div className="space-y-1.5">
-                                  <Label className="text-[clamp(11px,2.5vw,13px)] font-medium">Currency</Label>
+                                  <label className="text-[clamp(11px,2.5vw,13px)] font-medium text-foreground block">Currency</label>
                                   <Listbox
                                     value={profile?.currency || 'EUR'}
                                     onChange={(value) => updateSetting('currency', value)}
                                   >
                                     <div className="relative mt-1">
-                                      <Listbox.Button className="relative w-full min-h-[44px] cursor-pointer rounded-md border border-input bg-background py-2 pl-3 pr-10 text-left focus:outline-none focus:ring-2 focus:ring-primary text-[clamp(14px,3.5vw,16px)]">
+                                      <Listbox.Button className="relative w-full min-h-[44px] cursor-pointer rounded-md border border-input bg-background py-2 pl-3 pr-10 text-left focus:outline-none focus:ring-2 focus:ring-primary text-[clamp(14px,3.5vw,16px)] touch-manipulation">
                                         <span className="block truncate">
                                           {currencyOptions.find(o => o.value === profile?.currency)?.label || 'EUR (€)'}
                                         </span>
@@ -364,14 +364,14 @@ const SettingsDrawer = ({ role, open: controlledOpen, onOpenChange }: SettingsDr
                                         leaveFrom="opacity-100"
                                         leaveTo="opacity-0"
                                       >
-                                        <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-popover border border-border py-1 shadow-lg focus:outline-none">
+                                        <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-popover border border-border py-1 shadow-xl focus:outline-none backdrop-blur-sm">
                                           {currencyOptions.map((option) => (
                                             <Listbox.Option
                                               key={option.value}
                                               value={option.value}
                                               className={({ active }) =>
                                                 cn(
-                                                  "relative cursor-pointer select-none py-2 pl-10 pr-4 min-h-[44px] flex items-center text-[clamp(14px,3.5vw,16px)]",
+                                                  "relative cursor-pointer select-none py-2 pl-10 pr-4 min-h-[44px] flex items-center text-[clamp(14px,3.5vw,16px)] touch-manipulation",
                                                   active ? 'bg-primary/10 text-primary' : 'text-foreground'
                                                 )
                                               }
@@ -395,43 +395,43 @@ const SettingsDrawer = ({ role, open: controlledOpen, onOpenChange }: SettingsDr
                                     </div>
                                   </Listbox>
                                 </div>
-                              </CardContent>
-                            </Card>
+                              </div>
+                            </div>
                           )}
 
                           {/* Notifications */}
-                          <Card className="border-border/50">
-                            <CardHeader className="pb-3">
-                              <CardTitle className="text-[clamp(14px,3.5vw,16px)] font-semibold flex items-center gap-2">
+                          <div className="rounded-lg border border-border/50 bg-card shadow-sm">
+                            <div className="p-4 sm:p-5 pb-3">
+                              <h3 className="text-[clamp(14px,3.5vw,16px)] font-semibold text-card-foreground flex items-center gap-2">
                                 <Bell className="h-4 w-4 text-primary" />
                                 Notifications
-                              </CardTitle>
-                              <CardDescription className="text-[clamp(11px,2.5vw,13px)]">
+                              </h3>
+                              <p className="text-[clamp(11px,2.5vw,13px)] text-muted-foreground mt-1">
                                 Manage notification preferences
-                              </CardDescription>
-                            </CardHeader>
-                            <CardContent>
+                              </p>
+                            </div>
+                            <div className="px-4 sm:px-5 pb-4 sm:pb-5">
                               <NotificationPreferences role={role} />
-                            </CardContent>
-                          </Card>
+                            </div>
+                          </div>
 
                           {/* Language */}
-                          <Card className="border-border/50">
-                            <CardHeader className="pb-3">
-                              <CardTitle className="text-[clamp(14px,3.5vw,16px)] font-semibold">
+                          <div className="rounded-lg border border-border/50 bg-card shadow-sm">
+                            <div className="p-4 sm:p-5 pb-3">
+                              <h3 className="text-[clamp(14px,3.5vw,16px)] font-semibold text-card-foreground">
                                 Language
-                              </CardTitle>
-                              <CardDescription className="text-[clamp(11px,2.5vw,13px)]">
+                              </h3>
+                              <p className="text-[clamp(11px,2.5vw,13px)] text-muted-foreground mt-1">
                                 Choose your preferred language
-                              </CardDescription>
-                            </CardHeader>
-                            <CardContent>
+                              </p>
+                            </div>
+                            <div className="px-4 sm:px-5 pb-4 sm:pb-5">
                               <Listbox
                                 value={profile?.language || 'en'}
                                 onChange={(value) => updateSetting('language', value)}
                               >
                                 <div className="relative">
-                                  <Listbox.Button className="relative w-full min-h-[44px] cursor-pointer rounded-md border border-input bg-background py-2 pl-3 pr-10 text-left focus:outline-none focus:ring-2 focus:ring-primary text-[clamp(14px,3.5vw,16px)]">
+                                  <Listbox.Button className="relative w-full min-h-[44px] cursor-pointer rounded-md border border-input bg-background py-2 pl-3 pr-10 text-left focus:outline-none focus:ring-2 focus:ring-primary text-[clamp(14px,3.5vw,16px)] touch-manipulation">
                                     <span className="block truncate">
                                       {languageOptions.find(o => o.value === profile?.language)?.label || 'English'}
                                     </span>
@@ -445,14 +445,14 @@ const SettingsDrawer = ({ role, open: controlledOpen, onOpenChange }: SettingsDr
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                   >
-                                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-popover border border-border py-1 shadow-lg focus:outline-none">
+                                    <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-popover border border-border py-1 shadow-xl focus:outline-none backdrop-blur-sm">
                                       {languageOptions.map((option) => (
                                         <Listbox.Option
                                           key={option.value}
                                           value={option.value}
                                           className={({ active }) =>
                                             cn(
-                                              "relative cursor-pointer select-none py-2 pl-10 pr-4 min-h-[44px] flex items-center text-[clamp(14px,3.5vw,16px)]",
+                                              "relative cursor-pointer select-none py-2 pl-10 pr-4 min-h-[44px] flex items-center text-[clamp(14px,3.5vw,16px)] touch-manipulation",
                                               active ? 'bg-primary/10 text-primary' : 'text-foreground'
                                             )
                                           }
@@ -475,54 +475,50 @@ const SettingsDrawer = ({ role, open: controlledOpen, onOpenChange }: SettingsDr
                                   </Transition>
                                 </div>
                               </Listbox>
-                            </CardContent>
-                          </Card>
+                            </div>
+                          </div>
 
                           {/* Security */}
-                          <Card className="border-border/50">
-                            <CardHeader className="pb-3">
-                              <CardTitle className="text-[clamp(14px,3.5vw,16px)] font-semibold flex items-center gap-2">
+                          <div className="rounded-lg border border-border/50 bg-card shadow-sm">
+                            <div className="p-4 sm:p-5 pb-3">
+                              <h3 className="text-[clamp(14px,3.5vw,16px)] font-semibold text-card-foreground flex items-center gap-2">
                                 <Key className="h-4 w-4 text-primary" />
                                 Security
-                              </CardTitle>
-                              <CardDescription className="text-[clamp(11px,2.5vw,13px)]">
+                              </h3>
+                              <p className="text-[clamp(11px,2.5vw,13px)] text-muted-foreground mt-1">
                                 Manage your account security
-                              </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                              <Button
-                                variant="outline"
-                                size="sm"
+                              </p>
+                            </div>
+                            <div className="px-4 sm:px-5 pb-4 sm:pb-5">
+                              <button
                                 onClick={handlePasswordReset}
-                                className="w-full min-h-[44px] touch-target text-[clamp(14px,3.5vw,16px)]"
+                                className="w-full min-h-[44px] px-4 py-2 text-[clamp(14px,3.5vw,16px)] font-medium bg-background border border-input rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all touch-manipulation active:scale-95"
                               >
                                 Reset Password
-                              </Button>
-                            </CardContent>
-                          </Card>
+                              </button>
+                            </div>
+                          </div>
 
                           {/* Logout */}
-                          <Card className="border-destructive/30 bg-destructive/5">
-                            <CardHeader className="pb-3">
-                              <CardTitle className="text-[clamp(14px,3.5vw,16px)] font-semibold flex items-center gap-2 text-destructive">
+                          <div className="rounded-lg border border-destructive/30 bg-destructive/5 shadow-sm">
+                            <div className="p-4 sm:p-5 pb-3">
+                              <h3 className="text-[clamp(14px,3.5vw,16px)] font-semibold text-destructive flex items-center gap-2">
                                 <LogOut className="h-4 w-4" />
                                 Sign Out
-                              </CardTitle>
-                              <CardDescription className="text-[clamp(11px,2.5vw,13px)]">
+                              </h3>
+                              <p className="text-[clamp(11px,2.5vw,13px)] text-muted-foreground mt-1">
                                 End your current session
-                              </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                              <Button
-                                variant="destructive"
-                                size="sm"
+                              </p>
+                            </div>
+                            <div className="px-4 sm:px-5 pb-4 sm:pb-5">
+                              <button
                                 onClick={handleLogout}
-                                className="w-full min-h-[44px] touch-target text-[clamp(14px,3.5vw,16px)]"
+                                className="w-full min-h-[44px] px-4 py-2 text-[clamp(14px,3.5vw,16px)] font-medium bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-destructive focus:ring-offset-2 transition-all touch-manipulation active:scale-95"
                               >
                                 Logout
-                              </Button>
-                            </CardContent>
-                          </Card>
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
