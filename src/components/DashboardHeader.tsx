@@ -1,9 +1,11 @@
-import { User, LogOut, ChevronDown } from 'lucide-react';
+import { User, LogOut, ChevronDown, Settings } from 'lucide-react';
 import { Avatar } from '@/components/base/avatar/avatar';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { banner } from "@/hooks/use-banner";
+import { useState } from 'react';
+import SettingsDrawer from '@/components/SettingsDrawer';
 
 interface DashboardHeaderProps {
   firstName: string;
@@ -19,6 +21,7 @@ export const DashboardHeader = ({
   role,
 }: DashboardHeaderProps) => {
   const navigate = useNavigate();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -71,6 +74,14 @@ export const DashboardHeader = ({
               </button>
               
               <button
+                onClick={() => setSettingsOpen(true)}
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent rounded-md transition-colors"
+              >
+                <Settings className="h-4 w-4" />
+                <span>Settings</span>
+              </button>
+              
+              <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors"
               >
@@ -81,6 +92,9 @@ export const DashboardHeader = ({
           </Popover>
         </div>
       </div>
+
+      {/* Settings Drawer */}
+      <SettingsDrawer role={role} open={settingsOpen} onOpenChange={setSettingsOpen} />
     </header>
   );
 };
